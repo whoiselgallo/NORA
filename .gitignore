@@ -3,3 +3,5 @@
 .vscode/
 Thumbs.db
 *.tmp
+.neon
+node_modules/
