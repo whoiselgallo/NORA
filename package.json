@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/prepare-public.js",
     "start": "node dist/index.js",
     "migrate": "node server/db/migrate.js",
     "test:integration": "tsc && node dist/testIntegration.js"

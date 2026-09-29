@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma CAD Vectorial // Estudio de Lockups y Diseños SVG</title>
+
+  <!-- Fuentes de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Bebas+Neue&family=Chivo:wght@700;900&family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Jost:wght@500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Oswald:wght@600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #070B14;
+      --panel-bg: #0F172A;
+      --card-bg: #1E293B;
+      --card-hover: #273549;
+      --border: #334155;
+      --accent: #38BDF8;
+      --accent-hover: #0284C7;
+      --cyan: #06B6D4;
+      --blue: #2563EB;
+      --green: #10B981;
+      --amber: #F59E0B;
+      --red: #EF4444;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --code-bg: #020617;
+      --input-bg: #0B1120;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* TOP BAR / HEADER */
+    header {
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title span.badge {
+      font-size: 10px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* SELECTOR DE ELEMENTO */
+    .selector-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 4px 8px 4px 12px;
+      border-radius: 6px;
+    }
+
+    .selector-box label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    select#elementSelector {
+      background: var(--input-bg);
+      color: #FFFFFF;
+      border: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      outline: none;
+      min-width: 280px;
+      max-width: 380px;
+    }
+    select#elementSelector:focus {
+      border-color: var(--accent);
+    }
+
+    /* BOTONES */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: #1D4ED8; }
+    .btn-success { background: #059669; color: #fff; }
+    .btn-success:hover { background: #047857; }
+    .btn-amber { background: var(--amber); color: #000; }
+    .btn-amber:hover { background: #D97706; }
+    .btn-outline {
+      background: var(--card-bg);
+      border-color: var(--border);
+      color: #E2E8F0;
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-danger { background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #FCA5A5; }
+    .btn-danger:hover { background: var(--red); color: #fff; }
+
+    /* LAYOUT PRINCIPAL */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 1px;
+      background: var(--border);
+      height: calc(100vh - 61px);
+    }
+
+    @media (max-width: 1200px) {
+      main {
+        grid-template-columns: 1fr 400px;
+      }
+    }
+    @media (max-width: 960px) {
+      main {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+
+    /* PANEL IZQUIERDO: DISPLAY VIEWPORT */
+    .preview-section {
+      background: #080D1A;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .sub-toolbar {
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .viewport-tools {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tool-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: #CBD5E1;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-family: inherit;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .tool-btn:hover, .tool-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .viewport-canvas {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      padding: 24px;
+      position: relative;
+    }
+
+    /* FONDOS */
+    .bg-blueprint {
+      background-color: #0b1a30;
+      background-image: 
+        radial-gradient(rgba(56, 189, 248, 0.18) 1px, transparent 1px),
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px, 40px 40px, 40px 40px;
+    }
+    .bg-white {
+      background-color: #F8FAFC;
+      background-image: 
+        linear-gradient(to right, #E2E8F0 1px, transparent 1px),
+        linear-gradient(to bottom, #E2E8F0 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .bg-dark {
+      background-color: #020617;
+      background-image: radial-gradient(#1E293B 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .bg-checker {
+      background-color: #1e293b;
+      background-image: linear-gradient(45deg, #0f172a 25%, transparent 25%), 
+                        linear-gradient(-45deg, #0f172a 25%, transparent 25%), 
+                        linear-gradient(45deg, transparent 75%, #0f172a 75%), 
+                        linear-gradient(-45deg, transparent 75%, #0f172a 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    .svg-wrapper {
+      max-width: 100%;
+      max-height: 85vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+      border-radius: 4px;
+    }
+
+    .svg-wrapper svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+    }
+
+    /* PANEL DERECHO: TABS Y CONTROLES */
+    .controls-section {
+      background: var(--panel-bg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tabs-header {
+      background: #090D16;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 11px 12px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .tab-content {
+      flex: 1;
+      overflow-y: auto;
+      display: none;
+      padding: 16px;
+    }
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* TARJETAS DE CONTROLES DE DISEÑO */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      color: #CBD5E1;
+      font-weight: 500;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    input[type="text"], input[type="number"], select.form-select, textarea {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 5px;
+      outline: none;
+      width: 100%;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, select.form-select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .range-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .range-val {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 45px;
+      text-align: right;
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    input[type="color"] {
+      width: 34px;
+      height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    /* PESTAÑA CÓDIGO */
+    .code-editor-box {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 10px;
+    }
+    textarea#rawSvgEditor {
+      flex: 1;
+      min-height: 480px;
+      font-family: 'Fira Code', 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      background: var(--code-bg);
+      color: #A7F3D0;
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 6px;
+      resize: vertical;
+      tab-size: 2;
+    }
+
+    /* PESTAÑA BIBLIOTECA */
+    .lib-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      transition: background 0.15s;
+    }
+    .lib-item:hover { background: var(--card-hover); }
+    .lib-info { display: flex; flex-direction: column; gap: 2px; }
+    .lib-name { font-size: 12px; font-weight: 700; color: #F8FAFC; }
+    .lib-cat { font-size: 10px; color: var(--accent); }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .modal-title { font-size: 14px; font-weight: 700; color: var(--accent); }
+
+    /* TOAST */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--green);
+      color: #FFFFFF;
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 6px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+      z-index: 150;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER PRINCIPAL -->
+  <header>
+    <div class="brand-title">
+      <span>⚡ CAD VECTOR BRAND STUDIO</span>
+      <span class="badge">NÓRDICO / INDUSTRIAL</span>
+    </div>
+
+    <!-- SELECTOR DE ELEMENTO -->
+    <div class="selector-box">
+      <label for="elementSelector">Diseño:</label>
+      <select id="elementSelector" onchange="switchElement(this.value)">
+        <!-- Opciones dinámicas cargadas desde el almacenamiento -->
+      </select>
+    </div>
+
+    <!-- ACCIONES GLOBALES -->
+    <div class="header-actions">
+      <button class="btn btn-primary" onclick="openNewSvgModal()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+        + NUEVO SVG
+      </button>
+
+      <button class="btn btn-outline" onclick="copyCurrentSVG()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+        COPIAR
+      </button>
+
+      <button class="btn btn-success" onclick="downloadCurrentSVG()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        DESCARGAR .SVG
+      </button>
+
+      <button class="btn btn-amber" onclick="exportToJPEG()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        EXPORTAR JPEG
+      </button>
+    </div>
+  </header>
+
+  <!-- CUERPO SPLIT DE LA PLATAFORMA -->
+  <main>
+    <!-- DISPLAY VECTORIAL INTERACTIVO -->
+    <section class="preview-section">
+      <div class="sub-toolbar">
+        <div>
+          <span style="color:var(--accent);">●</span>
+          <span id="activeNameDisplay" style="font-weight:700; color:#F8FAFC; margin-left:4px;">Elemento Activo</span>
+          <span id="activeMetaDisplay" style="margin-left:8px; font-size:10px; color:#64748B;">(3000 × 1400)</span>
+        </div>
+
+        <div class="viewport-tools">
+          <span style="font-size:10px; margin-right:2px;">Lienzo:</span>
+          <button class="tool-btn active" id="btnBgBlueprint" onclick="setBg('blueprint')">Plano</button>
+          <button class="tool-btn" id="btnBgWhite" onclick="setBg('white')">Blanco</button>
+          <button class="tool-btn" id="btnBgDark" onclick="setBg('dark')">Oscuro</button>
+          <button class="tool-btn" id="btnBgChecker" onclick="setBg('checker')">Malla</button>
+
+          <span style="margin: 0 4px; color:#334155;">|</span>
+          <button class="tool-btn" onclick="zoomIn()">+</button>
+          <button class="tool-btn" onclick="zoomReset()">1:1</button>
+          <button class="tool-btn" onclick="zoomOut()">-</button>
+        </div>
+      </div>
+
+      <div class="viewport-canvas bg-blueprint" id="viewport">
+        <div class="svg-wrapper" id="svgContainer">
+          <!-- Renderizado en vivo del SVG -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL LATERAL DE EDICIÓN Y GESTIÓN -->
+    <aside class="controls-section">
+      <div class="tabs-header">
+        <button class="tab-btn active" onclick="switchTab('design')">🎨 ESTILOS &amp; TEXTOS</button>
+        <button class="tab-btn" onclick="switchTab('code')">💻 CÓDIGO SVG</button>
+        <button class="tab-btn" onclick="switchTab('library')">📂 BIBLIOTECA</button>
+      </div>
+
+      <!-- TAB 1: MODIFICADOR DE ESTILOS, TIPOGRAFÍA Y TEXTOS -->
+      <div class="tab-content active" id="tab-design">
+        <!-- EDICIÓN DE TEXTOS -->
+        <div class="section-card">
+          <div class="section-title">
+            <span>✏️ Textos de Identidad</span>
+          </div>
+
+          <div class="form-group">
+            <label>Wordmark Principal (Título de Marca):</label>
+            <input type="text" id="ctrlWordmark" oninput="applyDesignChanges()" placeholder="Ej. JÁRN, MALLEUS, FERRETODO...">
+          </div>
+
+          <div class="form-group">
+            <label>Descriptor / Subtítulo Técnico:</label>
+            <input type="text" id="ctrlDescriptor" oninput="applyDesignChanges()" placeholder="Ej. PRECISION EDGE & STEEL...">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Cabecera Plano CAD:</label>
+              <input type="text" id="ctrlDocTitle" oninput="applyDesignChanges()" placeholder="Ej. ARQUETIPO A // «TEMPLE Y FILO»">
+            </div>
+            <div class="form-group">
+              <label>Código DOC ID:</label>
+              <input type="text" id="ctrlDocId" oninput="applyDesignChanges()" placeholder="Ej. DOC ID: NID-A-2026-X1">
+            </div>
+          </div>
+        </div>
+
+        <!-- TIPOGRAFÍA -->
+        <div class="section-card">
+          <div class="section-title">
+            <span>🔤 Tipografía &amp; Tracking</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fuente Wordmark:</label>
+              <select class="form-select" id="ctrlFontWordmark" onchange="applyDesignChanges()">
+                <option value="'Jost', sans-serif">Jost (Nordic Bold)</option>
+                <option value="'Chivo', sans-serif">Chivo (Heavy Black)</option>
+                <option value="'Space Grotesk', sans-serif">Space Grotesk (Tech)</option>
+                <option value="'Barlow', sans-serif">Barlow (Clean DIN)</option>
+                <option value="'Montserrat', sans-serif">Montserrat (Geometric)</option>
+                <option value="'Oswald', sans-serif">Oswald (Industrial Condensed)</option>
+                <option value="'Bebas Neue', sans-serif">Bebas Neue (Heavy Display)</option>
+                <option value="'JetBrains Mono', monospace">JetBrains Mono (CAD Raw)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Fuente Descriptor:</label>
+              <select class="form-select" id="ctrlFontDescriptor" onchange="applyDesignChanges()">
+                <option value="'Jost', sans-serif">Jost</option>
+                <option value="'Barlow', sans-serif">Barlow SemiBold</option>
+                <option value="'Inter', sans-serif">Inter</option>
+                <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+                <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tracking Wordmark (Letter-spacing):</label>
+            <div class="range-group">
+              <input type="range" id="ctrlTrackWordmark" min="0" max="0.35" step="0.01" value="0.12" oninput="applyDesignChanges()">
+              <span class="range-val" id="valTrackWordmark">0.12em</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tracking Descriptor:</label>
+            <div class="range-group">
+              <input type="range" id="ctrlTrackDesc" min="0.05" max="0.50" step="0.01" value="0.28" oninput="applyDesignChanges()">
+              <span class="range-val" id="valTrackDesc">0.28em</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESTILOS VISUALES Y TRAZOS -->
+        <div class="section-card">
+          <div class="section-title">
+            <span>🎨 Geometría &amp; Paleta Técnica</span>
+          </div>
+
+          <div class="form-group">
+            <label>Grosor de Trazo del Símbolo (Stroke-Width):</label>
+            <div class="range-group">
+              <input type="range" id="ctrlStrokeWidth" min="10" max="100" step="1" value="57" oninput="applyDesignChanges()">
+              <span class="range-val" id="valStrokeWidth">57px</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Color de Trazo / Marca:</label>
+              <div class="color-picker-row">
+                <input type="color" id="ctrlColorStroke" value="#0F172A" onchange="applyDesignChanges()">
+                <input type="text" id="ctrlColorStrokeHex" value="#0F172A" oninput="syncColorInput('ctrlColorStroke', this.value); applyDesignChanges();">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Color de Cotas / Dim:</label>
+              <div class="color-picker-row">
+                <input type="color" id="ctrlColorDim" value="#2563EB" onchange="applyDesignChanges()">
+                <input type="text" id="ctrlColorDimHex" value="#2563EB" oninput="syncColorInput('ctrlColorDim', this.value); applyDesignChanges();">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Color de Fondo del Plano / Hoja:</label>
+            <div class="color-picker-row">
+              <input type="color" id="ctrlColorBg" value="#F8FAFC" onchange="applyDesignChanges()">
+              <input type="text" id="ctrlColorBgHex" value="#F8FAFC" oninput="syncColorInput('ctrlColorBg', this.value); applyDesignChanges();">
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-primary" style="flex:1;" onclick="saveDesignChanges()">💾 Guardar Cambios en este SVG</button>
+          <button class="btn btn-outline" onclick="resetCurrentToDefault()">↺ Restaurar Original</button>
+        </div>
+      </div>
+
+      <!-- TAB 2: EDITOR DIRECTO DE CÓDIGO SVG EN VIVO -->
+      <div class="tab-content" id="tab-code">
+        <div class="code-editor-box">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:11px; color:var(--accent);">Editor de Marcado SVG (Cambios en tiempo real):</span>
+            <button class="btn btn-outline" style="padding:4px 8px; font-size:10px;" onclick="formatSvgCode()">✨ Formatear</button>
+          </div>
+          <textarea id="rawSvgEditor" spellcheck="false" oninput="onCodeInput(this.value)"></textarea>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-primary" style="flex:1;" onclick="applyCodeDirectly()">⚡ Aplicar y Guardar Código</button>
+            <button class="btn btn-outline" onclick="copyCurrentSVG()">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: BIBLIOTECA & ARCHIVADO (IMPORTAR/EXPORTAR JSON) -->
+      <div class="tab-content" id="tab-library">
+        <div class="section-card">
+          <div class="section-title">
+            <span>📦 Archivado &amp; Copia de Seguridad</span>
+          </div>
+          <p style="font-size:11px; color:#94A3B8; line-height:1.4;">
+            Todos los elementos, modificaciones y SVGs agregados se guardan automáticamente en tu almacenamiento local. Puedes exportar la base de datos completa a un archivo JSON o importarla en otro equipo.
+          </p>
+          <div style="display:flex; gap:8px; margin-top:4px;">
+            <button class="btn btn-outline" style="flex:1;" onclick="exportDatabaseJSON()">📥 Exportar JSON</button>
+            <button class="btn btn-outline" style="flex:1;" onclick="triggerImportJSON()">📤 Importar JSON</button>
+            <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="importDatabaseJSON(event)">
+          </div>
+          <button class="btn btn-danger" style="margin-top:4px;" onclick="restoreAllFactoryDefaults()">⚠️ Restaurar Diseños de Fábrica</button>
+        </div>
+
+        <div class="section-card" style="flex:1;">
+          <div class="section-title">
+            <span>📋 Catálogo de Diseños Registrados</span>
+            <span id="libCountBadge" style="font-size:10px; color:var(--text-muted);">(0)</span>
+          </div>
+          <div id="libraryListContainer" style="overflow-y:auto; max-height:360px;">
+            <!-- Lista generada dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- MODAL: AGREGAR NUEVO SVG -->
+  <div class="modal-overlay" id="modalNewSvg">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title">+ AGREGAR NUEVO ELEMENTO SVG</span>
+        <button class="tool-btn" onclick="closeNewSvgModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label>Nombre del Elemento / Arquetipo:</label>
+        <input type="text" id="newSvgName" placeholder="Ej. Arquetipo D // «FUEGO Y FORJA»">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría / Arquetipo:</label>
+          <input type="text" id="newSvgCategory" placeholder="Ej. Arquetipo D, Custom, Ferretería...">
+        </div>
+        <div class="form-group">
+          <label>Cargar desde archivo .svg (opcional):</label>
+          <input type="file" id="newSvgFileInput" accept=".svg" onchange="handleSvgFileUpload(event)">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Código SVG (o contenido pegado):</label>
+        <textarea id="newSvgCode" style="min-height:180px; font-family:'Fira Code', monospace; font-size:11px;" placeholder="<svg xmlns='http://www.w3.org/2000/svg' ...>...</svg>"></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn btn-outline" onclick="closeNewSvgModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="confirmAddSvg()">Guardar Elemento en la Plataforma</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast">Acción completada con éxito</div>
+
+  <script>
+    // BASE DE DATOS INICIAL DE FÁBRICA (9 ELEMENTOS NÓRDICOS NORMALIZADOS)
+    const SVG_FONTS_DEF = `
+    <defs>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&amp;family=Chivo:wght@900&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Jost:wght@600;700;800&amp;family=Space+Grotesk:wght@700&amp;display=swap');
+        .cad-grid { fill: none; stroke: #E2E8F0; stroke-width: 1; }
+        .cad-frame-out { fill: none; stroke: #0F172A; stroke-width: 6; }
+        .cad-frame-in  { fill: none; stroke: #0F172A; stroke-width: 1.5; }
+        .cad-header { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 28px; fill: #0F172A; }
+        .cad-sub    { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 16px; fill: #64748B; }
+        .cad-dim-line { stroke: #2563EB; stroke-width: 2; fill: none; }
+        .cad-dim-text { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 20px; fill: #2563EB; }
+        .cad-datum { stroke: #0284C7; stroke-width: 1.5; stroke-dasharray: 6 6; fill: none; }
+        .spec-title { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 20px; fill: #0F172A; }
+        .spec-lbl   { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; fill: #0284C7; }
+        .spec-val   { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 16px; fill: #0F172A; }
+        .rune-stroke { fill: none; stroke: #0F172A; stroke-linecap: square; stroke-linejoin: miter; stroke-miterlimit: 4; }
+      </style>
+      <pattern id="cadGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E2E8F0" stroke-width="1"/>
+      </pattern>
+      <marker id="arrowL" markerWidth="10" markerHeight="10" refX="0" refY="5" orient="auto">
+        <path d="M 10 0 L 0 5 L 10 10 Z" fill="#2563EB"/>
+      </marker>
+      <marker id="arrowR" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#2563EB"/>
+      </marker>
+      <marker id="arrowU" markerWidth="10" markerHeight="10" refX="5" refY="0" orient="auto">
+        <path d="M 0 10 L 5 0 L 10 10 Z" fill="#2563EB"/>
+      </marker>
+      <marker id="arrowD" markerWidth="10" markerHeight="10" refX="5" refY="10" orient="auto">
+        <path d="M 0 0 L 5 10 L 10 0 Z" fill="#2563EB"/>
+      </marker>
+    </defs>`;
+
+    const FACTORY_ITEMS = {
+      'archA_cad': {
+        id: 'archA_cad',
+        name: 'Plano Técnico CAD Completo (3000 × 1400)',
+        category: '01 // ARQUETIPO A: «TEMPLE Y FILO» [JÁRN]',
+        wordmark: 'JÁRN',
+        descriptor: 'PRECISION EDGE & STEEL',
+        docTitle: 'ARQUETIPO A // «TEMPLE Y FILO» [TIWAZ + KENAZ + ISA]',
+        docId: 'DOC ID: NID-A-2026-X1',
+        fontWordmark: "'Jost', sans-serif",
+        fontDescriptor: "'Jost', sans-serif",
+        trackWordmark: 0.12,
+        trackDesc: 0.28,
+        strokeWidth: 57,
+        colorStroke: '#0F172A',
+        colorDim: '#2563EB',
+        colorBg: '#F8FAFC',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 1400" width="3000" height="1400">
+  ${SVG_FONTS_DEF}
+  <rect width="3000" height="1400" fill="#F8FAFC" class="sheet-bg"/>
+  <rect width="3000" height="1400" fill="url(#cadGrid)"/>
+  <rect x="50" y="50" width="2900" height="1300" class="cad-frame-out"/>
+  <rect x="65" y="65" width="2870" height="1270" class="cad-frame-in"/>
+  <text x="100" y="120" class="cad-header title-header">ARQUETIPO A // «TEMPLE Y FILO» [TIWAZ + KENAZ + ISA]</text>
+  <text x="100" y="155" class="cad-sub subtitle-header">DOC ID: NID-A-2026-X1 // ESCALA MASTER 1:1 // SISTEMA CAD NORMALIZADO</text>
+  <line x1="100" y1="180" x2="2900" y2="180" stroke="#0F172A" stroke-width="2"/>
+  <g transform="translate(2150, 1205)">
+    <rect width="750" height="65" fill="#FFFFFF" stroke="#0F172A" stroke-width="2"/>
+    <line x1="250" y1="0" x2="250" y2="65" stroke="#0F172A" stroke-width="1.5"/>
+    <line x1="500" y1="0" x2="500" y2="65" stroke="#0F172A" stroke-width="1.5"/>
+    <text x="15" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">DISCIPLINE:</text>
+    <text x="15" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">TOOLING / CAD</text>
+    <text x="265" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">STATUS:</text>
+    <text x="265" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">APPROVED (REV 1)</text>
+    <text x="515" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">STANDARD:</text>
+    <text x="515" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">ISO 15930-7</text>
+  </g>
+  <g transform="translate(2180, 310)">
+    <rect width="680" height="520" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+    <text x="30" y="45" class="spec-title">FICHA TÉCNICA DE IDENTIDAD</text>
+    <line x1="30" y1="65" x2="650" y2="65" stroke="#CBD5E1" stroke-width="1"/>
+    <g transform="translate(30, 105)">
+      <text x="0" y="0" class="spec-lbl">WORDMARK:</text><text x="210" y="0" class="spec-val">Jost Bold 800 (ALL CAPS)</text>
+      <text x="0" y="48" class="spec-lbl">TRACKING:</text><text x="210" y="48" class="spec-val">+120 / +280 (Descriptor)</text>
+      <text x="0" y="96" class="spec-lbl">RUNAS BASE:</text><text x="210" y="96" class="spec-val">Tiwaz + Kenaz + Isa</text>
+      <text x="0" y="144" class="spec-lbl">ÁNGULO VÉRTICE:</text><text x="210" y="144" class="spec-val">60.0° (Punta de lanza)</text>
+      <text x="0" y="192" class="spec-lbl">APLICACIÓN:</text><text x="210" y="192" class="spec-val">Brocas, formones, corte</text>
+      <text x="0" y="240" class="spec-lbl">GRADO ACERO:</text><text x="210" y="240" class="spec-val">AISI D2 / O1 (Herramienta)</text>
+      <text x="0" y="288" class="spec-lbl">DUREZA:</text><text x="210" y="288" class="spec-val">60 - 62 HRC</text>
+      <text x="0" y="336" class="spec-lbl">MECANIZADO:</text><text x="210" y="336" class="spec-val">Láser Fibra / EDM</text>
+    </g>
+  </g>
+  <g transform="translate(180, 260) scale(0.95)" class="monogram-symbol">
+    <rect x="360" y="110" width="330" height="780" class="cad-datum"/>
+    <line x1="500" y1="140" x2="500" y2="860" class="rune-stroke mark-line" stroke-width="60"/>
+    <polyline points="390,330.53 500,140 610,330.53" class="rune-stroke mark-line" stroke-width="60"/>
+    <polyline points="500,420 699.2,535 500,650" class="rune-stroke mark-line" stroke-width="60"/>
+  </g>
+  <line x1="480" y1="735" x2="2100" y2="735" stroke="#0284C7" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="522" y1="393" x2="442" y2="393" stroke="#2563EB" stroke-width="1.5" class="dim-stroke"/>
+  <line x1="522" y1="1077" x2="442" y2="1077" stroke="#2563EB" stroke-width="1.5" class="dim-stroke"/>
+  <line x1="442" y1="393" x2="442" y2="1077" class="cad-dim-line dim-stroke" marker-start="url(#arrowU)" marker-end="url(#arrowD)"/>
+  <text x="430" y="735" class="cad-dim-text dim-text" text-anchor="end">Hs = 12U (720px)</text>
+  <line x1="550" y1="1077" x2="550" y2="1147" stroke="#2563EB" stroke-width="1.5" class="dim-stroke"/>
+  <line x1="844" y1="1077" x2="844" y2="1147" stroke="#2563EB" stroke-width="1.5" class="dim-stroke"/>
+  <line x1="550" y1="1147" x2="844" y2="1147" class="cad-dim-line dim-stroke" marker-start="url(#arrowL)" marker-end="url(#arrowR)"/>
+  <text x="697" y="1137" class="cad-dim-text dim-text" text-anchor="middle">Ws = 5.15U (309px)</text>
+  <text x="1040" y="670" class="brand-text-main" font-family="'Jost', sans-serif" font-weight="800" font-size="230" letter-spacing="0.12em" fill="#0F172A">JÁRN</text>
+  <text x="1050" y="770" class="brand-text-desc" font-family="'Jost', sans-serif" font-weight="600" font-size="50" letter-spacing="0.28em" fill="#475569">PRECISION EDGE &amp; STEEL</text>
+  <line x1="1000" y1="480" x2="970" y2="480" stroke="#2563EB" stroke-width="1.5" class="dim-stroke"/>
+  <line x1="1000" y1="670" x2="970" y2="670" stroke="#2563EB" stroke-width="1.5" class="dim-stroke"/>
+  <line x1="970" y1="480" x2="970" y2="670" class="cad-dim-line dim-stroke" marker-start="url(#arrowU)" marker-end="url(#arrowD)"/>
+  <text x="955" y="575" class="cad-dim-text dim-text" text-anchor="end">Hcap = 4.8U (288px)</text>
+</svg>`
+      },
+
+      'archA_lockup': {
+        id: 'archA_lockup',
+        name: 'Lockup Horizontal Comercial (JÁRN + Edge)',
+        category: '01 // ARQUETIPO A: «TEMPLE Y FILO» [JÁRN]',
+        wordmark: 'JÁRN',
+        descriptor: 'PRECISION EDGE & STEEL',
+        fontWordmark: "'Jost', sans-serif",
+        fontDescriptor: "'Jost', sans-serif",
+        trackWordmark: 0.12,
+        trackDesc: 0.28,
+        strokeWidth: 58,
+        colorStroke: '#0F172A',
+        colorBg: '#FFFFFF',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 800" width="2000" height="800">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Jost:wght@600;800&amp;display=swap');
+      .brand-mono { fill: none; stroke: #0F172A; stroke-width: 58; stroke-linecap: square; stroke-linejoin: miter; stroke-miterlimit: 4; }
+      .brand-text-main { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 210px; letter-spacing: 0.12em; fill: #0F172A; }
+      .brand-text-desc { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 44px; letter-spacing: 0.28em; fill: #475569; }
+    </style>
+  </defs>
+  <g transform="translate(100, 50) scale(0.85)" class="monogram-symbol">
+    <line x1="500" y1="120" x2="500" y2="840" class="brand-mono mark-line"/>
+    <polyline points="390,310.53 500,120 610,310.53" class="brand-mono mark-line"/>
+    <polyline points="500,400 699.2,515 500,630" class="brand-mono mark-line"/>
+  </g>
+  <text x="760" y="440" class="brand-text-main">JÁRN</text>
+  <text x="770" y="530" class="brand-text-desc">PRECISION EDGE &amp; STEEL</text>
+</svg>`
+      },
+
+      'archA_isotipo': {
+        id: 'archA_isotipo',
+        name: 'Isotipo Puro (Monograma Tiwaz-Kenaz-Isa)',
+        category: '01 // ARQUETIPO A: «TEMPLE Y FILO» [JÁRN]',
+        strokeWidth: 62,
+        colorStroke: '#0F172A',
+        colorBg: '#FFFFFF',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900">
+  <defs>
+    <style>
+      .brand-mono { fill: none; stroke: #0F172A; stroke-width: 62; stroke-linecap: square; stroke-linejoin: miter; stroke-miterlimit: 4; }
+    </style>
+  </defs>
+  <g transform="translate(-200, 20)" class="monogram-symbol">
+    <line x1="500" y1="100" x2="500" y2="820" class="brand-mono mark-line"/>
+    <polyline points="390,290.53 500,100 610,290.53" class="brand-mono mark-line"/>
+    <polyline points="500,380 699.2,495 500,610" class="brand-mono mark-line"/>
+  </g>
+</svg>`
+      },
+
+      'archB_cad': {
+        id: 'archB_cad',
+        name: 'Plano Técnico CAD Completo (3000 × 1400)',
+        category: '02 // ARQUETIPO B: «TENACIDAD Y YUNQUE» [MALLEUS]',
+        wordmark: 'MALLEUS',
+        descriptor: 'HEAVY INDUSTRIAL FORGE',
+        docTitle: 'ARQUETIPO B // «TENACIDAD Y YUNQUE» [URUZ + THURISAZ + TIWAZ]',
+        docId: 'DOC ID: NID-B-2026-X2',
+        fontWordmark: "'Chivo', sans-serif",
+        fontDescriptor: "'Jost', sans-serif",
+        trackWordmark: 0.08,
+        trackDesc: 0.28,
+        strokeWidth: 50,
+        colorStroke: '#0F172A',
+        colorDim: '#2563EB',
+        colorBg: '#F8FAFC',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 1400" width="3000" height="1400">
+  ${SVG_FONTS_DEF}
+  <rect width="3000" height="1400" fill="#F8FAFC" class="sheet-bg"/>
+  <rect width="3000" height="1400" fill="url(#cadGrid)"/>
+  <rect x="50" y="50" width="2900" height="1300" class="cad-frame-out"/>
+  <rect x="65" y="65" width="2870" height="1270" class="cad-frame-in"/>
+  <text x="100" y="120" class="cad-header title-header">ARQUETIPO B // «TENACIDAD Y YUNQUE» [URUZ + THURISAZ + TIWAZ]</text>
+  <text x="100" y="155" class="cad-sub subtitle-header">DOC ID: NID-B-2026-X2 // ESCALA MASTER 1:1 // SISTEMA CAD NORMALIZADO</text>
+  <line x1="100" y1="180" x2="2900" y2="180" stroke="#0F172A" stroke-width="2"/>
+  <g transform="translate(2150, 1205)">
+    <rect width="750" height="65" fill="#FFFFFF" stroke="#0F172A" stroke-width="2"/>
+    <line x1="250" y1="0" x2="250" y2="65" stroke="#0F172A" stroke-width="1.5"/>
+    <line x1="500" y1="0" x2="500" y2="65" stroke="#0F172A" stroke-width="1.5"/>
+    <text x="15" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">DISCIPLINE:</text>
+    <text x="15" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">TOOLING / CAD</text>
+    <text x="265" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">STATUS:</text>
+    <text x="265" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">APPROVED (REV 1)</text>
+    <text x="515" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">STANDARD:</text>
+    <text x="515" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">ISO 15930-7</text>
+  </g>
+  <g transform="translate(2180, 310)">
+    <rect width="680" height="520" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+    <text x="30" y="45" class="spec-title">FICHA TÉCNICA DE IDENTIDAD</text>
+    <line x1="30" y1="65" x2="650" y2="65" stroke="#CBD5E1" stroke-width="1"/>
+    <g transform="translate(30, 105)">
+      <text x="0" y="0" class="spec-lbl">WORDMARK:</text><text x="210" y="0" class="spec-val">Chivo Black 900 (ALL CAPS)</text>
+      <text x="0" y="48" class="spec-lbl">TRACKING:</text><text x="210" y="48" class="spec-val">+80 / +280 (Descriptor)</text>
+      <text x="0" y="96" class="spec-lbl">RUNAS BASE:</text><text x="210" y="96" class="spec-val">Uruz + Thurisaz + Tiwaz</text>
+      <text x="0" y="144" class="spec-lbl">SIMETRÍA:</text><text x="210" y="144" class="spec-val">Bilateral especular (0.97:1)</text>
+      <text x="0" y="192" class="spec-lbl">APLICACIÓN:</text><text x="210" y="192" class="spec-val">Mazas, prensas, tornillería</text>
+      <text x="0" y="240" class="spec-lbl">GRADO ACERO:</text><text x="210" y="240" class="spec-val">AISI 4140 / 1045 (Forja)</text>
+      <text x="0" y="288" class="spec-lbl">DUREZA:</text><text x="210" y="288" class="spec-val">52 - 56 HRC</text>
+      <text x="0" y="336" class="spec-lbl">MECANIZADO:</text><text x="210" y="336" class="spec-val">Forja en caliente / Prensa</text>
+    </g>
+  </g>
+  <g transform="translate(130, 250) scale(0.95)" class="monogram-symbol">
+    <line x1="200" y1="850" x2="800" y2="850" class="rune-stroke mark-line" stroke-width="50"/>
+    <line x1="500" y1="110" x2="500" y2="850" class="rune-stroke mark-line" stroke-width="50"/>
+    <polyline points="420,248.56 500,110 580,248.56" class="rune-stroke mark-line" stroke-width="50"/>
+    <line x1="280" y1="260" x2="280" y2="850" class="rune-stroke mark-line" stroke-width="50"/>
+    <line x1="720" y1="260" x2="720" y2="850" class="rune-stroke mark-line" stroke-width="50"/>
+    <polyline points="280,260 500,387.03 720,260" class="rune-stroke mark-line" stroke-width="50"/>
+    <polyline points="280,479.17 140,560 280,640.83" class="rune-stroke mark-line" stroke-width="50"/>
+    <polyline points="720,479.17 860,560 720,640.83" class="rune-stroke mark-line" stroke-width="50"/>
+  </g>
+  <line x1="263" y1="354" x2="200" y2="354" stroke="#2563EB" stroke-width="1.5" class="dim-stroke"/>
+  <line x1="263" y1="1057" x2="200" y2="1057" stroke="#2563EB" stroke-width="1.5" class="dim-stroke"/>
+  <line x1="200" y1="354" x2="200" y2="1057" class="cad-dim-line dim-stroke" marker-start="url(#arrowU)" marker-end="url(#arrowD)"/>
+  <text x="188" y="705" class="cad-dim-text dim-text" text-anchor="end">Hs = 14.8U (740px)</text>
+  <text x="1140" y="670" class="brand-text-main" font-family="'Chivo', sans-serif" font-weight="900" font-size="220" letter-spacing="0.08em" fill="#0F172A">MALLEUS</text>
+  <text x="1148" y="770" class="brand-text-desc" font-family="'Jost', sans-serif" font-weight="700" font-size="50" letter-spacing="0.28em" fill="#475569">HEAVY INDUSTRIAL FORGE</text>
+</svg>`
+      },
+
+      'archB_lockup': {
+        id: 'archB_lockup',
+        name: 'Lockup Horizontal Comercial (MALLEUS + Forge)',
+        category: '02 // ARQUETIPO B: «TENACIDAD Y YUNQUE» [MALLEUS]',
+        wordmark: 'MALLEUS',
+        descriptor: 'HEAVY INDUSTRIAL FORGE',
+        fontWordmark: "'Chivo', sans-serif",
+        fontDescriptor: "'Jost', sans-serif",
+        trackWordmark: 0.08,
+        trackDesc: 0.28,
+        strokeWidth: 48,
+        colorStroke: '#0F172A',
+        colorBg: '#FFFFFF',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2200 800" width="2200" height="800">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@900&amp;family=Jost:wght@700&amp;display=swap');
+      .brand-mono-b { fill: none; stroke: #0F172A; stroke-width: 48; stroke-linecap: square; stroke-linejoin: miter; stroke-miterlimit: 4; }
+      .brand-text-main { font-family: 'Chivo', sans-serif; font-weight: 900; font-size: 200px; letter-spacing: 0.08em; fill: #0F172A; }
+      .brand-text-desc { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 42px; letter-spacing: 0.28em; fill: #475569; }
+    </style>
+  </defs>
+  <g transform="translate(60, 50) scale(0.8)" class="monogram-symbol">
+    <line x1="200" y1="850" x2="800" y2="850" class="brand-mono-b mark-line"/>
+    <line x1="500" y1="110" x2="500" y2="850" class="brand-mono-b mark-line"/>
+    <polyline points="420,248.56 500,110 580,248.56" class="brand-mono-b mark-line"/>
+    <line x1="280" y1="260" x2="280" y2="850" class="brand-mono-b mark-line"/>
+    <line x1="720" y1="260" x2="720" y2="850" class="brand-mono-b mark-line"/>
+    <polyline points="280,260 500,387.03 720,260" class="brand-mono-b mark-line"/>
+    <polyline points="280,479.17 140,560 280,640.83" class="brand-mono-b mark-line"/>
+    <polyline points="720,479.17 860,560 720,640.83" class="brand-mono-b mark-line"/>
+  </g>
+  <text x="860" y="440" class="brand-text-main">MALLEUS</text>
+  <text x="868" y="530" class="brand-text-desc">HEAVY INDUSTRIAL FORGE</text>
+</svg>`
+      },
+
+      'archB_isotipo': {
+        id: 'archB_isotipo',
+        name: 'Isotipo Puro (Monograma Uruz-Thurisaz-Tiwaz)',
+        category: '02 // ARQUETIPO B: «TENACIDAD Y YUNQUE» [MALLEUS]',
+        strokeWidth: 50,
+        colorStroke: '#0F172A',
+        colorBg: '#FFFFFF',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 900" width="850" height="900">
+  <defs>
+    <style>
+      .brand-mono-b { fill: none; stroke: #0F172A; stroke-width: 50; stroke-linecap: square; stroke-linejoin: miter; stroke-miterlimit: 4; }
+    </style>
+  </defs>
+  <g transform="translate(-75, 10)" class="monogram-symbol">
+    <line x1="200" y1="850" x2="800" y2="850" class="brand-mono-b mark-line"/>
+    <line x1="500" y1="110" x2="500" y2="850" class="brand-mono-b mark-line"/>
+    <polyline points="420,248.56 500,110 580,248.56" class="brand-mono-b mark-line"/>
+    <line x1="280" y1="260" x2="280" y2="850" class="brand-mono-b mark-line"/>
+    <line x1="720" y1="260" x2="720" y2="850" class="brand-mono-b mark-line"/>
+    <polyline points="280,260 500,387.03 720,260" class="brand-mono-b mark-line"/>
+    <polyline points="280,479.17 140,560 280,640.83" class="brand-mono-b mark-line"/>
+    <polyline points="720,479.17 860,560 720,640.83" class="brand-mono-b mark-line"/>
+  </g>
+</svg>`
+      },
+
+      'archC_cad': {
+        id: 'archC_cad',
+        name: 'Plano Técnico CAD Completo (3000 × 1400)',
+        category: '03 // ARQUETIPO C: «CRISOL Y ALEACIÓN» [SMIDJA]',
+        wordmark: 'SMIDJA',
+        descriptor: 'ALLOY & THERMAL MATRIX',
+        docTitle: 'ARQUETIPO C // «CRISOL Y ALEACIÓN» [KENAZ + URUZ + INGWAZ]',
+        docId: 'DOC ID: NID-C-2026-X3',
+        fontWordmark: "'Space Grotesk', sans-serif",
+        fontDescriptor: "'Barlow', sans-serif",
+        trackWordmark: 0.08,
+        trackDesc: 0.26,
+        strokeWidth: 50,
+        colorStroke: '#0F172A',
+        colorDim: '#2563EB',
+        colorBg: '#F8FAFC',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 1400" width="3000" height="1400">
+  ${SVG_FONTS_DEF}
+  <rect width="3000" height="1400" fill="#F8FAFC" class="sheet-bg"/>
+  <rect width="3000" height="1400" fill="url(#cadGrid)"/>
+  <rect x="50" y="50" width="2900" height="1300" class="cad-frame-out"/>
+  <rect x="65" y="65" width="2870" height="1270" class="cad-frame-in"/>
+  <text x="100" y="120" class="cad-header title-header">ARQUETIPO C // «CRISOL Y ALEACIÓN» [KENAZ + URUZ + INGWAZ]</text>
+  <text x="100" y="155" class="cad-sub subtitle-header">DOC ID: NID-C-2026-X3 // ESCALA MASTER 1:1 // SISTEMA CAD NORMALIZADO</text>
+  <line x1="100" y1="180" x2="2900" y2="180" stroke="#0F172A" stroke-width="2"/>
+  <g transform="translate(2150, 1205)">
+    <rect width="750" height="65" fill="#FFFFFF" stroke="#0F172A" stroke-width="2"/>
+    <line x1="250" y1="0" x2="250" y2="65" stroke="#0F172A" stroke-width="1.5"/>
+    <line x1="500" y1="0" x2="500" y2="65" stroke="#0F172A" stroke-width="1.5"/>
+    <text x="15" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">DISCIPLINE:</text>
+    <text x="15" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">TOOLING / CAD</text>
+    <text x="265" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">STATUS:</text>
+    <text x="265" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">APPROVED (REV 1)</text>
+    <text x="515" y="23" font-family="'JetBrains Mono'" font-size="12" font-weight="500" fill="#64748B">STANDARD:</text>
+    <text x="515" y="49" font-family="'JetBrains Mono'" font-size="15" font-weight="700" fill="#0F172A">ISO 15930-7</text>
+  </g>
+  <g transform="translate(2180, 310)">
+    <rect width="680" height="520" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+    <text x="30" y="45" class="spec-title">FICHA TÉCNICA DE IDENTIDAD</text>
+    <line x1="30" y1="65" x2="650" y2="65" stroke="#CBD5E1" stroke-width="1"/>
+    <g transform="translate(30, 105)">
+      <text x="0" y="0" class="spec-lbl">WORDMARK:</text><text x="210" y="0" class="spec-val">Space Grotesk Bold 700</text>
+      <text x="0" y="48" class="spec-lbl">DESCRIPTOR:</text><text x="210" y="48" class="spec-val">Barlow SemiBold 600</text>
+      <text x="0" y="96" class="spec-lbl">RUNAS BASE:</text><text x="210" y="96" class="spec-val">Kenaz + Uruz + Ingwaz</text>
+      <text x="0" y="144" class="spec-lbl">NÚCLEO:</text><text x="210" y="144" class="spec-val">Hermético 45° (Crisol)</text>
+      <text x="0" y="192" class="spec-lbl">APLICACIÓN:</text><text x="210" y="192" class="spec-val">Válvulas, aceros HSS, bujes</text>
+      <text x="0" y="240" class="spec-lbl">GRADO ACERO:</text><text x="210" y="240" class="spec-val">HSS M2 / Inox 316L</text>
+      <text x="0" y="288" class="spec-lbl">DUREZA:</text><text x="210" y="288" class="spec-val">64 - 66 HRC</text>
+      <text x="0" y="336" class="spec-lbl">MECANIZADO:</text><text x="210" y="336" class="spec-val">Fundición / Sinterizado</text>
+    </g>
+  </g>
+  <g transform="translate(150, 250) scale(0.95)" class="monogram-symbol">
+    <line x1="180" y1="850" x2="820" y2="850" class="rune-stroke mark-line" stroke-width="50"/>
+    <polyline points="250,274.34 500,130 750,274.34" class="rune-stroke mark-line" stroke-width="50"/>
+    <line x1="250" y1="274.34" x2="250" y2="850" class="rune-stroke mark-line" stroke-width="50"/>
+    <line x1="750" y1="274.34" x2="750" y2="850" class="rune-stroke mark-line" stroke-width="50"/>
+    <polyline points="390,340 500,230 610,340" class="rune-stroke mark-line" stroke-width="50"/>
+    <polyline points="250,502.26 350,560 250,617.74" class="rune-stroke mark-line" stroke-width="50"/>
+    <polyline points="750,502.26 650,560 750,617.74" class="rune-stroke mark-line" stroke-width="50"/>
+    <polygon points="500,410 650,560 500,710 350,560" class="rune-stroke mark-line" stroke-width="50"/>
+  </g>
+  <text x="1100" y="665" class="brand-text-main" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="210" letter-spacing="0.08em" fill="#0F172A">SMIDJA</text>
+  <text x="1108" y="765" class="brand-text-desc" font-family="'Barlow', sans-serif" font-weight="600" font-size="50" letter-spacing="0.26em" fill="#475569">ALLOY &amp; THERMAL MATRIX</text>
+</svg>`
+      },
+
+      'archC_lockup': {
+        id: 'archC_lockup',
+        name: 'Lockup Horizontal Comercial (SMIDJA + Alloy)',
+        category: '03 // ARQUETIPO C: «CRISOL Y ALEACIÓN» [SMIDJA]',
+        wordmark: 'SMIDJA',
+        descriptor: 'ALLOY & THERMAL MATRIX',
+        fontWordmark: "'Space Grotesk', sans-serif",
+        fontDescriptor: "'Barlow', sans-serif",
+        trackWordmark: 0.08,
+        trackDesc: 0.26,
+        strokeWidth: 48,
+        colorStroke: '#0F172A',
+        colorBg: '#FFFFFF',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2200 800" width="2200" height="800">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600&amp;family=Space+Grotesk:wght@700&amp;display=swap');
+      .brand-mono-c { fill: none; stroke: #0F172A; stroke-width: 48; stroke-linecap: square; stroke-linejoin: miter; stroke-miterlimit: 4; }
+      .brand-text-main { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 195px; letter-spacing: 0.08em; fill: #0F172A; }
+      .brand-text-desc { font-family: 'Barlow', sans-serif; font-weight: 600; font-size: 44px; letter-spacing: 0.26em; fill: #475569; }
+    </style>
+  </defs>
+  <g transform="translate(60, 45) scale(0.8)" class="monogram-symbol">
+    <line x1="180" y1="850" x2="820" y2="850" class="brand-mono-c mark-line"/>
+    <polyline points="250,274.34 500,130 750,274.34" class="brand-mono-c mark-line"/>
+    <line x1="250" y1="274.34" x2="250" y2="850" class="brand-mono-c mark-line"/>
+    <line x1="750" y1="274.34" x2="750" y2="850" class="brand-mono-c mark-line"/>
+    <polyline points="390,340 500,230 610,340" class="brand-mono-c mark-line"/>
+    <polyline points="250,502.26 350,560 250,617.74" class="brand-mono-c mark-line"/>
+    <polyline points="750,502.26 650,560 750,617.74" class="brand-mono-c mark-line"/>
+    <polygon points="500,410 650,560 500,710 350,560" class="brand-mono-c mark-line"/>
+  </g>
+  <text x="820" y="440" class="brand-text-main">SMIDJA</text>
+  <text x="828" y="530" class="brand-text-desc">ALLOY &amp; THERMAL MATRIX</text>
+</svg>`
+      },
+
+      'archC_isotipo': {
+        id: 'archC_isotipo',
+        name: 'Isotipo Puro (Monograma Kenaz-Uruz-Ingwaz)',
+        category: '03 // ARQUETIPO C: «CRISOL Y ALEACIÓN» [SMIDJA]',
+        strokeWidth: 50,
+        colorStroke: '#0F172A',
+        colorBg: '#FFFFFF',
+        svg: `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 900" width="750" height="900">
+  <defs>
+    <style>
+      .brand-mono-c { fill: none; stroke: #0F172A; stroke-width: 50; stroke-linecap: square; stroke-linejoin: miter; stroke-miterlimit: 4; }
+    </style>
+  </defs>
+  <g transform="translate(-125, 10)" class="monogram-symbol">
+    <line x1="180" y1="850" x2="820" y2="850" class="brand-mono-c mark-line"/>
+    <polyline points="250,274.34 500,130 750,274.34" class="brand-mono-c mark-line"/>
+    <line x1="250" y1="274.34" x2="250" y2="850" class="brand-mono-c mark-line"/>
+    <line x1="750" y1="274.34" x2="750" y2="850" class="brand-mono-c mark-line"/>
+    <polyline points="390,340 500,230 610,340" class="brand-mono-c mark-line"/>
+    <polyline points="250,502.26 350,560 250,617.74" class="brand-mono-c mark-line"/>
+    <polyline points="750,502.26 650,560 750,617.74" class="brand-mono-c mark-line"/>
+    <polygon points="500,410 650,560 500,710 350,560" class="brand-mono-c mark-line"/>
+  </g>
+</svg>`
+      }
+    };
+
+    // ALMACENAMIENTO Y ESTADO
+    const STORAGE_KEY = 'NORDIC_SVG_CAD_STUDIO_V1';
+    let db = {};
+    let activeId = 'archA_cad';
+    let currentZoom = 1;
+
+    function initDatabase() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          db = JSON.parse(stored);
+        } catch (e) {
+          db = JSON.parse(JSON.stringify(FACTORY_ITEMS));
+        }
+      } else {
+        db = JSON.parse(JSON.stringify(FACTORY_ITEMS));
+        saveDatabase();
+      }
+
+      if (!db[activeId]) {
+        activeId = Object.keys(db)[0] || 'archA_cad';
+      }
+
+      populateSelector();
+      renderLibraryList();
+      loadActiveElement();
+    }
+
+    function saveDatabase() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      populateSelector();
+      renderLibraryList();
+    }
+
+    function populateSelector() {
+      const selector = document.getElementById('elementSelector');
+      selector.innerHTML = '';
+
+      const categories = {};
+      for (const [id, item] of Object.entries(db)) {
+        const cat = item.category || 'Otros';
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push(item);
+      }
+
+      for (const [catName, items] of Object.entries(categories)) {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = catName;
+        for (const item of items) {
+          const opt = document.createElement('option');
+          opt.value = item.id;
+          opt.innerText = item.name;
+          if (item.id === activeId) opt.selected = true;
+          optgroup.appendChild(opt);
+        }
+        selector.appendChild(optgroup);
+      }
+    }
+
+    function switchElement(id) {
+      if (!db[id]) return;
+      activeId = id;
+      loadActiveElement();
+    }
+
+    function loadActiveElement() {
+      const item = db[activeId];
+      if (!item) return;
+
+      document.getElementById('activeNameDisplay').innerText = item.name;
+      const dimsMatch = item.svg.match(/viewBox=["'](.*?)["']/);
+      if (dimsMatch && dimsMatch[1]) {
+        const parts = dimsMatch[1].split(' ');
+        if (parts.length === 4) {
+          document.getElementById('activeMetaDisplay').innerText = `(${parts[2]} × ${parts[3]} px)`;
+        }
+      }
+
+      // Sincronizar formulario
+      document.getElementById('ctrlWordmark').value = item.wordmark || '';
+      document.getElementById('ctrlDescriptor').value = item.descriptor || '';
+      document.getElementById('ctrlDocTitle').value = item.docTitle || '';
+      document.getElementById('ctrlDocId').value = item.docId || '';
+
+      if (item.fontWordmark) document.getElementById('ctrlFontWordmark').value = item.fontWordmark;
+      if (item.fontDescriptor) document.getElementById('ctrlFontDescriptor').value = item.fontDescriptor;
+
+      document.getElementById('ctrlTrackWordmark').value = item.trackWordmark || 0.12;
+      document.getElementById('valTrackWordmark').innerText = (item.trackWordmark || 0.12) + 'em';
+
+      document.getElementById('ctrlTrackDesc').value = item.trackDesc || 0.28;
+      document.getElementById('valTrackDesc').innerText = (item.trackDesc || 0.28) + 'em';
+
+      document.getElementById('ctrlStrokeWidth').value = item.strokeWidth || 50;
+      document.getElementById('valStrokeWidth').innerText = (item.strokeWidth || 50) + 'px';
+
+      const strokeCol = item.colorStroke || '#0F172A';
+      document.getElementById('ctrlColorStroke').value = strokeCol;
+      document.getElementById('ctrlColorStrokeHex').value = strokeCol;
+
+      const dimCol = item.colorDim || '#2563EB';
+      document.getElementById('ctrlColorDim').value = dimCol;
+      document.getElementById('ctrlColorDimHex').value = dimCol;
+
+      const bgCol = item.colorBg || '#F8FAFC';
+      document.getElementById('ctrlColorBg').value = bgCol;
+      document.getElementById('ctrlColorBgHex').value = bgCol;
+
+      renderPreview(item.svg);
+      document.getElementById('rawSvgEditor').value = item.svg;
+    }
+
+    function renderPreview(svgCode) {
+      document.getElementById('svgContainer').innerHTML = svgCode;
+    }
+
+    // MODIFICAR ESTILOS EN VIVO
+    function applyDesignChanges() {
+      const item = db[activeId];
+      if (!item) return;
+
+      const wordmark = document.getElementById('ctrlWordmark').value;
+      const descriptor = document.getElementById('ctrlDescriptor').value;
+      const docTitle = document.getElementById('ctrlDocTitle').value;
+      const docId = document.getElementById('ctrlDocId').value;
+      const fontWordmark = document.getElementById('ctrlFontWordmark').value;
+      const fontDescriptor = document.getElementById('ctrlFontDescriptor').value;
+      const trackWordmark = document.getElementById('ctrlTrackWordmark').value;
+      document.getElementById('valTrackWordmark').innerText = trackWordmark + 'em';
+      const trackDesc = document.getElementById('ctrlTrackDesc').value;
+      document.getElementById('valTrackDesc').innerText = trackDesc + 'em';
+      const strokeWidth = document.getElementById('ctrlStrokeWidth').value;
+      document.getElementById('valStrokeWidth').innerText = strokeWidth + 'px';
+      const colorStroke = document.getElementById('ctrlColorStroke').value;
+      const colorDim = document.getElementById('ctrlColorDim').value;
+      const colorBg = document.getElementById('ctrlColorBg').value;
+
+      const container = document.getElementById('svgContainer');
+      const svg = container.querySelector('svg');
+      if (!svg) return;
+
+      const mainText = svg.querySelector('.brand-text-main');
+      if (mainText) {
+        if (wordmark) mainText.textContent = wordmark;
+        mainText.setAttribute('font-family', fontWordmark);
+        mainText.setAttribute('letter-spacing', trackWordmark + 'em');
+        mainText.setAttribute('fill', colorStroke);
+      }
+
+      const descText = svg.querySelector('.brand-text-desc');
+      if (descText) {
+        if (descriptor) descText.textContent = descriptor;
+        descText.setAttribute('font-family', fontDescriptor);
+        descText.setAttribute('letter-spacing', trackDesc + 'em');
+      }
+
+      const titleHeader = svg.querySelector('.title-header');
+      if (titleHeader && docTitle) titleHeader.textContent = docTitle;
+
+      const subHeader = svg.querySelector('.subtitle-header');
+      if (subHeader && docId) subHeader.textContent = docId + ' // ESCALA MASTER 1:1 // SISTEMA CAD NORMALIZADO';
+
+      const markLines = svg.querySelectorAll('.mark-line, .brand-mono, .brand-mono-b, .brand-mono-c');
+      markLines.forEach(el => {
+        el.setAttribute('stroke-width', strokeWidth);
+        el.setAttribute('stroke', colorStroke);
+      });
+
+      const dimStrokes = svg.querySelectorAll('.dim-stroke, .cad-dim-line');
+      dimStrokes.forEach(el => el.setAttribute('stroke', colorDim));
+      const dimTexts = svg.querySelectorAll('.dim-text, .cad-dim-text');
+      dimTexts.forEach(el => el.setAttribute('fill', colorDim));
+
+      const sheetBg = svg.querySelector('.sheet-bg');
+      if (sheetBg) sheetBg.setAttribute('fill', colorBg);
+
+      document.getElementById('rawSvgEditor').value = new XMLSerializer().serializeToString(svg);
+    }
+
+    function saveDesignChanges() {
+      const item = db[activeId];
+      if (!item) return;
+
+      const container = document.getElementById('svgContainer');
+      const svg = container.querySelector('svg');
+      if (!svg) return;
+
+      item.svg = new XMLSerializer().serializeToString(svg);
+      item.wordmark = document.getElementById('ctrlWordmark').value;
+      item.descriptor = document.getElementById('ctrlDescriptor').value;
+      item.docTitle = document.getElementById('ctrlDocTitle').value;
+      item.docId = document.getElementById('ctrlDocId').value;
+      item.fontWordmark = document.getElementById('ctrlFontWordmark').value;
+      item.fontDescriptor = document.getElementById('ctrlFontDescriptor').value;
+      item.trackWordmark = parseFloat(document.getElementById('ctrlTrackWordmark').value);
+      item.trackDesc = parseFloat(document.getElementById('ctrlTrackDesc').value);
+      item.strokeWidth = parseInt(document.getElementById('ctrlStrokeWidth').value);
+      item.colorStroke = document.getElementById('ctrlColorStroke').value;
+      item.colorDim = document.getElementById('ctrlColorDim').value;
+      item.colorBg = document.getElementById('ctrlColorBg').value;
+
+      saveDatabase();
+      showToast('¡Diseño y estilos guardados en la plataforma!');
+    }
+
+    function resetCurrentToDefault() {
+      if (FACTORY_ITEMS[activeId]) {
+        db[activeId] = JSON.parse(JSON.stringify(FACTORY_ITEMS[activeId]));
+        saveDatabase();
+        loadActiveElement();
+        showToast('Restaurado a los valores originales.');
+      } else {
+        showToast('Este elemento no tiene versión de fábrica.');
+      }
+    }
+
+    function syncColorInput(pickerId, hexValue) {
+      if (/^#[0-9A-F]{6}$/i.test(hexValue)) {
+        document.getElementById(pickerId).value = hexValue;
+      }
+    }
+
+    // EDITOR DE CÓDIGO
+    function onCodeInput(code) {
+      renderPreview(code);
+    }
+
+    function applyCodeDirectly() {
+      const code = document.getElementById('rawSvgEditor').value;
+      if (!code.includes('<svg') || !code.includes('</svg>')) {
+        showToast('Error: El marcado debe contener etiquetas <svg> válidas.');
+        return;
+      }
+      db[activeId].svg = code;
+      saveDatabase();
+      loadActiveElement();
+      showToast('¡Código SVG aplicado y guardado!');
+    }
+
+    function formatSvgCode() {
+      const editor = document.getElementById('rawSvgEditor');
+      editor.value = editor.value.trim().replace(/>\s*</g, '>\n<');
+      showToast('Código formateado con saltos de línea.');
+    }
+
+    // AGREGAR NUEVO SVG
+    function openNewSvgModal() {
+      document.getElementById('newSvgName').value = '';
+      document.getElementById('newSvgCategory').value = 'Personalizados';
+      document.getElementById('newSvgCode').value = '';
+      document.getElementById('modalNewSvg').classList.add('open');
+    }
+
+    function closeNewSvgModal() {
+      document.getElementById('modalNewSvg').classList.remove('open');
+    }
+
+    function handleSvgFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('newSvgCode').value = e.target.result;
+        if (!document.getElementById('newSvgName').value) {
+          document.getElementById('newSvgName').value = file.name.replace('.svg', '');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function confirmAddSvg() {
+      const name = document.getElementById('newSvgName').value.trim() || 'Nuevo Elemento SVG';
+      const category = document.getElementById('newSvgCategory').value.trim() || 'Personalizados';
+      let svgCode = document.getElementById('newSvgCode').value.trim();
+
+      if (!svgCode || !svgCode.includes('<svg')) {
+        showToast('Por favor introduce un código SVG válido.');
+        return;
+      }
+
+      const newId = 'custom_' + Date.now();
+      db[newId] = {
+        id: newId,
+        name: name,
+        category: category,
+        wordmark: '',
+        descriptor: '',
+        strokeWidth: 50,
+        colorStroke: '#0F172A',
+        colorBg: '#FFFFFF',
+        svg: svgCode
+      };
+
+      saveDatabase();
+      closeNewSvgModal();
+      switchElement(newId);
+      showToast('¡Nuevo SVG agregado y seleccionado!');
+    }
+
+    // GESTIÓN DE BIBLIOTECA
+    function renderLibraryList() {
+      const container = document.getElementById('libraryListContainer');
+      container.innerHTML = '';
+      const items = Object.values(db);
+      document.getElementById('libCountBadge').innerText = `(${items.length})`;
+
+      for (const item of items) {
+        const div = document.createElement('div');
+        div.className = 'lib-item';
+        div.innerHTML = `
+          <div class="lib-info">
+            <span class="lib-name">${item.name}</span>
+            <span class="lib-cat">${item.category || 'General'}</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="tool-btn" onclick="switchElement('${item.id}'); switchTab('design');">Ver</button>
+            ${!FACTORY_ITEMS[item.id] ? `<button class="tool-btn" style="color:var(--red);" onclick="deleteItem('${item.id}')">✕</button>` : ''}
+          </div>
+        `;
+        container.appendChild(div);
+      }
+    }
+
+    function deleteItem(id) {
+      if (confirm(`¿Eliminar el elemento "${db[id].name}" de la plataforma?`)) {
+        delete db[id];
+        saveDatabase();
+        if (activeId === id) {
+          activeId = Object.keys(db)[0];
+          loadActiveElement();
+        }
+        showToast('Elemento eliminado.');
+      }
+    }
+
+    function exportDatabaseJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+      const a = document.createElement('a');
+      a.href = dataStr;
+      a.download = "Nordic_SVG_CAD_Library_Backup.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Archivo JSON de biblioteca descargado.');
+    }
+
+    function triggerImportJSON() {
+      document.getElementById('jsonFileInput').click();
+    }
+
+    function importDatabaseJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (typeof imported === 'object' && imported !== null) {
+            db = Object.assign(db, imported);
+            saveDatabase();
+            loadActiveElement();
+            showToast('¡Biblioteca JSON importada y sincronizada!');
+          }
+        } catch (err) {
+          showToast('Error: Archivo JSON no válido.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function restoreAllFactoryDefaults() {
+      if (confirm('¿Restaurar todos los diseños y arquetipos de fábrica? (Se conservarán los personalizados)')) {
+        db = Object.assign({}, db, JSON.parse(JSON.stringify(FACTORY_ITEMS)));
+        saveDatabase();
+        loadActiveElement();
+        showToast('Diseños restaurados a fábrica.');
+      }
+    }
+
+    // EXPORTACIÓN A SVG Y JPEG
+    function copyCurrentSVG() {
+      const svgCode = db[activeId]?.svg;
+      if (!svgCode) return;
+      navigator.clipboard.writeText(svgCode).then(() => {
+        showToast('¡Código SVG copiado al portapapeles!');
+      });
+    }
+
+    function downloadCurrentSVG() {
+      const item = db[activeId];
+      if (!item || !item.svg) return;
+
+      const blob = new Blob([item.svg], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (item.name.replace(/[^a-zA-Z0-9_\-]/g, '_')) + '.svg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Descargando archivo vectorial .svg');
+    }
+
+    function exportToJPEG() {
+      const item = db[activeId];
+      if (!item || !item.svg) return;
+
+      const img = new Image();
+      const svgBlob = new Blob([item.svg], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+
+      img.onload = function() {
+        let w = img.width || 3000;
+        let h = img.height || 1400;
+
+        const matchBox = item.svg.match(/viewBox=["'](.*?)["']/);
+        if (matchBox && matchBox[1]) {
+          const p = matchBox[1].split(' ');
+          if (p.length === 4) {
+            w = parseFloat(p[2]);
+            h = parseFloat(p[3]);
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = item.colorBg || '#FFFFFF';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+
+        const jpegUrl = canvas.toDataURL('image/jpeg', 0.98);
+        const a = document.createElement('a');
+        a.href = jpegUrl;
+        a.download = (item.name.replace(/[^a-zA-Z0-9_\-]/g, '_')) + '.jpeg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Exportado a JPEG (Calidad Máxima)');
+      };
+      img.src = url;
+    }
+
+    // TABS Y NAVEGACIÓN
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+
+      if (tabId === 'design') {
+        document.querySelector("button[onclick=\"switchTab('design')\"]").classList.add('active');
+        document.getElementById('tab-design').classList.add('active');
+      } else if (tabId === 'code') {
+        document.querySelector("button[onclick=\"switchTab('code')\"]").classList.add('active');
+        document.getElementById('tab-code').classList.add('active');
+      } else if (tabId === 'library') {
+        document.querySelector("button[onclick=\"switchTab('library')\"]").classList.add('active');
+        document.getElementById('tab-library').classList.add('active');
+      }
+    }
+
+    function setBg(type) {
+      const vp = document.getElementById('viewport');
+      vp.className = 'viewport-canvas ' + (
+        type === 'blueprint' ? 'bg-blueprint' :
+        type === 'white' ? 'bg-white' :
+        type === 'dark' ? 'bg-dark' : 'bg-checker'
+      );
+      document.querySelectorAll('.viewport-tools .tool-btn').forEach(b => b.classList.remove('active'));
+      if (type === 'blueprint') document.getElementById('btnBgBlueprint').classList.add('active');
+      if (type === 'white') document.getElementById('btnBgWhite').classList.add('active');
+      if (type === 'dark') document.getElementById('btnBgDark').classList.add('active');
+      if (type === 'checker') document.getElementById('btnBgChecker').classList.add('active');
+    }
+
+    function zoomIn() {
+      currentZoom = Math.min(currentZoom + 0.15, 2.5);
+      applyZoom();
+    }
+    function zoomOut() {
+      currentZoom = Math.max(currentZoom - 0.15, 0.4);
+      applyZoom();
+    }
+    function zoomReset() {
+      currentZoom = 1;
+      applyZoom();
+    }
+    function applyZoom() {
+      document.getElementById('svgContainer').style.transform = `scale(${currentZoom})`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); }, 2200);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initDatabase();
+    });
+  </script>
+</body>
+</html>
