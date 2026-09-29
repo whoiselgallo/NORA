@@ -5,3 +5,4 @@ Thumbs.db
 *.tmp
 .neon
 node_modules/
+dist/
