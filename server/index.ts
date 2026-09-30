@@ -7,7 +7,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createApiRouter } from './routes/api.routes';
 import { CampaignDispatcherService } from './services/campaignDispatcher.service';
-import { createEmailMarketingWorker } from './workers/emailQueue.worker';
+import { DagCacheService } from './services/dagCache.service';
+import { createEmailBatchWorker } from './workers/emailQueue.worker';
 
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
@@ -31,6 +32,9 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+// Inicializar capa de caché Redis del DAG
+const dagCache = new DagCacheService();
+
 // Middleware rawBody para validación HMAC de webhooks de GitHub
 app.use(cors());
 app.use(
@@ -41,8 +45,8 @@ app.use(
   })
 );
 
-// Enrutador de API v1
-app.use('/api/v1', createApiRouter(pool, io));
+// Enrutador de API v1 con inyección de Pool, SocketIO y DagCacheService
+app.use('/api/v1', createApiRouter(pool, io, dagCache));
 
 // Gestión de conexiones y salas WebSocket
 io.on('connection', socket => {
@@ -55,11 +59,11 @@ io.on('connection', socket => {
   });
 });
 
-// Iniciar worker de email marketing
+// Iniciar worker de email marketing por lotes (BullMQ Batching)
 try {
-  const dispatcher = new CampaignDispatcherService(pool, io);
-  createEmailMarketingWorker(pool, io, dispatcher);
-  console.log('✓ BullMQ Email Marketing Worker initialized.');
+  const dispatcher = new CampaignDispatcherService(pool, io, undefined, dagCache);
+  createEmailBatchWorker(pool, io, dispatcher);
+  console.log('✓ BullMQ Email Marketing Batch Worker initialized (concurrency: 5).');
 } catch (err: any) {
   console.warn('Note: Redis connection for BullMQ Worker skipped or deferred:', err.message);
 }
@@ -71,5 +75,5 @@ if (!process.env.VERCEL) {
   });
 }
 
-export { app, server, pool, io };
+export { app, server, pool, io, dagCache };
 export default app;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { WorkflowCanvas } from '../workflow/WorkflowCanvas';
 import { MarketingCampaignModal } from '../marketing/MarketingCampaignModal';
+import { VirtualTodoList } from './VirtualTodoList';
 import { Node, Edge } from 'reactflow';
 
 export interface TaskItem {
@@ -375,58 +376,12 @@ export const ProjectDashboard: React.FC<{ projectId: string; userRole: 'ADMIN' |
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {filteredTasks.map(task => (
-            <div
-              key={task.id}
-              onClick={() => toggleTaskStatus(task.id, task.status)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                padding: '10px 14px',
-                background: '#1E293B',
-                borderRadius: 6,
-                borderLeft: `4px solid ${task.priority === 'CRITICAL' ? '#EF4444' : task.priority === 'HIGH' ? '#F59E0B' : '#38BDF8'}`,
-                cursor: userRole === 'CLIENT' ? 'default' : 'pointer'
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={task.status === 'DONE'}
-                readOnly
-                style={{ width: 18, height: 18, accentColor: '#10B981' }}
-              />
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ textDecoration: task.status === 'DONE' ? 'line-through' : 'none' }}>{task.title}</span>
-                  <span style={{ fontSize: '0.65rem', padding: '1px 5px', borderRadius: 3, background: 'rgba(255,255,255,0.1)', color: '#94A3B8' }}>{task.priority}</span>
-                </div>
-                <div style={{ fontSize: '0.75rem', color: '#94A3B8' }}>{task.description}</div>
-              </div>
-
-              {/* Botón interactivo para descomponer tarea con IA */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDecomposeTask(task.title, task.description);
-                }}
-                title="Desglosar esta tarea en subtareas atómicas con IA"
-                style={{
-                  background: 'rgba(168, 85, 247, 0.15)',
-                  border: '1px solid #A855F7',
-                  color: '#A855F7',
-                  fontSize: '0.7rem',
-                  padding: '4px 8px',
-                  borderRadius: 4,
-                  cursor: 'pointer'
-                }}
-              >
-                ✨ IA
-              </button>
-            </div>
-          ))}
-        </div>
+        <VirtualTodoList
+          tasks={filteredTasks}
+          userRole={userRole}
+          onToggleStatus={toggleTaskStatus}
+          onDecomposeTask={handleDecomposeTask}
+        />
       </section>
 
       {/* MODAL 1: REPORTE EJECUTIVO IA */}

@@ -8,7 +8,7 @@ export function createAIRoutes(pool: Pool, io?: SocketIOServer): Router {
   const aiGateway = new AIGatewayService(pool, io);
 
   // 1. Blueprint Engine AI
-  router.post('/blueprint/generate', async (req: Request, res: Response): Promise<void> => {
+  const handleBlueprint = async (req: Request, res: Response): Promise<void> => {
     try {
       const { projectId, projectDescription, techStack } = req.body;
       if (!projectId || !projectDescription) {
@@ -21,10 +21,12 @@ export function createAIRoutes(pool: Pool, io?: SocketIOServer): Router {
       console.error('[AI Gateway Blueprint Error]:', err);
       res.status(500).json({ error: (err as Error).message });
     }
-  });
+  };
+  router.post('/blueprint/generate', handleBlueprint);
+  router.post('/blueprint', handleBlueprint);
 
   // 2. DevOps Triage AI
-  router.post('/triage/analyze', async (req: Request, res: Response): Promise<void> => {
+  const handleTriage = async (req: Request, res: Response): Promise<void> => {
     try {
       const { projectId, failureLog, workflowPath, commitMessage } = req.body;
       if (!projectId || !failureLog) {
@@ -42,10 +44,12 @@ export function createAIRoutes(pool: Pool, io?: SocketIOServer): Router {
       console.error('[AI Gateway Triage Error]:', err);
       res.status(500).json({ error: (err as Error).message });
     }
-  });
+  };
+  router.post('/triage/analyze', handleTriage);
+  router.post('/devops-triage', handleTriage);
 
   // 3. Task Planner AI
-  router.post('/tasks/breakdown', async (req: Request, res: Response): Promise<void> => {
+  const handleTaskBreakdown = async (req: Request, res: Response): Promise<void> => {
     try {
       const { projectId, taskTitle, taskDescription } = req.body;
       if (!projectId || !taskTitle) {
@@ -58,10 +62,12 @@ export function createAIRoutes(pool: Pool, io?: SocketIOServer): Router {
       console.error('[AI Gateway Tasks Error]:', err);
       res.status(500).json({ error: (err as Error).message });
     }
-  });
+  };
+  router.post('/tasks/breakdown', handleTaskBreakdown);
+  router.post('/decompose-task', handleTaskBreakdown);
 
   // 4. Marketing Email Copy AI
-  router.post('/marketing/generate-copy', async (req: Request, res: Response): Promise<void> => {
+  const handleMarketingCopy = async (req: Request, res: Response): Promise<void> => {
     try {
       const { projectId, campaignGoal, targetAudience, tone } = req.body;
       if (!projectId || !campaignGoal || !targetAudience) {
@@ -74,14 +80,17 @@ export function createAIRoutes(pool: Pool, io?: SocketIOServer): Router {
       console.error('[AI Gateway Marketing Error]:', err);
       res.status(500).json({ error: (err as Error).message });
     }
-  });
+  };
+  router.post('/marketing/generate-copy', handleMarketingCopy);
+  router.post('/marketing-copy', handleMarketingCopy);
+  router.post('/email-copy', handleMarketingCopy);
 
   // 5. Executive Status Report AI
-  router.get('/executive-report/:projectId', async (req: Request, res: Response): Promise<void> => {
+  const handleExecutiveReport = async (req: Request, res: Response): Promise<void> => {
     try {
-      const projectId = Array.isArray(req.params.projectId) ? req.params.projectId[0] : req.params.projectId;
+      const projectId = req.params.projectId || req.body.projectId;
       if (!projectId) {
-        res.status(400).json({ error: 'Missing projectId parameter.' });
+        res.status(400).json({ error: 'Missing projectId parameter or body field.' });
         return;
       }
       const report = await aiGateway.generateExecutiveStatusReport(projectId);
@@ -90,7 +99,9 @@ export function createAIRoutes(pool: Pool, io?: SocketIOServer): Router {
       console.error('[AI Gateway Executive Report Error]:', err);
       res.status(500).json({ error: (err as Error).message });
     }
-  });
+  };
+  router.get('/executive-report/:projectId', handleExecutiveReport);
+  router.post('/executive-report', handleExecutiveReport);
 
   return router;
 }

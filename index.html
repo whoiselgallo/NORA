@@ -797,6 +797,68 @@
       color: var(--accent-red);
     }
 
+    .modal-input, .modal-textarea, .modal-select {
+      width: 100%;
+      background: #080D18;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: #FFF;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      padding: 10px 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+    .modal-input:focus, .modal-textarea:focus, .modal-select:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+    }
+    .modal-textarea {
+      resize: vertical;
+      min-height: 90px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+    .btn-ai-action {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(168, 85, 247, 0.15));
+      border: 1px solid var(--accent-cyan);
+      color: #FFF;
+      padding: 10px 18px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-ai-action:hover {
+      box-shadow: 0 0 18px rgba(0, 242, 254, 0.35);
+      transform: translateY(-1px);
+    }
+    .btn-ai-action:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .ai-spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: var(--accent-cyan);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     @media (max-width: 768px) {
       .hero-title { font-size: 2.1rem; }
       .top-nav { flex-direction: column; gap: 12px; align-items: flex-start; }
@@ -819,18 +881,21 @@
 
     <!-- STRIP DE TELEMETRÍA EN VIVO -->
     <div class="top-telemetry-strip">
-      <div class="telemetry-pill">
-        <span class="status-dot"></span>
-        <span>NEON POSTGRES: <strong>ONLINE</strong></span>
+      <div class="telemetry-pill" id="pill-db-conn">
+        <span class="status-dot" id="dot-db-status"></span>
+        <span id="txt-db-status">NEON: <strong id="lbl-db-status" style="color:var(--accent-green);">ONLINE (59b89995)</strong></span>
       </div>
-      <div class="telemetry-pill">
-        <span class="status-dot"></span>
-        <span>WEBSOCKETS: <strong>ROOM ACTIVE</strong></span>
+      <div class="telemetry-pill" style="border-color: rgba(0, 242, 254, 0.4);">
+        <span style="font-size:0.68rem; color:var(--text-dim);">👤 ROL:</span>
+        <select id="user-role-selector" onchange="changeActiveRole(this.value)" style="background: transparent; color: var(--accent-cyan); border: none; outline: none; font-family: var(--font-mono); font-weight: 700; cursor: pointer; font-size: 0.72rem;">
+          <option value="COLLABORATOR" style="background: #0D131F; color: #FFF;">COLLABORATOR (Mutar)</option>
+          <option value="ADMIN" style="background: #0D131F; color: #10B981;">ADMIN (Total)</option>
+          <option value="CLIENT" style="background: #0D131F; color: #EF4444;">CLIENT (403 Bloqueado)</option>
+        </select>
       </div>
-      <div class="telemetry-pill">
-        <span class="status-dot"></span>
-        <span>BULLMQ QUEUE: <strong>READY</strong></span>
-      </div>
+      <button class="sim-action-btn" onclick="syncWithNeonDB()" style="padding: 5px 10px; font-size: 0.7rem; border-color: var(--accent-green); color: var(--accent-green);" title="Sincronizar estado en tiempo real con Neon PostgreSQL">
+        🔄 Sincronizar Neon
+      </button>
     </div>
 
     <!-- ACCIONES DE NAVEGACIÓN -->
@@ -1177,18 +1242,18 @@
 
         </div>
 
-        <!-- CONTROLES DE SIMULACIÓN -->
+        <!-- CONTROLES DE SIMULACIÓN Y ACCIONES REALES EN NEON POSTGRESQL -->
         <div class="simulation-controls">
           <div class="sim-card">
-            <h4><span>✓</span> Mutación de Tareas To-Do</h4>
+            <h4><span>✓</span> Mutación de Tareas Neon DB</h4>
             <div class="sim-btn-group">
-              <button class="sim-action-btn success-btn" onclick="completeAllTasksNode2()">Completar Tareas API (→ GREEN)</button>
-              <button class="sim-action-btn" onclick="revertTasksNode2()">Revertir a Pendiente (→ RED)</button>
+              <button class="sim-action-btn success-btn" onclick="toggleBackendTaskNeon()" title="Alternar tarea 'Rutas CRUD' en Neon PostgreSQL">Core API (DONE/TODO)</button>
+              <button class="sim-action-btn" onclick="toggleInfraTaskNeon()" title="Alternar tarea 'Esquema DDL' en Neon PostgreSQL">Infra DB (DONE/TODO)</button>
             </div>
           </div>
 
           <div class="sim-card">
-            <h4><span>⚡</span> GitHub Webhook Simulator</h4>
+            <h4><span>⚡</span> GitHub Webhook Telemetry</h4>
             <div class="sim-btn-group">
               <button class="sim-action-btn success-btn" onclick="simulateGitHubWebhook()">Enviar conclusion: success</button>
               <button class="sim-action-btn" onclick="simulateGitHubWebhookFail()">Enviar failure</button>
@@ -1221,6 +1286,20 @@
             <h4 style="color: var(--accent-red);"><span>⚡</span> AI DevOps Triage</h4>
             <div class="sim-btn-group">
               <button class="sim-action-btn" onclick="triggerAIDevOpsTriage()" style="border-color: var(--accent-red); color: var(--accent-red);">🔍 Triage CI/CD</button>
+            </div>
+          </div>
+
+          <div class="sim-card" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05);">
+            <h4 style="color: var(--accent-green);"><span>✉️</span> AI Marketing Copy</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn" onclick="triggerAIMarketingCopy()" style="border-color: var(--accent-green); color: var(--accent-green);">📝 Generar Copy IA</button>
+            </div>
+          </div>
+
+          <div class="sim-card" style="border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05);">
+            <h4 style="color: var(--accent-amber);"><span>🏗️</span> AI Blueprint DAG</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn" onclick="triggerAIBlueprint()" style="border-color: var(--accent-amber); color: var(--accent-amber);">📐 Diseñar Grafo IA</button>
             </div>
           </div>
         </div>
@@ -1324,67 +1403,185 @@
       document.getElementById('overall-status-text').innerText = `${completed} DE 5 COMPLETADOS (${pct}%)`;
     }
 
+    // CONFIGURACIÓN CENTRALIZADA Y ESTADO EN VIVO
+    const ACTIVE_PROJECT_ID = '59b89995-9684-4de6-9291-f7a6806b999a';
+    let currentRole = 'COLLABORATOR';
+    let liveTasks = [];
+    let liveNodes = [];
+    let lastGeneratedSubtasks = [];
+
+    function changeActiveRole(newRole) {
+      currentRole = newRole;
+      addLog(`[RBAC] Rol de usuario establecido a: ${currentRole}`, 'pulse');
+      if (currentRole === 'CLIENT') {
+        addLog('[RBAC ALERTA] Modo CLIENT activado: Mutaciones y creación de tareas restringidas (403 Forbidden).', 'transition');
+      }
+    }
+
+    // SINCRONIZACIÓN EN VIVO CON NEON POSTGRESQL
+    async function syncWithNeonDB() {
+      const lbl = document.getElementById('lbl-db-status');
+      const dot = document.getElementById('dot-db-status');
+      if (lbl) lbl.innerText = 'SINCRONIZANDO...';
+
+      try {
+        const [wfRes, tasksRes] = await Promise.all([
+          fetch(`/api/v1/projects/${ACTIVE_PROJECT_ID}/workflow`).then(r => r.json()),
+          fetch(`/api/v1/projects/${ACTIVE_PROJECT_ID}/tasks`).then(r => r.json())
+        ]);
+
+        if (wfRes && wfRes.nodes) {
+          liveNodes = wfRes.nodes;
+        }
+        if (Array.isArray(tasksRes)) {
+          liveTasks = tasksRes;
+        }
+
+        const categoryMap = {
+          'infra': 'node-infra',
+          'backend': 'node-backend',
+          'frontend': 'node-frontend',
+          'devops': 'node-telemetry',
+          'marketing': 'node-marketing'
+        };
+
+        liveNodes.forEach(node => {
+          const elId = categoryMap[node.category];
+          if (!elId) return;
+          const el = document.getElementById(elId);
+          const pill = document.getElementById(`pill-${elId}`);
+          const countEl = document.getElementById(`count-${elId}`);
+
+          nodeStates[elId] = (node.status === 'GREEN');
+          if (el) {
+            if (node.status === 'GREEN') {
+              el.classList.add('green');
+            } else {
+              el.classList.remove('green');
+            }
+          }
+          if (pill) {
+            pill.innerText = node.status;
+          }
+          if (countEl) {
+            if (node.category === 'devops') {
+              countEl.innerText = node.status === 'GREEN' ? '1/1 workflow_run exitoso' : '0/1 workflow_run (Pendiente)';
+            } else if (node.category === 'marketing') {
+              countEl.innerText = node.status === 'GREEN' ? '98.5% tasa de entrega (≥95%)' : '0% tasa de entrega (Requiere ≥95%)';
+            } else {
+              const nodeTasks = liveTasks.filter(t => t.node_id === node.id || (t.title && t.title.toLowerCase().includes(node.category)));
+              const done = nodeTasks.filter(t => t.status === 'DONE').length;
+              countEl.innerText = `${done}/${Math.max(nodeTasks.length, 2)} tareas completadas`;
+            }
+          }
+        });
+
+        updateOverallMetrics();
+        if (lbl) {
+          lbl.innerText = `ONLINE (${liveTasks.length} tareas)`;
+          lbl.style.color = 'var(--accent-green)';
+        }
+        if (dot) dot.classList.remove('red');
+      } catch (err) {
+        if (lbl) {
+          lbl.innerText = 'CONEXIÓN INTERMITENTE';
+          lbl.style.color = 'var(--accent-red)';
+        }
+        if (dot) dot.classList.add('red');
+        addLog(`[NEON SYNC WARN] ${err.message}`, 'normal');
+      }
+    }
+
+    // MUTACIÓN REAL DE TAREAS EN NEON POSTGRESQL
+    async function mutateTaskReal(taskId, newStatus, taskName) {
+      if (currentRole === 'CLIENT') {
+        addLog(`[HTTP 403 FORBIDDEN] Mutación rechazada para tarea '${taskName}'. El rol CLIENT es de sólo lectura.`, 'pulse');
+        alert('Acceso Denegado (HTTP 403 Forbidden): El rol CLIENT tiene permisos estrictamente de sólo lectura según las directivas del sistema.');
+        return;
+      }
+
+      addLog(`[HTTP PATCH /api/v1/tasks/${taskId}/status] status: ${newStatus} (Rol: ${currentRole})...`, 'normal');
+      try {
+        const res = await fetch(`/api/v1/tasks/${taskId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus, user_role: currentRole })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        addLog(`[NEON DB] Tarea '${taskName}' -> ${newStatus} guardada en PostgreSQL.`, 'pulse');
+        if (data.nodeTransitions && data.nodeTransitions.length > 0) {
+          data.nodeTransitions.forEach(trans => {
+            addLog(`[WS EMIT] WORKFLOW_NODE_TRANSITION: Transición binaria -> Nodo ${trans.status}`, 'transition');
+          });
+        }
+        await syncWithNeonDB();
+      } catch (err) {
+        addLog(`[MUTATION ERROR]: ${err.message}`, 'pulse');
+        alert(`Error al actualizar tarea: ${err.message}`);
+      }
+    }
+
+    // ACCIONES ESPECÍFICAS PARA EL PANEL
+    function toggleBackendTaskNeon() {
+      const task = liveTasks.find(t => t.id === 'f17dcbf9-8ac8-44d6-bf51-8cab5999a840') || { status: 'TODO' };
+      const target = task.status === 'DONE' ? 'TODO' : 'DONE';
+      mutateTaskReal('f17dcbf9-8ac8-44d6-bf51-8cab5999a840', target, 'Rutas CRUD de tareas');
+    }
+
+    function toggleInfraTaskNeon() {
+      const task = liveTasks.find(t => t.id === '3af53ce9-b025-47d9-ad62-1b029cb80b2d') || { status: 'TODO' };
+      const target = task.status === 'DONE' ? 'TODO' : 'DONE';
+      mutateTaskReal('3af53ce9-b025-47d9-ad62-1b029cb80b2d', target, 'Ejecutar esquema DDL');
+    }
+
     function toggleNodeState(nodeId, nodeName) {
+      if (nodeId === 'node-backend') {
+        toggleBackendTaskNeon();
+        return;
+      }
+      if (nodeId === 'node-infra') {
+        toggleInfraTaskNeon();
+        return;
+      }
       nodeStates[nodeId] = !nodeStates[nodeId];
       const el = document.getElementById(nodeId);
       const pill = document.getElementById(`pill-${nodeId}`);
-
       if (nodeStates[nodeId]) {
         el.classList.add('green');
         pill.innerText = 'GREEN';
-        addLog(`[WS EMIT] WORKFLOW_NODE_TRANSITION: Node '${nodeName}' -> GREEN (100% requirements verified)`, 'transition');
+        addLog(`[SIMULACIÓN] Nodo '${nodeName}' -> GREEN`, 'transition');
       } else {
         el.classList.remove('green');
         pill.innerText = 'RED';
-        addLog(`[WS EMIT] WORKFLOW_NODE_TRANSITION: Node '${nodeName}' -> RED (Reverted to pending)`, 'transition');
+        addLog(`[SIMULACIÓN] Nodo '${nodeName}' -> RED`, 'transition');
       }
-      updateOverallMetrics();
-    }
-
-    function completeAllTasksNode2() {
-      const el = document.getElementById('node-backend');
-      const pill = document.getElementById('pill-node-backend');
-      const count = document.getElementById('count-node-backend');
-      nodeStates['node-backend'] = true;
-      el.classList.add('green');
-      pill.innerText = 'GREEN';
-      count.innerText = '2/2 tareas completadas (100%)';
-      addLog("[WS EMIT] TASK_STATUS_UPDATED: taskId 'tsk-api-2' -> DONE", 'pulse');
-      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Servicios Core API' -> GREEN", 'transition');
-      updateOverallMetrics();
-    }
-
-    function revertTasksNode2() {
-      const el = document.getElementById('node-backend');
-      const pill = document.getElementById('pill-node-backend');
-      const count = document.getElementById('count-node-backend');
-      nodeStates['node-backend'] = false;
-      el.classList.remove('green');
-      pill.innerText = 'RED';
-      count.innerText = '1/2 tareas completadas';
-      addLog("[WS EMIT] TASK_STATUS_UPDATED: taskId 'tsk-api-2' -> IN_PROGRESS", 'pulse');
-      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Servicios Core API' -> RED (Reverted)", 'transition');
       updateOverallMetrics();
     }
 
     function simulateGitHubWebhook() {
       const el = document.getElementById('node-telemetry');
-      const pill = document.getElementById('pill-node-telemetry');
-      const count = document.getElementById('count-node-telemetry');
+      const pill = document.getElementById(`pill-node-telemetry`);
+      const count = document.getElementById(`count-node-telemetry`);
       nodeStates['node-telemetry'] = true;
       el.classList.add('green');
       pill.innerText = 'GREEN';
       count.innerText = '1/1 workflow_run exitoso (sha: 032064f)';
-      addLog("[HTTP POST /api/v1/telemetry/github] HMAC-SHA256 signature verified OK (Status 200)", 'pulse');
-      addLog("[WS EMIT] TELEMETRY_PULSE: workflow_run 'CI Build' conclusion: success (Duration: 34s)", 'pulse');
+      addLog("[HTTP POST /api/v1/telemetry/github] HMAC-SHA256 firma criptográfica verificada OK (Status 200)", 'pulse');
+      addLog("[WS EMIT] TELEMETRY_PULSE: workflow_run 'CI Build' conclusion: success (34s)", 'pulse');
       addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Telemetría GitHub' -> GREEN", 'transition');
       updateOverallMetrics();
     }
 
     function simulateGitHubWebhookFail() {
       const el = document.getElementById('node-telemetry');
-      const pill = document.getElementById('pill-node-telemetry');
-      const count = document.getElementById('count-node-telemetry');
+      const pill = document.getElementById(`pill-node-telemetry`);
+      const count = document.getElementById(`count-node-telemetry`);
       nodeStates['node-telemetry'] = false;
       el.classList.remove('green');
       pill.innerText = 'RED';
@@ -1396,37 +1593,487 @@
 
     function simulateMarketingCampaign() {
       const el = document.getElementById('node-marketing');
-      const pill = document.getElementById('pill-node-marketing');
-      const count = document.getElementById('count-node-marketing');
+      const pill = document.getElementById(`pill-node-marketing`);
+      const count = document.getElementById(`count-node-marketing`);
       nodeStates['node-marketing'] = true;
       el.classList.add('green');
       pill.innerText = 'GREEN';
       count.innerText = '98.5% tasa de entrega exitosa (≥95%)';
-      addLog("[BULLMQ QUEUE] Job #8491 completed: 250 sent, 0 hard bounces, 2 unsubscribes", 'pulse');
-      addLog("[WS EMIT] CAMPAIGN_TELEMETRY_PULSE: Campaign 'Lanzamiento v2.5' reached 98.5% delivery", 'pulse');
-      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Campaña Masiva' -> GREEN (≥95% threshold met)", 'transition');
+      addLog("[BULLMQ QUEUE] Job #8491 completado: 250 enviados, 0 rebotes, 2 bajas", 'pulse');
+      addLog("[WS EMIT] CAMPAIGN_TELEMETRY_PULSE: Campaña alcanzó 98.5% de entrega", 'pulse');
+      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Campaña Masiva' -> GREEN (≥95% umbral superado)", 'transition');
       updateOverallMetrics();
     }
 
     function resetMarketingCampaign() {
       const el = document.getElementById('node-marketing');
-      const pill = document.getElementById('pill-node-marketing');
-      const count = document.getElementById('count-node-marketing');
+      const pill = document.getElementById(`pill-node-marketing`);
+      const count = document.getElementById(`count-node-marketing`);
       nodeStates['node-marketing'] = false;
       el.classList.remove('green');
       pill.innerText = 'RED';
       count.innerText = '0% de entrega (Requiere ≥95%)';
-      addLog("[BULLMQ QUEUE] Campaign status reset to DRAFT", 'normal');
+      addLog("[BULLMQ QUEUE] Estado reiniciado a DRAFT", 'normal');
       addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Campaña Masiva' -> RED", 'transition');
       updateOverallMetrics();
     }
 
-    function simulateTaskMutation() {
-      scrollToShowcase();
-      completeAllTasksNode2();
+    // MODAL: 1. AI TASK PLANNER (DESGLOSAR TAREAS CON IA)
+    function triggerAIDecomposeTask() {
+      document.getElementById('modal-title').innerText = '🤖 AI Task Planner: Desglosar Requerimientos';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div>
+            <label style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:4px; display:block;">TÍTULO DE LA TAREA O HISTORIA:</label>
+            <input type="text" id="ai-task-title-input" class="modal-input" value="Integrar pasarela de pagos con Stripe y webhooks" />
+          </div>
+          <div>
+            <label style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:4px; display:block;">CONTEXTO Y ALCANCE ADICIONAL (OPCIONAL):</label>
+            <textarea id="ai-task-desc-input" class="modal-textarea" placeholder="Describir requerimientos específicos...">Manejo de suscripciones mensuales, webhooks para checkout.session.completed y portal de cliente.</textarea>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <button class="btn-ai-action" id="btn-run-ai-task" onclick="executeAIDecomposeTask()">
+              <span>✨ Desglosar con Gemini AI</span>
+            </button>
+            <span style="font-size:0.72rem; color:var(--text-dim); font-family:var(--font-mono);">Fallback Engine: Activo</span>
+          </div>
+          <div id="ai-task-results" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;"></div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
     }
 
-    // MODALES INFORMATIVOS
+    async function executeAIDecomposeTask() {
+      const title = document.getElementById('ai-task-title-input').value.trim();
+      const desc = document.getElementById('ai-task-desc-input').value.trim();
+      const btn = document.getElementById('btn-run-ai-task');
+      const resultsBox = document.getElementById('ai-task-results');
+
+      if (!title) {
+        alert('Por favor ingresa un título para la tarea.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="ai-spinner"></span> <span>Consultando AI Gateway...</span>`;
+      addLog(`[AI GATEWAY] Desglosando tarea: "${title}"...`, 'pulse');
+
+      try {
+        const res = await fetch('/api/v1/ai/tasks/breakdown', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId: ACTIVE_PROJECT_ID,
+            taskTitle: title,
+            taskDescription: desc
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const plan = data.plan;
+        lastGeneratedSubtasks = plan.subtasks || [];
+
+        let subtasksHtml = lastGeneratedSubtasks.map((st, i) => `
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-left:3px solid var(--accent-purple); padding:10px 14px; border-radius:6px;">
+            <div style="font-weight:700; color:#FFF; font-size:0.85rem;">${i+1}. ${st.title}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;"><strong>Criterio:</strong> ${st.acceptance_criteria}</div>
+            <div style="font-size:0.68rem; color:var(--accent-cyan); font-family:var(--font-mono); margin-top:4px;">Rol: ${st.suggested_role || 'COLLABORATOR'}</div>
+          </div>
+        `).join('');
+
+        resultsBox.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-subtle); padding-top:12px; margin-top:6px;">
+            <div style="font-size:0.75rem; color:var(--text-muted);">
+              Complejidad Estimada: <strong style="color:var(--accent-amber);">${plan.estimated_complexity || 'MEDIUM'}</strong> (${lastGeneratedSubtasks.length} subtareas)
+            </div>
+            <button class="btn-ai-action" style="border-color:var(--accent-green); background:rgba(16,185,129,0.15);" onclick="saveSubtasksToNeon()">
+              <span>💾 Guardar Todas en Neon DB</span>
+            </button>
+          </div>
+          ${subtasksHtml}
+        `;
+        addLog(`[AI GATEWAY] ${lastGeneratedSubtasks.length} subtareas generadas con éxito y validadas con Zod.`, 'transition');
+      } catch (err) {
+        addLog(`[AI ERROR] Falló el desglose: ${err.message}`, 'pulse');
+        resultsBox.innerHTML = `<div style="color:var(--accent-red); font-size:0.8rem;">Error: ${err.message}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>✨ Desglosar con Gemini AI</span>`;
+      }
+    }
+
+    async function saveSubtasksToNeon() {
+      if (currentRole === 'CLIENT') {
+        alert('Acceso Denegado (HTTP 403 Forbidden): El rol CLIENT no puede crear tareas.');
+        return;
+      }
+      if (!lastGeneratedSubtasks || lastGeneratedSubtasks.length === 0) {
+        alert('No hay subtareas generadas para guardar.');
+        return;
+      }
+
+      addLog(`[NEON DB] Insertando ${lastGeneratedSubtasks.length} subtareas en PostgreSQL...`, 'pulse');
+      try {
+        let inserted = 0;
+        for (const st of lastGeneratedSubtasks) {
+          await fetch(`/api/v1/projects/${ACTIVE_PROJECT_ID}/tasks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: st.title,
+              description: st.acceptance_criteria,
+              priority: 'MEDIUM',
+              user_role: currentRole
+            })
+          });
+          inserted++;
+        }
+        addLog(`[NEON DB] ${inserted} subtareas persistidas correctamente en project_tasks.`, 'transition');
+        alert(`¡Éxito! Se insertaron ${inserted} subtareas en la base de datos Neon.`);
+        await syncWithNeonDB();
+      } catch (err) {
+        alert(`Error al guardar en Neon: ${err.message}`);
+      }
+    }
+
+    // MODAL: 2. AI EXECUTIVE REPORT (CONSULTA VIVA DE POSTGRESQL + GEMINI)
+    function triggerAIExecutiveReport() {
+      document.getElementById('modal-title').innerText = '📊 Reporte Ejecutivo en Vivo para Clientes';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="background:rgba(0,242,254,0.05); border:1px solid rgba(0,242,254,0.2); padding:12px; border-radius:8px; font-size:0.8rem; color:var(--text-muted);">
+            Este reporte consulta el estado real de los nodos en <strong>Neon PostgreSQL</strong>, métricas de avance y CI/CD, sintetizándolos mediante el <strong>AI Gateway</strong> en un formato comprensible para directores de negocio.
+          </div>
+          <div>
+            <button class="btn-ai-action" id="btn-run-exec-report" onclick="executeAIExecutiveReport()">
+              <span>📊 Generar Reporte en Tiempo Real</span>
+            </button>
+          </div>
+          <div id="ai-exec-results" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;"></div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+    }
+
+    async function executeAIExecutiveReport() {
+      const btn = document.getElementById('btn-run-exec-report');
+      const box = document.getElementById('ai-exec-results');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="ai-spinner"></span> <span>Consultando Neon DB & AI Gateway...</span>`;
+      addLog(`[AI GATEWAY] Consultando estado consolidado en PostgreSQL para reporte ejecutivo...`, 'pulse');
+
+      try {
+        const res = await fetch(`/api/v1/ai/executive-report/${ACTIVE_PROJECT_ID}`);
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+        const data = await res.json();
+        const rep = data.report;
+
+        const healthColor = rep.overall_health === 'ON_TRACK' ? 'var(--accent-green)' : (rep.overall_health === 'AT_RISK' ? 'var(--accent-amber)' : 'var(--accent-red)');
+
+        box.innerHTML = `
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:16px; border-radius:10px; display:flex; flex-direction:column; gap:12px; font-size:0.85rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong>Salud Global del Proyecto:</strong>
+              <span style="background:rgba(255,255,255,0.06); padding:3px 8px; border-radius:4px; font-weight:700; font-family:var(--font-mono); color:${healthColor}; border:1px solid ${healthColor};">${rep.overall_health}</span>
+            </div>
+            <div style="background:rgba(0,242,254,0.06); padding:12px; border-radius:6px; border-left:3px solid var(--accent-cyan); line-height:1.5; color:#F1F5F9;">
+              ${rep.executive_summary}
+            </div>
+            <div>
+              <strong style="color:var(--accent-green);">Hitos Concluidos:</strong>
+              <ul style="padding-left:20px; margin-top:4px; display:flex; flex-direction:column; gap:4px; font-size:0.8rem; color:var(--text-muted);">
+                ${(rep.completed_milestones || []).map(m => `<li>${m}</li>`).join('')}
+              </ul>
+            </div>
+            <div>
+              <strong style="color:var(--accent-cyan);">Focos de Próxima Entrega:</strong>
+              <ul style="padding-left:20px; margin-top:4px; display:flex; flex-direction:column; gap:4px; font-size:0.8rem; color:var(--text-muted);">
+                ${(rep.upcoming_focus || []).map(f => `<li>${f}</li>`).join('')}
+              </ul>
+            </div>
+            <div style="border-top:1px solid var(--border-subtle); padding-top:10px; font-size:0.78rem; color:var(--text-muted);">
+              <strong>Impacto de Negocio: </strong>${rep.business_impact}
+            </div>
+          </div>
+        `;
+        addLog(`[AI GATEWAY] Reporte ejecutivo generado y validado con Zod (HTTP 200).`, 'transition');
+      } catch (err) {
+        addLog(`[AI ERROR] Reporte falló: ${err.message}`, 'pulse');
+        box.innerHTML = `<div style="color:var(--accent-red); font-size:0.8rem;">Error: ${err.message}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>📊 Regenerar Reporte</span>`;
+      }
+    }
+
+    // MODAL: 3. AI DEVOPS TRIAGE (ANÁLISIS DE FALLOS CI/CD)
+    function triggerAIDevOpsTriage() {
+      document.getElementById('modal-title').innerText = '⚡ AI DevOps Triage: Diagnóstico SRE de CI/CD';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div>
+            <label style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:4px; display:block;">LOG DE FALLO DE GITHUB ACTIONS (ÚLTIMAS LÍNEAS):</label>
+            <textarea id="ai-ci-log-input" class="modal-textarea" style="height:100px;">Error: Type 'string' is not assignable to type 'number' in src/components/workflow/CustomNode.tsx line 42:15.
+npm run build exited with code 1.
+Process completed with exit code 1.</textarea>
+          </div>
+          <div>
+            <button class="btn-ai-action" id="btn-run-triage" onclick="executeAIDevOpsTriage()">
+              <span>🔍 Diagnosticar Causa Raíz con IA</span>
+            </button>
+          </div>
+          <div id="ai-triage-results" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;"></div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+    }
+
+    async function executeAIDevOpsTriage() {
+      const logText = document.getElementById('ai-ci-log-input').value.trim();
+      const btn = document.getElementById('btn-run-triage');
+      const box = document.getElementById('ai-triage-results');
+
+      if (!logText) {
+        alert('Por favor introduce un log de compilación para analizar.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="ai-spinner"></span> <span>Analizando logs con SRE AI...</span>`;
+      addLog(`[AI GATEWAY] Analizando log de CI/CD (${logText.length} bytes)...`, 'pulse');
+
+      try {
+        const res = await fetch('/api/v1/ai/triage/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId: ACTIVE_PROJECT_ID,
+            failureLog: logText,
+            workflowPath: '.github/workflows/ci.yml',
+            commitMessage: 'fix(workflow): update node coordinate types'
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const tri = data.triage;
+
+        box.innerHTML = `
+          <div style="background:rgba(239,68,68,0.08); padding:14px; border-radius:8px; border-left:3px solid var(--accent-red);">
+            <div style="color:var(--accent-red); font-weight:bold; font-size:0.85rem; margin-bottom:4px;">
+              Causa Raíz Identificada (Severidad: ${tri.severity})
+            </div>
+            <div style="font-size:0.82rem; color:#F8FAFC;">${tri.root_cause}</div>
+          </div>
+          <div style="background:rgba(16,185,129,0.08); padding:14px; border-radius:8px; border-left:3px solid var(--accent-green);">
+            <div style="color:var(--accent-green); font-weight:bold; font-size:0.85rem; margin-bottom:4px;">
+              Comando Técnico Correctivo Sugerido
+            </div>
+            <code style="display:block; color:var(--accent-cyan); font-family:var(--font-mono); font-size:0.8rem; background:rgba(0,0,0,0.3); padding:8px; border-radius:4px; word-break:break-all;">${tri.suggested_fix}</code>
+          </div>
+          <div style="background:rgba(0,242,254,0.06); padding:14px; border-radius:8px; border-left:3px solid var(--accent-cyan);">
+            <div style="color:var(--accent-cyan); font-weight:bold; font-size:0.85rem; margin-bottom:4px;">
+              Explicación Digerible para Clientes
+            </div>
+            <div style="color:var(--text-muted); font-size:0.82rem; line-height:1.5;">${tri.client_friendly_summary}</div>
+          </div>
+        `;
+        addLog(`[AI GATEWAY] Diagnóstico SRE generado con recomendación accionable.`, 'transition');
+      } catch (err) {
+        addLog(`[AI ERROR] Triage falló: ${err.message}`, 'pulse');
+        box.innerHTML = `<div style="color:var(--accent-red); font-size:0.8rem;">Error: ${err.message}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>🔍 Diagnosticar con IA</span>`;
+      }
+    }
+
+    // MODAL: 4. AI MARKETING COPY & ANTISPAM
+    function triggerAIMarketingCopy() {
+      document.getElementById('modal-title').innerText = '✉️ AI Email Copy & Evaluación Antispam';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div>
+            <label style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:4px; display:block;">OBJETIVO DE LA CAMPAÑA:</label>
+            <input type="text" id="ai-mkt-goal" class="modal-input" value="Lanzamiento Nexus v2.5 Enterprise y Automatizaciones DAG" />
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:4px; display:block;">AUDIENCIA OBJETIVO:</label>
+              <input type="text" id="ai-mkt-audience" class="modal-input" value="CTOs, DevOps Leads y Fundadores Tech" />
+            </div>
+            <div>
+              <label style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:4px; display:block;">TONO DE COMUNICACIÓN:</label>
+              <input type="text" id="ai-mkt-tone" class="modal-input" value="Profesional, persuasivo y técnico" />
+            </div>
+          </div>
+          <div>
+            <button class="btn-ai-action" id="btn-run-mkt" onclick="executeAIMarketingCopy()">
+              <span>✉️ Redactar Campaña & Auditar Antispam</span>
+            </button>
+          </div>
+          <div id="ai-mkt-results" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;"></div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+    }
+
+    async function executeAIMarketingCopy() {
+      const goal = document.getElementById('ai-mkt-goal').value.trim();
+      const audience = document.getElementById('ai-mkt-audience').value.trim();
+      const tone = document.getElementById('ai-mkt-tone').value.trim();
+      const btn = document.getElementById('btn-run-mkt');
+      const box = document.getElementById('ai-mkt-results');
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="ai-spinner"></span> <span>Generando copy y analizando entregabilidad...</span>`;
+      addLog(`[AI GATEWAY] Generando copy de marketing para objetivo: "${goal}"...`, 'pulse');
+
+      try {
+        const res = await fetch('/api/v1/ai/marketing/generate-copy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId: ACTIVE_PROJECT_ID,
+            campaignGoal: goal,
+            targetAudience: audience,
+            tone: tone
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const copy = data.copy;
+
+        box.innerHTML = `
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:16px; border-radius:8px; display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="color:var(--accent-cyan); font-size:0.85rem;">Puntaje de Riesgo Antispam:</strong>
+              <span style="font-family:var(--font-mono); font-weight:800; color:${copy.spam_risk_score <= 3 ? 'var(--accent-green)' : 'var(--accent-amber)'}; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">
+                ${copy.spam_risk_score} / 10 (Excelente)
+              </span>
+            </div>
+            <div>
+              <strong style="font-size:0.75rem; color:var(--text-muted);">LÍNEAS DE ASUNTO SUGERIDAS:</strong>
+              <ul style="padding-left:18px; margin-top:4px; font-size:0.82rem; color:#FFF; display:flex; flex-direction:column; gap:2px;">
+                ${(copy.subject_lines || []).map(s => `<li>${s}</li>`).join('')}
+              </ul>
+            </div>
+            <div>
+              <strong style="font-size:0.75rem; color:var(--text-muted);">TEXTO PRE-HEADER:</strong>
+              <div style="font-size:0.8rem; color:var(--accent-cyan); margin-top:2px;">${copy.preview_text}</div>
+            </div>
+            <div style="border-top:1px solid var(--border-subtle); padding-top:8px;">
+              <strong style="font-size:0.75rem; color:var(--text-muted);">PREVISUALIZACIÓN DE CUERPO (TEXTO PLANO):</strong>
+              <pre style="background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; font-size:0.75rem; color:#CBD5E1; font-family:var(--font-mono); white-space:pre-wrap; margin-top:4px;">${copy.plain_text_body}</pre>
+            </div>
+          </div>
+        `;
+        addLog(`[AI GATEWAY] Plantilla de correo y análisis antispam generado con éxito.`, 'transition');
+      } catch (err) {
+        addLog(`[AI ERROR] Falló copy de marketing: ${err.message}`, 'pulse');
+        box.innerHTML = `<div style="color:var(--accent-red); font-size:0.8rem;">Error: ${err.message}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>✉️ Redactar Campaña & Auditar Antispam</span>`;
+      }
+    }
+
+    // MODAL: 5. AI BLUEPRINT ENGINE (GRAFO DAG)
+    function triggerAIBlueprint() {
+      document.getElementById('modal-title').innerText = '🏗️ AI Blueprint Engine: Arquitectura de Workflows';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div>
+            <label style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:4px; display:block;">DESCRIPCIÓN DEL PROYECTO O ALCANCE:</label>
+            <input type="text" id="ai-bp-desc" class="modal-input" value="E-commerce SaaS multi-inquilino con pagos recurrentes y telemetría" />
+          </div>
+          <div>
+            <label style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:4px; display:block;">STACK TECNOLÓGICO SELECCIONADO:</label>
+            <input type="text" id="ai-bp-stack" class="modal-input" value="Node.js, PostgreSQL Neon, React, GitHub Actions, Vercel" />
+          </div>
+          <div>
+            <button class="btn-ai-action" id="btn-run-bp" onclick="executeAIBlueprint()">
+              <span>📐 Generar Grafo DAG & Nodos con IA</span>
+            </button>
+          </div>
+          <div id="ai-bp-results" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;"></div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+    }
+
+    async function executeAIBlueprint() {
+      const desc = document.getElementById('ai-bp-desc').value.trim();
+      const stack = document.getElementById('ai-bp-stack').value.trim();
+      const btn = document.getElementById('btn-run-bp');
+      const box = document.getElementById('ai-bp-results');
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="ai-spinner"></span> <span>Diseñando DAG con Principal Architect AI...</span>`;
+      addLog(`[AI GATEWAY] Diseñando Grafo Acíclico Dirigido (DAG)...`, 'pulse');
+
+      try {
+        const res = await fetch('/api/v1/ai/blueprint/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId: ACTIVE_PROJECT_ID,
+            projectDescription: desc,
+            techStack: { backend: 'Node.js', database: 'Neon Postgres', ci: 'GitHub Actions', frontend: 'React' }
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const dag = data.dag;
+
+        box.innerHTML = `
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:16px; border-radius:8px; font-size:0.82rem;">
+            <div style="color:var(--accent-amber); font-weight:700; margin-bottom:8px;">
+              ✓ Grafo DAG Generado (${dag.nodes.length} Nodos, ${dag.edges.length} Aristas)
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              ${dag.nodes.map(n => `
+                <div style="padding:6px 10px; background:rgba(0,0,0,0.3); border-radius:4px; display:flex; justify-content:space-between; align-items:center;">
+                  <span><strong>${n.title}</strong> [${n.category}]</span>
+                  <span style="font-size:0.7rem; color:var(--accent-cyan); font-family:var(--font-mono);">${n.tasks ? n.tasks.length : 0} tareas</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        addLog(`[AI GATEWAY] Grafo DAG generado exitosamente y formateado para @xyflow/react.`, 'transition');
+      } catch (err) {
+        addLog(`[AI ERROR] Falló Blueprint: ${err.message}`, 'pulse');
+        box.innerHTML = `<div style="color:var(--accent-red); font-size:0.8rem;">Error: ${err.message}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>📐 Generar Grafo DAG & Nodos con IA</span>`;
+      }
+    }
+
+    // MODAL DE INFORMACIÓN RÁPIDA / GUÍA
     function openQuickGuideModal() {
       document.getElementById('modal-title').innerText = 'Guía Integral del Ecosistema Nexus';
       document.getElementById('modal-content').innerHTML = `
@@ -1478,133 +2125,6 @@
       document.getElementById('guide-modal').classList.add('open');
     }
 
-    function triggerAIDecomposeTask() {
-      addLog('[AI GATEWAY] Solicitando desglose de tarea: "Integrar pasarela de pagos con Stripe y webhooks"...', 'pulse');
-      document.getElementById('modal-title').innerText = '🤖 Desglose de Subtareas Sugerido por IA';
-      document.getElementById('modal-content').innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:12px;">
-          <div style="font-size:0.8rem; color:var(--text-muted);">
-            Tarea Original: <strong style="color:#FFF;">Integrar pasarela de pagos con Stripe</strong><br>
-            Complejidad Estimada: <span style="color:var(--accent-amber); font-weight:bold;">MEDIUM</span>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; border-left:3px solid var(--accent-purple);">
-              <strong>1. Diseñar contrato de interfaz y modelo</strong>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Criterio: Definición de tipos en TypeScript aprobada sin uso de any.</div>
-              <div style="font-size:0.68rem; color:var(--accent-cyan); margin-top:2px;">Rol sugerido: COLLABORATOR</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; border-left:3px solid var(--accent-purple);">
-              <strong>2. Implementar lógica core y endpoints REST</strong>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Criterio: Respuestas HTTP 200/201 con manejo de errores 400/500.</div>
-              <div style="font-size:0.68rem; color:var(--accent-cyan); margin-top:2px;">Rol sugerido: COLLABORATOR</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; border-left:3px solid var(--accent-purple);">
-              <strong>3. Integrar validación en interfaz de usuario y eventos</strong>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Criterio: Feedback visual inmediato y sincronización WebSocket confirmada.</div>
-              <div style="font-size:0.68rem; color:var(--accent-cyan); margin-top:2px;">Rol sugerido: COLLABORATOR</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; border-left:3px solid var(--accent-green);">
-              <strong>4. Ejecutar prueba de integración e incorporar a CI/CD</strong>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Criterio: Pruebas automatizadas en verde sin regresiones.</div>
-              <div style="font-size:0.68rem; color:var(--accent-cyan); margin-top:2px;">Rol sugerido: ADMIN</div>
-            </div>
-          </div>
-        </div>
-      `;
-      document.getElementById('guide-modal').classList.add('open');
-      addLog('[AI GATEWAY] 4 subtareas atómicas generadas con Definition of Done.', 'transition');
-    }
-
-    function triggerAIExecutiveReport() {
-      addLog('[AI GATEWAY] Consultando estado consolidado en PostgreSQL para reporte ejecutivo...', 'pulse');
-      document.getElementById('modal-title').innerText = '📊 Resumen Ejecutivo para Clientes Corporativos';
-      document.getElementById('modal-content').innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:14px; font-size:0.85rem;">
-          <div>
-            <strong>Salud del Proyecto: </strong>
-            <span style="color:var(--accent-green); font-weight:bold;">ON_TRACK (En cronograma)</span>
-          </div>
-          <div style="background:rgba(0,242,254,0.06); padding:12px; border-radius:6px; border-left:3px solid var(--accent-cyan); line-height:1.5;">
-            El proyecto presenta un avance global verificado superior al 65%. Los cimientos de infraestructura, base de datos Neon y los servicios centrales se encuentran desplegados bajo estándares de alta disponibilidad y estabilidad operativa continua.
-          </div>
-          <div>
-            <strong style="color:var(--accent-green);">Hitos Concluidos:</strong>
-            <ul style="padding-left:20px; margin-top:4px; display:flex; flex-direction:column; gap:4px;">
-              <li>Consolidación y verificación de Infraestructura & Base de Datos Neon</li>
-              <li>Despliegue de Servicios Core & API REST con WebSockets</li>
-              <li>Conexión de Webhooks GitHub con verificación criptográfica HMAC-SHA256</li>
-            </ul>
-          </div>
-          <div style="border-top:1px solid var(--border-subtle); padding-top:10px; font-size:0.78rem; color:var(--text-muted);">
-            <strong>Impacto de Negocio: </strong>La automatización de los flujos de trabajo reduce el tiempo de comercialización y garantiza que cada entrega cumpla con los estándares de rendimiento sin interrumpir las operaciones vigentes.
-          </div>
-        </div>
-      `;
-      document.getElementById('guide-modal').classList.add('open');
-      addLog('[AI GATEWAY] Reporte ejecutivo generado y validado con Zod (HTTP 200).', 'transition');
-    }
-
-    function triggerAIDevOpsTriage() {
-      addLog('[AI GATEWAY] Analizando log de compilación CI/CD (100 líneas)...', 'pulse');
-      document.getElementById('modal-title').innerText = '⚡ Diagnóstico de Falla CI/CD (DevOps SRE)';
-      document.getElementById('modal-content').innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:12px; font-size:0.85rem;">
-          <div style="background:rgba(239,68,68,0.08); padding:12px; border-radius:6px; border-left:3px solid var(--accent-red);">
-            <div style="color:var(--accent-red); font-weight:bold; margin-bottom:4px;">Causa Raíz Identificada (Severidad: HIGH)</div>
-            <div>Error de tipado estricto en TypeScript durante el proceso de verificación tsc: incompatibilidad en los parámetros de coordenadas del grafo.</div>
-          </div>
-          <div style="background:rgba(16,185,129,0.08); padding:12px; border-radius:6px; border-left:3px solid var(--accent-green);">
-            <div style="color:var(--accent-green); font-weight:bold; margin-bottom:4px;">Corrección Sugerida (Comando Técnico)</div>
-            <code style="color:var(--accent-cyan); font-family:var(--font-mono); font-size:0.8rem;">npm run build && git commit -m "fix: align coordinate types"</code>
-          </div>
-          <div style="background:rgba(0,242,254,0.06); padding:12px; border-radius:6px; border-left:3px solid var(--accent-cyan);">
-            <div style="color:var(--accent-cyan); font-weight:bold; margin-bottom:4px;">Resumen para Clientes (Lenguaje No Técnico)</div>
-            <div style="color:var(--text-muted); font-size:0.8rem;">Una verificación automática detectó un desajuste técnico antes de publicar los cambios. El equipo de desarrollo ya cuenta con la instrucción precisa para ajustarlo de inmediato sin afectar la plataforma.</div>
-          </div>
-        </div>
-      `;
-      document.getElementById('guide-modal').classList.add('open');
-      addLog('[AI GATEWAY] Diagnóstico SRE generado con recomendación accionable.', 'transition');
-    }
-
-    function openEndpointInfo(type) {
-      document.getElementById('modal-title').innerText = 'Endpoints REST & Eventos de Socket';
-      let content = '';
-      if (type === 'workflow') {
-        content = `
-          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">GET /api/v1/projects/:projectId/workflow</h4>
-          <p style="margin-bottom: 12px;">Retorna el grafo completo de nodos (con categoría, coordenadas y estado RED/GREEN), aristas conexas y tareas asociadas para React Flow.</p>
-          <h4 style="color: var(--accent-green); font-family: var(--font-mono); margin-bottom: 6px;">WS Event: WORKFLOW_NODE_TRANSITION</h4>
-          <p>Payload: <code>{ nodeId, status: 'RED' | 'GREEN', reason: 'TASK_COMPLETION_STATE_CHANGED' }</code></p>
-        `;
-      } else if (type === 'tasks') {
-        content = `
-          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">POST /api/v1/projects/:projectId/tasks</h4>
-          <p style="margin-bottom: 12px;">Crea una nueva tarea. Rechaza modificaciones si el usuario tiene rol <code>CLIENT</code> con código 403 Forbidden.</p>
-          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">PATCH /api/v1/tasks/:taskId/status</h4>
-          <p>Actualiza estado a TODO, IN_PROGRESS o DONE. Dispara la evaluación binaria de transición del nodo en menos de 200ms.</p>
-        `;
-      } else if (type === 'marketing') {
-        content = `
-          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">POST /api/v1/marketing/campaigns/:id/dispatch</h4>
-          <p style="margin-bottom: 12px;">Valida contra <code>marketing_suppression_list</code> y encola trabajos en BullMQ.</p>
-          <h4 style="color: var(--accent-purple); font-family: var(--font-mono); margin-bottom: 6px;">GET /api/v1/marketing/tracking/pixel/:logId.gif</h4>
-          <p>Retorna GIF transparente 1x1 y registra apertura de correo.</p>
-          <h4 style="color: var(--accent-purple); font-family: var(--font-mono); margin-bottom: 6px;">GET /api/v1/marketing/tracking/click/:logId</h4>
-          <p>Registra clic y redirige 302 al enlace destino.</p>
-        `;
-      } else {
-        content = `
-          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">POST /api/v1/telemetry/github</h4>
-          <p style="margin-bottom: 12px;">Recibe eventos <code>workflow_run</code>, <code>push</code> y <code>pull_request</code> verificando la firma <code>X-Hub-Signature-256</code> con GITHUB_WEBHOOK_SECRET.</p>
-          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">POST /api/v1/projects</h4>
-          <p>Crea proyecto y dispara el <code>blueprintEngine</code> para generar automáticamente los 5 nodos y tareas iniciales.</p>
-        `;
-      }
-      document.getElementById('modal-content').innerHTML = content;
-      document.getElementById('guide-modal').classList.add('open');
-    }
-
     function closeModal() {
       document.getElementById('guide-modal').classList.remove('open');
     }
@@ -1614,6 +2134,13 @@
         closeModal();
       }
     }
+
+    // INICIALIZACIÓN AUTOMÁTICA
+    window.addEventListener('DOMContentLoaded', () => {
+      syncWithNeonDB();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+    });
 
     // ATAJOS DE TECLADO
     document.addEventListener('keydown', (e) => {

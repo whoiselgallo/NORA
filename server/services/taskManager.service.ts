@@ -1,12 +1,21 @@
 import { Pool, PoolClient } from 'pg';
 import { Server as SocketIOServer } from 'socket.io';
+import { DagCacheService } from './dagCache.service';
 
 export class TaskManagerService {
-  constructor(private pool: Pool, private io: SocketIOServer) {}
+  private dagCacheService: DagCacheService;
+
+  constructor(
+    private pool: Pool,
+    private io: SocketIOServer,
+    dagCacheService?: DagCacheService
+  ) {
+    this.dagCacheService = dagCacheService || new DagCacheService();
+  }
 
   public async updateTaskStatus(
     taskId: string,
-    newStatus: 'TODO' | 'IN_PROGRESS' | 'DONE',
+    newStatus: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE',
     requestingUserRole: 'ADMIN' | 'COLLABORATOR' | 'CLIENT'
   ): Promise<{ taskId: string; newStatus: string; nodeTransitions: Array<{ nodeId: string; status: 'RED' | 'GREEN' }> }> {
     // 1. Regla de autorización estricta: CLIENT no puede mutar tareas de desarrollo
@@ -74,7 +83,12 @@ export class TaskManagerService {
 
       await client.query('COMMIT');
 
-      // 4. Emisión WebSocket a la sala del proyecto (< 200 ms)
+      // 4. Invalidación atómica de Redis inmediatamente ANTES de emitir por WebSockets
+      if (transitions.length > 0) {
+        await this.dagCacheService.invalidateDag(projectId);
+      }
+
+      // 5. Emisión WebSocket a la sala del proyecto (< 200 ms)
       this.io.to(`project:${projectId}`).emit('TASK_STATUS_UPDATED', {
         taskId,
         status: newStatus

@@ -1,91 +1,152 @@
 import { Worker, Job } from 'bullmq';
-import { Pool } from 'pg';
+import { Pool, PoolClient } from 'pg';
 import { Server as SocketIOServer } from 'socket.io';
-import { EmailJobData, CampaignDispatcherService } from '../services/campaignDispatcher.service';
+import { EmailBatchJobData, CampaignDispatcherService } from '../services/campaignDispatcher.service';
 
-export function createEmailMarketingWorker(
+/**
+ * Worker optimizado para procesar lotes de marketing (50 destinatarios por trabajo)
+ * con concurrencia controlada de hasta 5 workers en paralelo.
+ */
+export function createEmailBatchWorker(
   pool: Pool,
   io: SocketIOServer,
   dispatcher: CampaignDispatcherService,
   redisUrl?: string
 ) {
-  return new Worker<EmailJobData>(
-    'email-marketing-queue',
-    async (job: Job<EmailJobData>) => {
-      const { campaignId, logId } = job.data;
+  const connectionUrl = redisUrl || process.env.REDIS_URL || 'redis://127.0.0.1:6379';
 
+  return new Worker<EmailBatchJobData>(
+    'email-marketing-batch-queue',
+    async (job: Job<EmailBatchJobData>) => {
+      const {
+        campaignId,
+        projectId,
+        batchIndex,
+        totalBatches,
+        recipients,
+        subject,
+        htmlBodyTemplate,
+        baseUrl
+      } = job.data;
+
+      const batchCount = recipients.length;
+      if (batchCount === 0) return { processed: 0 };
+
+      // 1. Simular / Ejecutar envío masivo vía API al proveedor (Amazon SES / Resend)
+      const simulatedDispatchLogs: Array<{
+        contactId: string;
+        messageId: string;
+        status: 'DELIVERED' | 'FAILED';
+        errorMessage?: string;
+      }> = [];
+
+      for (const recipient of recipients) {
+        const messageId = `msg_batch_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+        // Personalización de plantilla
+        const personalizedHtml = htmlBodyTemplate
+          .replace(/\{\{\s*first_name\s*\}\}/g, recipient.firstName || 'Cliente')
+          .replace(/\{\{\s*email\s*\}\}/g, recipient.email);
+
+        simulatedDispatchLogs.push({
+          contactId: recipient.contactId,
+          messageId,
+          status: 'DELIVERED'
+        });
+      }
+
+      // Latencia de despacho agrupado (controlada para API del proveedor)
+      await new Promise(resolve => setTimeout(resolve, 80));
+
+      // 2. Transacción SQL atómica: inserción masiva en marketing_email_logs e incremento en campaña
+      const client: PoolClient = await pool.connect();
       try {
-        // Mock de entrega hacia proveedor (Amazon SES / Resend) con RFC 8058
-        const mockMessageId = `msg_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+        await client.query('BEGIN');
 
-        await new Promise((resolve, reject) => {
-          setTimeout(() => {
-            if (Math.random() < 0.02) {
-              reject(new Error('PROVIDER_RATE_LIMIT: HTTP 429 Too Many Requests'));
-            } else {
-              resolve(true);
-            }
-          }, 60);
-        });
+        // Construir sentencia SQL para inserción masiva de los 50 registros en una sola consulta
+        const valuesPlaceholders: string[] = [];
+        const queryParams: any[] = [];
+        let paramIndex = 1;
 
-        // Registrar entrega
-        await pool.query(
-          `UPDATE marketing_email_logs
-           SET status = 'DELIVERED', message_id = $1, sent_at = CURRENT_TIMESTAMP
-           WHERE id = $2`,
-          [mockMessageId, logId]
-        );
+        for (const log of simulatedDispatchLogs) {
+          valuesPlaceholders.push(
+            `($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, CURRENT_TIMESTAMP)`
+          );
+          queryParams.push(campaignId, log.contactId, log.messageId, log.status);
+          paramIndex += 4;
+        }
 
-        // Incrementar métricas en campaña
-        const campRes = await pool.query(
+        const bulkInsertQuery = `
+          INSERT INTO marketing_email_logs (campaign_id, contact_id, message_id, status, sent_at)
+          VALUES ${valuesPlaceholders.join(', ')}
+        `;
+        await client.query(bulkInsertQuery, queryParams);
+
+        // Incrementar sent_count y delivered_count de forma atómica
+        const campRes = await client.query(
           `UPDATE marketing_campaigns
-           SET sent_count = sent_count + 1, delivered_count = delivered_count + 1
-           WHERE id = $1
-           RETURNING project_id, total_recipients, delivered_count, sent_count`,
-          [campaignId]
+           SET sent_count = sent_count + $1,
+               delivered_count = delivered_count + $1
+           WHERE id = $2
+           RETURNING project_id, total_recipients, sent_count, delivered_count, status`,
+          [batchCount, campaignId]
         );
 
-        const camp = campRes.rows[0];
+        const campaign = campRes.rows[0];
 
-        // Emitir telemetría por WebSocket
-        io.to(`project:${camp.project_id}`).emit('CAMPAIGN_TELEMETRY_PULSE', {
-          campaignId,
-          totalRecipients: camp.total_recipients,
-          deliveredCount: camp.delivered_count,
-          sentCount: camp.sent_count
-        });
-
-        // Si se completó el lote, evaluar la regla de color de marketing >= 95%
-        if (camp.sent_count >= camp.total_recipients) {
-          await pool.query(
+        // Si se completaron todos los lotes de la campaña, marcar como COMPLETED
+        let isFullyCompleted = false;
+        if (campaign && campaign.sent_count >= campaign.total_recipients) {
+          await client.query(
             `UPDATE marketing_campaigns
              SET status = 'COMPLETED', completed_at = CURRENT_TIMESTAMP
              WHERE id = $1`,
             [campaignId]
           );
+          isFullyCompleted = true;
+        }
+
+        await client.query('COMMIT');
+
+        // 3. Emitir evento WebSocket CAMPAIGN_TELEMETRY_PULSE a la sala del proyecto
+        io.to(`project:${projectId}`).emit('CAMPAIGN_TELEMETRY_PULSE', {
+          campaignId,
+          batchIndex,
+          totalBatches,
+          processedInBatch: batchCount,
+          sentCount: campaign.sent_count,
+          deliveredCount: campaign.delivered_count,
+          totalRecipients: campaign.total_recipients,
+          status: isFullyCompleted ? 'COMPLETED' : 'PROCESSING',
+          timestamp: new Date().toISOString()
+        });
+
+        // 4. Si se completó la campaña, evaluar regla del 95% para transicionar nodo DAG a GREEN
+        if (isFullyCompleted) {
           await dispatcher.checkCampaignCompletionRule(campaignId);
         }
 
-        return { messageId: mockMessageId, status: 'DELIVERED' };
-      } catch (err: any) {
-        await pool.query(
-          `UPDATE marketing_email_logs
-           SET status = 'PENDING', error_message = $1
-           WHERE id = $2`,
-          [err.message, logId]
-        );
+        return {
+          batchIndex,
+          totalBatches,
+          processed: batchCount,
+          campaignCompleted: isFullyCompleted
+        };
+      } catch (err) {
+        await client.query('ROLLBACK');
         throw err;
+      } finally {
+        client.release();
       }
     },
     {
       connection: {
-        url: redisUrl || process.env.REDIS_URL || 'redis://127.0.0.1:6379'
+        url: connectionUrl
       },
-      limiter: {
-        max: 50,
-        duration: 1000
-      },
-      concurrency: 5
+      concurrency: 5 // Máximo 5 workers en paralelo
     }
   );
 }
+
+// Mantener compatibilidad retroactiva si algún módulo importa createEmailMarketingWorker
+export const createEmailMarketingWorker = createEmailBatchWorker;

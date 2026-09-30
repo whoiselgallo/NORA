@@ -2,9 +2,19 @@ import { Request, Response } from 'express';
 import crypto from 'crypto';
 import { Pool } from 'pg';
 import { Server as SocketIOServer } from 'socket.io';
+import { DagCacheService } from '../services/dagCache.service';
+import { GitHubWebhookSchema } from '../validation/schemas';
 
 export class GitHubWebhookHandler {
-  constructor(private pool: Pool, private io: SocketIOServer) {}
+  private dagCacheService: DagCacheService;
+
+  constructor(
+    private pool: Pool,
+    private io: SocketIOServer,
+    dagCacheService?: DagCacheService
+  ) {
+    this.dagCacheService = dagCacheService || new DagCacheService();
+  }
 
   public handleWebhook = async (req: Request, res: Response): Promise<void> => {
     const startTime = Date.now();
@@ -37,7 +47,17 @@ export class GitHubWebhookHandler {
       return;
     }
 
-    // Respuesta inmediata al evento ping de prueba inicial de GitHub
+    // 2. Validación en runtime con Zod del payload entrante
+    const parseResult = GitHubWebhookSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      res.status(400).json({
+        error: 'Invalid GitHub webhook payload schema',
+        details: parseResult.error.errors.map(e => ({ field: e.path.join('.'), message: e.message }))
+      });
+      return;
+    }
+
+    // Respuesta inmediata al evento ping de GitHub
     if (event === 'ping') {
       res.status(200).json({ message: 'GitHub ping verified OK', zen: req.body?.zen });
       return;
@@ -70,7 +90,7 @@ export class GitHubWebhookHandler {
       let commitSha: string | null = null;
       let branch: string | null = null;
 
-      // 2. Procesar workflow_run
+      // 3. Procesar workflow_run
       if (event === 'workflow_run') {
         const run = payload.workflow_run;
         conclusion = run.conclusion; // "success" | "failure" | "cancelled"
@@ -92,20 +112,25 @@ export class GitHubWebhookHandler {
             [projectId]
           );
 
-          for (const node of updateRes.rows) {
-            this.io.to(`project:${projectId}`).emit('WORKFLOW_NODE_TRANSITION', {
-              nodeId: node.id,
-              slug: node.slug,
-              status: node.status,
-              reason: 'GITHUB_WORKFLOW_RUN_SUCCESS'
-            });
+          if (updateRes.rows.length > 0) {
+            // Borrado atómico de la clave en Redis inmediatamente antes de notificar
+            await this.dagCacheService.invalidateDag(projectId);
+
+            for (const node of updateRes.rows) {
+              this.io.to(`project:${projectId}`).emit('WORKFLOW_NODE_TRANSITION', {
+                nodeId: node.id,
+                slug: node.slug,
+                status: node.status,
+                reason: 'GITHUB_WORKFLOW_RUN_SUCCESS'
+              });
+            }
           }
         }
       }
 
       const latencyMs = Date.now() - startTime;
 
-      // 3. Registrar latencia y métricas en github_telemetry_events
+      // 4. Registrar latencia y métricas en github_telemetry_events
       await client.query(
         `INSERT INTO github_telemetry_events 
           (project_id, event_type, event_action, delivery_id, commit_sha, branch, conclusion, duration_ms, latency_ms, raw_payload)
@@ -124,7 +149,7 @@ export class GitHubWebhookHandler {
         ]
       );
 
-      // 4. Emitir pulsos por WebSocket a la sala del proyecto
+      // 5. Emitir pulsos por WebSocket a la sala del proyecto
       this.io.to(`project:${projectId}`).emit('TELEMETRY_PULSE', {
         projectId,
         event,
