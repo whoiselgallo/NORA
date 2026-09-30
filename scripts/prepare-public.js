@@ -11,6 +11,7 @@ if (!fs.existsSync(publicDir)) {
 // Lista de archivos estáticos que deben estar disponibles en el despliegue
 const filesToCopy = [
   'index.html',
+  'prompt_architect.html',
   'generador_lockups_tecnicos.html',
   'MPS_AYALA_PROPUESTA_ROI_001.html',
   'PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES MPS AYALA..html',

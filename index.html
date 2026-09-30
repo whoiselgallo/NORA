@@ -3,23 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Antigravity Prompt Architect & Instruction Generator</title>
+  <title>Nexus Architect Suite // Centro de Control y Landing Integral</title>
+  
+  <!-- Tipografías de alta fidelidad -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --bg-base: #0a0e17;
-      --bg-surface: #111827;
-      --bg-elevated: #1f2937;
-      --border-subtle: #374151;
-      --border-active: #00f2fe;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --accent-cyan: #00f2fe;
-      --accent-magenta: #ff007f;
-      --accent-green: #10b981;
-      --accent-amber: #f59e0b;
-      --accent-purple: #a855f7;
-      --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --bg-base: #06090F;
+      --bg-surface: #0D131F;
+      --bg-card: #121A2B;
+      --bg-card-hover: #18233A;
+      --border-subtle: #1E293B;
+      --border-glow: rgba(0, 242, 254, 0.35);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      
+      --accent-cyan: #00F2FE;
+      --accent-blue: #38BDF8;
+      --accent-magenta: #FF007F;
+      --accent-purple: #A855F7;
+      --accent-green: #10B981;
+      --accent-green-glow: rgba(16, 185, 129, 0.4);
+      --accent-red: #EF4444;
+      --accent-red-glow: rgba(239, 68, 68, 0.4);
+      --accent-amber: #F59E0B;
+      
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * {
@@ -32,1243 +46,1438 @@
       background-color: var(--bg-base);
       color: var(--text-main);
       font-family: var(--font-sans);
-      line-height: 1.5;
-      padding: 20px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(255, 0, 127, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.04) 0%, transparent 50%),
+        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
     }
 
-    .container {
-      max-width: 1780px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.1fr 1.25fr 1.15fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 1440px) {
-      .container {
-        grid-template-columns: 1fr 1fr;
-      }
-      .panel-output-col {
-        grid-column: 1 / -1;
-      }
-    }
-
-    @media (max-width: 960px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-      .panel-output-col {
-        grid-column: 1 / 2;
-      }
-    }
-
-    header {
-      grid-column: 1 / -1;
+    /* BARRA SUPERIOR */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(6, 9, 15, 0.85);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 4px;
-      flex-wrap: wrap;
-      gap: 16px;
+      transition: all 0.3s ease;
     }
 
-    .title-block h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #fff;
+    .brand-wrap {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 14px;
+      text-decoration: none;
     }
 
-    .title-block h1 span.logo-tag {
+    .brand-logo {
+      width: 38px;
+      height: 38px;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #06090F;
+      font-family: var(--font-mono);
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-text span.badge-tag {
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      color: var(--accent-cyan);
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .top-telemetry-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .telemetry-pill {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse-dot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .status-dot.red {
+      background: var(--accent-red);
+      box-shadow: 0 0 8px var(--accent-red);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-repo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-family: var(--font-mono);
+    }
+
+    .btn-repo:hover {
+      border-color: var(--accent-cyan);
+      background: var(--bg-card);
+      box-shadow: 0 0 14px rgba(0, 242, 254, 0.2);
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .main-wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* HERO SECTION */
+    .hero-box {
+      background: linear-gradient(180deg, rgba(13, 19, 31, 0.85) 0%, rgba(6, 9, 15, 0.95) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-magenta), transparent);
+    }
+
+    .hero-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      color: var(--accent-cyan);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      color: #FFFFFF;
+    }
+
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, #00F2FE 0%, #38BDF8 40%, #A855F7 80%, #FF007F 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .title-block p {
-      font-size: 0.85rem;
+    .hero-subtitle {
+      font-size: 1.08rem;
       color: var(--text-muted);
+      max-width: 820px;
+      line-height: 1.6;
+      margin-bottom: 28px;
     }
 
-    .badge-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
+    .hero-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .metric-badge {
-      background: var(--bg-surface);
+    .hero-stat-card {
+      background: rgba(18, 26, 43, 0.5);
       border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 0.8rem;
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+
+    .hero-stat-card .stat-label {
+      font-size: 0.75rem;
       font-family: var(--font-mono);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .metric-badge span {
-      color: var(--accent-cyan);
-      font-weight: 700;
-    }
-
-    .panel {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      min-height: 680px;
-    }
-
-    .panel-header {
-      padding: 14px 18px;
-      background: var(--bg-elevated);
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .panel-header h2 {
-      font-size: 0.92rem;
+      color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--accent-cyan);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      margin-bottom: 4px;
     }
 
-    .panel-body {
-      padding: 18px;
-      overflow-y: auto;
-      max-height: calc(100vh - 180px);
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Espacio de Idea */
-    .idea-tools {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .examples-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .example-btn {
-      background: rgba(31, 41, 55, 0.7);
-      border: 1px solid var(--border-subtle);
-      color: #94a3b8;
-      border-radius: 5px;
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .example-btn:hover {
-      border-color: var(--accent-cyan);
-      color: #fff;
-      background: rgba(0, 242, 254, 0.1);
-    }
-
-    .idea-textarea {
-      flex: 1;
-      min-height: 380px;
-      width: 100%;
-      background: #06090e;
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      color: #f1f5f9;
-      font-family: var(--font-sans);
-      font-size: 0.88rem;
-      padding: 16px;
-      resize: vertical;
-      outline: none;
-      line-height: 1.6;
-      transition: border-color 0.2s;
-    }
-
-    .idea-textarea:focus {
-      border-color: var(--border-active);
-      box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
-    }
-
-    .idea-stats-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      font-size: 0.75rem;
-      color: var(--text-muted);
+    .hero-stat-card .stat-value {
+      font-size: 1.35rem;
+      font-weight: 800;
       font-family: var(--font-mono);
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .detected-keywords-box {
-      margin-top: 12px;
-      background: rgba(31, 41, 55, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 6px;
-      padding: 10px 12px;
-    }
-
-    .detected-keywords-title {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .keywords-tags {
+      color: #FFF;
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
       gap: 6px;
     }
 
-    .keyword-tag {
-      background: rgba(0, 242, 254, 0.12);
-      border: 1px solid rgba(0, 242, 254, 0.3);
-      color: var(--accent-cyan);
-      font-size: 0.72rem;
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-    }
-
-    .coverage-card {
-      margin-top: 14px;
-      background: rgba(17, 24, 39, 0.8);
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      padding: 12px;
-    }
-
-    .coverage-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .progress-bar-bg {
-      width: 100%;
-      height: 8px;
-      background: rgba(55, 65, 81, 0.6);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
-      width: 0%;
-      transition: width 0.35s ease;
-    }
-
-    /* Checklist */
-    .filter-tabs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .tab-pill {
-      background: rgba(31, 41, 55, 0.7);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .tab-pill.active {
-      background: var(--accent-cyan);
-      color: #000;
-      border-color: var(--accent-cyan);
-      font-weight: 600;
-    }
-
-    .phase-card {
-      background: rgba(31, 41, 55, 0.35);
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      margin-bottom: 14px;
-      padding: 14px;
-      transition: border-color 0.2s;
-    }
-
-    .phase-card:hover {
-      border-color: rgba(0, 242, 254, 0.3);
-    }
-
-    .phase-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .phase-badge {
-      font-size: 0.72rem;
-      font-family: var(--font-mono);
-      padding: 2px 7px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-muted);
-    }
-
-    .phase-badge.complete {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .checklist-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .check-item {
-      display: grid;
-      grid-template-columns: 20px 1fr;
-      gap: 12px;
-      align-items: start;
-      font-size: 0.84rem;
-      background: rgba(17, 24, 39, 0.65);
-      padding: 9px 12px;
-      border-radius: 5px;
-      border-left: 3px solid transparent;
-      border: 1px solid var(--border-subtle);
-      transition: all 0.2s ease;
-    }
-
-    .check-item.state-auto {
-      border-left: 3px solid var(--accent-cyan);
-      background: rgba(0, 242, 254, 0.04);
-      border-color: rgba(0, 242, 254, 0.3);
-    }
-
-    .check-item.state-manual {
-      border-left: 3px solid var(--accent-green);
-      background: rgba(16, 185, 129, 0.04);
-    }
-
-    .check-item.state-pending {
-      border-left: 3px solid rgba(245, 158, 11, 0.4);
-      opacity: 0.88;
-    }
-
-    .check-item input[type="checkbox"] {
-      margin-top: 3px;
-      accent-color: var(--accent-cyan);
-      cursor: pointer;
-      width: 16px;
-      height: 16px;
-    }
-
-    .item-content {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .item-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .item-label {
-      color: var(--text-main);
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .status-badge {
-      font-size: 0.68rem;
-      font-family: var(--font-mono);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .status-badge.badge-auto {
-      background: rgba(0, 242, 254, 0.15);
-      color: var(--accent-cyan);
-      border: 1px solid rgba(0, 242, 254, 0.35);
-    }
-
-    .status-badge.badge-manual {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-green);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-    }
-
-    .status-badge.badge-pending {
-      background: rgba(245, 158, 11, 0.12);
-      color: var(--accent-amber);
-      border: 1px solid rgba(245, 158, 11, 0.25);
-    }
-
-    .item-desc {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .item-meta {
-      font-family: var(--font-mono);
+    .hero-stat-card .stat-detail {
       font-size: 0.72rem;
       color: var(--text-muted);
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
       margin-top: 4px;
     }
 
-    .tag {
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-size: 0.68rem;
+    /* MATRIZ DE APLICACIONES Y MÓDULOS (CARDS) */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
-    .tag-action {
-      background: rgba(0, 242, 254, 0.1);
+    .section-title-wrap h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title-wrap p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .quick-filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-cyan);
       color: var(--accent-cyan);
     }
 
-    .tag-mention {
-      background: rgba(255, 0, 127, 0.1);
-      color: var(--accent-magenta);
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 24px;
     }
 
-    .tag-skill {
-      background: rgba(16, 185, 129, 0.1);
-      color: var(--accent-green);
-    }
-
-    /* Terminal */
-    .terminal-container {
-      position: relative;
+    .app-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 28px;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .terminal-output {
-      flex: 1;
-      min-height: 480px;
-      width: 100%;
-      background: #06090e;
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      color: #7dd3fc;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      padding: 16px;
-      resize: none;
-      outline: none;
-      white-space: pre;
-      line-height: 1.45;
-      tab-size: 2;
+    .app-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 242, 254, 0.5);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5), 0 0 24px rgba(0, 242, 254, 0.15);
     }
 
-    .terminal-output:focus {
-      border-color: var(--border-active);
+    .app-card.featured {
+      border-color: rgba(0, 242, 254, 0.4);
+      background: linear-gradient(180deg, #131E33 0%, #0F172A 100%);
     }
 
-    .action-row {
+    .app-card-top {
       display: flex;
-      gap: 10px;
-      margin-top: 14px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
     }
 
-    .btn {
-      cursor: pointer;
-      display: inline-flex;
+    .app-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 9px 14px;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      border: none;
+      font-size: 1.4rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .app-badge {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-cyan { background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-magenta { background: rgba(255, 0, 127, 0.1); color: var(--accent-magenta); border: 1px solid rgba(255, 0, 127, 0.3); }
+    .badge-purple { background: rgba(168, 85, 247, 0.1); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+    .badge-amber { background: rgba(245, 158, 11, 0.1); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .app-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 8px;
+    }
+
+    .app-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .feature-tag-list {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .tech-pill {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: var(--text-dim);
+    }
+
+    .app-card-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
 
     .btn-primary {
-      background: var(--accent-cyan);
-      color: #000;
       flex: 1;
+      background: linear-gradient(135deg, var(--accent-cyan), #0284C7);
+      color: #06090F;
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      text-align: center;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
     }
 
     .btn-primary:hover {
-      background: #38f9d7;
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.4);
+      filter: brightness(1.1);
     }
 
     .btn-secondary {
-      background: var(--bg-elevated);
-      color: var(--text-main);
+      background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      cursor: pointer;
     }
 
     .btn-secondary:hover {
-      background: var(--border-subtle);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
     }
 
-    .toggle-label {
+    /* DEMO INTERACTIVA / SIMULADOR EN VIVO */
+    .interactive-showcase {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .showcase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 18px;
+    }
+
+    .showcase-title h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .showcase-title p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* MINI DAG CANVAS INTERACTIVO */
+    .dag-interactive-container {
+      background: #030712;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    .dag-nodes-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 14px 4px;
+    }
+
+    .dag-node-preview {
+      flex: 1;
+      min-width: 170px;
+      background: #0B1120;
+      border: 2px solid var(--accent-red);
+      box-shadow: 0 0 14px var(--accent-red-glow);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .dag-node-preview.green {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 20px var(--accent-green-glow);
+      background: #061A14;
+    }
+
+    .dag-node-preview:hover {
+      transform: translateY(-2px);
+    }
+
+    .dag-node-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .dag-category-tag {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .dag-status-pill {
+      font-size: 0.62rem;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-red);
+    }
+
+    .dag-node-preview.green .dag-status-pill {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--accent-green);
+    }
+
+    .dag-node-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dag-node-tasks-count {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .dag-connector {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    /* SIMULADOR DE ACCIONES */
+    .simulation-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .sim-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .sim-card h4 {
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      color: var(--accent-cyan);
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.78rem;
+    }
+
+    .sim-btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .sim-action-btn {
+      flex: 1;
+      padding: 8px 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sim-action-btn:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .sim-action-btn.success-btn:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    /* CONSOLA DE LOGS */
+    .log-console-wrap {
+      background: #020617;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      height: 120px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .log-entry {
+      color: var(--text-dim);
+    }
+    .log-entry .timestamp { color: var(--accent-cyan); }
+    .log-entry.event-pulse { color: var(--accent-green); }
+    .log-entry.event-transition { color: var(--accent-magenta); font-weight: bold; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 40px 24px;
+      text-align: center;
+      background: #04070D;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-links a {
       color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+    }
+
+    /* MODAL DE INFORMACIÓN RÁPIDA / GUÍA */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-window {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      max-width: 680px;
+      width: 100%;
+      padding: 32px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8), 0 0 32px rgba(0, 242, 254, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+    }
+
+    .modal-header h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #FFF;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
       cursor: pointer;
     }
 
-    .toggle-label input {
-      accent-color: var(--accent-cyan);
-      cursor: pointer;
+    .btn-close-modal:hover {
+      color: var(--accent-red);
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2.1rem; }
+      .top-nav { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .nav-actions { width: 100%; justify-content: space-between; }
+      .apps-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <div class="title-block">
-        <h1>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-cyan)"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-          <span class="logo-tag">Antigravity</span> Instruction Architect
-        </h1>
-        <p>Espacio de trabajo inteligente: describe tu proyecto en texto plano, pre-rellena el checklist por fases y genera directivas lean operativas.</p>
+  <!-- TOP NAVIGATION BAR -->
+  <nav class="top-nav">
+    <a href="#" class="brand-wrap">
+      <div class="brand-logo">Δ</div>
+      <div class="brand-text">
+        <h1>Nexus Architect Suite <span class="badge-tag">v2.5 Enterprise</span></h1>
+        <p>Ecosistema Centralizado de Arquitectura, Telemetría y Marketing</p>
       </div>
-      <div class="badge-bar">
-        <div class="metric-badge">Auto-detectados: <span id="auto-count">0</span></div>
-        <div class="metric-badge">Pendientes: <span id="pending-count">12</span></div>
-        <div class="metric-badge">Activos: <span id="active-count">0</span>/12</div>
-        <div class="metric-badge">Tokens est.: <span id="token-count">0</span></div>
+    </a>
+
+    <!-- STRIP DE TELEMETRÍA EN VIVO -->
+    <div class="top-telemetry-strip">
+      <div class="telemetry-pill">
+        <span class="status-dot"></span>
+        <span>NEON POSTGRES: <strong>ONLINE</strong></span>
       </div>
-    </header>
+      <div class="telemetry-pill">
+        <span class="status-dot"></span>
+        <span>WEBSOCKETS: <strong>ROOM ACTIVE</strong></span>
+      </div>
+      <div class="telemetry-pill">
+        <span class="status-dot"></span>
+        <span>BULLMQ QUEUE: <strong>READY</strong></span>
+      </div>
+    </div>
 
-    <!-- PANEL 1: ESPACIO DE TRABAJO - IDEA Y DESCRIPCIÓN DEL PROYECTO -->
-    <section class="panel">
-      <div class="panel-header">
-        <h2>
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          1. Espacio de Trabajo: Idea de Proyecto
-        </h2>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <label class="toggle-label" title="Analiza e infiere automáticamente los puntos mientras escribes">
-            <input type="checkbox" id="live-analysis-toggle" checked onchange="handleLiveToggle()">
-            Auto-análisis en vivo
-          </label>
-          <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="clearIdea()">Limpiar</button>
-        </div>
+    <!-- ACCIONES DE NAVEGACIÓN -->
+    <div class="nav-actions">
+      <button class="btn-repo" onclick="openQuickGuideModal()">
+        <span>ℹ Guía Rápida</span>
+      </button>
+      <a href="https://github.com/whoiselgallo/antigravity-instruction-architect" target="_blank" rel="noopener" class="btn-repo">
+        <span>GitHub Repository ↗</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="main-wrap">
+
+    <!-- HERO SECTION -->
+    <section class="hero-box">
+      <div class="hero-badge-tag">
+        <span>⚡ CENTRO DE CONTROL DE OPERACIONES</span>
+        <span>•</span>
+        <span>PROTOCOL: BINARY RED/GREEN</span>
       </div>
 
-      <div class="panel-body">
-        <div class="idea-tools">
-          <div class="examples-bar">
-            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Cargar plantilla:</span>
-            <button class="example-btn" onclick="loadExample('saas')">⚡ SaaS & Stripe</button>
-            <button class="example-btn" onclick="loadExample('ecommerce')">🛒 E-commerce & Leads</button>
-            <button class="example-btn" onclick="loadExample('api')">🔌 API REST & Worker</button>
-          </div>
+      <h1 class="hero-title">
+        Plataforma Unificada de <span class="gradient-text">Ingeniería, Workflows y Marketing</span>
+      </h1>
+      <p class="hero-subtitle">
+        Gestiona el ciclo de vida completo de tus sistemas: desde la formulación de directivas con IA y diagramación vectorial, hasta la ejecución de grafos DAG en vivo, sincronización de tareas To-Do y despacho masivo de correos corporativos.
+      </p>
+
+      <div class="hero-metrics-grid">
+        <div class="hero-stat-card">
+          <div class="stat-label">Esquema Relacional</div>
+          <div class="stat-value" id="stat-tables">15 Tablas</div>
+          <div class="stat-detail">Neon PostgreSQL AWS Cloud</div>
         </div>
-
-        <textarea 
-          id="project-idea" 
-          class="idea-textarea" 
-          placeholder="Describe aquí tu proyecto en texto plano...
-Escribe todo lo que se te ocurra:
-• ¿Qué problema resuelve o qué servicio ofrece?
-• ¿Qué acciones y funciones realiza el usuario?
-• ¿Qué base de datos o almacenamiento requiere?
-• ¿Tiene pasarela de pagos (Stripe, Paypal), webhooks o firmas HMAC?
-• ¿Necesita tareas pesadas en segundo plano o colas asíncronas (Redis/BullMQ)?
-• ¿Cómo es la interfaz gráfica (Tailwind, responsive móvil, componentes UI)?
-• ¿Deseas capturar leads en formularios y medir eventos en Analytics?
-• ¿Requiere despliegue con Docker / GitHub Actions o auditoría Lighthouse?
-
-El motor analizará tus palabras y pre-rellenará automáticamente las fases de desarrollo."
-          oninput="handleIdeaInput()"
-        ></textarea>
-
-        <div class="idea-stats-bar">
-          <div>
-            <span id="idea-word-count">0</span> palabras · <span id="idea-char-count">0</span> caracteres
-          </div>
-          <div>
-            Cobertura del plan: <strong id="coverage-percent" style="color:var(--accent-cyan)">0%</strong>
-          </div>
+        <div class="hero-stat-card">
+          <div class="stat-label">Latencia WebSockets</div>
+          <div class="stat-value" style="color: var(--accent-green);">< 180 ms</div>
+          <div class="stat-detail">Salas aisladas por Project ID</div>
         </div>
-
-        <div class="coverage-card">
-          <div class="coverage-header">
-            <span>Progreso de fases cubiertas por tu idea:</span>
-            <span id="coverage-label">0 de 12 puntos definidos</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div id="coverage-progress-bar" class="progress-bar-fill"></div>
-          </div>
+        <div class="hero-stat-card">
+          <div class="stat-label">Validador Criptográfico</div>
+          <div class="stat-value" style="color: var(--accent-cyan);">HMAC-SHA256</div>
+          <div class="stat-detail">GitHub Webhooks Verificados</div>
         </div>
-
-        <div class="detected-keywords-box">
-          <div class="detected-keywords-title">Módulos & Capacidades detectadas en tu texto:</div>
-          <div class="keywords-tags" id="detected-tags-list">
-            <span style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">Escribe en el espacio superior para detectar módulos...</span>
-          </div>
-        </div>
-
-        <div class="action-row" style="margin-top: 14px;">
-          <button class="btn btn-primary" onclick="analyzeIdea()">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            Analizar Idea y Pre-rellenar Fases
-          </button>
+        <div class="hero-stat-card">
+          <div class="stat-label">Despachador de Correos</div>
+          <div class="stat-value" style="color: var(--accent-purple);">BullMQ + Redis</div>
+          <div class="stat-detail">RFC 8058 & Umbral ≥95%</div>
         </div>
       </div>
     </section>
 
-    <!-- PANEL 2: CHECKLIST INTERACTIVO POR FASES -->
-    <section class="panel">
-      <div class="panel-header">
-        <h2>
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          2. Fases de Desarrollo
-        </h2>
-        <div style="display:flex; gap:6px;">
-          <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="selectAll(true)">Todo</button>
-          <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="selectAll(false)">Limpiar</button>
+    <!-- MATRIZ DE MÓDULOS DEL PROYECTO -->
+    <section>
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2><span>❖</span> Catálogo Central de Módulos y Herramientas</h2>
+          <p>Selecciona cualquier herramienta para acceder de forma instantánea a sus funciones operativas.</p>
+        </div>
+        <div class="quick-filter-bar">
+          <button class="filter-btn active" onclick="filterCards('all')">Todos (7)</button>
+          <button class="filter-btn" onclick="filterCards('core')">Ingeniería & DAG</button>
+          <button class="filter-btn" onclick="filterCards('ai')">IA & Directivas</button>
+          <button class="filter-btn" onclick="filterCards('marketing')">Marketing</button>
+          <button class="filter-btn" onclick="filterCards('commercial')">Comercial & ROI</button>
         </div>
       </div>
 
-      <div class="panel-body">
-        <div class="filter-tabs">
-          <button class="tab-pill active" id="tab-all" onclick="setFilter('all')">Todos (<span id="tab-count-all">12</span>)</button>
-          <button class="tab-pill" id="tab-auto" onclick="setFilter('auto')">⚡ Auto-detectados (<span id="tab-count-auto">0</span>)</button>
-          <button class="tab-pill" id="tab-pending" onclick="setFilter('pending')">⏳ Pendientes de Definir (<span id="tab-count-pending">12</span>)</button>
+      <div class="apps-grid">
+
+        <!-- CARD 1: WORKSPACE DAG & REACT FLOW -->
+        <div class="app-card featured" data-category="core">
+          <div class="app-card-top">
+            <div class="app-icon" style="background: rgba(0, 242, 254, 0.1); border-color: rgba(0, 242, 254, 0.3);">
+              🕸️
+            </div>
+            <span class="app-badge badge-cyan">DAG Engine Live</span>
+          </div>
+          <h3>Lienzo de Workflow DAG & Telemetría</h3>
+          <p>
+            Grafo interactivo con React Flow (@xyflow/react). Visualiza los 5 nodos secuenciales de arquitectura con mutación de color binaria (Rojo y Verde), sincronización reactiva <200ms y bloqueo de edición para rol CLIENT.
+          </p>
+          <div class="feature-tag-list">
+            <span class="tech-pill">React Flow</span>
+            <span class="tech-pill">WebSocket Rooms</span>
+            <span class="tech-pill">Binary Color Algorithm</span>
+            <span class="tech-pill">Role Guard</span>
+          </div>
+          <div class="app-card-actions">
+            <button class="btn-primary" onclick="scrollToShowcase()">
+              <span>Probar Simulador DAG</span> →
+            </button>
+            <button class="btn-secondary" onclick="openEndpointInfo('workflow')">
+              <span>API / Sockets</span>
+            </button>
+          </div>
         </div>
 
-        <div id="checklist-root">
-          <!-- Render dinámico vía JS -->
+        <!-- CARD 2: PROMPT ARCHITECT -->
+        <div class="app-card" data-category="ai">
+          <div class="app-card-top">
+            <div class="app-icon" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+              🧠
+            </div>
+            <span class="app-badge badge-purple">AI Generator</span>
+          </div>
+          <h3>Antigravity Prompt Architect</h3>
+          <p>
+            Área de trabajo en texto plano para ideas de proyectos. Procesa tu texto descriptivo y pre-rellena automáticamente el checklist interactivo de desarrollo de 5 fases para generar directivas de sistema precisas.
+          </p>
+          <div class="feature-tag-list">
+            <span class="tech-pill">Idea Parser</span>
+            <span class="tech-pill">5-Phase Checklist</span>
+            <span class="tech-pill">System Directive Exporter</span>
+            <span class="tech-pill">Local Storage Sync</span>
+          </div>
+          <div class="app-card-actions">
+            <a href="prompt_architect.html" class="btn-primary">
+              <span>Abrir Prompt Architect</span> ↗
+            </a>
+          </div>
         </div>
+
+        <!-- CARD 3: TO-DO TASK MANAGER -->
+        <div class="app-card" data-category="core">
+          <div class="app-card-top">
+            <div class="app-icon" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+              ✓
+            </div>
+            <span class="app-badge badge-green">Colaborativo</span>
+          </div>
+          <h3>Gestor de Tareas To-Do Binario</h3>
+          <p>
+            Gestor de tareas manuales con prioridades (Low, Medium, High, Critical) vinculado a los nodos del grafo. Cuando el 100% de las tareas de un nodo pasan a DONE, el nodo transmuta de inmediato a GREEN.
+          </p>
+          <div class="feature-tag-list">
+            <span class="tech-pill">Task CRUD</span>
+            <span class="tech-pill">Role: COLLABORATOR</span>
+            <span class="tech-pill">Real-time Pulse</span>
+            <span class="tech-pill">Neon DB Persisted</span>
+          </div>
+          <div class="app-card-actions">
+            <button class="btn-primary" onclick="simulateTaskMutation()">
+              <span>Simular Transición To-Do</span>
+            </button>
+            <button class="btn-secondary" onclick="openEndpointInfo('tasks')">
+              <span>Rutas /tasks</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 4: EMAIL MARKETING BULLMQ -->
+        <div class="app-card" data-category="marketing">
+          <div class="app-card-top">
+            <div class="app-icon" style="background: rgba(255, 0, 127, 0.1); border-color: rgba(255, 0, 127, 0.3);">
+              ✉
+            </div>
+            <span class="app-badge badge-magenta">BullMQ + Redis</span>
+          </div>
+          <h3>Motor de Mercadotecnia y Envíos Masivos</h3>
+          <p>
+            Segmentación de audiencias con verificación contra listas de supresión, cabeceras RFC 8058 One-Click Unsubscribe, inyección de píxel 1x1, enlaces 302 y regla de completado ≥95% para validar el nodo de marketing a GREEN.
+          </p>
+          <div class="feature-tag-list">
+            <span class="tech-pill">BullMQ Queue</span>
+            <span class="tech-pill">Suppression List</span>
+            <span class="tech-pill">Pixel Tracking</span>
+            <span class="tech-pill">95% Success Trigger</span>
+          </div>
+          <div class="app-card-actions">
+            <button class="btn-primary" onclick="simulateMarketingCampaign()">
+              <span>Disparar Campaña Sim</span>
+            </button>
+            <button class="btn-secondary" onclick="openEndpointInfo('marketing')">
+              <span>Tracking API</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 5: CAD VECTORIAL Y LOCKUPS -->
+        <div class="app-card" data-category="core">
+          <div class="app-card-top">
+            <div class="app-icon" style="background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
+              📐
+            </div>
+            <span class="app-badge badge-cyan">Diseño SVG CAD</span>
+          </div>
+          <h3>Generador de Lockups Técnicos Vectoriales</h3>
+          <p>
+            Suite visual de diseño vectorial para generar lockups de arquitectura, sellos técnicos, diagramas de ingeniería y exportación limpia en formatos SVG de alta precisión y rasterizados PNG.
+          </p>
+          <div class="feature-tag-list">
+            <span class="tech-pill">SVG Engine</span>
+            <span class="tech-pill">Technical Lockups</span>
+            <span class="tech-pill">Vector Exports</span>
+            <span class="tech-pill">Canvas Studio</span>
+          </div>
+          <div class="app-card-actions">
+            <a href="generador_lockups_tecnicos.html" class="btn-primary">
+              <span>Abrir Generador Lockups</span> ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- CARD 6: PROPUESTAS COMERCIALES & ROI -->
+        <div class="app-card" data-category="commercial">
+          <div class="app-card-top">
+            <div class="app-icon" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+              📊
+            </div>
+            <span class="app-badge badge-amber">Finanzas & ROI</span>
+          </div>
+          <h3>Modelos de Proyección Comercial y ROI</h3>
+          <p>
+            Documentación ejecutiva y modelo de retorno de inversión para el proyecto de modernización MPS Ayala. Incluye cálculo de optimización operativa, amortización fiscal y desglose de servicios.
+          </p>
+          <div class="feature-tag-list">
+            <span class="tech-pill">ROI Projections</span>
+            <span class="tech-pill">Tax Strategy</span>
+            <span class="tech-pill">Executive Reports</span>
+            <span class="tech-pill">Client Facing</span>
+          </div>
+          <div class="app-card-actions">
+            <a href="MPS_AYALA_PROPUESTA_ROI_001.html" class="btn-primary" target="_blank">
+              <span>Informe ROI ↗</span>
+            </a>
+            <a href="PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES MPS AYALA..html" class="btn-secondary" target="_blank">
+              <span>Soluciones Digitales ↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- CARD 7: API CONSOLE & WEBHOOKS -->
+        <div class="app-card" data-category="core">
+          <div class="app-card-top">
+            <div class="app-icon" style="background: rgba(148, 163, 184, 0.1); border-color: rgba(148, 163, 184, 0.3);">
+              ⚡
+            </div>
+            <span class="app-badge badge-cyan">Backend API</span>
+          </div>
+          <h3>Consola de Servicios REST y Webhooks</h3>
+          <p>
+            Especificación de endpoints backend, validador de firmas HMAC-SHA256 para GitHub Webhooks (X-Hub-Signature-256), y conexión en vivo a la base de datos distribuida Neon PostgreSQL.
+          </p>
+          <div class="feature-tag-list">
+            <span class="tech-pill">Express + TS</span>
+            <span class="tech-pill">HMAC-SHA256 Auth</span>
+            <span class="tech-pill">Neon Connection Pool</span>
+            <span class="tech-pill">REST v1</span>
+          </div>
+          <div class="app-card-actions">
+            <button class="btn-primary" onclick="simulateGitHubWebhook()">
+              <span>Simular Webhook GitHub</span>
+            </button>
+            <button class="btn-secondary" onclick="openEndpointInfo('api-full')">
+              <span>Ver Endpoints</span>
+            </button>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- PANEL 3: SALIDA OPTIMIZADA PARA ANTIGRAVITY -->
-    <section class="panel panel-output-col">
-      <div class="panel-header">
-        <h2>
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-          3. Directiva Antigravity
-        </h2>
-        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">LEAN_PROMPT_V1</span>
-      </div>
-
-      <div class="panel-body terminal-container">
-        <textarea id="output" class="terminal-output" readonly spellcheck="false"></textarea>
-        <div class="action-row">
-          <button class="btn btn-primary" onclick="copyInstructions(event)">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-            Copiar Directiva al Portapapeles
-          </button>
-          <button class="btn btn-secondary" onclick="generateOutput()">Actualizar</button>
+    <!-- DEMO INTERACTIVA / SIMULADOR EN VIVO DEL SISTEMA -->
+    <section class="interactive-showcase" id="interactive-demo">
+      <div class="showcase-header">
+        <div class="showcase-title">
+          <h3><span>⚡</span> Demostrador Interactivo: DAG & Transición Binaria de Estados</h3>
+          <p>Prueba en tiempo real cómo los eventos de tareas y webhooks activan la regla binaria Rojo/Verde.</p>
+        </div>
+        <div class="telemetry-pill">
+          <span class="status-dot"></span>
+          <span>ESTADO: <strong id="overall-status-text">1 DE 5 COMPLETADOS (20%)</strong></span>
         </div>
       </div>
+
+      <!-- GRAFO DAG SIMULADO -->
+      <div class="dag-interactive-container">
+        <div class="dag-nodes-row">
+          
+          <!-- NODO 1 -->
+          <div class="dag-node-preview green" id="node-infra" onclick="toggleNodeState('node-infra', 'Infraestructura')">
+            <div class="dag-node-header">
+              <span class="dag-category-tag">INFRA</span>
+              <span class="dag-status-pill" id="pill-node-infra">GREEN</span>
+            </div>
+            <div class="dag-node-title">1. Infra & Neon DB</div>
+            <div class="dag-node-tasks-count" id="count-node-infra">2/2 tareas completadas</div>
+          </div>
+
+          <div class="dag-connector">→</div>
+
+          <!-- NODO 2 -->
+          <div class="dag-node-preview" id="node-backend" onclick="toggleNodeState('node-backend', 'Core API')">
+            <div class="dag-node-header">
+              <span class="dag-category-tag">BACKEND</span>
+              <span class="dag-status-pill" id="pill-node-backend">RED</span>
+            </div>
+            <div class="dag-node-title">2. Servicios Core API</div>
+            <div class="dag-node-tasks-count" id="count-node-backend">1/2 tareas completadas</div>
+          </div>
+
+          <div class="dag-connector">→</div>
+
+          <!-- NODO 3 -->
+          <div class="dag-node-preview" id="node-frontend" onclick="toggleNodeState('node-frontend', 'Frontend')">
+            <div class="dag-node-header">
+              <span class="dag-category-tag">FRONTEND</span>
+              <span class="dag-status-pill" id="pill-node-frontend">RED</span>
+            </div>
+            <div class="dag-node-title">3. UI & React Flow</div>
+            <div class="dag-node-tasks-count" id="count-node-frontend">0/2 tareas completadas</div>
+          </div>
+
+          <div class="dag-connector">→</div>
+
+          <!-- NODO 4 -->
+          <div class="dag-node-preview" id="node-telemetry" onclick="toggleNodeState('node-telemetry', 'Telemetría')">
+            <div class="dag-node-header">
+              <span class="dag-category-tag">DEVOPS</span>
+              <span class="dag-status-pill" id="pill-node-telemetry">RED</span>
+            </div>
+            <div class="dag-node-title">4. Telemetría GitHub</div>
+            <div class="dag-node-tasks-count" id="count-node-telemetry">0/1 webhook exitoso</div>
+          </div>
+
+          <div class="dag-connector">→</div>
+
+          <!-- NODO 5 -->
+          <div class="dag-node-preview" id="node-marketing" onclick="toggleNodeState('node-marketing', 'Marketing')">
+            <div class="dag-node-header">
+              <span class="dag-category-tag">MARKETING</span>
+              <span class="dag-status-pill" id="pill-node-marketing">RED</span>
+            </div>
+            <div class="dag-node-title">5. Campaña Masiva</div>
+            <div class="dag-node-tasks-count" id="count-node-marketing">0% de entrega (Requiere ≥95%)</div>
+          </div>
+
+        </div>
+
+        <!-- CONTROLES DE SIMULACIÓN -->
+        <div class="simulation-controls">
+          <div class="sim-card">
+            <h4><span>✓</span> Mutación de Tareas To-Do</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn success-btn" onclick="completeAllTasksNode2()">Completar Tareas API (→ GREEN)</button>
+              <button class="sim-action-btn" onclick="revertTasksNode2()">Revertir a Pendiente (→ RED)</button>
+            </div>
+          </div>
+
+          <div class="sim-card">
+            <h4><span>⚡</span> GitHub Webhook Simulator</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn success-btn" onclick="simulateGitHubWebhook()">Enviar conclusion: success</button>
+              <button class="sim-action-btn" onclick="simulateGitHubWebhookFail()">Enviar failure</button>
+            </div>
+          </div>
+
+          <div class="sim-card">
+            <h4><span>✉</span> BullMQ Email Dispatch</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn success-btn" onclick="simulateMarketingCampaign()">Entregar 100% (≥95% → GREEN)</button>
+              <button class="sim-action-btn" onclick="resetMarketingCampaign()">Reiniciar Campaña</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TERMINAL DE EVENTOS EN TIEMPO REAL -->
+        <div>
+          <div style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-dim); margin-bottom: 6px; display: flex; justify-content: space-between;">
+            <span>SOCKET.IO LOG STREAM [project:59b89995]</span>
+            <span style="color: var(--accent-cyan); cursor: pointer;" onclick="clearLogs()">Limpiar Consola</span>
+          </div>
+          <div class="log-console-wrap" id="log-console">
+            <div class="log-entry"><span class="timestamp">[18:45:00]</span> WS client connected to room 'project:59b89995-9684-4de6-9291-f7a6806b999a'</div>
+            <div class="log-entry"><span class="timestamp">[18:45:01]</span> System initialized: 5 nodes in DAG. Initial binary rule applied.</div>
+          </div>
+        </div>
+
+      </div>
     </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="prompt_architect.html">Prompt Architect</a>
+      <span>•</span>
+      <a href="generador_lockups_tecnicos.html">Generador de Lockups</a>
+      <span>•</span>
+      <a href="MPS_AYALA_PROPUESTA_ROI_001.html" target="_blank">Modelo Financiero ROI</a>
+      <span>•</span>
+      <a href="PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES MPS AYALA..html" target="_blank">Soluciones Digitales MPS</a>
+      <span>•</span>
+      <a href="https://github.com/whoiselgallo/antigravity-instruction-architect" target="_blank">GitHub Repository</a>
+    </div>
+    <div class="footer-copy">
+      © 2026 Nexus Architect Suite // Desplegado en Vercel & Neon PostgreSQL. Arquitectura de alto rendimiento.
+    </div>
+  </footer>
+
+  <!-- MODAL DE INFORMACIÓN RÁPIDA / GUÍA -->
+  <div class="modal-backdrop" id="guide-modal" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="modal-title">Guía de Navegación del Proyecto</h3>
+        <button class="btn-close-modal" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modal-content" style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+        <!-- Se llena dinámicamente -->
+      </div>
+    </div>
   </div>
 
   <script>
-    // Definición de datos de pipeline con palabras clave normalizadas (sin tildes)
-    const PIPELINE_DATA = [
-      {
-        phase: "Fase 1: Definición & Arquitectura",
-        items: [
-          {
-            id: "arch_spec",
-            label: "Modelado de Negocio & KPI",
-            desc: "Define métricas de conversión y límites técnicos del workspace.",
-            action: "/plan",
-            mention: "@specs/prd.md",
-            skill: "accidental-data-loss-prevention",
-            checked: false,
-            source: "none", // 'auto' | 'manual' | 'none'
-            keywords: ["negocio", "kpi", "prd", "especific", "requerim", "objetiv", "mvp", "saas", "plataforma", "usuario", "cliente", "conversi", "modelo", "alcance", "idea", "funcionalidad", "app", "aplicacion"]
-          },
-          {
-            id: "arch_contract",
-            label: "Contrato de Datos & Interfaces API",
-            desc: "Genera tipados TypeScript estrictos antes de codificar la interfaz.",
-            action: "/contract",
-            mention: "@types/api.d.ts",
-            skill: "openapi-spec",
-            checked: false,
-            source: "none",
-            keywords: ["contrat", "interfa", "typescript", "types", "tipado", "dto", "swagger", "openapi", "payload", "schema", "zod", "d.ts", "serializ", "valida"]
-          },
-          {
-            id: "arch_db",
-            label: "Esquema DB & Migraciones",
-            desc: "Declaración de esquemas relacionales optimizados e índices.",
-            action: "/db-schema",
-            mention: "@prisma/schema.prisma",
-            skill: "db-architect",
-            checked: false,
-            source: "none",
-            keywords: ["db", "database", "base de datos", "postgres", "mysql", "sqlite", "mongo", "prisma", "tabla", "relacion", "migrac", "sql", "orm", "indice", "foreign key", "entidad", "repositorio", "almacenar", "guardar datos"]
-          }
-        ]
-      },
-      {
-        phase: "Fase 2: Frontend & Maquetación UI",
-        items: [
-          {
-            id: "fe_tokens",
-            label: "Sistema de Diseño & Design Tokens",
-            desc: "Tokens CSS, paleta de colores y variables globales.",
-            action: "/style-tokens",
-            mention: "@tailwind.config.js",
-            skill: "ui-system",
-            checked: false,
-            source: "none",
-            keywords: ["diseno", "design", "token", "color", "paleta", "tailwind", "css", "estilo", "dark mode", "modo oscuro", "theme", "tema", "branding", "tipograf"]
-          },
-          {
-            id: "fe_components",
-            label: "Componentes Atómicos Reutilizables",
-            desc: "Creación modular de componentes UI sin lógica de negocio.",
-            action: "/ui-atomic",
-            mention: "@components/ui/",
-            skill: "clean-code",
-            checked: false,
-            source: "none",
-            keywords: ["component", "atomic", "boton", "modal", "card", "tarjeta", "formulario", "input", "interfaz", "ui", "reutiliz", "react", "vue", "svelte", "widget", "shadcn"]
-          },
-          {
-            id: "fe_views",
-            label: "Layouts Responsive & Vistas Core",
-            desc: "Estructuras de página fluidas optimizadas para conversión móvil.",
-            action: "/views",
-            mention: "@app/routes/",
-            skill: "responsive-ux",
-            checked: false,
-            source: "none",
-            keywords: ["responsive", "movil", "celular", "pantalla", "layout", "vista", "ruta", "navega", "dashboard", "panel de control", "landing", "checkout", "sidebar", "escritorio", "mobile"]
-          }
-        ]
-      },
-      {
-        phase: "Fase 3: Backend & Lógica de Servicios",
-        items: [
-          {
-            id: "be_endpoints",
-            label: "Controladores & Endpoints REST",
-            desc: "Rutas con validación de payloads mediante esquemas estrictos.",
-            action: "/api-route",
-            mention: "@server/routes/",
-            skill: "backend-standards",
-            checked: false,
-            source: "none",
-            keywords: ["backend", "endpoint", "rest", "controlador", "servicio", "servidor", "node", "express", "fastify", "nest", "crud", "login", "auth", "autentic", "jwt", "sesion", "post", "get", "api"]
-          },
-          {
-            id: "be_webhooks",
-            label: "Receptor de Webhooks & Validación HMAC",
-            desc: "Endpoints con rawBody, timingSafeEqual e idempotencia.",
-            action: "/webhook-handler",
-            mention: "@server/webhooks/",
-            skill: "security-validator",
-            checked: false,
-            source: "none",
-            keywords: ["webhook", "stripe", "paypal", "mercadopago", "pasarela", "pago", "hmac", "firma", "callback", "idempotencia", "notificacion externa", "signature"]
-          },
-          {
-            id: "be_queues",
-            label: "Colas Asíncronas & Tareas en Segundo Plano",
-            desc: "Desacople de procesos pesados vía background workers.",
-            action: "/queue-worker",
-            mention: "@workers/queue.ts",
-            skill: "queue-worker-pattern",
-            checked: false,
-            source: "none",
-            keywords: ["cola", "queue", "worker", "bullmq", "redis", "asincron", "segundo plano", "background", "pesad", "cron", "batch", "email", "correo", "push", "scheduler"]
-          }
-        ]
-      },
-      {
-        phase: "Fase 4: Telemetría & Conversión de Leads",
-        items: [
-          {
-            id: "lead_telemetry",
-            label: "Instrumentación de Eventos DataLayer",
-            desc: "Eventos personalizados de clics, scroll y abandono de flujo.",
-            action: "/analytics",
-            mention: "@analytics/events.ts",
-            skill: "telemetry-collector",
-            checked: false,
-            source: "none",
-            keywords: ["analytic", "telemetr", "evento", "tracking", "seguimiento", "datalayer", "mixpanel", "google analytics", "ga4", "pixel", "metric", "clic", "retencion"]
-          },
-          {
-            id: "lead_pipeline",
-            label: "Captura & Enrutamiento de Leads",
-            desc: "Validación y despacho directo de prospectos hacia CRM.",
-            action: "/lead-pipeline",
-            mention: "@forms/contact.tsx",
-            skill: "lead-funnel-optimizer",
-            checked: false,
-            source: "none",
-            keywords: ["lead", "prospecto", "crm", "contacto", "contactar", "captura", "embudo", "funnel", "venta", "hubspot", "formulario de contacto", "newsletter", "suscripci"]
-          }
-        ]
-      },
-      {
-        phase: "Fase 5: QA, Rendimiento & Despliegue",
-        items: [
-          {
-            id: "qa_lighthouse",
-            label: "Auditoría Lighthouse & Core Web Vitals",
-            desc: "Revisión de Performance >= 90, LCP, CLS y compresión de assets.",
-            action: "/audit-perf",
-            mention: "@perf/metrics.json",
-            skill: "lighthouse-audit",
-            checked: false,
-            source: "none",
-            keywords: ["rendimiento", "performance", "lighthouse", "core web vitals", "lcp", "cls", "velocidad", "optimiz", "cache", "seo", "compres", "auditor"]
-          },
-          {
-            id: "deploy_cicd",
-            label: "Pipeline CI/CD & Despliegue Cloud",
-            desc: "Automatización de builds, pruebas unitarias y release edge/cloud.",
-            action: "/deploy",
-            mention: "@.github/workflows/",
-            skill: "deploy-ci",
-            checked: false,
-            source: "none",
-            keywords: ["deploy", "desplieg", "ci/cd", "cicd", "github actions", "docker", "vercel", "netlify", "cloud", "aws", "gcp", "kubernetes", "produccion", "release"]
-          }
-        ]
-      }
-    ];
+    // FUNCIONALIDAD DE FILTRADO DE CARDS
+    function filterCards(category) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
 
-    const PRESET_EXAMPLES = {
-      saas: `Plataforma SaaS B2B de facturación recurrente y suscripciones mensuales con pagos vía Stripe.
-- El usuario se registra, inicia sesión con autenticación JWT y gestiona sus clientes y facturas.
-- Arquitectura API REST con Node.js y validación estricta de esquemas TypeScript con Zod.
-- Base de datos relacional PostgreSQL modelada con Prisma ORM (tablas de usuarios, suscripciones, facturas).
-- Integración de Webhooks de Stripe con validación criptográfica de firma HMAC e idempotencia para renovaciones automáticas.
-- Procesamiento en segundo plano: Cola asíncrona con Redis y BullMQ para generación de PDFs y envío de correos transaccionales a clientes.
-- Interfaz gráfica moderna con componentes en React, diseño responsive en Tailwind CSS con modo oscuro y dashboard interactivo.
-- Medición de telemetría de eventos DataLayer para retención de clientes y embudo de conversión de leads en la landing page.
-- Pipeline de CI/CD en GitHub Actions con Docker para despliegue automatizado a producción.`,
+      const cards = document.querySelectorAll('.app-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
 
-      ecommerce: `Tienda online e-commerce mobile-first para venta de productos físicos y suscripciones de cajas mensuales.
-- Catálogo interactivo con filtros, búsqueda dinámica, tarjetas de productos atómicas y carrito de compras deslizante.
-- Landing page de alta conversión optimizada para celulares y pantallas táctiles con sistema de diseño basado en Tailwind tokens.
-- Formulario de captura de prospectos y leads con ofertas por registro conectadas directamente a un CRM.
-- Instrumentación profunda de eventos de analítica: clics de adición al carrito, visualización de productos y abandono de checkout.
-- Pasarela de pago con Stripe y PayPal, con receptor seguro de webhooks para confirmar órdenes y actualizar inventario.
-- Auditoría Lighthouse estricta: Performance >= 95, Core Web Vitals (LCP < 2.5s, CLS < 0.1), compresión WebP y carga diferida.`,
+    function scrollToShowcase() {
+      document.getElementById('interactive-demo').scrollIntoView({ behavior: 'smooth' });
+    }
 
-      api: `API RESTful modular de alto rendimiento para gestión de activos e inventario empresarial.
-- Endpoints REST para operaciones CRUD completas sobre almacenes, categorías, lotes y proveedores.
-- Contrato estricto de interfaces TypeScript OpenAPI / Swagger con tipado riguroso sin ningún tipo 'any'.
-- Base de datos relacional PostgreSQL con migraciones versionadas de Prisma e índices optimizados en claves compuestas.
-- Tareas pesadas asíncronas: workers en segundo plano para consolidación de reportes nocturnos en formato Excel y limpieza de logs.
-- Seguridad en webhooks para sincronización bidireccional con ERP de terceros.
-- Pipeline de pruebas unitarias automatizadas y despliegue continuo (CI/CD) en contenedor Docker.`
+    // LOGGING SYSTEM
+    function addLog(msg, type = 'normal') {
+      const consoleBox = document.getElementById('log-console');
+      const time = new Date().toTimeString().split(' ')[0];
+      const div = document.createElement('div');
+      div.className = `log-entry ${type === 'pulse' ? 'event-pulse' : (type === 'transition' ? 'event-transition' : '')}`;
+      div.innerHTML = `<span class="timestamp">[${time}]</span> ${msg}`;
+      consoleBox.appendChild(div);
+      consoleBox.scrollTop = consoleBox.scrollHeight;
+    }
+
+    function clearLogs() {
+      document.getElementById('log-console').innerHTML = '';
+      addLog('Consola reiniciada.', 'normal');
+    }
+
+    // SIMULACIÓN DE NODOS Y REGLA BINARIA
+    const nodeStates = {
+      'node-infra': true,
+      'node-backend': false,
+      'node-frontend': false,
+      'node-telemetry': false,
+      'node-marketing': false
     };
 
-    let currentFilter = 'all'; // 'all' | 'auto' | 'pending'
-    let inputDebounceTimer = null;
-
-    // Función auxiliar para normalizar texto (remover tildes y caracteres especiales)
-    function normalizeText(str) {
-      if (!str) return "";
-      return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    function updateOverallMetrics() {
+      let completed = Object.values(nodeStates).filter(Boolean).length;
+      let pct = (completed / 5) * 100;
+      document.getElementById('overall-status-text').innerText = `${completed} DE 5 COMPLETADOS (${pct}%)`;
     }
 
-    // Análisis de la idea en texto plano
-    function analyzeIdea() {
-      const textarea = document.getElementById("project-idea");
-      const rawText = textarea.value;
-      const text = normalizeText(rawText);
+    function toggleNodeState(nodeId, nodeName) {
+      nodeStates[nodeId] = !nodeStates[nodeId];
+      const el = document.getElementById(nodeId);
+      const pill = document.getElementById(`pill-${nodeId}`);
 
-      const words = rawText.trim() ? rawText.trim().split(/\s+/).length : 0;
-      document.getElementById("idea-word-count").textContent = words;
-      document.getElementById("idea-char-count").textContent = rawText.length;
-
-      const detectedKeywordsSet = new Set();
-      let autoDetectedCount = 0;
-
-      PIPELINE_DATA.forEach(group => {
-        group.items.forEach(item => {
-          let matched = false;
-          let matchedKeyword = null;
-
-          if (text.length > 5) {
-            for (const kw of item.keywords) {
-              if (text.includes(kw)) {
-                matched = true;
-                matchedKeyword = kw;
-                break;
-              }
-            }
-          }
-
-          if (matched) {
-            item.checked = true;
-            item.source = "auto";
-            autoDetectedCount++;
-            detectedKeywordsSet.add(item.label);
-          } else {
-            // Si antes era auto y ahora ya no coincide el texto, vuelve a pendiente (a menos que fue marcado manualmente)
-            if (item.source === "auto") {
-              item.checked = false;
-              item.source = "none";
-            }
-          }
-        });
-      });
-
-      // Renderizar tags de conceptos detectados
-      const tagsContainer = document.getElementById("detected-tags-list");
-      if (detectedKeywordsSet.size === 0) {
-        tagsContainer.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">No se han detectado módulos aún. Describe tu idea con más detalle o carga una plantilla.</span>`;
+      if (nodeStates[nodeId]) {
+        el.classList.add('green');
+        pill.innerText = 'GREEN';
+        addLog(`[WS EMIT] WORKFLOW_NODE_TRANSITION: Node '${nodeName}' -> GREEN (100% requirements verified)`, 'transition');
       } else {
-        tagsContainer.innerHTML = Array.from(detectedKeywordsSet).map(label => 
-          `<span class="keyword-tag">✓ ${label}</span>`
-        ).join("");
+        el.classList.remove('green');
+        pill.innerText = 'RED';
+        addLog(`[WS EMIT] WORKFLOW_NODE_TRANSITION: Node '${nodeName}' -> RED (Reverted to pending)`, 'transition');
       }
-
-      renderChecklist();
+      updateOverallMetrics();
     }
 
-    function handleIdeaInput() {
-      const liveEnabled = document.getElementById("live-analysis-toggle").checked;
-      if (!liveEnabled) {
-        const rawText = document.getElementById("project-idea").value;
-        const words = rawText.trim() ? rawText.trim().split(/\s+/).length : 0;
-        document.getElementById("idea-word-count").textContent = words;
-        document.getElementById("idea-char-count").textContent = rawText.length;
-        return;
-      }
-
-      clearTimeout(inputDebounceTimer);
-      inputDebounceTimer = setTimeout(() => {
-        analyzeIdea();
-      }, 250);
+    function completeAllTasksNode2() {
+      const el = document.getElementById('node-backend');
+      const pill = document.getElementById('pill-node-backend');
+      const count = document.getElementById('count-node-backend');
+      nodeStates['node-backend'] = true;
+      el.classList.add('green');
+      pill.innerText = 'GREEN';
+      count.innerText = '2/2 tareas completadas (100%)';
+      addLog("[WS EMIT] TASK_STATUS_UPDATED: taskId 'tsk-api-2' -> DONE", 'pulse');
+      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Servicios Core API' -> GREEN", 'transition');
+      updateOverallMetrics();
     }
 
-    function handleLiveToggle() {
-      const liveEnabled = document.getElementById("live-analysis-toggle").checked;
-      if (liveEnabled) {
-        analyzeIdea();
-      }
+    function revertTasksNode2() {
+      const el = document.getElementById('node-backend');
+      const pill = document.getElementById('pill-node-backend');
+      const count = document.getElementById('count-node-backend');
+      nodeStates['node-backend'] = false;
+      el.classList.remove('green');
+      pill.innerText = 'RED';
+      count.innerText = '1/2 tareas completadas';
+      addLog("[WS EMIT] TASK_STATUS_UPDATED: taskId 'tsk-api-2' -> IN_PROGRESS", 'pulse');
+      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Servicios Core API' -> RED (Reverted)", 'transition');
+      updateOverallMetrics();
     }
 
-    function loadExample(key) {
-      if (PRESET_EXAMPLES[key]) {
-        const textarea = document.getElementById("project-idea");
-        textarea.value = PRESET_EXAMPLES[key];
-        analyzeIdea();
-      }
+    function simulateGitHubWebhook() {
+      const el = document.getElementById('node-telemetry');
+      const pill = document.getElementById('pill-node-telemetry');
+      const count = document.getElementById('count-node-telemetry');
+      nodeStates['node-telemetry'] = true;
+      el.classList.add('green');
+      pill.innerText = 'GREEN';
+      count.innerText = '1/1 workflow_run exitoso (sha: 032064f)';
+      addLog("[HTTP POST /api/v1/telemetry/github] HMAC-SHA256 signature verified OK (Status 200)", 'pulse');
+      addLog("[WS EMIT] TELEMETRY_PULSE: workflow_run 'CI Build' conclusion: success (Duration: 34s)", 'pulse');
+      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Telemetría GitHub' -> GREEN", 'transition');
+      updateOverallMetrics();
     }
 
-    function clearIdea() {
-      document.getElementById("project-idea").value = "";
-      PIPELINE_DATA.forEach(group => {
-        group.items.forEach(item => {
-          item.checked = false;
-          item.source = "none";
-        });
-      });
-      analyzeIdea();
+    function simulateGitHubWebhookFail() {
+      const el = document.getElementById('node-telemetry');
+      const pill = document.getElementById('pill-node-telemetry');
+      const count = document.getElementById('count-node-telemetry');
+      nodeStates['node-telemetry'] = false;
+      el.classList.remove('green');
+      pill.innerText = 'RED';
+      count.innerText = '0/1 workflow_run (Falló o pendiente)';
+      addLog("[HTTP POST /api/v1/telemetry/github] workflow_run conclusion: failure", 'pulse');
+      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Telemetría GitHub' -> RED", 'transition');
+      updateOverallMetrics();
     }
 
-    function setFilter(filter) {
-      currentFilter = filter;
-      document.querySelectorAll(".tab-pill").forEach(el => el.classList.remove("active"));
-      const activeBtn = document.getElementById(`tab-${filter}`);
-      if (activeBtn) activeBtn.classList.add("active");
-      renderChecklist();
+    function simulateMarketingCampaign() {
+      const el = document.getElementById('node-marketing');
+      const pill = document.getElementById('pill-node-marketing');
+      const count = document.getElementById('count-node-marketing');
+      nodeStates['node-marketing'] = true;
+      el.classList.add('green');
+      pill.innerText = 'GREEN';
+      count.innerText = '98.5% tasa de entrega exitosa (≥95%)';
+      addLog("[BULLMQ QUEUE] Job #8491 completed: 250 sent, 0 hard bounces, 2 unsubscribes", 'pulse');
+      addLog("[WS EMIT] CAMPAIGN_TELEMETRY_PULSE: Campaign 'Lanzamiento v2.5' reached 98.5% delivery", 'pulse');
+      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Campaña Masiva' -> GREEN (≥95% threshold met)", 'transition');
+      updateOverallMetrics();
     }
 
-    function renderChecklist() {
-      const root = document.getElementById("checklist-root");
-      root.innerHTML = "";
+    function resetMarketingCampaign() {
+      const el = document.getElementById('node-marketing');
+      const pill = document.getElementById('pill-node-marketing');
+      const count = document.getElementById('count-node-marketing');
+      nodeStates['node-marketing'] = false;
+      el.classList.remove('green');
+      pill.innerText = 'RED';
+      count.innerText = '0% de entrega (Requiere ≥95%)';
+      addLog("[BULLMQ QUEUE] Campaign status reset to DRAFT", 'normal');
+      addLog("[WS EMIT] WORKFLOW_NODE_TRANSITION: Node 'Campaña Masiva' -> RED", 'transition');
+      updateOverallMetrics();
+    }
 
-      let totalItems = 0;
-      let totalAuto = 0;
-      let totalManual = 0;
-      let totalChecked = 0;
+    function simulateTaskMutation() {
+      scrollToShowcase();
+      completeAllTasksNode2();
+    }
 
-      PIPELINE_DATA.forEach(group => {
-        totalItems += group.items.length;
-        group.items.forEach(i => {
-          if (i.checked) {
-            totalChecked++;
-            if (i.source === "auto") totalAuto++;
-            else totalManual++;
-          }
-        });
-      });
+    // MODALES INFORMATIVOS
+    function openQuickGuideModal() {
+      document.getElementById('modal-title').innerText = 'Guía Integral del Ecosistema Nexus';
+      document.getElementById('modal-content').innerHTML = `
+        <p style="margin-bottom: 14px;"><strong>Bienvenido a Nexus Architect Suite</strong>. Esta plataforma centraliza todas las herramientas desarrolladas para la ingeniería, diseño y comercialización del proyecto:</p>
+        <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+          <li><strong>Lienzo de Workflow DAG:</strong> Grafo de 5 nodos con algoritmo binario de color (Rojo si falta alguna tarea o webhook, Verde cuando el 100% de requerimientos se cumple).</li>
+          <li><strong>Prompt Architect:</strong> Redactor en texto plano de ideas que auto-rellena checklists de 5 fases y formula directivas de sistema para LLMs.</li>
+          <li><strong>Gestor To-Do:</strong> Sincronización colaborativa de tareas con tiempo de respuesta inferior a 200 ms y protección contra mutaciones por rol CLIENT.</li>
+          <li><strong>Motor de Marketing BullMQ:</strong> Cola de envíos masivos por Redis, filtrado de listas de supresión, cabeceras RFC 8058 y métricas de apertura/clics.</li>
+          <li><strong>Generador de Lockups CAD:</strong> Plataforma SVG para creación de esquemas técnicos vectoriales y marcas de agua.</li>
+          <li><strong>Modelos ROI y Comerciales:</strong> Informes financieros con ROI y desgravación fiscal para MPS Ayala.</li>
+        </ul>
+        <p style="font-family: var(--font-mono); font-size: 0.78rem; background: rgba(0,242,254,0.06); padding: 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2);">
+          Tip: En el simulador inferior puedes accionar los botones de simulación para observar las transiciones de eventos y logs de WebSocket en tiempo real.
+        </p>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+    }
 
-      const totalPending = totalItems - totalChecked;
-
-      // Actualizar contadores globales y métricas
-      document.getElementById("auto-count").textContent = totalAuto;
-      document.getElementById("pending-count").textContent = totalPending;
-      document.getElementById("active-count").textContent = totalChecked;
-      document.getElementById("tab-count-all").textContent = totalItems;
-      document.getElementById("tab-count-auto").textContent = totalAuto;
-      document.getElementById("tab-count-pending").textContent = totalPending;
-
-      const coveragePercent = Math.round((totalChecked / totalItems) * 100);
-      document.getElementById("coverage-percent").textContent = `${coveragePercent}%`;
-      document.getElementById("coverage-label").textContent = `${totalChecked} de ${totalItems} puntos definidos (${totalPending} pendientes)`;
-      document.getElementById("coverage-progress-bar").style.width = `${coveragePercent}%`;
-
-      PIPELINE_DATA.forEach((group) => {
-        // Filtrar items según tab activo
-        const filteredItems = group.items.filter(item => {
-          if (currentFilter === "auto") return item.checked && item.source === "auto";
-          if (currentFilter === "pending") return !item.checked;
-          return true; // 'all'
-        });
-
-        if (filteredItems.length === 0 && currentFilter !== 'all') {
-          return; // No mostrar fases vacías al filtrar
-        }
-
-        const card = document.createElement("div");
-        card.className = "phase-card";
-
-        const groupCheckedCount = group.items.filter(i => i.checked).length;
-        const isGroupComplete = groupCheckedCount === group.items.length;
-
-        const title = document.createElement("div");
-        title.className = "phase-title";
-        title.innerHTML = `
-          <span>${group.phase}</span>
-          <span class="phase-badge ${isGroupComplete ? 'complete' : ''}">
-            ${groupCheckedCount}/${group.items.length} definidos
-          </span>
+    function openEndpointInfo(type) {
+      document.getElementById('modal-title').innerText = 'Endpoints REST & Eventos de Socket';
+      let content = '';
+      if (type === 'workflow') {
+        content = `
+          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">GET /api/v1/projects/:projectId/workflow</h4>
+          <p style="margin-bottom: 12px;">Retorna el grafo completo de nodos (con categoría, coordenadas y estado RED/GREEN), aristas conexas y tareas asociadas para React Flow.</p>
+          <h4 style="color: var(--accent-green); font-family: var(--font-mono); margin-bottom: 6px;">WS Event: WORKFLOW_NODE_TRANSITION</h4>
+          <p>Payload: <code>{ nodeId, status: 'RED' | 'GREEN', reason: 'TASK_COMPLETION_STATE_CHANGED' }</code></p>
         `;
-        card.appendChild(title);
-
-        const groupContainer = document.createElement("div");
-        groupContainer.className = "checklist-group";
-
-        filteredItems.forEach((item) => {
-          const row = document.createElement("div");
-          let stateClass = "state-pending";
-          let badgeHtml = `<span class="status-badge badge-pending">⏳ Falta por definir</span>`;
-
-          if (item.checked) {
-            if (item.source === "auto") {
-              stateClass = "state-auto";
-              badgeHtml = `<span class="status-badge badge-auto">⚡ Auto-detectado</span>`;
-            } else {
-              stateClass = "state-manual";
-              badgeHtml = `<span class="status-badge badge-manual">✓ Definido manual</span>`;
-            }
-          }
-
-          row.className = `check-item ${stateClass}`;
-
-          row.innerHTML = `
-            <input type="checkbox" id="${item.id}" ${item.checked ? "checked" : ""} onchange="updateItemState('${item.id}', this.checked)">
-            <div class="item-content">
-              <div class="item-header-row">
-                <label for="${item.id}" class="item-label">${item.label}</label>
-                ${badgeHtml}
-              </div>
-              <p class="item-desc">${item.desc}</p>
-              <div class="item-meta">
-                <span class="tag tag-action">${item.action}</span>
-                <span class="tag tag-mention">${item.mention}</span>
-                <span class="tag tag-skill">skill:${item.skill}</span>
-              </div>
-            </div>
-          `;
-          groupContainer.appendChild(row);
-        });
-
-        card.appendChild(groupContainer);
-        root.appendChild(card);
-      });
-
-      if (root.children.length === 0) {
-        root.innerHTML = `<div style="text-align:center; padding: 30px; color: var(--text-muted); font-size: 0.85rem;">
-          No hay elementos en esta vista. (${currentFilter === 'pending' ? '¡Excelente! Todas las fases han sido cubiertas.' : 'Aún no hay puntos auto-detectados.'})
-        </div>`;
-      }
-
-      generateOutput();
-    }
-
-    function updateItemState(id, isChecked) {
-      for (const group of PIPELINE_DATA) {
-        const found = group.items.find(i => i.id === id);
-        if (found) {
-          found.checked = isChecked;
-          found.source = isChecked ? "manual" : "none";
-          break;
-        }
-      }
-      renderChecklist();
-    }
-
-    function selectAll(state) {
-      PIPELINE_DATA.forEach(group => {
-        group.items.forEach(item => {
-          item.checked = state;
-          item.source = state ? "manual" : "none";
-        });
-      });
-      renderChecklist();
-    }
-
-    function generateOutput() {
-      const activeItems = [];
-      const pendingItems = [];
-      const usedSkills = new Set();
-      const rawIdea = document.getElementById("project-idea") ? document.getElementById("project-idea").value.trim() : "";
-
-      PIPELINE_DATA.forEach(group => {
-        const checkedInGroup = group.items.filter(i => i.checked);
-        const unCheckedInGroup = group.items.filter(i => !i.checked);
-
-        if (checkedInGroup.length > 0) {
-          activeItems.push({
-            phase: group.phase,
-            items: checkedInGroup
-          });
-          checkedInGroup.forEach(i => usedSkills.add({ skill: i.skill, action: i.action }));
-        }
-
-        if (unCheckedInGroup.length > 0) {
-          pendingItems.push({
-            phase: group.phase,
-            items: unCheckedInGroup
-          });
-        }
-      });
-
-      // Generación de Directiva Lean para Antigravity
-      let prompt = `<!-- ANTIGRAVITY WORKSPACE SYSTEM DIRECTIVE -->\n`;
-      
-      if (rawIdea) {
-        prompt += `[PROJECT_VISION_AND_INTENT]\n`;
-        prompt += `${rawIdea}\n\n`;
-      }
-
-      prompt += `[CORE_PROTOCOL: LEAN_EXECUTION]\n`;
-      prompt += `- Zero-filler mode: omit conversational introductions, apologies, and unsolicited closing notes.\n`;
-      prompt += `- Token budgeting: reference file context strictly via @path pointers. Do NOT dump entire files unless requested.\n`;
-      prompt += `- Code delivery: provide complete, executable code without truncated snippets.\n\n`;
-
-      prompt += `[PIPELINE_ROUTING_ACTIONS]\n`;
-      if (activeItems.length === 0) {
-        prompt += `# NO ACTIONS CURRENTLY SELECTED\n\n`;
+      } else if (type === 'tasks') {
+        content = `
+          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">POST /api/v1/projects/:projectId/tasks</h4>
+          <p style="margin-bottom: 12px;">Crea una nueva tarea. Rechaza modificaciones si el usuario tiene rol <code>CLIENT</code> con código 403 Forbidden.</p>
+          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">PATCH /api/v1/tasks/:taskId/status</h4>
+          <p>Actualiza estado a TODO, IN_PROGRESS o DONE. Dispara la evaluación binaria de transición del nodo en menos de 200ms.</p>
+        `;
+      } else if (type === 'marketing') {
+        content = `
+          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">POST /api/v1/marketing/campaigns/:id/dispatch</h4>
+          <p style="margin-bottom: 12px;">Valida contra <code>marketing_suppression_list</code> y encola trabajos en BullMQ.</p>
+          <h4 style="color: var(--accent-purple); font-family: var(--font-mono); margin-bottom: 6px;">GET /api/v1/marketing/tracking/pixel/:logId.gif</h4>
+          <p>Retorna GIF transparente 1x1 y registra apertura de correo.</p>
+          <h4 style="color: var(--accent-purple); font-family: var(--font-mono); margin-bottom: 6px;">GET /api/v1/marketing/tracking/click/:logId</h4>
+          <p>Registra clic y redirige 302 al enlace destino.</p>
+        `;
       } else {
-        activeItems.forEach(group => {
-          prompt += `# ${group.phase.toUpperCase()}\n`;
-          group.items.forEach(item => {
-            const originTag = item.source === "auto" ? "[AUTO]" : "[MANUAL]";
-            prompt += `${item.action.padEnd(16)} -> Inspect ${item.mention} | Run ${item.desc} ${originTag}\n`;
-          });
-          prompt += `\n`;
-        });
+        content = `
+          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">POST /api/v1/telemetry/github</h4>
+          <p style="margin-bottom: 12px;">Recibe eventos <code>workflow_run</code>, <code>push</code> y <code>pull_request</code> verificando la firma <code>X-Hub-Signature-256</code> con GITHUB_WEBHOOK_SECRET.</p>
+          <h4 style="color: var(--accent-cyan); font-family: var(--font-mono); margin-bottom: 6px;">POST /api/v1/projects</h4>
+          <p>Crea proyecto y dispara el <code>blueprintEngine</code> para generar automáticamente los 5 nodos y tareas iniciales.</p>
+        `;
       }
-
-      prompt += `[SKILLS_LAZY_LOAD_MAP]\n`;
-      prompt += `Load specialized skill context ONLY when executing the associated trigger action:\n`;
-      if (usedSkills.size === 0) {
-        prompt += `- None selected.\n`;
-      } else {
-        usedSkills.forEach(pair => {
-          prompt += `- On '${pair.action}' => activate skill:${pair.skill}\n`;
-        });
-      }
-
-      prompt += `\n[QUALITY_GATES]\n`;
-      prompt += `- Strict typing: zero 'any' fallback.\n`;
-      prompt += `- Performance: Core Web Vitals threshold >= 90.\n`;
-      prompt += `- Webhook security: require rawBody capture & timingSafeEqual HMAC validation.\n`;
-
-      if (pendingItems.length > 0) {
-        prompt += `\n[PENDING_PHASE_GAPS]\n`;
-        prompt += `# Items not yet verified or explicitly defined by the architect:\n`;
-        pendingItems.forEach(group => {
-          group.items.forEach(item => {
-            prompt += `- Pending [${group.phase.split(':')[0]}]: ${item.label} (${item.action})\n`;
-          });
-        });
-      }
-
-      const outputEl = document.getElementById("output");
-      outputEl.value = prompt;
-
-      // Estimación de tokens (~4 caracteres por token en prompts estructurados en inglés/código)
-      const estTokens = Math.ceil(prompt.length / 3.8);
-      document.getElementById("token-count").textContent = estTokens;
+      document.getElementById('modal-content').innerHTML = content;
+      document.getElementById('guide-modal').classList.add('open');
     }
 
-    function copyInstructions(event) {
-      const outputEl = document.getElementById("output");
-      navigator.clipboard.writeText(outputEl.value).then(() => {
-        const btn = (event && (event.currentTarget || event.target)) || document.querySelector('.btn-primary');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = `✓ ¡Copiado con éxito!`;
-        btn.style.background = "#10b981";
-        setTimeout(() => {
-          btn.innerHTML = originalText;
-          btn.style.background = "var(--accent-cyan)";
-        }, 2000);
-      });
+    function closeModal() {
+      document.getElementById('guide-modal').classList.remove('open');
     }
 
-    // Inicializar al cargar con la plantilla SaaS de muestra para mostrar la funcionalidad de inmediato
-    loadExample('saas');
+    function closeModalOnBackdrop(e) {
+      if (e.target.id === 'guide-modal') {
+        closeModal();
+      }
+    }
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+      if (e.key === '1') scrollToShowcase();
+      if (e.key === '2') window.location.href = 'prompt_architect.html';
+      if (e.key === '3') window.location.href = 'generador_lockups_tecnicos.html';
+    });
   </script>
+
 </body>
 </html>
