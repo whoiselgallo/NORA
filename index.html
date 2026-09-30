@@ -1202,6 +1202,27 @@
               <button class="sim-action-btn" onclick="resetMarketingCampaign()">Reiniciar Campaña</button>
             </div>
           </div>
+
+          <div class="sim-card" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.05);">
+            <h4 style="color: var(--accent-purple);"><span>🤖</span> AI Task Planner</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn" onclick="triggerAIDecomposeTask()" style="border-color: var(--accent-purple); color: var(--accent-purple);">✨ Desglosar con IA</button>
+            </div>
+          </div>
+
+          <div class="sim-card" style="border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.05);">
+            <h4 style="color: var(--accent-cyan);"><span>📊</span> AI Executive Status</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn" onclick="triggerAIExecutiveReport()" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">📄 Reporte Ejecutivo</button>
+            </div>
+          </div>
+
+          <div class="sim-card" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);">
+            <h4 style="color: var(--accent-red);"><span>⚡</span> AI DevOps Triage</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn" onclick="triggerAIDevOpsTriage()" style="border-color: var(--accent-red); color: var(--accent-red);">🔍 Triage CI/CD</button>
+            </div>
+          </div>
         </div>
 
         <!-- TERMINAL DE EVENTOS EN TIEMPO REAL -->
@@ -1455,6 +1476,95 @@
         </div>
       `;
       document.getElementById('guide-modal').classList.add('open');
+    }
+
+    function triggerAIDecomposeTask() {
+      addLog('[AI GATEWAY] Solicitando desglose de tarea: "Integrar pasarela de pagos con Stripe y webhooks"...', 'pulse');
+      document.getElementById('modal-title').innerText = '🤖 Desglose de Subtareas Sugerido por IA';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="font-size:0.8rem; color:var(--text-muted);">
+            Tarea Original: <strong style="color:#FFF;">Integrar pasarela de pagos con Stripe</strong><br>
+            Complejidad Estimada: <span style="color:var(--accent-amber); font-weight:bold;">MEDIUM</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; border-left:3px solid var(--accent-purple);">
+              <strong>1. Diseñar contrato de interfaz y modelo</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Criterio: Definición de tipos en TypeScript aprobada sin uso de any.</div>
+              <div style="font-size:0.68rem; color:var(--accent-cyan); margin-top:2px;">Rol sugerido: COLLABORATOR</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; border-left:3px solid var(--accent-purple);">
+              <strong>2. Implementar lógica core y endpoints REST</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Criterio: Respuestas HTTP 200/201 con manejo de errores 400/500.</div>
+              <div style="font-size:0.68rem; color:var(--accent-cyan); margin-top:2px;">Rol sugerido: COLLABORATOR</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; border-left:3px solid var(--accent-purple);">
+              <strong>3. Integrar validación en interfaz de usuario y eventos</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Criterio: Feedback visual inmediato y sincronización WebSocket confirmada.</div>
+              <div style="font-size:0.68rem; color:var(--accent-cyan); margin-top:2px;">Rol sugerido: COLLABORATOR</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; border-left:3px solid var(--accent-green);">
+              <strong>4. Ejecutar prueba de integración e incorporar a CI/CD</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Criterio: Pruebas automatizadas en verde sin regresiones.</div>
+              <div style="font-size:0.68rem; color:var(--accent-cyan); margin-top:2px;">Rol sugerido: ADMIN</div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+      addLog('[AI GATEWAY] 4 subtareas atómicas generadas con Definition of Done.', 'transition');
+    }
+
+    function triggerAIExecutiveReport() {
+      addLog('[AI GATEWAY] Consultando estado consolidado en PostgreSQL para reporte ejecutivo...', 'pulse');
+      document.getElementById('modal-title').innerText = '📊 Resumen Ejecutivo para Clientes Corporativos';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:14px; font-size:0.85rem;">
+          <div>
+            <strong>Salud del Proyecto: </strong>
+            <span style="color:var(--accent-green); font-weight:bold;">ON_TRACK (En cronograma)</span>
+          </div>
+          <div style="background:rgba(0,242,254,0.06); padding:12px; border-radius:6px; border-left:3px solid var(--accent-cyan); line-height:1.5;">
+            El proyecto presenta un avance global verificado superior al 65%. Los cimientos de infraestructura, base de datos Neon y los servicios centrales se encuentran desplegados bajo estándares de alta disponibilidad y estabilidad operativa continua.
+          </div>
+          <div>
+            <strong style="color:var(--accent-green);">Hitos Concluidos:</strong>
+            <ul style="padding-left:20px; margin-top:4px; display:flex; flex-direction:column; gap:4px;">
+              <li>Consolidación y verificación de Infraestructura & Base de Datos Neon</li>
+              <li>Despliegue de Servicios Core & API REST con WebSockets</li>
+              <li>Conexión de Webhooks GitHub con verificación criptográfica HMAC-SHA256</li>
+            </ul>
+          </div>
+          <div style="border-top:1px solid var(--border-subtle); padding-top:10px; font-size:0.78rem; color:var(--text-muted);">
+            <strong>Impacto de Negocio: </strong>La automatización de los flujos de trabajo reduce el tiempo de comercialización y garantiza que cada entrega cumpla con los estándares de rendimiento sin interrumpir las operaciones vigentes.
+          </div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+      addLog('[AI GATEWAY] Reporte ejecutivo generado y validado con Zod (HTTP 200).', 'transition');
+    }
+
+    function triggerAIDevOpsTriage() {
+      addLog('[AI GATEWAY] Analizando log de compilación CI/CD (100 líneas)...', 'pulse');
+      document.getElementById('modal-title').innerText = '⚡ Diagnóstico de Falla CI/CD (DevOps SRE)';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:12px; font-size:0.85rem;">
+          <div style="background:rgba(239,68,68,0.08); padding:12px; border-radius:6px; border-left:3px solid var(--accent-red);">
+            <div style="color:var(--accent-red); font-weight:bold; margin-bottom:4px;">Causa Raíz Identificada (Severidad: HIGH)</div>
+            <div>Error de tipado estricto en TypeScript durante el proceso de verificación tsc: incompatibilidad en los parámetros de coordenadas del grafo.</div>
+          </div>
+          <div style="background:rgba(16,185,129,0.08); padding:12px; border-radius:6px; border-left:3px solid var(--accent-green);">
+            <div style="color:var(--accent-green); font-weight:bold; margin-bottom:4px;">Corrección Sugerida (Comando Técnico)</div>
+            <code style="color:var(--accent-cyan); font-family:var(--font-mono); font-size:0.8rem;">npm run build && git commit -m "fix: align coordinate types"</code>
+          </div>
+          <div style="background:rgba(0,242,254,0.06); padding:12px; border-radius:6px; border-left:3px solid var(--accent-cyan);">
+            <div style="color:var(--accent-cyan); font-weight:bold; margin-bottom:4px;">Resumen para Clientes (Lenguaje No Técnico)</div>
+            <div style="color:var(--text-muted); font-size:0.8rem;">Una verificación automática detectó un desajuste técnico antes de publicar los cambios. El equipo de desarrollo ya cuenta con la instrucción precisa para ajustarlo de inmediato sin afectar la plataforma.</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+      addLog('[AI GATEWAY] Diagnóstico SRE generado con recomendación accionable.', 'transition');
     }
 
     function openEndpointInfo(type) {
