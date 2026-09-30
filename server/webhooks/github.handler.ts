@@ -37,6 +37,12 @@ export class GitHubWebhookHandler {
       return;
     }
 
+    // Respuesta inmediata al evento ping de prueba inicial de GitHub
+    if (event === 'ping') {
+      res.status(200).json({ message: 'GitHub ping verified OK', zen: req.body?.zen });
+      return;
+    }
+
     const payload = req.body;
     const repoFullName = payload?.repository?.full_name;
 
