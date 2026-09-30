@@ -6,7 +6,8 @@
     "build": "tsc && node scripts/prepare-public.js",
     "start": "node dist/index.js",
     "migrate": "node server/db/migrate.js",
-    "test:integration": "tsc && node dist/testIntegration.js"
+    "test:integration": "tsc && node dist/testIntegration.js",
+    "test:ai": "tsx server/testAIGateway.ts"
   },
   "dependencies": {
     "@neon/config": "^1.8.2",
@@ -18,7 +19,8 @@
     "express": "^5.2.1",
     "ioredis": "^6.0.0",
     "pg": "^8.23.0",
-    "socket.io": "^4.8.4"
+    "socket.io": "^4.8.4",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

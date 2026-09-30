@@ -6,6 +6,7 @@ import { TaskManagerService } from '../services/taskManager.service';
 import { GitHubWebhookHandler } from '../webhooks/github.handler';
 import { CampaignDispatcherService } from '../services/campaignDispatcher.service';
 import { createMarketingRouter } from './marketing.routes';
+import { createAIRoutes } from './ai.routes';
 
 export function createApiRouter(pool: Pool, io: SocketIOServer): Router {
   const router = Router();
@@ -15,6 +16,9 @@ export function createApiRouter(pool: Pool, io: SocketIOServer): Router {
 
   // Subrutas de Marketing
   router.use('/marketing', createMarketingRouter(pool, io, campaignDispatcher));
+
+  // Capa Centralizada AI Gateway (Orquestador de IA)
+  router.use('/ai', createAIRoutes(pool, io));
 
   // FASE 3: Ruta Webhook GitHub
   router.post('/telemetry/github', webhookHandler.handleWebhook);
