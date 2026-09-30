@@ -1,6 +1,7 @@
 import Redis from 'ioredis';
 import { Pool } from 'pg';
 import { Server as SocketIOServer } from 'socket.io';
+import { DEFAULT_WORKSPACE_ID, withWorkspaceClient } from '../middleware/workspace.middleware';
 
 export interface WorkflowNodeItem {
   id: string;
@@ -33,6 +34,7 @@ export interface ProjectWorkflowDAG {
   nodes: WorkflowNodeItem[];
   edges: WorkflowEdgeItem[];
   cached_at?: string;
+  workspace_id?: string;
 }
 
 export class DagCacheService {
@@ -49,7 +51,7 @@ export class DagCacheService {
         connectTimeout: 2000,
         enableOfflineQueue: false,
         retryStrategy: (times) => {
-          if (times > 3) return null; // Detener reintentos ruidosos si no hay Redis local
+          if (times > 3) return null;
           return Math.min(times * 500, 2000);
         }
       });
@@ -58,35 +60,40 @@ export class DagCacheService {
         this.isConnected = true;
       });
 
-      this.redis.on('error', (err) => {
+      this.redis.on('error', () => {
         this.isConnected = false;
       });
 
-      // Conexión no bloqueante
       this.redis.connect().catch(() => {
         this.isConnected = false;
       });
-    } catch (err: any) {
+    } catch {
       this.isConnected = false;
       this.redis = null;
     }
   }
 
-  private getKey(projectId: string): string {
-    return `project:${projectId}:dag`;
+  /**
+   * Namespaciado estricto multi-tenant de llaves en Redis con prefijo ws:WORKSPACE_ID:
+   */
+  private getKey(projectId: string, workspaceId: string = DEFAULT_WORKSPACE_ID): string {
+    return `ws:${workspaceId}:project:${projectId}:dag`;
   }
 
   /**
-   * Consulta la caché en memoria del grafo DAG en Redis bajo la clave project:PROJECT_ID:dag
+   * Consulta la caché en memoria del grafo DAG en Redis bajo ws:WORKSPACE_ID:project:PROJECT_ID:dag
    */
-  public async getDag(projectId: string): Promise<ProjectWorkflowDAG | null> {
+  public async getDag(
+    projectId: string,
+    workspaceId: string = DEFAULT_WORKSPACE_ID
+  ): Promise<ProjectWorkflowDAG | null> {
     if (!this.redis || !this.isConnected) return null;
 
     try {
-      const data = await this.redis.get(this.getKey(projectId));
+      const data = await this.redis.get(this.getKey(projectId, workspaceId));
       if (!data) return null;
       return JSON.parse(data) as ProjectWorkflowDAG;
-    } catch (err) {
+    } catch {
       return null;
     }
   }
@@ -97,6 +104,7 @@ export class DagCacheService {
   public async setDag(
     projectId: string,
     dag: ProjectWorkflowDAG,
+    workspaceId: string = DEFAULT_WORKSPACE_ID,
     ttlSeconds: number = this.defaultTtlSeconds
   ): Promise<void> {
     if (!this.redis || !this.isConnected) return;
@@ -104,88 +112,102 @@ export class DagCacheService {
     try {
       const payload = JSON.stringify({
         ...dag,
+        workspace_id: workspaceId,
         cached_at: new Date().toISOString()
       });
-      await this.redis.set(this.getKey(projectId), payload, 'EX', ttlSeconds);
-    } catch (err) {
-      // Degradación elegante si falla Redis
+      await this.redis.set(this.getKey(projectId, workspaceId), payload, 'EX', ttlSeconds);
+    } catch {
+      // Degradación elegante
     }
   }
 
   /**
-   * Borrado atómico de la clave project:PROJECT_ID:dag en Redis.
-   * Se ejecuta única y exclusivamente cuando ocurre un evento WORKFLOW_NODE_TRANSITION
-   * o cuando se altere la estructura de nodos y aristas del grafo.
+   * Borrado atómico de la clave namespaciada en Redis.
    */
-  public async invalidateDag(projectId: string): Promise<boolean> {
+  public async invalidateDag(
+    projectId: string,
+    workspaceId: string = DEFAULT_WORKSPACE_ID
+  ): Promise<boolean> {
     if (!this.redis || !this.isConnected) return false;
 
     try {
-      const deleted = await this.redis.del(this.getKey(projectId));
+      const deleted = await this.redis.del(this.getKey(projectId, workspaceId));
       return deleted > 0;
-    } catch (err) {
+    } catch {
       return false;
     }
   }
 
+  public async invalidateProjectDag(
+    projectId: string,
+    workspaceId: string = DEFAULT_WORKSPACE_ID
+  ): Promise<boolean> {
+    return this.invalidateDag(projectId, workspaceId);
+  }
+
   /**
-   * Flujo de lectura optimizado:
-   * 1. Consulta Redis (cache hit -> retorno inmediato).
-   * 2. Cache miss -> Consulta Neon PostgreSQL, persiste en Redis con TTL 24h y retorna.
+   * Flujo de lectura optimizado con RLS respetando app.current_workspace_id
    */
   public async getOrFetchDag(
     pool: Pool,
-    projectId: string
+    projectId: string,
+    workspaceId: string = DEFAULT_WORKSPACE_ID
   ): Promise<{ data: ProjectWorkflowDAG; cached: boolean }> {
-    // 1. Intentar lectura de caché
-    const cached = await this.getDag(projectId);
+    // 1. Intentar lectura de caché en Redis
+    const cached = await this.getDag(projectId, workspaceId);
     if (cached) {
       return { data: cached, cached: true };
     }
 
-    // 2. Cache miss: Consultar base de datos relacional Neon
-    const workflowRes = await pool.query(
-      `SELECT * FROM project_workflows WHERE project_id = $1 LIMIT 1`,
-      [projectId]
-    );
+    // 2. Cache miss: Consultar base de datos relacional Neon aplicando RLS
+    return await withWorkspaceClient(pool, workspaceId, async (client) => {
+      const workflowRes = await client.query(
+        `SELECT pw.* FROM project_workflows pw
+         JOIN projects p ON pw.project_id = p.id
+         WHERE pw.project_id = $1 AND p.workspace_id = $2
+         LIMIT 1`,
+        [projectId, workspaceId]
+      );
 
-    if (workflowRes.rows.length === 0) {
-      throw new Error(`Workflow not found for project ${projectId}`);
-    }
+      if (workflowRes.rows.length === 0) {
+        throw new Error(`Workflow not found for project ${projectId} in workspace ${workspaceId}`);
+      }
 
-    const workflow = workflowRes.rows[0];
+      const workflow = workflowRes.rows[0];
 
-    const nodesRes = await pool.query(
-      `SELECT id, slug, title, label, description, category, status, is_automated_github,
-              step_order, position_x, position_y, completed_at
-       FROM workflow_nodes
-       WHERE workflow_id = $1
-       ORDER BY position_x ASC, step_order ASC`,
-      [workflow.id]
-    );
+      const nodesRes = await client.query(
+        `SELECT id, slug, title, label, description, category, status, is_automated_github,
+                step_order, position_x, position_y, completed_at
+         FROM workflow_nodes
+         WHERE workflow_id = $1
+         ORDER BY position_x ASC, step_order ASC`,
+        [workflow.id]
+      );
 
-    const edgesRes = await pool.query(
-      `SELECT id, source_node_id, target_node_id
-       FROM workflow_edges
-       WHERE workflow_id = $1`,
-      [workflow.id]
-    );
+      const edgesRes = await client.query(
+        `SELECT id, source_node_id, target_node_id
+         FROM workflow_edges
+         WHERE workflow_id = $1`,
+        [workflow.id]
+      );
 
-    const dagData: ProjectWorkflowDAG = {
-      workflow,
-      nodes: nodesRes.rows,
-      edges: edgesRes.rows
-    };
+      const dagData: ProjectWorkflowDAG = {
+        workflow,
+        nodes: nodesRes.rows,
+        edges: edgesRes.rows,
+        workspace_id: workspaceId
+      };
 
-    // 3. Persistir en Redis con TTL de 24 horas
-    await this.setDag(projectId, dagData, this.defaultTtlSeconds);
+      // 3. Persistir en Redis con TTL de 24 horas bajo la clave ws:WORKSPACE_ID:project:PROJECT_ID:dag
+      await this.setDag(projectId, dagData, workspaceId, this.defaultTtlSeconds);
 
-    return { data: dagData, cached: false };
+      return { data: dagData, cached: false };
+    });
   }
 
   /**
    * Asegura que la invalidación atómica de Redis ocurra inmediatamente ANTES
-   * de la emisión por WebSocket, garantizando consistencia estricta en los clientes.
+   * de la emisión por WebSocket a las salas workspace_WORKSPACE_ID y project:PROJECT_ID.
    */
   public async invalidateAndEmitTransition(
     projectId: string,
@@ -196,28 +218,18 @@ export class DagCacheService {
       title?: string;
       status: 'RED' | 'GREEN';
       reason: string;
-    }
+    },
+    workspaceId: string = DEFAULT_WORKSPACE_ID
   ): Promise<void> {
-    // 1. Borrado atómico de la clave en Redis
-    await this.invalidateDag(projectId);
+    await this.invalidateDag(projectId, workspaceId);
 
-    // 2. Notificación en tiempo real a la sala del proyecto
-    io.to(`project:${projectId}`).emit('WORKFLOW_NODE_TRANSITION', transition);
-  }
-
-  /**
-   * Invalida la caché del grafo e informa a la sala del proyecto sobre la actualización
-   * de topología completa (nodos y aristas agregados o reconfigurados).
-   */
-  public async invalidateAndEmitTopologyUpdate(
-    projectId: string,
-    io: SocketIOServer
-  ): Promise<void> {
-    await this.invalidateDag(projectId);
-    io.to(`project:${projectId}`).emit('WORKFLOW_DAG_UPDATED', {
+    // Notificar tanto a la sala de workspace como de proyecto
+    io.to(`workspace_${workspaceId}`).emit('WORKFLOW_NODE_TRANSITION', {
+      ...transition,
       projectId,
-      invalidatedAt: new Date().toISOString()
+      workspaceId
     });
+    io.to(`project:${projectId}`).emit('WORKFLOW_NODE_TRANSITION', transition);
   }
 
   public async close(): Promise<void> {

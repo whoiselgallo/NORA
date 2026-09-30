@@ -2,13 +2,6 @@ import { z } from 'zod';
 
 /**
  * Esquema estricto para mutación y creación de tareas del proyecto
- * Requisitos:
- * - title: min 3, max 200 caracteres
- * - description: opcional / nullable
- * - status: valores estrictos 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
- * - priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
- * - assigned_to: formato UUID
- * - due_date: formato fecha ISO (ISO 8601)
  */
 export const TaskMutationSchema = z.object({
   title: z
@@ -24,12 +17,16 @@ export const TaskMutationSchema = z.object({
     errorMap: () => ({ message: 'Priority must be one of: LOW, MEDIUM, HIGH, CRITICAL' })
   }),
   assigned_to: z.string().uuid('assigned_to must be a valid UUID').optional().nullable(),
+  sprint_id: z.string().uuid().optional().nullable(),
+  story_points: z.number().int().min(0).default(0),
+  start_date: z.string().datetime().optional().nullable(),
   due_date: z
     .string()
     .datetime({ message: 'due_date must be a valid ISO 8601 datetime string' })
     .optional()
     .nullable(),
-  node_id: z.string().uuid('node_id must be a valid UUID').optional().nullable()
+  node_id: z.string().uuid('node_id must be a valid UUID').optional().nullable(),
+  workspace_id: z.string().uuid().optional()
 });
 
 export const TaskCreateSchema = TaskMutationSchema.extend({
@@ -45,7 +42,6 @@ export const TaskStatusUpdateSchema = z.object({
 
 /**
  * Esquemas para tipar y validar Webhooks de GitHub
- * Valida workflow_run, push, pull_request asegurando identificadores numéricos, commit sha, ramas y conclusiones
  */
 const WorkflowRunEventSchema = z.object({
   action: z.string().optional(),
@@ -130,11 +126,13 @@ export const CreateCampaignSchema = z.object({
   name: z.string().trim().min(3, 'Campaign name must be at least 3 characters long').max(255),
   template_id: z.string().uuid('template_id must be a valid UUID'),
   audience_id: z.string().uuid('audience_id must be a valid UUID'),
-  project_id: z.string().uuid('project_id must be a valid UUID')
+  project_id: z.string().uuid('project_id must be a valid UUID'),
+  workspace_id: z.string().uuid().optional()
 });
 
 export const CreateTemplateSchema = z.object({
   project_id: z.string().uuid('project_id must be a valid UUID'),
+  workspace_id: z.string().uuid().optional(),
   name: z.string().trim().min(3, 'Template name must be at least 3 characters long').max(255),
   subject: z.string().trim().min(1, 'Subject cannot be empty').max(255),
   preview_text: z.string().max(255).optional().nullable(),
@@ -162,7 +160,138 @@ export const CreateProjectSchema = z.object({
   github_repo: z.string().optional(),
   github_repo_owner: z.string().optional(),
   github_repo_name: z.string().optional(),
-  tech_stack: z.record(z.unknown()).optional().default({})
+  tech_stack: z.record(z.unknown()).optional().default({}),
+  workspace_id: z.string().uuid().optional()
+});
+
+/**
+ * ----------------------------------------------------------------------------
+ * ESQUEMAS PARA MULTI-WORKSPACE, CALENDARIO, ÁGILE, OPEX Y NOTAS
+ * ----------------------------------------------------------------------------
+ */
+
+// Workspaces
+export const CreateWorkspaceSchema = z.object({
+  name: z.string().trim().min(2).max(255),
+  slug: z.string().trim().min(2).max(100).regex(/^[a-z0-9-]+$/, 'Slug must be URL-safe (lowercase, digits, hyphens)'),
+  description: z.string().max(1000).optional().nullable()
+});
+
+// Calendario Maestro
+export const CreateCalendarEventSchema = z.object({
+  project_id: z.string().uuid().optional().nullable(),
+  title: z.string().trim().min(2).max(255),
+  description: z.string().optional().nullable(),
+  start_date: z.string().datetime(),
+  due_date: z.string().datetime(),
+  event_type: z.enum(['TASK', 'GANTT_MILESTONE', 'SPRINT', 'CUSTOM']).default('CUSTOM'),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).default('MEDIUM')
+});
+
+// Scrum Sprints
+export const CreateSprintSchema = z.object({
+  project_id: z.string().uuid('project_id must be a valid UUID'),
+  name: z.string().trim().min(2).max(255),
+  goal: z.string().max(2000).optional().nullable(),
+  start_date: z.string().datetime(),
+  end_date: z.string().datetime()
+});
+
+// Kanban Card Movement
+export const MoveKanbanCardSchema = z.object({
+  task_id: z.string().uuid('task_id must be a valid UUID'),
+  target_column_id: z.string().uuid('target_column_id must be a valid UUID'),
+  new_position: z.number().int().min(0).default(0)
+});
+
+// Gantt Dependencies & Reschedule
+export const CreateGanttDependencySchema = z.object({
+  predecessor_id: z.string().uuid('predecessor_id must be a valid UUID'),
+  successor_id: z.string().uuid('successor_id must be a valid UUID'),
+  dependency_type: z.enum(['FS', 'SS', 'FF', 'SF']).default('FS'),
+  lag_days: z.number().int().default(0)
+});
+
+export const RescheduleGanttTaskSchema = z.object({
+  new_start_date: z.string().datetime(),
+  new_due_date: z.string().datetime()
+});
+
+// OPEX: 5 Porqués
+export const CreateFiveWhysSchema = z.object({
+  project_id: z.string().uuid('project_id must be a valid UUID'),
+  problem: z.string().trim().min(5).max(2000),
+  why_1: z.string().trim().min(2).max(1000),
+  why_2: z.string().trim().max(1000).optional().nullable(),
+  why_3: z.string().trim().max(1000).optional().nullable(),
+  why_4: z.string().trim().max(1000).optional().nullable(),
+  why_5: z.string().trim().max(1000).optional().nullable(),
+  root_cause: z.string().trim().min(5).max(2000),
+  corrective_task_title: z.string().trim().max(255).optional().nullable()
+});
+
+// OPEX: Ishikawa
+export const CreateIshikawaDiagramSchema = z.object({
+  project_id: z.string().uuid('project_id must be a valid UUID'),
+  title: z.string().trim().min(3).max(255),
+  problem_statement: z.string().trim().min(5).max(2000)
+});
+
+export const AddIshikawaFactorSchema = z.object({
+  category: z.enum(['MANPOWER', 'MACHINERY', 'METHODS', 'MATERIALS', 'MEASUREMENT', 'ENVIRONMENT']),
+  factor_text: z.string().trim().min(2).max(1000),
+  weight: z.number().int().min(1).max(10).default(1)
+});
+
+// OPEX: FODA (SWOT)
+export const CreateSwotItemSchema = z.object({
+  project_id: z.string().uuid('project_id must be a valid UUID'),
+  type: z.enum(['STRENGTH', 'WEAKNESS', 'OPPORTUNITY', 'THREAT']),
+  description: z.string().trim().min(2).max(2000),
+  impact_level: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).default('MEDIUM'),
+  score: z.number().int().min(1).max(10).default(1)
+});
+
+// OPEX: Pareto
+export const CreateParetoDataSchema = z.object({
+  project_id: z.string().uuid('project_id must be a valid UUID'),
+  category: z.string().trim().min(2).max(100),
+  frequency: z.number().int().min(1),
+  cost: z.number().min(0).default(0)
+});
+
+// Notes
+export const CreateNoteSchema = z.object({
+  title: z.string().trim().min(1).max(255),
+  content: z.string().default(''),
+  tags: z.array(z.string().trim()).default([]),
+  is_pinned: z.boolean().default(false)
+});
+
+export const UpdateNoteSchema = z.object({
+  title: z.string().trim().min(1).max(255).optional(),
+  content: z.string().optional(),
+  tags: z.array(z.string().trim()).optional(),
+  is_pinned: z.boolean().optional()
+});
+
+// Webhook Master Telemetry Payload
+export const MasterWebhookPayloadSchema = z.object({
+  event: z.string({ required_error: 'event identifier is required' }),
+  routingKey: z.string().optional(),
+  commit_sha: z.string().optional(),
+  branch: z.string().optional(),
+  author: z.string().optional(),
+  workflow_status: z.enum(['success', 'failure', 'cancelled']).optional(),
+  phases_detail: z.array(z.record(z.unknown())).optional(),
+  timestamp: z.string().optional(),
+  projectId: z.string().uuid().optional(),
+  workspaceId: z.string().uuid().optional(),
+  eventId: z.string().uuid().optional(),
+  title: z.string().optional(),
+  dueDate: z.string().optional(),
+  priority: z.string().optional(),
+  isOverdue: z.boolean().optional()
 });
 
 export type TaskMutation = z.infer<typeof TaskMutationSchema>;

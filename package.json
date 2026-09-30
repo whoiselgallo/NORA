@@ -5,8 +5,10 @@
   "scripts": {
     "build": "tsc && node scripts/prepare-public.js",
     "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
     "migrate": "node server/db/migrate.js",
     "test:integration": "tsc && node dist/testIntegration.js",
+    "test:optimizations": "tsc && node dist/testOptimizations.js",
     "test:ai": "npx tsx server/testAIGateway.ts"
   },
   "dependencies": {

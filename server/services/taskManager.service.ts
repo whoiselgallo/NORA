@@ -1,9 +1,12 @@
 import { Pool, PoolClient } from 'pg';
 import { Server as SocketIOServer } from 'socket.io';
 import { DagCacheService } from './dagCache.service';
+import { CalendarService } from './calendar.service';
+import { DEFAULT_WORKSPACE_ID, withWorkspaceClient } from '../middleware/workspace.middleware';
 
 export class TaskManagerService {
   private dagCacheService: DagCacheService;
+  private calendarService: CalendarService;
 
   constructor(
     private pool: Pool,
@@ -11,35 +14,38 @@ export class TaskManagerService {
     dagCacheService?: DagCacheService
   ) {
     this.dagCacheService = dagCacheService || new DagCacheService();
+    this.calendarService = new CalendarService(pool);
   }
 
   public async updateTaskStatus(
     taskId: string,
     newStatus: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE',
-    requestingUserRole: 'ADMIN' | 'COLLABORATOR' | 'CLIENT'
+    requestingUserRole: 'ADMIN' | 'COLLABORATOR' | 'CLIENT',
+    workspaceId: string = DEFAULT_WORKSPACE_ID
   ): Promise<{ taskId: string; newStatus: string; nodeTransitions: Array<{ nodeId: string; status: 'RED' | 'GREEN' }> }> {
     // 1. Regla de autorización estricta: CLIENT no puede mutar tareas de desarrollo
     if (requestingUserRole === 'CLIENT') {
       throw new Error('FORBIDDEN: CLIENT role cannot mutate development tasks.');
     }
 
-    const client: PoolClient = await this.pool.connect();
-    try {
-      await client.query('BEGIN');
-
+    return await withWorkspaceClient(this.pool, workspaceId, async (client: PoolClient) => {
       // Actualizar estado de la tarea
       const taskRes = await client.query(
         `UPDATE project_tasks
          SET status = $1, updated_at = CURRENT_TIMESTAMP
-         WHERE id = $2
-         RETURNING project_id`,
-        [newStatus, taskId]
+         WHERE id = $2 AND workspace_id = $3
+         RETURNING *`,
+        [newStatus, taskId, workspaceId]
       );
 
       if (taskRes.rows.length === 0) {
-        throw new Error('Task not found.');
+        throw new Error('Task not found in this workspace.');
       }
-      const projectId = taskRes.rows[0].project_id;
+      const task = taskRes.rows[0];
+      const projectId = task.project_id;
+
+      // Sincronizar automáticamente con calendar_events
+      await this.calendarService.syncTaskEvent(client, task);
 
       // 2. Identificar nodos vinculados en workflow_node_tasks
       const nodesRes = await client.query(
@@ -53,7 +59,6 @@ export class TaskManagerService {
       for (const row of nodesRes.rows) {
         const nodeId = row.node_id;
 
-        // Consultar todas las tareas asociadas al nodo
         const checkRes = await client.query(
           `SELECT pt.status
            FROM workflow_node_tasks wnt
@@ -63,11 +68,9 @@ export class TaskManagerService {
         );
 
         const allTasks = checkRes.rows;
-        // Si todas las tareas asociadas están en DONE => GREEN; si al menos una no está en DONE => RED
         const allDone = allTasks.length > 0 && allTasks.every(t => t.status === 'DONE');
         const targetStatus: 'RED' | 'GREEN' = allDone ? 'GREEN' : 'RED';
 
-        // Actualizar nodo si hubo transición
         const updateNodeRes = await client.query(
           `UPDATE workflow_nodes
            SET status = $1, updated_at = CURRENT_TIMESTAMP
@@ -81,20 +84,31 @@ export class TaskManagerService {
         }
       }
 
-      await client.query('COMMIT');
-
       // 4. Invalidación atómica de Redis inmediatamente ANTES de emitir por WebSockets
       if (transitions.length > 0) {
-        await this.dagCacheService.invalidateDag(projectId);
+        await this.dagCacheService.invalidateDag(projectId, workspaceId);
       }
 
-      // 5. Emisión WebSocket a la sala del proyecto (< 200 ms)
+      // 5. Emisión WebSocket a las salas de workspace y proyecto
+      this.io.to(`workspace_${workspaceId}`).emit('TASK_STATUS_UPDATED', {
+        taskId,
+        status: newStatus,
+        workspaceId,
+        projectId
+      });
       this.io.to(`project:${projectId}`).emit('TASK_STATUS_UPDATED', {
         taskId,
         status: newStatus
       });
 
       for (const trans of transitions) {
+        this.io.to(`workspace_${workspaceId}`).emit('WORKFLOW_NODE_TRANSITION', {
+          nodeId: trans.nodeId,
+          status: trans.status,
+          reason: 'TASK_COMPLETION_STATE_CHANGED',
+          workspaceId,
+          projectId
+        });
         this.io.to(`project:${projectId}`).emit('WORKFLOW_NODE_TRANSITION', {
           nodeId: trans.nodeId,
           status: trans.status,
@@ -103,23 +117,20 @@ export class TaskManagerService {
       }
 
       return { taskId, newStatus, nodeTransitions: transitions };
-    } catch (err) {
-      await client.query('ROLLBACK');
-      throw err;
-    } finally {
-      client.release();
-    }
+    });
   }
 
-  public async getProjectTasks(projectId: string) {
-    const res = await this.pool.query(
-      `SELECT pt.*, u.name as assignee_name, u.email as assignee_email
-       FROM project_tasks pt
-       LEFT JOIN users u ON pt.assigned_to = u.id
-       WHERE pt.project_id = $1
-       ORDER BY pt.created_at ASC`,
-      [projectId]
-    );
-    return res.rows;
+  public async getProjectTasks(projectId: string, workspaceId: string = DEFAULT_WORKSPACE_ID) {
+    return await withWorkspaceClient(this.pool, workspaceId, async (client) => {
+      const res = await client.query(
+        `SELECT pt.*, u.name as assignee_name, u.email as assignee_email
+         FROM project_tasks pt
+         LEFT JOIN users u ON pt.assigned_to = u.id
+         WHERE pt.project_id = $1 AND pt.workspace_id = $2
+         ORDER BY pt.created_at ASC`,
+        [projectId, workspaceId]
+      );
+      return res.rows;
+    });
   }
 }

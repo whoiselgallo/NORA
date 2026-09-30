@@ -48,19 +48,18 @@ export class AIGatewayService {
     ].filter((k): k is string => Boolean(k && k.trim().length > 0));
 
     if (geminiKeys.length > 0 && process.env.ENABLE_REMOTE_AI !== 'false') {
-      const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+      const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 
       for (let i = 0; i < geminiKeys.length; i++) {
         const currentKey = geminiKeys[i];
         const keyMask = `${currentKey.slice(0, 6)}...${currentKey.slice(-4)}`;
         
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${currentKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(currentKey)}`;
         const headers: Record<string, string> = {
           'Content-Type': 'application/json',
-          'x-goog-api-key': currentKey,
         };
-        if (currentKey.startsWith('AQ.') || currentKey.startsWith('ya29.')) {
-          headers['Authorization'] = `Bearer ${currentKey}`;
+        if (currentKey.startsWith('AIzaSy')) {
+          headers['x-goog-api-key'] = currentKey;
         }
 
         try {
@@ -81,10 +80,10 @@ export class AIGatewayService {
             }),
           });
 
-          // Si se agota la cuota (429) o rechaza por límite (403), rota de inmediato a la siguiente clave
-          if (response.status === 429 || response.status === 403) {
+          // Si se agota cuota (429), límite (403) o saturación temporal (503), rotar a la siguiente clave
+          if (response.status === 429 || response.status === 403 || response.status === 503) {
             console.warn(
-              `[GeminiPool] Clave #${i + 1} (${keyMask}) sin cuota disponible (HTTP ${response.status}). Rotando a la clave siguiente...`
+              `[GeminiPool] Clave #${i + 1} (${keyMask}) indisponible temporalmente (HTTP ${response.status}). Rotando a la clave siguiente en el pool...`
             );
             continue;
           }

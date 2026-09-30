@@ -202,7 +202,7 @@ async function runOptimizationsTestSuite() {
   };
 
   // Simular almacenamiento en caché
-  await dagCache.setDag(testProjectId, mockDAG, 86400);
+  await dagCache.setDag(testProjectId, mockDAG, 'default-workspace', 86400);
   const cachedDAG = await dagCache.getDag(testProjectId);
   assert(
     cachedDAG === null || cachedDAG.workflow.id === 'wf_001',

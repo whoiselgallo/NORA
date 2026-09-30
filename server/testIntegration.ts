@@ -3,6 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { BlueprintEngineService } from './services/blueprintEngine.service';
 import { TaskManagerService } from './services/taskManager.service';
+import { DEFAULT_WORKSPACE_ID } from './middleware/workspace.middleware';
 
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
@@ -28,9 +29,9 @@ async function runIntegrationTest() {
     await client.query('BEGIN');
 
     const projRes = await client.query(
-      `INSERT INTO projects (name, github_repo, tech_stack)
-       VALUES ($1, $2, $3) RETURNING *`,
-      ['Test Architecture Engine', 'whoiselgallo/antigravity-instruction-architect', JSON.stringify({ frontend: 'React', backend: 'Node' })]
+      `INSERT INTO projects (workspace_id, name, github_repo, tech_stack)
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [DEFAULT_WORKSPACE_ID, 'Test Architecture Engine', 'whoiselgallo/antigravity-instruction-architect', JSON.stringify({ frontend: 'React', backend: 'Node' })]
     );
     const project = projRes.rows[0];
     console.log('Created project:', project.id, project.name);

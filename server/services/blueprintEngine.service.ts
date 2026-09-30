@@ -81,6 +81,12 @@ export class BlueprintEngineService {
     );
     const workflowId = wfRes.rows[0].id;
 
+    const projRes = await client.query(
+      `SELECT workspace_id FROM projects WHERE id = $1`,
+      [projectId]
+    );
+    const workspaceId = projRes.rows[0]?.workspace_id || '00000000-0000-0000-0000-000000000001';
+
     const createdNodeIds: string[] = [];
 
     for (const def of this.SEQUENCE) {
@@ -107,9 +113,9 @@ export class BlueprintEngineService {
 
       for (const t of def.default_tasks) {
         const taskRes = await client.query(
-          `INSERT INTO project_tasks (project_id, title, description, priority, status)
-           VALUES ($1, $2, $3, $4, 'TODO') RETURNING id`,
-          [projectId, t.title, t.description, t.priority]
+          `INSERT INTO project_tasks (workspace_id, project_id, title, description, priority, status)
+           VALUES ($1, $2, $3, $4, $5, 'TODO') RETURNING id`,
+          [workspaceId, projectId, t.title, t.description, t.priority]
         );
         const taskId = taskRes.rows[0].id;
 
