@@ -835,6 +835,9 @@
 
     <!-- ACCIONES DE NAVEGACIÓN -->
     <div class="nav-actions">
+      <button class="btn-repo" onclick="openManualModal()" style="border-color: rgba(0, 242, 254, 0.4); color: var(--accent-cyan);">
+        <span>📖 Manual & Optimizaciones</span>
+      </button>
       <button class="btn-repo" onclick="openQuickGuideModal()">
         <span>ℹ Guía Rápida</span>
       </button>
@@ -1418,6 +1421,38 @@
         <p style="font-family: var(--font-mono); font-size: 0.78rem; background: rgba(0,242,254,0.06); padding: 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2);">
           Tip: En el simulador inferior puedes accionar los botones de simulación para observar las transiciones de eventos y logs de WebSocket en tiempo real.
         </p>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+    }
+
+    function openManualModal() {
+      document.getElementById('modal-title').innerText = 'Manual Integral & Sugerencias de Optimización';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="background: rgba(0,242,254,0.08); border: 1px solid rgba(0,242,254,0.25); padding: 12px; border-radius: 8px;">
+            <h4 style="color:var(--accent-cyan); margin-bottom:4px; font-size:0.95rem;">📘 Documento de Arquitectura y Manual Operativo</h4>
+            <p style="font-size:0.8rem; color:var(--text-muted);">El manual exhaustivo con todas las funciones, endpoints y esquemas está persistido en el archivo raíz <code>MANUAL_DE_USUARIO_Y_ARQUITECTURA.md</code>.</p>
+          </div>
+
+          <h4 style="color:#FFF; border-bottom:1px solid var(--border-subtle); padding-bottom:6px; margin-top:8px;">1. Resumen de Módulos y Funcionalidades</h4>
+          <ul style="padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size:0.82rem;">
+            <li><strong>Lienzo DAG (React Flow):</strong> Grafo de 5 nodos secuenciales con algoritmo binario de color (RED / GREEN) y bloqueo estructural para rol CLIENT.</li>
+            <li><strong>Antigravity Prompt Architect:</strong> Workspace de texto plano con analizador léxico, checklist de 5 fases y generador de directivas de sistema para LLMs.</li>
+            <li><strong>Gestor To-Do:</strong> Control de tareas con prioridades (Low a Critical), latencia <200ms en WebSocket y regla 100% DONE para activación de nodos.</li>
+            <li><strong>Motor de Marketing BullMQ:</strong> Colas asíncronas con Redis, verificación contra lista de supresión, cabeceras RFC 8058, píxel 1x1 y regla de aprobación ≥95%.</li>
+            <li><strong>Estudio CAD Vectorial SVG:</strong> Diseñador técnico de lockups y diagramas con exportación SVG y rasterizado.</li>
+            <li><strong>Modelos Financieros y ROI:</strong> Documentación ejecutiva de amortización y mitigación fiscal para MPS Ayala.</li>
+          </ul>
+
+          <h4 style="color:var(--accent-green); border-bottom:1px solid var(--border-subtle); padding-bottom:6px; margin-top:8px;">2. Sugerencias Clave de Optimización</h4>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.82rem;">
+            <div><strong>• Caché de Grafos en Redis:</strong> Almacenar en memoria la estructura del DAG para reducir consultas repetitivas a Neon PostgreSQL, invalidando la clave solo ante eventos <code>WORKFLOW_NODE_TRANSITION</code>.</div>
+            <div><strong>• Despacho por Lotes (Batching) en BullMQ:</strong> Empaquetar envíos en bloques de 50 correos por job para optimizar el rendimiento de la cola y conexiones concurrentes.</div>
+            <div><strong>• Validación Estricta con Zod:</strong> Proteger todos los controladores REST y Webhooks con schemas Zod para tipado seguro en tiempo de ejecución.</div>
+            <div><strong>• Virtualización de Tareas (React Virtual):</strong> Implementar <code>@tanstack/react-virtual</code> en la lista To-Do para soportar proyectos con cientos de tareas sin degradación del DOM.</div>
+            <div><strong>• Autenticación Robusta con Neon Auth:</strong> Integrar sesiones JWT y rotación de credenciales para reemplazar el paso de headers de rol en peticiones API.</div>
+          </div>
+        </div>
       `;
       document.getElementById('guide-modal').classList.add('open');
     }
