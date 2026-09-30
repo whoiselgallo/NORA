@@ -55,7 +55,7 @@ export const MarketingCampaignModal: React.FC<{
             style={{ padding: '8px 12px', background: '#1E293B', border: '1px solid #334155', borderRadius: 6, color: '#FFF' }}
           />
 
-          <label style={{ fontSize: '0.8rem', color: '#94A3B8' }}>Cuerpo HTML (Variables: {{first_name}}, {{email}}):</label>
+          <label style={{ fontSize: '0.8rem', color: '#94A3B8' }}>{"Cuerpo HTML (Variables: {{first_name}}, {{email}}):"}</label>
           <textarea
             value={htmlBody}
             onChange={e => setHtmlBody(e.target.value)}

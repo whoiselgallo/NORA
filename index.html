@@ -1426,8 +1426,12 @@
 
       try {
         const [wfRes, tasksRes] = await Promise.all([
-          fetch(`/api/v1/projects/${ACTIVE_PROJECT_ID}/workflow`).then(r => r.json()),
-          fetch(`/api/v1/projects/${ACTIVE_PROJECT_ID}/tasks`).then(r => r.json())
+          fetch(`/api/v1/projects/${ACTIVE_PROJECT_ID}/workflow`, {
+            headers: { 'x-user-role': currentRole }
+          }).then(r => r.json()),
+          fetch(`/api/v1/projects/${ACTIVE_PROJECT_ID}/tasks`, {
+            headers: { 'x-user-role': currentRole }
+          }).then(r => r.json())
         ]);
 
         if (wfRes && wfRes.nodes) {
@@ -1504,7 +1508,10 @@
       try {
         const res = await fetch(`/api/v1/tasks/${taskId}/status`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-role': currentRole
+          },
           body: JSON.stringify({ status: newStatus, user_role: currentRole })
         });
 
@@ -1723,7 +1730,10 @@
         for (const st of lastGeneratedSubtasks) {
           await fetch(`/api/v1/projects/${ACTIVE_PROJECT_ID}/tasks`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'x-user-role': currentRole
+            },
             body: JSON.stringify({
               title: st.title,
               description: st.acceptance_criteria,

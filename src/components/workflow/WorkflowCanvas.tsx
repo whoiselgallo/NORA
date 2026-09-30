@@ -33,7 +33,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   const isClient = userRole === 'CLIENT';
 
   const onNodesChange: OnNodesChange = useCallback(
-    changes => {
+    (changes) => {
       if (isClient) return; // Bloqueo estricto para rol CLIENT
       onNodesUpdate(applyNodeChanges(changes, nodes));
     },
@@ -41,7 +41,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   );
 
   const onEdgesChange: OnEdgesChange = useCallback(
-    changes => {
+    (changes) => {
       if (isClient) return; // Bloqueo estricto para rol CLIENT
       onEdgesUpdate(applyEdgeChanges(changes, edges));
     },
@@ -63,7 +63,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
       >
         <Background color="#1E293B" gap={20} size={1.5} />
         <Controls />
-        <MiniMap nodeColor={n => (n.data?.status === 'GREEN' ? '#10B981' : '#EF4444')} maskColor="rgba(7, 11, 20, 0.7)" />
+        <MiniMap nodeColor={(n: Node) => (n.data?.status === 'GREEN' ? '#10B981' : '#EF4444')} maskColor="rgba(7, 11, 20, 0.7)" />
       </ReactFlow>
     </div>
   );
