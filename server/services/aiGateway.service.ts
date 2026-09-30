@@ -54,13 +54,12 @@ export class AIGatewayService {
         const currentKey = geminiKeys[i];
         const keyMask = `${currentKey.slice(0, 6)}...${currentKey.slice(-4)}`;
         
-        const isBearer = currentKey.startsWith('AQ.') || currentKey.startsWith('ya29.');
-        const url = isBearer
-          ? `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
-          : `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${currentKey}`;
-
-        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-        if (isBearer) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${currentKey}`;
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': currentKey,
+        };
+        if (currentKey.startsWith('AQ.') || currentKey.startsWith('ya29.')) {
           headers['Authorization'] = `Bearer ${currentKey}`;
         }
 
