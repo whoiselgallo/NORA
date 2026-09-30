@@ -6,6 +6,8 @@ import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createApiRouter } from './routes/api.routes';
+import { CampaignDispatcherService } from './services/campaignDispatcher.service';
+import { createEmailMarketingWorker } from './workers/emailQueue.worker';
 
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
@@ -29,7 +31,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// Middleware para capturar rawBody para verificación HMAC de webhooks
+// Middleware rawBody para validación HMAC de webhooks de GitHub
 app.use(cors());
 app.use(
   express.json({
@@ -42,7 +44,7 @@ app.use(
 // Enrutador de API v1
 app.use('/api/v1', createApiRouter(pool, io));
 
-// Gestión de conexiones WebSocket
+// Gestión de conexiones y salas WebSocket
 io.on('connection', socket => {
   socket.on('JOIN_PROJECT', (projectId: string) => {
     socket.join(`project:${projectId}`);
@@ -52,6 +54,15 @@ io.on('connection', socket => {
     socket.leave(`project:${projectId}`);
   });
 });
+
+// Iniciar worker de email marketing
+try {
+  const dispatcher = new CampaignDispatcherService(pool, io);
+  createEmailMarketingWorker(pool, io, dispatcher);
+  console.log('✓ BullMQ Email Marketing Worker initialized.');
+} catch (err: any) {
+  console.warn('Note: Redis connection for BullMQ Worker skipped or deferred:', err.message);
+}
 
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {

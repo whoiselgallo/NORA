@@ -1,135 +1,115 @@
 import { PoolClient } from 'pg';
 
-export interface TechStackConfig {
-  backend?: string;
-  database?: string;
-  frontend?: string;
-  cicd?: string;
-  [key: string]: unknown;
-}
-
-export interface NodeBlueprint {
-  slug: string;
-  label: string;
-  description: string;
-  step_order: number;
+export interface BlueprintNodeDef {
+  title: string;
+  category: 'infra' | 'backend' | 'frontend' | 'devops' | 'qa' | 'marketing';
   is_automated_github: boolean;
+  github_trigger_event?: string;
   position_x: number;
   position_y: number;
-  default_tasks: Array<{ title: string; description: string }>;
+  default_tasks: Array<{ title: string; description: string; priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' }>;
 }
 
 export class BlueprintEngineService {
-  private static BLUEPRINT_NODES: NodeBlueprint[] = [
+  private static SEQUENCE: BlueprintNodeDef[] = [
     {
-      slug: 'infra_database',
-      label: 'Infraestructura / Base de datos',
-      description: 'Modelado DDL, pooling relacional, migraciones e índices.',
-      step_order: 1,
+      title: 'Infraestructura & Base de Datos',
+      category: 'infra',
       is_automated_github: false,
-      position_x: 100,
-      position_y: 200,
+      position_x: 80,
+      position_y: 220,
       default_tasks: [
-        { title: 'Ejecutar esquema DDL y tipos enumerados', description: 'Creación de tablas relacionales y constraints.' },
-        { title: 'Configurar conexión y pooling en Neon', description: 'Asignar DATABASE_URL_UNPOOLED y verificar conexión.' }
+        { title: 'Ejecutar esquema DDL relacional', description: 'Creación de tablas, enums e índices en PostgreSQL.', priority: 'HIGH' },
+        { title: 'Configurar variables de pooling', description: 'Asignar DATABASE_URL_UNPOOLED y verificar conexión.', priority: 'HIGH' }
       ]
     },
     {
-      slug: 'core_services_api',
-      label: 'Servicios Core / API',
-      description: 'Arquitectura de endpoints REST, tipados estrictos y controladores.',
-      step_order: 2,
+      title: 'Servicios Core & API REST',
+      category: 'backend',
       is_automated_github: false,
-      position_x: 420,
-      position_y: 200,
+      position_x: 380,
+      position_y: 220,
       default_tasks: [
-        { title: 'Definir contratos TypeScript y DTOs', description: 'Validación estricta de payloads con esquemas.' },
-        { title: 'Implementar servicios y controladores CRUD', description: 'Desacoplamiento de lógica de persistencia.' }
+        { title: 'Rutas CRUD de tareas y proyectos', description: 'Controladores con tipado estricto en TypeScript.', priority: 'MEDIUM' },
+        { title: 'Integración de autenticación y roles', description: 'Restricción de mutación para rol CLIENT.', priority: 'HIGH' }
       ]
     },
     {
-      slug: 'ui_frontend',
-      label: 'Interfaz de Usuario / Frontend',
-      description: 'Maquetación responsive, componentes atómicos y consumo de API.',
-      step_order: 3,
+      title: 'Interfaz de Usuario & React Flow',
+      category: 'frontend',
       is_automated_github: false,
-      position_x: 740,
-      position_y: 200,
+      position_x: 680,
+      position_y: 220,
       default_tasks: [
-        { title: 'Configurar Design Tokens y Paleta de Colores', description: 'Variables CSS y tokens Tailwind.' },
-        { title: 'Implementar vistas interactivas y lienzo React Flow', description: 'Nodos personalizados y consumo WebSocket.' }
+        { title: 'Construir WorkflowCanvas interactivo', description: 'Integración de React Flow con CustomNode #10B981 / #EF4444.', priority: 'MEDIUM' },
+        { title: 'Módulo To-Do con optimismo de UI', description: 'Lista estilo Microsoft To-Do con filtro por estado y prioridad.', priority: 'MEDIUM' }
       ]
     },
     {
-      slug: 'telemetry_webhooks',
-      label: 'Telemetría & Webhooks',
-      description: 'Ingesta de eventos GitHub, verificación HMAC y pulsos WebSocket.',
-      step_order: 4,
+      title: 'Telemetría & Webhooks GitHub',
+      category: 'devops',
       is_automated_github: true,
-      position_x: 1060,
-      position_y: 200,
+      github_trigger_event: 'workflow_run',
+      position_x: 980,
+      position_y: 220,
       default_tasks: [
-        { title: 'Verificar firma HMAC SHA-256 de GitHub', description: 'TimingSafeEqual con GITHUB_WEBHOOK_SECRET.' },
-        { title: 'Instrumentar eventos DataLayer y canal WebSocket', description: 'Emisión de pulsos de telemetría a clientes.' }
+        { title: 'Verificación de firma HMAC SHA-256', description: 'Rechazo 401 Unauthorized ante firmas inválidas.', priority: 'CRITICAL' },
+        { title: 'Transición automática a GREEN', description: 'Mudar nodo ante workflow_run conclusion success.', priority: 'HIGH' }
       ]
     },
     {
-      slug: 'cicd_deploy',
-      label: 'Pipelines CI/CD & Deploy',
-      description: 'Automatización de builds, pruebas unitarias y release edge/cloud.',
-      step_order: 5,
-      is_automated_github: true,
-      position_x: 1380,
-      position_y: 200,
+      title: 'Campaña de Mercadotecnia Masiva',
+      category: 'marketing',
+      is_automated_github: false,
+      position_x: 1280,
+      position_y: 220,
       default_tasks: [
-        { title: 'Configurar GitHub Actions workflow_run', description: 'Pipeline de compilación y verificación automática.' },
-        { title: 'Despliegue continuo en ambiente de producción', description: 'Sincronización automática de releases.' }
+        { title: 'Configurar colas BullMQ y límites de tasa', description: 'Worker con retroceso exponencial ante rate limits.', priority: 'HIGH' },
+        { title: 'Alcanzar 95% de tasa de entrega exitosa', description: 'Condición requerida para mutar nodo a GREEN.', priority: 'HIGH' }
       ]
     }
   ];
 
-  public static async generateProjectBlueprint(
+  public static async generate(
     client: PoolClient,
     projectId: string,
-    projectName: string,
-    _techStack: TechStackConfig = {}
-  ): Promise<{ workflowId: string; nodeCount: number; edgeCount: number }> {
-    // 1. Crear el Workflow del proyecto
-    const workflowRes = await client.query(
-      `INSERT INTO project_workflows (project_id, name) VALUES ($1, $2) RETURNING id`,
-      [projectId, `${projectName} Primary Workflow`]
+    _techStack: Record<string, unknown> = {}
+  ): Promise<{ workflowId: string; nodeIds: string[]; edgeCount: number }> {
+    const wfRes = await client.query(
+      `INSERT INTO project_workflows (project_id, name) VALUES ($1, 'Primary DAG Workflow') RETURNING id`,
+      [projectId]
     );
-    const workflowId = workflowRes.rows[0].id;
+    const workflowId = wfRes.rows[0].id;
 
     const createdNodeIds: string[] = [];
 
-    // 2. Insertar nodos secuenciales y tareas asociadas
-    for (const blueprint of this.BLUEPRINT_NODES) {
+    for (const def of this.SEQUENCE) {
+      const slug = def.title.toLowerCase().replace(/[^a-z0-9]+/g, '_');
       const nodeRes = await client.query(
         `INSERT INTO workflow_nodes 
-          (workflow_id, slug, label, description, step_order, status, is_automated_github, position_x, position_y)
-         VALUES ($1, $2, $3, $4, $5, 'RED', $6, $7, $8)
+          (workflow_id, slug, label, title, category, position_x, position_y, status, is_automated_github, github_trigger_event)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, 'RED', $8, $9)
          RETURNING id`,
         [
           workflowId,
-          blueprint.slug,
-          blueprint.label,
-          blueprint.description,
-          blueprint.step_order,
-          blueprint.is_automated_github,
-          blueprint.position_x,
-          blueprint.position_y
+          slug,
+          def.title,
+          def.title,
+          def.category,
+          def.position_x,
+          def.position_y,
+          def.is_automated_github,
+          def.github_trigger_event || null
         ]
       );
       const nodeId = nodeRes.rows[0].id;
       createdNodeIds.push(nodeId);
 
-      // Crear tareas por defecto y asociarlas al nodo
-      for (const t of blueprint.default_tasks) {
+      for (const t of def.default_tasks) {
         const taskRes = await client.query(
-          `INSERT INTO project_tasks (project_id, title, description, status)
-           VALUES ($1, $2, $3, 'TODO') RETURNING id`,
-          [projectId, t.title, t.description]
+          `INSERT INTO project_tasks (project_id, title, description, priority, status)
+           VALUES ($1, $2, $3, $4, 'TODO') RETURNING id`,
+          [projectId, t.title, t.description, t.priority]
         );
         const taskId = taskRes.rows[0].id;
 
@@ -140,21 +120,15 @@ export class BlueprintEngineService {
       }
     }
 
-    // 3. Crear conexiones unidireccionales (Edges)
     let edgeCount = 0;
     for (let i = 0; i < createdNodeIds.length - 1; i++) {
       await client.query(
-        `INSERT INTO workflow_edges (workflow_id, source_node_id, target_node_id)
-         VALUES ($1, $2, $3)`,
+        `INSERT INTO workflow_edges (workflow_id, source_node_id, target_node_id) VALUES ($1, $2, $3)`,
         [workflowId, createdNodeIds[i], createdNodeIds[i + 1]]
       );
       edgeCount++;
     }
 
-    return {
-      workflowId,
-      nodeCount: createdNodeIds.length,
-      edgeCount
-    };
+    return { workflowId, nodeIds: createdNodeIds, edgeCount };
   }
 }

@@ -35,10 +35,9 @@ async function runIntegrationTest() {
     const project = projRes.rows[0];
     console.log('Created project:', project.id, project.name);
 
-    const bp = await BlueprintEngineService.generateProjectBlueprint(
+    const bp = await BlueprintEngineService.generate(
       client,
       project.id,
-      project.name,
       project.tech_stack
     );
     console.log('Blueprint created:', bp);

@@ -12,15 +12,18 @@
     "@neon/config": "^1.8.2",
     "@neon/env": "^1.4.7",
     "@types/pg": "^8.23.1",
+    "bullmq": "^6.3.10",
     "cors": "^2.8.6",
     "dotenv": "^18.0.4",
     "express": "^5.2.1",
+    "ioredis": "^6.0.0",
     "pg": "^8.23.0",
     "socket.io": "^4.8.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/ioredis": "^4.28.10",
     "@types/node": "^26.6.3",
     "ts-node": "^10.9.2",
     "typescript": "^7.0.2"
