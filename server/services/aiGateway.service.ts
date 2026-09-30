@@ -31,7 +31,7 @@ export class AIGatewayService {
   }
 
   /**
-   * Router genérico para llamadas al modelo de IA con temperatura controlada y validación Zod.
+   * Router con pool anidado de 3 claves Gemini y failover ante cuota agotada (HTTP 429).
    */
   private async callLLM<T>(params: {
     systemPrompt: string;
@@ -40,6 +40,80 @@ export class AIGatewayService {
     schema: z.ZodSchema<T>;
     fallbackGenerator: () => T;
   }): Promise<T> {
+    // 1. POOL ANIDADO DE CLAVES GEMINI (Rotación y failover automático ante 429)
+    const geminiKeys = [
+      process.env.GEMINI_API_KEY_1 || process.env.GEMINI_API_KEY,
+      process.env.GEMINI_API_KEY_2,
+      process.env.GEMINI_API_KEY_3,
+    ].filter((k): k is string => Boolean(k && k.trim().length > 0));
+
+    if (geminiKeys.length > 0 && process.env.ENABLE_REMOTE_AI !== 'false') {
+      const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+
+      for (let i = 0; i < geminiKeys.length; i++) {
+        const currentKey = geminiKeys[i];
+        const keyMask = `${currentKey.slice(0, 6)}...${currentKey.slice(-4)}`;
+        
+        const isBearer = currentKey.startsWith('AQ.') || currentKey.startsWith('ya29.');
+        const url = isBearer
+          ? `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
+          : `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${currentKey}`;
+
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (isBearer) {
+          headers['Authorization'] = `Bearer ${currentKey}`;
+        }
+
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              systemInstruction: {
+                parts: [{ text: params.systemPrompt }],
+              },
+              contents: [
+                { role: 'user', parts: [{ text: params.userPrompt }] },
+              ],
+              generationConfig: {
+                temperature: params.temperature,
+                responseMimeType: 'application/json',
+              },
+            }),
+          });
+
+          // Si se agota la cuota (429) o rechaza por límite (403), rota de inmediato a la siguiente clave
+          if (response.status === 429 || response.status === 403) {
+            console.warn(
+              `[GeminiPool] Clave #${i + 1} (${keyMask}) sin cuota disponible (HTTP ${response.status}). Rotando a la clave siguiente...`
+            );
+            continue;
+          }
+
+          if (response.ok) {
+            const data = (await response.json()) as {
+              candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+            };
+            const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (rawText) {
+              const parsed = JSON.parse(rawText);
+              const validated = params.schema.safeParse(parsed);
+              if (validated.success) {
+                return validated.data;
+              }
+            }
+          } else {
+            const errBody = await response.text();
+            console.warn(`[GeminiPool] Clave #${i + 1} (${keyMask}) error ${response.status}: ${errBody}`);
+          }
+        } catch (err) {
+          console.warn(`[GeminiPool] Excepción en clave #${i + 1} (${keyMask}):`, err);
+        }
+      }
+      console.warn('[GeminiPool] Todas las claves Gemini del pool agotadas o no disponibles. Activando motor determinístico de contingencia.');
+    }
+
+    // 2. FALLBACK A NEON AI GATEWAY / OPENAI SI ESTÁ CONFIGURADO
     const apiKey = process.env.NEON_AI_GATEWAY_KEY || process.env.OPENAI_API_KEY;
     const baseUrl = process.env.NEON_AI_GATEWAY_URL || 'https://ai-gateway.neon.tech/v1';
 
@@ -74,11 +148,11 @@ export class AIGatewayService {
           }
         }
       } catch (err) {
-        console.warn('[AIGateway] Remote LLM call failed, falling back to deterministic engine:', err);
+        console.warn('[AIGateway] Remote OpenAI fallback failed:', err);
       }
     }
 
-    // Motor determinístico lean de fallback: garantiza 0 consumo de créditos y 100% de cumplimiento de esquema Zod
+    // 3. MOTOR DETERMINÍSTICO LEAN (0 costo, 100% apego al esquema Zod)
     const fallbackData = params.fallbackGenerator();
     return params.schema.parse(fallbackData);
   }
