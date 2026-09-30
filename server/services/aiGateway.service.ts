@@ -14,6 +14,11 @@ import {
   TaskPlanner,
   TaskPlannerSchema
 } from '../types/aiGateway.types';
+import {
+  GeneratedPresentation,
+  GeneratedPresentationSchema,
+  SlideLayoutType
+} from '../types/presentation.types';
 
 export class AIGatewayService {
   private pool: Pool;
@@ -37,7 +42,7 @@ export class AIGatewayService {
     systemPrompt: string;
     userPrompt: string;
     temperature: number;
-    schema: z.ZodSchema<T>;
+    schema: z.ZodType<T, any, any>;
     fallbackGenerator: () => T;
   }): Promise<T> {
     // 1. POOL ANIDADO DE CLAVES GEMINI (Rotación y failover automático ante 429)
@@ -669,5 +674,220 @@ ${context.recentTelemetry.map(t => `- Evento ${t.eventType}: estado ${t.status}`
     }
 
     return report;
+  }
+
+  /**
+   * 6. PRESENTATION SLIDE ENGINE AI (ESTILO TERA AI / GAMMA PARA TSOLUTIONS IPIDD)
+   */
+  public async generatePresentationDeck(params: {
+    workspaceId: string;
+    projectId?: string;
+    authorId?: string;
+    title: string;
+    objective: string;
+    contextSummary?: string;
+  }): Promise<{ deck: any; slides: any[] }> {
+    let projectContextStr = '';
+    if (params.projectId) {
+      try {
+        const ctx = await this.contextAssembler.assembleProjectContext(params.projectId);
+        const totalTasks = ctx.nodes.reduce((acc, n) => acc + (n.tasksCount || 0), 0);
+        projectContextStr = `\nContexto del Proyecto:\n- Nombre: ${ctx.projectName}\n- Total Nodos: ${ctx.nodes.length} (Verdes: ${ctx.nodes.filter(n => n.status === 'GREEN').length})\n- Tareas asociadas: ${totalTasks} registradas.`;
+      } catch (err) {
+        // Fallback silencioso si no existe el proyecto
+      }
+    }
+
+    const systemPrompt = `Actúa como Arquitecto de Soluciones y Consultor Senior OPEX de TSolutions IPIDD.
+Lema Rector: "Tecnología instalada. Conocimiento transferido. Negocios escalados."
+
+Tu misión es generar una presentación ejecutiva modular (estilo Tera AI / Gamma) de alto impacto, técnica y orientada a directores y tomadores de decisiones.
+Directrices obligatorias de diseño y contenido:
+1. Generar el contenido en bloques modulares y concisos, no en prosa densa.
+2. Jerarquizar visualmente asignando a los títulos principales tipografía Bruno Ace, subtítulos en Space Grotesk y cuerpos en Plus Jakarta Sans.
+3. Asignar acentos de color coherentes: Naranja Energy (#FF6B00) para llamadas a la acción, títulos destacados y problemas críticos; Aqua Turquesa (#00E5FF) para métricas de IA, datos técnicos y logros operativos.
+4. Genera entre 4 y 6 diapositivas ordenadas lógicamente con layouts permitidos:
+   - HERO_COVER (Portada principal, autor TSolutions IPIDD, lema y badge corporativo)
+   - OPEX_PROBLEM_STATEMENT (Diagnóstico de causa raíz, desperdicios operativos o cuello de botella técnico)
+   - THREE_CARD_KPI (3 métricas de gran escala: eficiencia, ROI, latencia o reducción de costo)
+   - TWO_COLUMN (Comparativa As-Is vs To-Be o Problema vs Solución de arquitectura)
+   - TIMELINE_ROADMAP (Ruta crítica en 3 a 5 fases con entregables)
+   - CONCLUSION_CTA (Llamada a la acción ejecutiva con el lema rector de TSolutions)
+5. Salida estrictamente en JSON válido conforme al esquema requerido.`;
+
+    const userPrompt = `Genera un mazo de diapositivas ejecutivas para:
+Título: ${params.title}
+Objetivo / Alcance: ${params.objective}
+${params.contextSummary ? `Resumen adicional: ${params.contextSummary}` : ''}
+${projectContextStr}`;
+
+    const presentation = await this.callLLM<GeneratedPresentation>({
+      systemPrompt,
+      userPrompt,
+      temperature: 0.2,
+      schema: GeneratedPresentationSchema,
+      fallbackGenerator: () => ({
+        title: params.title || 'Arquitectura de Sistemas & Consultoría OPEX',
+        description: params.objective || 'Presentación estratégica de transformación tecnológica y optimización operativa',
+        aspectRatio: '16:9',
+        slides: [
+          {
+            slideIndex: 1,
+            layoutType: 'HERO_COVER',
+            headerTag: 'TSOLUTIONS ARQUITECTURA',
+            slideData: {
+              tagline: 'TSOLUTIONS IPIDD • SYSTEM ARCHITECTURE & OPEX',
+              title: (params.title || 'TRANSFORMACIÓN DIGITAL & ESCALAMIENTO').toUpperCase(),
+              subtitle: params.objective || 'Tecnología instalada. Conocimiento transferido. Negocios escalados.',
+              author: 'TSolutions IPIDD Solution Architect',
+              client: 'Comité Directivo & Stakeholders',
+              date: new Date().toISOString().split('T')[0],
+              badgeText: 'AUDITORÍA OPEX 2026'
+            },
+            speakerNotes: 'Apertura ejecutiva presentando la visión estratégica y alineación de negocio.'
+          },
+          {
+            slideIndex: 2,
+            layoutType: 'OPEX_PROBLEM_STATEMENT',
+            headerTag: 'DIAGNÓSTICO OPEX',
+            slideData: {
+              title: 'ANÁLISIS DE CUADRO DE OPERACIONES Y DESPERDICIOS',
+              problemSummary: 'Falta de automatización centralizada y silos de información que generan fricción operativa y sobrecostos por reprocesos manuales.',
+              rootCauses: [
+                { category: 'MÉTODOS', factor: 'Flujos manuales de sincronización sin webhooks', impact: 'Pérdida de 12h/semana en conciliación' },
+                { category: 'SISTEMAS', factor: 'Arquitecturas desacopladas sin caché unificada', impact: 'Latencias en reportes y riesgo de inconsistencia' },
+                { category: 'MEDICIÓN', factor: 'Telemetría fragmentada sin alertas tempranas SRE', impact: 'Tiempo de resolución superior a 4 horas' }
+              ],
+              countermeasure: 'Despliegue de AI Gateway con balanceo multinivel y persistencia reactiva en Neon PostgreSQL.',
+              expectedGain: 'Reducción del 75% en tiempos de respuesta y cero pérdida de eventos de telemetría.'
+            },
+            speakerNotes: 'Detallar las causas raíz encontradas con la metodología Ishikawa aplicada a la infraestructura.'
+          },
+          {
+            slideIndex: 3,
+            layoutType: 'THREE_CARD_KPI',
+            headerTag: 'MÉTRICAS CLAVE',
+            slideData: {
+              title: 'IMPACTO OPERATIVO Y RETORNO DE INVERSIÓN (ROI)',
+              subtitle: 'Indicadores clave proyectados tras la implementación de la arquitectura TSolutions',
+              cards: [
+                { label: 'DISPONIBILIDAD SISTÉMICA', value: '99.98%', description: 'Uptime garantizado mediante pool redundante y motor determinístico de contingencia', accent: 'energy', badge: 'SLA CRÍTICO' },
+                { label: 'TIEMPO DE LATENCIA CI/CD', value: '-65%', description: 'Reducción drástica en tiempos de compilación y despliegue continuo con caché Redis', accent: 'turquesa', badge: 'EFICIENCIA' },
+                { label: 'AHORRO OPERATIVO ANUAL', value: '$42,500', description: 'Eliminación de licencias redundantes y optimización de computo serverless Neon', accent: 'gold', badge: 'ROI DIRECTO' }
+              ]
+            },
+            speakerNotes: 'Resaltar el impacto financiero medible y las garantías de SLA.'
+          },
+          {
+            slideIndex: 4,
+            layoutType: 'TWO_COLUMN',
+            headerTag: 'ARQUITECTURA COMPARATIVA',
+            slideData: {
+              title: 'TRANSICIÓN DE ARQUITECTURA: ESTADO AS-IS VS TO-BE',
+              subtitle: 'Evolución desde infraestructura monolítica hacia ecosistema reactivo desacoplado',
+              leftTitle: 'ESTADO AS-IS (LIMITACIONES)',
+              leftBadge: 'DEUDA TÉCNICA',
+              leftPoints: [
+                'Puntos únicos de fallo en llamadas a modelos de IA sin failover',
+                'Consultas directas a base de datos sin capa de caché DAG ni índices espaciales',
+                'Triage reactivo manual ante fallas de despliegue en GitHub Actions',
+                'Falta de gobierno multitenant con aislamiento RLS a nivel de base de datos'
+              ],
+              rightTitle: 'ESTADO TO-BE (TSOLUTIONS IPIDD)',
+              rightBadge: 'ARQUITECTURA ESCALABLE',
+              rightPoints: [
+                'AI Gateway con rotación en milisegundos y contingencia determinística',
+                'Neon PostgreSQL serverless con branching instantáneo y RLS estricto',
+                'Telemetría automatizada con diagnóstico SRE en tiempo real vía WebSockets',
+                'Panel unificado Dark Tech con tokens corporativos inmutables'
+              ]
+            },
+            speakerNotes: 'Mostrar el contraste visual entre la situación de riesgo previa y la estabilidad actual.'
+          },
+          {
+            slideIndex: 5,
+            layoutType: 'TIMELINE_ROADMAP',
+            headerTag: 'HOJA DE RUTA',
+            slideData: {
+              title: 'CRONOGRAMA DE EJECUCIÓN Y TRANSFERENCIA TECNOLÓGICA',
+              subtitle: 'Despliegue estructurado bajo metodología ágil en 4 fases secuenciales',
+              phases: [
+                { step: '01', phaseName: 'Aprovisionamiento & DDL', duration: 'Semana 1', deliverables: ['Esquemas Neon Postgres', 'Políticas RLS Multi-Tenant', 'Tokens Oficiales'], status: 'COMPLETED' },
+                { step: '02', phaseName: 'Integración AI Gateway & DAG', duration: 'Semana 2', deliverables: ['Pool redundante 3 claves', 'Caché Redis DAG', 'Webhooks HMAC'], status: 'IN_PROGRESS' },
+                { step: '03', phaseName: 'Dashboard & Diapositivas', duration: 'Semana 3', deliverables: ['Reproductor Fullscreen 16:9', 'Exportador PDF Vectorial', 'Modales React'], status: 'PLANNED' },
+                { step: '04', phaseName: 'Transferencia & Certificación', duration: 'Semana 4', deliverables: ['Capacitación de equipo', 'Manual de arquitectura', 'Pase a producción'], status: 'PLANNED' }
+              ]
+            },
+            speakerNotes: 'Explicar las fases y el compromiso de transferencia de conocimiento para autonomía del cliente.'
+          },
+          {
+            slideIndex: 6,
+            layoutType: 'CONCLUSION_CTA',
+            headerTag: 'ACUERDO & CIERRE',
+            slideData: {
+              title: 'DECISIÓN ESTRATÉGICA & PRÓXIMOS PASOS',
+              summary: 'La solución implementada proporciona una plataforma robusta, auditable y escalable que protege la continuidad operativa y minimiza el riesgo tecnológico.',
+              keyTakeaways: [
+                'Garantía de uptime 100% gracias al motor de contingencia determinístico',
+                'Propiedad intelectual completa y conocimiento transferido al equipo interno',
+                'Alineación total con las directrices de diseño corporativo y estándares SRE'
+              ],
+              ctaButtonText: 'AUTORIZAR PASE A PRODUCCIÓN',
+              motto: 'Tecnología instalada. Conocimiento transferido. Negocios escalados.'
+            },
+            speakerNotes: 'Cierre con llamado a la acción enfocado en la aprobación del despliegue.'
+          }
+        ]
+      })
+    });
+
+    // PERSISTENCIA RELACIONAL EN NEON POSTGRESQL
+    const deckResult = await this.pool.query(
+      `INSERT INTO presentation_decks (workspace_id, project_id, author_id, title, description, aspect_ratio)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [
+        params.workspaceId,
+        params.projectId || null,
+        params.authorId || null,
+        presentation.title,
+        presentation.description,
+        presentation.aspectRatio || '16:9'
+      ]
+    );
+    const deck = deckResult.rows[0];
+
+    const insertedSlides = [];
+    for (const slide of presentation.slides) {
+      const slideResult = await this.pool.query(
+        `INSERT INTO presentation_slides (deck_id, slide_index, layout_type, slide_data)
+         VALUES ($1, $2, $3, $4)
+         RETURNING *`,
+        [
+          deck.id,
+          slide.slideIndex,
+          slide.layoutType,
+          JSON.stringify(slide.slideData)
+        ]
+      );
+      insertedSlides.push(slideResult.rows[0]);
+    }
+
+    if (this.io) {
+      this.io.to(`workspace_${params.workspaceId}`).emit('PRESENTATION_GENERATED', {
+        deckId: deck.id,
+        title: deck.title,
+        slidesCount: insertedSlides.length
+      });
+      if (params.projectId) {
+        this.io.to(`project:${params.projectId}`).emit('PRESENTATION_GENERATED', {
+          deckId: deck.id,
+          title: deck.title,
+          slidesCount: insertedSlides.length
+        });
+      }
+    }
+
+    return { deck, slides: insertedSlides };
   }
 }

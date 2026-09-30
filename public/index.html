@@ -36,6 +36,41 @@
       --font-mono: 'JetBrains Mono', monospace;
     }
 
+    @media print {
+      body, html {
+        background-color: #0A0D14 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .app-header, .stat-bar, .main-layout, .footer-bar, .btn-ai-action, .btn-repo {
+        display: none !important;
+      }
+      #ts-fullscreen-presenter-overlay > div:first-child,
+      #ts-fullscreen-presenter-overlay > div:last-child {
+        display: none !important;
+      }
+      #ts-fullscreen-presenter-overlay {
+        position: static !important;
+        padding: 0 !important;
+        background: transparent !important;
+      }
+      #fullscreen-slide-body {
+        page-break-after: always;
+        break-after: page;
+        width: 100vw !important;
+        height: 56.25vw !important;
+        max-height: 100vh !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      @page {
+        size: landscape;
+        margin: 0;
+      }
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -1302,6 +1337,13 @@
               <button class="sim-action-btn" onclick="triggerAIBlueprint()" style="border-color: var(--accent-amber); color: var(--accent-amber);">📐 Diseñar Grafo IA</button>
             </div>
           </div>
+
+          <div class="sim-card" style="border-color: rgba(255, 107, 0, 0.4); background: rgba(255, 107, 0, 0.05);">
+            <h4 style="color: #FF6B00;"><span>📽️</span> AI Slide Engine</h4>
+            <div class="sim-btn-group">
+              <button class="sim-action-btn" onclick="triggerAISlideEngine()" style="border-color: #FF6B00; color: #FF6B00;">✨ Diapositivas 16:9 IA</button>
+            </div>
+          </div>
         </div>
 
         <!-- TERMINAL DE EVENTOS EN TIEMPO REAL -->
@@ -2081,6 +2123,476 @@ Process completed with exit code 1.</textarea>
         btn.disabled = false;
         btn.innerHTML = `<span>📐 Generar Grafo DAG & Nodos con IA</span>`;
       }
+    }
+
+    // =========================================================================
+    // 6. AI SLIDE ENGINE: DIAPOSITIVAS EJECUTIVAS TSOLUTIONS IPIDD (TERA / GAMMA)
+    // =========================================================================
+    let currentPresentationSlides = [];
+    let currentPresentationIndex = 0;
+    let currentPresentationTitle = '';
+
+    async function triggerAISlideEngine() {
+      document.getElementById('modal-title').innerText = '📽️ AI Slide Engine: Diapositivas Ejecutivas TSolutions IPIDD';
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="background:rgba(255,107,0,0.06); border:1px solid rgba(255,107,0,0.3); padding:12px; border-radius:8px; font-size:0.8rem; color:#F8FAFC; display:flex; align-items:center; gap:10px;">
+            <div style="width:24px; height:24px; clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background:#FF6B00; flex-shrink:0;"></div>
+            <div>
+              <strong>Lema Rector:</strong> <em>"Tecnología instalada. Conocimiento transferido. Negocios escalados."</em><br>
+              Generador de diapositivas ejecutivas 16:9 bloqueado bajo los tokens corporativos de TSolutions IPIDD.
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-family:var(--font-mono); color:var(--accent-cyan); margin-bottom:4px; font-weight:700;">TÍTULO DE LA PRESENTACIÓN EJECUTIVA:</label>
+              <input type="text" id="ai-slide-title" class="modal-input" value="Transformación Digital & Arquitectura Escalable" style="width:100%; box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label style="display:block; font-size:0.75rem; font-family:var(--font-mono); color:var(--accent-cyan); margin-bottom:4px; font-weight:700;">OBJETIVO ESTRATÉGICO / ALCANCE:</label>
+              <textarea id="ai-slide-objective" class="modal-textarea" rows="2" style="width:100%; box-sizing:border-box;">Optimización de procesos operativos, diagnóstico Ishikawa de cuello de botella y despliegue de AI Gateway con resiliencia en Neon Postgres.</textarea>
+            </div>
+
+            <div>
+              <label style="display:block; font-size:0.75rem; font-family:var(--font-mono); color:var(--text-dim); margin-bottom:4px;">CONTEXTO COMPLEMENTARIO (OPCIONAL):</label>
+              <input type="text" id="ai-slide-context" class="modal-input" placeholder="Ej: Reducción de latencias SRE, SLA 99.98%, ahorro operativo" style="width:100%; box-sizing:border-box;">
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button class="btn-ai-action" id="btn-run-slides" onclick="executeAISlideEngine()" style="background:#FF6B00; color:#0A0D14; border-color:#FF6B00; font-weight:800;">
+              <span>✨ Generar Mazo 16:9 con IA</span>
+            </button>
+            <button class="btn-repo" onclick="loadSavedPresentationsList()" style="border-color:rgba(0,229,255,0.4); color:var(--accent-cyan);">
+              <span>📂 Cargar Mazos Existentes</span>
+            </button>
+          </div>
+
+          <div id="ai-slide-results" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;"></div>
+        </div>
+      `;
+      document.getElementById('guide-modal').classList.add('open');
+    }
+
+    async function executeAISlideEngine() {
+      const title = document.getElementById('ai-slide-title').value.trim();
+      const objective = document.getElementById('ai-slide-objective').value.trim();
+      const context = document.getElementById('ai-slide-context').value.trim();
+      const btn = document.getElementById('btn-run-slides');
+      const box = document.getElementById('ai-slide-results');
+
+      if (!title || !objective) {
+        alert('Por favor completa el título y el objetivo.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="ai-spinner"></span> <span>Orquestando con AI Gateway & Persistiendo en Neon...</span>`;
+      addLog(`[AI GATEWAY] Generando diapositivas ejecutivas para: "${title}"...`, 'pulse');
+
+      try {
+        const res = await fetch('/api/v1/presentations/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId: ACTIVE_PROJECT_ID,
+            title,
+            objective,
+            contextSummary: context
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        currentPresentationSlides = data.slides || [];
+        currentPresentationTitle = data.deck.title;
+        currentPresentationIndex = 0;
+
+        box.innerHTML = `
+          <div style="background:#121722; border:1px solid rgba(255,107,0,0.4); padding:16px; border-radius:12px; box-shadow:0 0 20px rgba(255,107,0,0.25);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <div>
+                <strong style="color:#FFF; font-size:0.95rem; font-family:'Bruno Ace', sans-serif;">${data.deck.title}</strong>
+                <div style="font-size:0.75rem; color:#00E5FF; font-family:var(--font-mono); margin-top:2px;">
+                  ✓ ${currentPresentationSlides.length} diapositivas modulares generadas y persistidas en Neon PostgreSQL
+                </div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button onclick="launchFullscreenPresenter()" style="background:#FF6B00; color:#0A0D14; border:none; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.75rem; cursor:pointer;">
+                  ▶ Presentar [F]
+                </button>
+                <button onclick="window.print()" style="background:rgba(255,255,255,0.1); color:#FFF; border:1px solid rgba(255,255,255,0.2); padding:6px 12px; border-radius:20px; font-size:0.75rem; cursor:pointer;">
+                  🖨 PDF
+                </button>
+              </div>
+            </div>
+
+            <!-- CONTENEDOR 16:9 EN VIVO -->
+            <div id="live-slide-preview-container" style="width:100%; aspect-ratio:16/9; background:#0A0D14; border-radius:8px; border:1px solid rgba(255,255,255,0.1); overflow:hidden; position:relative;">
+              ${renderSlideHTML(currentPresentationSlides[0], 1, currentPresentationSlides.length)}
+            </div>
+
+            <!-- NAVEGADOR DE MINIATURAS -->
+            <div style="display:flex; gap:8px; overflow-x:auto; margin-top:12px; padding-bottom:4px;">
+              ${currentPresentationSlides.map((s, idx) => `
+                <div onclick="switchPreviewSlide(${idx})" style="flex-shrink:0; width:100px; aspect-ratio:16/9; background:#0A0D14; border:1px solid ${idx === 0 ? '#FF6B00' : 'rgba(255,255,255,0.15)'}; border-radius:4px; padding:4px; cursor:pointer; font-size:0.65rem; color:#94A3B8; display:flex; flex-direction:column; justify-content:space-between;" id="thumb-slide-${idx}">
+                  <span>#${idx + 1} ${s.layout_type}</span>
+                  <span style="color:#FFF; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${(s.slide_data.title || 'Slide').slice(0, 15)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        addLog(`[AI GATEWAY] Mazo de diapositivas ejecutivas guardado en PostgreSQL (${currentPresentationSlides.length} slides).`, 'transition');
+      } catch (err) {
+        addLog(`[AI ERROR] Falló Slide Engine: ${err.message}`, 'pulse');
+        box.innerHTML = `<div style="color:var(--accent-red); font-size:0.8rem;">Error: ${err.message}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>✨ Generar Mazo 16:9 con IA</span>`;
+      }
+    }
+
+    function switchPreviewSlide(idx) {
+      currentPresentationIndex = idx;
+      const container = document.getElementById('live-slide-preview-container');
+      if (container && currentPresentationSlides[idx]) {
+        container.innerHTML = renderSlideHTML(currentPresentationSlides[idx], idx + 1, currentPresentationSlides.length);
+      }
+      currentPresentationSlides.forEach((_, sIdx) => {
+        const thumb = document.getElementById(`thumb-slide-${sIdx}`);
+        if (thumb) {
+          thumb.style.borderColor = sIdx === idx ? '#FF6B00' : 'rgba(255,255,255,0.15)';
+        }
+      });
+    }
+
+    async function loadSavedPresentationsList() {
+      const box = document.getElementById('ai-slide-results');
+      box.innerHTML = `<div style="color:var(--accent-cyan); font-size:0.8rem;">Consultando mazos en Neon PostgreSQL...</div>`;
+      try {
+        const res = await fetch('/api/v1/presentations');
+        const decks = await res.json();
+        if (decks.length === 0) {
+          box.innerHTML = `<div style="color:#94A3B8; font-size:0.8rem;">No hay mazos registrados todavía.</div>`;
+          return;
+        }
+
+        box.innerHTML = `
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--accent-cyan);">SELECCIONA UN MAZO PARA VISUALIZAR:</div>
+            ${decks.map(d => `
+              <div onclick="selectDeckForPreview('${d.id}')" style="background:#121722; border:1px solid rgba(255,255,255,0.1); padding:10px 14px; border-radius:8px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <strong style="color:#FFF; font-size:0.85rem;">${d.title}</strong>
+                  <div style="font-size:0.7rem; color:#94A3B8;">${d.slides_count || 0} diapositivas • Creado: ${new Date(d.created_at).toLocaleDateString()}</div>
+                </div>
+                <span style="color:#FF6B00; font-size:0.8rem;">Ver Mazo ➔</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } catch (err) {
+        box.innerHTML = `<div style="color:var(--accent-red); font-size:0.8rem;">Error al listar mazos: ${err.message}</div>`;
+      }
+    }
+
+    async function selectDeckForPreview(deckId) {
+      const box = document.getElementById('ai-slide-results');
+      box.innerHTML = `<div style="color:var(--accent-cyan); font-size:0.8rem;">Cargando diapositivas...</div>`;
+      try {
+        const res = await fetch(`/api/v1/presentations/${deckId}`);
+        const data = await res.json();
+        currentPresentationSlides = data.slides || [];
+        currentPresentationTitle = data.deck.title;
+        currentPresentationIndex = 0;
+
+        box.innerHTML = `
+          <div style="background:#121722; border:1px solid rgba(255,107,0,0.4); padding:16px; border-radius:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <strong style="color:#FFF; font-size:0.95rem; font-family:'Bruno Ace', sans-serif;">${data.deck.title}</strong>
+              <div style="display:flex; gap:8px;">
+                <button onclick="launchFullscreenPresenter()" style="background:#FF6B00; color:#0A0D14; border:none; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.75rem; cursor:pointer;">
+                  ▶ Presentar [F]
+                </button>
+                <button onclick="window.print()" style="background:rgba(255,255,255,0.1); color:#FFF; border:1px solid rgba(255,255,255,0.2); padding:6px 12px; border-radius:20px; font-size:0.75rem; cursor:pointer;">
+                  🖨 PDF
+                </button>
+              </div>
+            </div>
+            <div id="live-slide-preview-container" style="width:100%; aspect-ratio:16/9; background:#0A0D14; border-radius:8px; border:1px solid rgba(255,255,255,0.1); overflow:hidden;">
+              ${renderSlideHTML(currentPresentationSlides[0], 1, currentPresentationSlides.length)}
+            </div>
+            <div style="display:flex; gap:8px; overflow-x:auto; margin-top:12px; padding-bottom:4px;">
+              ${currentPresentationSlides.map((s, idx) => `
+                <div onclick="switchPreviewSlide(${idx})" style="flex-shrink:0; width:100px; aspect-ratio:16/9; background:#0A0D14; border:1px solid ${idx === 0 ? '#FF6B00' : 'rgba(255,255,255,0.15)'}; border-radius:4px; padding:4px; cursor:pointer; font-size:0.65rem; color:#94A3B8; display:flex; flex-direction:column; justify-content:space-between;" id="thumb-slide-${idx}">
+                  <span>#${idx + 1} ${s.layout_type}</span>
+                  <span style="color:#FFF; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${(s.slide_data.title || 'Slide').slice(0, 15)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        box.innerHTML = `<div style="color:var(--accent-red); font-size:0.8rem;">Error al cargar diapositivas: ${err.message}</div>`;
+      }
+    }
+
+    function renderSlideHTML(slide, current, total) {
+      if (!slide) return '<div style="padding:20px; color:#94A3B8;">Sin diapositiva disponible</div>';
+      const d = typeof slide.slide_data === 'string' ? JSON.parse(slide.slide_data) : slide.slide_data;
+      const type = slide.layout_type;
+
+      let bodyHTML = '';
+      if (type === 'HERO_COVER') {
+        bodyHTML = `
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; height:100%; padding:0 24px;">
+            <div style="display:inline-flex; align-items:center; gap:8px; padding:4px 12px; border-radius:20px; background:rgba(255,107,0,0.12); border:1px solid #FF6B00; margin-bottom:12px;">
+              <span style="width:10px; height:10px; clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background:#FF6B00; display:inline-block;"></span>
+              <span style="font-size:0.65rem; font-family:var(--font-mono); color:#FF6B00; font-weight:800; letter-spacing:0.08em;">${d.badgeText || 'AUDITORÍA OPEX 2026'}</span>
+            </div>
+            <h1 style="font-family:'Bruno Ace', sans-serif; font-size:1.8rem; color:#FFFFFF; margin:0 0 8px 0; text-transform:uppercase; letter-spacing:-0.01em;">${d.title}</h1>
+            <p style="font-family:'Space Grotesk', sans-serif; font-size:0.85rem; color:#00E5FF; margin:0 0 16px 0; max-width:550px;">${d.subtitle || ''}</p>
+            <div style="background:#121722; border:1px solid rgba(255,255,255,0.1); padding:8px 16px; border-radius:8px; display:flex; gap:16px; font-size:0.7rem; color:#94A3B8;">
+              <div>CONSULTORÍA: <strong style="color:#FFF;">${d.author || 'TSolutions IPIDD'}</strong></div>
+              <div>•</div>
+              <div>CLIENTE: <strong style="color:#FFF;">${d.client || 'Comité Directivo'}</strong></div>
+              <div>•</div>
+              <div>FECHA: <strong style="color:#00E5FF;">${d.date || '2026-09-30'}</strong></div>
+            </div>
+          </div>
+        `;
+      } else if (type === 'THREE_CARD_KPI') {
+        const cards = d.cards || [];
+        bodyHTML = `
+          <div style="display:flex; flex-direction:column; justify-content:center; height:100%; padding:0 24px;">
+            <div style="text-align:center; margin-bottom:12px;">
+              <h2 style="font-family:'Bruno Ace', sans-serif; font-size:1.3rem; color:#FFF; margin:0 0 4px 0; text-transform:uppercase;">${d.title}</h2>
+              <p style="font-family:'Space Grotesk', sans-serif; font-size:0.75rem; color:#00E5FF; margin:0;">${d.subtitle || ''}</p>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
+              ${cards.map((c, i) => {
+                const color = i === 0 ? '#FF6B00' : (i === 1 ? '#00E5FF' : '#F59E0B');
+                return `
+                  <div style="background:#121722; border:1px solid rgba(255,255,255,0.1); border-top:3px solid ${color}; padding:12px; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <span style="font-size:0.6rem; font-family:var(--font-mono); color:${color}; font-weight:700;">${c.badge || 'KPI'}</span>
+                      <span style="width:6px; height:6px; border-radius:50%; background:${color};"></span>
+                    </div>
+                    <div style="font-family:'Bruno Ace', sans-serif; font-size:1.8rem; color:#FFF; margin:6px 0 2px 0;">${c.value}</div>
+                    <div style="font-family:'Space Grotesk', sans-serif; font-size:0.7rem; color:${color}; font-weight:700; text-transform:uppercase; margin-bottom:4px;">${c.label}</div>
+                    <div style="font-size:0.65rem; color:#F8FAFC; line-height:1.3;">${c.description}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      } else if (type === 'TWO_COLUMN') {
+        bodyHTML = `
+          <div style="display:flex; flex-direction:column; justify-content:center; height:100%; padding:0 24px;">
+            <div style="text-align:center; margin-bottom:12px;">
+              <h2 style="font-family:'Bruno Ace', sans-serif; font-size:1.25rem; color:#FFF; margin:0 0 2px 0; text-transform:uppercase;">${d.title}</h2>
+              <p style="font-family:'Space Grotesk', sans-serif; font-size:0.75rem; color:#00E5FF; margin:0;">${d.subtitle || ''}</p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div style="background:#121722; border:1px solid rgba(255,107,0,0.4); padding:12px; border-radius:8px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                  <span style="font-size:0.65rem; font-family:var(--font-mono); color:#FF6B00; font-weight:700;">${d.leftBadge || 'AS-IS'}</span>
+                </div>
+                <h4 style="font-size:0.8rem; font-family:'Space Grotesk', sans-serif; color:#FFF; margin:0 0 8px 0; text-transform:uppercase;">${d.leftTitle}</h4>
+                <ul style="margin:0; padding-left:14px; font-size:0.68rem; color:#F8FAFC; line-height:1.4;">
+                  ${(d.leftPoints || []).map(p => `<li style="margin-bottom:4px;">${p}</li>`).join('')}
+                </ul>
+              </div>
+              <div style="background:#121722; border:1px solid rgba(0,229,255,0.4); padding:12px; border-radius:8px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                  <span style="font-size:0.65rem; font-family:var(--font-mono); color:#00E5FF; font-weight:700;">${d.rightBadge || 'TO-BE'}</span>
+                </div>
+                <h4 style="font-size:0.8rem; font-family:'Space Grotesk', sans-serif; color:#FFF; margin:0 0 8px 0; text-transform:uppercase;">${d.rightTitle}</h4>
+                <ul style="margin:0; padding-left:14px; font-size:0.68rem; color:#F8FAFC; line-height:1.4;">
+                  ${(d.rightPoints || []).map(p => `<li style="margin-bottom:4px;">${p}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (type === 'TIMELINE_ROADMAP') {
+        const phases = d.phases || [];
+        bodyHTML = `
+          <div style="display:flex; flex-direction:column; justify-content:center; height:100%; padding:0 24px;">
+            <div style="text-align:center; margin-bottom:12px;">
+              <h2 style="font-family:'Bruno Ace', sans-serif; font-size:1.25rem; color:#FFF; margin:0 0 2px 0; text-transform:uppercase;">${d.title}</h2>
+              <p style="font-family:'Space Grotesk', sans-serif; font-size:0.75rem; color:#00E5FF; margin:0;">${d.subtitle || ''}</p>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;">
+              ${phases.map((p, i) => {
+                const color = p.status === 'COMPLETED' ? '#00E5FF' : (p.status === 'IN_PROGRESS' ? '#FF6B00' : '#94A3B8');
+                return `
+                  <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+                    <div style="width:28px; height:28px; clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background:${color}; color:#0A0D14; font-family:var(--font-mono); font-weight:800; font-size:0.75rem; display:flex; align-items:center; justify-content:center; margin-bottom:8px;">
+                      ${p.step}
+                    </div>
+                    <div style="width:100%; background:#121722; border:1px solid rgba(255,255,255,0.1); padding:8px; border-radius:6px; text-align:left;">
+                      <div style="font-size:0.6rem; font-family:var(--font-mono); color:${color}; font-weight:700;">${p.duration}</div>
+                      <div style="font-size:0.7rem; font-weight:700; color:#FFF; margin:2px 0 6px 0;">${p.phaseName}</div>
+                      <div style="font-size:0.62rem; color:#94A3B8; line-height:1.3;">${(p.deliverables || []).join(' • ')}</div>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        // Formato Genérico / Cierre / Ishikawa
+        bodyHTML = `
+          <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; text-align:center; padding:0 32px;">
+            <span style="font-size:0.65rem; font-family:var(--font-mono); color:#FF6B00; font-weight:700; margin-bottom:6px;">${type}</span>
+            <h2 style="font-family:'Bruno Ace', sans-serif; font-size:1.4rem; color:#FFF; margin:0 0 8px 0; text-transform:uppercase;">${d.title}</h2>
+            <p style="font-size:0.8rem; color:#F8FAFC; max-width:600px; line-height:1.4; margin:0 0 16px 0;">${d.summary || d.problemSummary || ''}</p>
+            ${d.ctaButtonText ? `
+              <button style="background:#FF6B00; color:#0A0D14; border:none; padding:8px 20px; border-radius:20px; font-weight:800; font-size:0.8rem; cursor:pointer; font-family:'Space Grotesk', sans-serif;">
+                ${d.ctaButtonText}
+              </button>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      return `
+        <div style="width:100%; height:100%; background:#0A0D14; background-image:linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px); background-size:32px 32px; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box;">
+          <!-- CABECERA -->
+          <div style="padding:10px 20px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; background:rgba(10,13,20,0.85);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="width:20px; height:20px; clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background:#FF6B00;"></div>
+              <span style="font-family:'Bruno Ace', sans-serif; font-size:0.8rem; color:#FFF; font-weight:800;">TSOLUTIONS <span style="color:#FF6B00;">IPIDD</span></span>
+              <span style="font-size:0.65rem; font-family:var(--font-mono); color:#00E5FF; background:rgba(0,229,255,0.1); padding:1px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.3); font-weight:700;">${type}</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.75rem; color:#94A3B8;">
+              <span style="color:#FF6B00; font-weight:800;">${String(current).padStart(2, '0')}</span> / ${String(total).padStart(2, '0')}
+            </div>
+          </div>
+
+          <!-- CUERPO -->
+          <div style="flex:1; overflow:hidden;">
+            ${bodyHTML}
+          </div>
+
+          <!-- PIE FIJO -->
+          <div style="padding:8px 20px; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; font-size:0.65rem; color:#94A3B8; background:rgba(10,13,20,0.85);">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:#FF6B00; box-shadow:0 0 10px #FF6B00;"></span>
+              <span style="width:6px; height:6px; border-radius:50%; background:#00E5FF; box-shadow:0 0 8px #00E5FF;"></span>
+              <span style="font-family:var(--font-mono); letter-spacing:0.05em;">TSOLUTIONS IPIDD • SYSTEM ARCHITECTURE & OPEX</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.6rem; opacity:0.7;">
+              Tecnología instalada. Conocimiento transferido. Negocios escalados.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // REPRODUCTOR PANTALLA COMPLETA
+    function launchFullscreenPresenter() {
+      if (currentPresentationSlides.length === 0) return;
+      let overlay = document.getElementById('ts-fullscreen-presenter-overlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'ts-fullscreen-presenter-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.inset = '0';
+        overlay.style.background = '#05070B';
+        overlay.style.zIndex = '99999';
+        overlay.style.display = 'flex';
+        overlay.style.flexDirection = 'column';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.padding = '20px';
+        document.body.appendChild(overlay);
+      }
+
+      overlay.innerHTML = `
+        <div style="width:100%; max-width:1200px; display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:0.8rem; color:#FFF;">
+          <span style="font-family:'Bruno Ace', sans-serif; font-size:1rem; font-weight:800;">${currentPresentationTitle}</span>
+          <div style="display:flex; gap:10px;">
+            <button onclick="window.print()" style="background:#121722; border:1px solid rgba(255,255,255,0.2); color:#00E5FF; padding:4px 12px; border-radius:6px; font-size:0.75rem; cursor:pointer;">
+              🖨 Imprimir PDF
+            </button>
+            <button onclick="closeFullscreenPresenter()" style="background:#121722; border:1px solid rgba(255,255,255,0.2); color:#FFF; padding:4px 12px; border-radius:6px; font-size:0.75rem; cursor:pointer;">
+              ✕ Salir [Esc]
+            </button>
+          </div>
+        </div>
+
+        <div id="fullscreen-slide-body" style="width:100%; max-width:1200px; aspect-ratio:16/9; box-shadow:0 0 40px rgba(0,0,0,0.8); border-radius:12px; overflow:hidden;">
+          ${renderSlideHTML(currentPresentationSlides[currentPresentationIndex], currentPresentationIndex + 1, currentPresentationSlides.length)}
+        </div>
+
+        <div style="width:100%; max-width:1200px; display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+          <div style="display:flex; gap:8px;">
+            <button onclick="fullscreenPrevSlide()" style="background:#121722; border:1px solid rgba(255,255,255,0.2); color:#FFF; padding:6px 14px; border-radius:6px; font-size:0.75rem; cursor:pointer;">
+              ◀ Anterior
+            </button>
+            <button onclick="fullscreenNextSlide()" style="background:#FF6B00; border:none; color:#0A0D14; font-weight:800; padding:6px 16px; border-radius:6px; font-size:0.75rem; cursor:pointer;">
+              Siguiente ▶
+            </button>
+          </div>
+          <div style="font-size:0.7rem; font-family:var(--font-mono); color:#94A3B8;">
+            Usa <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">Espacio</kbd> o <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">Flechas</kbd> para navegar
+          </div>
+        </div>
+      `;
+
+      overlay.style.display = 'flex';
+
+      // Atajos de teclado en pantalla completa
+      window.onkeydown = function(e) {
+        if (overlay.style.display === 'flex') {
+          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            fullscreenNextSlide();
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            fullscreenPrevSlide();
+          } else if (e.key === 'Escape') {
+            closeFullscreenPresenter();
+          }
+        }
+      };
+    }
+
+    function fullscreenNextSlide() {
+      if (currentPresentationIndex < currentPresentationSlides.length - 1) {
+        currentPresentationIndex++;
+        const target = document.getElementById('fullscreen-slide-body');
+        if (target) {
+          target.innerHTML = renderSlideHTML(currentPresentationSlides[currentPresentationIndex], currentPresentationIndex + 1, currentPresentationSlides.length);
+        }
+      }
+    }
+
+    function fullscreenPrevSlide() {
+      if (currentPresentationIndex > 0) {
+        currentPresentationIndex--;
+        const target = document.getElementById('fullscreen-slide-body');
+        if (target) {
+          target.innerHTML = renderSlideHTML(currentPresentationSlides[currentPresentationIndex], currentPresentationIndex + 1, currentPresentationSlides.length);
+        }
+      }
+    }
+
+    function closeFullscreenPresenter() {
+      const overlay = document.getElementById('ts-fullscreen-presenter-overlay');
+      if (overlay) overlay.style.display = 'none';
+      window.onkeydown = null;
     }
 
     // MODAL DE INFORMACIÓN RÁPIDA / GUÍA

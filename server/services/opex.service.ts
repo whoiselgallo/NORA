@@ -257,4 +257,89 @@ export class OpexService {
       };
     });
   }
+
+  // ==========================================================================
+  // 5. ACCIÓN CORRECTIVA AUTOMÁTICA OPEX
+  // ==========================================================================
+
+  public async createCorrectiveAction(
+    workspaceId: string,
+    projectId: string,
+    data: {
+      title: string;
+      description?: string;
+      failedNodeId?: string;
+      fiveWhysId?: string;
+      ishikawaFactorId?: string;
+      startDate?: string;
+      dueDate?: string;
+    }
+  ) {
+    return await withWorkspaceClient(this.pool, workspaceId, async (client) => {
+      const startDate = data.startDate || new Date().toISOString();
+      const dueDate = data.dueDate || new Date(Date.now() + 48 * 3600 * 1000).toISOString();
+
+      // 1. Insertar tarea en project_tasks con prioridad CRITICAL
+      const taskRes = await client.query(
+        `INSERT INTO project_tasks (
+           workspace_id, project_id, title, description, priority, status, start_date, due_date
+         ) VALUES ($1, $2, $3, $4, 'CRITICAL', 'TODO', $5, $6)
+         RETURNING *`,
+        [
+          workspaceId,
+          projectId,
+          `[ACCIÓN CORRECTIVA OPEX] ${data.title}`,
+          data.description || 'Acción correctiva inmediata derivada de causa raíz confirmada.',
+          startDate,
+          dueDate
+        ]
+      );
+      const correctiveTask = taskRes.rows[0];
+
+      // 2. Conectar al nodo fallido del DAG en workflow_node_tasks si se proporcionó
+      if (data.failedNodeId) {
+        await client.query(
+          `INSERT INTO workflow_node_tasks (node_id, task_id)
+           VALUES ($1, $2)
+           ON CONFLICT DO NOTHING`,
+          [data.failedNodeId, correctiveTask.id]
+        );
+      }
+
+      // 3. Vincular con fiveWhys o ishikawaFactor
+      if (data.fiveWhysId) {
+        await client.query(
+          `UPDATE opex_five_whys SET corrective_task_id = $1 WHERE id = $2 AND workspace_id = $3`,
+          [correctiveTask.id, data.fiveWhysId, workspaceId]
+        );
+      }
+      if (data.ishikawaFactorId) {
+        await client.query(
+          `UPDATE opex_ishikawa_factors SET corrective_task_id = $1, is_critical = true WHERE id = $2 AND workspace_id = $3`,
+          [correctiveTask.id, data.ishikawaFactorId, workspaceId]
+        );
+      }
+
+      // 4. Registrar en el cronograma del Calendario y Gantt
+      await client.query(
+        `INSERT INTO calendar_events (
+           workspace_id, project_id, title, description, start_date, due_date,
+           event_type, reference_id, priority, status
+         ) VALUES ($1, $2, $3, $4, $5, $6, 'TASK_DUE', $7, 'CRITICAL', 'IN_PROGRESS')
+         ON CONFLICT DO NOTHING`,
+        [
+          workspaceId,
+          projectId,
+          correctiveTask.title,
+          correctiveTask.description,
+          startDate,
+          dueDate,
+          correctiveTask.id
+        ]
+      );
+
+      return correctiveTask;
+    });
+  }
 }
+

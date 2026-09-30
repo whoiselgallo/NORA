@@ -294,9 +294,41 @@ export const MasterWebhookPayloadSchema = z.object({
   isOverdue: z.boolean().optional()
 });
 
+// DMAIC & OPEX Corrective Action Schemas
+export const UpdateDmaicPhaseSchema = z.object({
+  charter_problem_statement: z.string().optional(),
+  charter_business_case: z.string().optional(),
+  charter_goal: z.string().optional(),
+  charter_scope: z.string().optional(),
+  sipoc_data: z.record(z.unknown()).optional(),
+  measure_baseline_metrics: z.record(z.unknown()).optional(),
+  analyze_findings: z.record(z.unknown()).optional(),
+  improve_action_plan: z.record(z.unknown()).optional(),
+  control_plan: z.record(z.unknown()).optional()
+});
+
+export const ApproveTollgateSchema = z.object({
+  approved_by: z.string().uuid().optional().nullable()
+});
+
+export const CreateCorrectiveActionSchema = z.object({
+  title: z.string().trim().min(3).max(255),
+  description: z.string().optional(),
+  failedNodeId: z.string().uuid().optional(),
+  fiveWhysId: z.string().uuid().optional(),
+  ishikawaFactorId: z.string().uuid().optional(),
+  startDate: z.string().datetime().optional(),
+  dueDate: z.string().datetime().optional()
+});
+
+export const CompileDeliverableSchema = z.object({
+  author_id: z.string().uuid().optional().nullable()
+});
+
 export type TaskMutation = z.infer<typeof TaskMutationSchema>;
 export type TaskCreate = z.infer<typeof TaskCreateSchema>;
 export type GitHubWebhookPayload = z.infer<typeof GitHubWebhookSchema>;
 export type CreateCampaignInput = z.infer<typeof CreateCampaignSchema>;
 export type CreateTemplateInput = z.infer<typeof CreateTemplateSchema>;
 export type SubscribeContactInput = z.infer<typeof SubscribeContactSchema>;
+

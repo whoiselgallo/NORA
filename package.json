@@ -9,7 +9,8 @@
     "migrate": "node server/db/migrate.js",
     "test:integration": "tsc && node dist/testIntegration.js",
     "test:optimizations": "tsc && node dist/testOptimizations.js",
-    "test:ai": "npx tsx server/testAIGateway.ts"
+    "test:ai": "npx tsx server/testAIGateway.ts",
+    "test:presentation": "npx tsx server/testPresentationAI.ts"
   },
   "dependencies": {
     "@neon/config": "^1.8.2",

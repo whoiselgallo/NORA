@@ -13,6 +13,7 @@ import { OpexService } from '../services/opex.service';
 import { NotesService } from '../services/notes.service';
 import { createMarketingRouter } from './marketing.routes';
 import { createAIRoutes } from './ai.routes';
+import { createPresentationRoutes } from './presentation.routes';
 import { authenticateNeonAuth, requireRole } from '../middleware/auth.middleware';
 import { requireWorkspace, DEFAULT_WORKSPACE_ID, withWorkspaceClient } from '../middleware/workspace.middleware';
 import { validateBody } from '../middleware/validate.middleware';
@@ -71,6 +72,7 @@ export function createApiRouter(
   // Subrutas de Marketing & AI Gateway
   router.use('/marketing', createMarketingRouter(pool, io, campaignDispatcher));
   router.use('/ai', createAIRoutes(pool, io));
+  router.use('/presentations', createPresentationRoutes(pool, io));
 
   // ==========================================================================
   // 1. WORKSPACES MULTI-TENANT

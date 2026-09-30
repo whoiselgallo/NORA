@@ -46,6 +46,9 @@ app.use(
   })
 );
 
+// Servir archivos estáticos del directorio public (activos, logos, SVG)
+app.use(express.static(path.join(__dirname, '../public')));
+
 // Enrutador de API v1 con inyección de Pool, SocketIO y DagCacheService
 app.use('/api/v1', createApiRouter(pool, io, dagCache));
 

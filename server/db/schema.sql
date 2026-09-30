@@ -408,7 +408,69 @@ CREATE TABLE IF NOT EXISTS marketing_suppression_list (
 );
 
 -- ============================================================================
--- 11. ROW-LEVEL SECURITY (RLS) MULTI-TENANT ISOLATION
+-- 11. DIAPOSITIVAS EJECUTIVAS ASISTIDAS POR IA (TSOLUTIONS IPIDD STYLE)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS presentation_decks (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    project_id UUID REFERENCES projects(id) ON DELETE SET NULL,
+    author_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    aspect_ratio VARCHAR(10) DEFAULT '16:9',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS presentation_slides (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    deck_id UUID NOT NULL REFERENCES presentation_decks(id) ON DELETE CASCADE,
+    slide_index INTEGER NOT NULL,
+    layout_type VARCHAR(50) NOT NULL CHECK (
+        layout_type IN (
+            'HERO_COVER', 
+            'TWO_COLUMN', 
+            'THREE_CARD_KPI', 
+            'TIMELINE_ROADMAP', 
+            'OPEX_PROBLEM_STATEMENT', 
+            'CODE_AND_ARCHITECTURE', 
+            'CONCLUSION_CTA'
+        )
+    ),
+    slide_data JSONB NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 13. Módulo DMAIC (Define, Measure, Analyze, Improve, Control)
+CREATE TABLE IF NOT EXISTS dmaic_phases (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    phase VARCHAR(20) NOT NULL CHECK (phase IN ('DEFINE', 'MEASURE', 'ANALYZE', 'IMPROVE', 'CONTROL')),
+    tollgate_status VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (tollgate_status IN ('PENDING', 'APPROVED', 'REJECTED')),
+    approved_at TIMESTAMP WITH TIME ZONE,
+    approved_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    charter_problem_statement TEXT,
+    charter_business_case TEXT,
+    charter_goal TEXT,
+    charter_scope TEXT,
+    sipoc_data JSONB DEFAULT '{"suppliers": [], "inputs": [], "process": [], "outputs": [], "customers": []}'::jsonb,
+    measure_baseline_metrics JSONB DEFAULT '{"defect_rate": 0, "cycle_time_hours": 0, "dpmo": 0, "sigma_level": 6.0}'::jsonb,
+    analyze_findings JSONB DEFAULT '{"root_causes": [], "verified_hypotheses": []}'::jsonb,
+    improve_action_plan JSONB DEFAULT '{"solutions": [], "pilots": []}'::jsonb,
+    control_plan JSONB DEFAULT '{"tolerance_min_duration_ms": 0, "tolerance_max_duration_ms": 300000, "min_success_rate": 95.0, "telemetry_logs": []}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_dmaic_project_phase UNIQUE (project_id, phase)
+);
+
+ALTER TABLE marketing_campaigns ADD COLUMN IF NOT EXISTS is_blocked BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE marketing_campaigns ADD COLUMN IF NOT EXISTS release_tag VARCHAR(100);
+ALTER TABLE opex_ishikawa_factors ADD COLUMN IF NOT EXISTS is_critical BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE opex_ishikawa_factors ADD COLUMN IF NOT EXISTS corrective_task_id UUID REFERENCES project_tasks(id) ON DELETE SET NULL;
+
+-- ============================================================================
+-- 12. ROW-LEVEL SECURITY (RLS) MULTI-TENANT ISOLATION
 -- ============================================================================
 
 CREATE OR REPLACE FUNCTION get_current_workspace_id() RETURNS UUID AS $$
@@ -435,7 +497,9 @@ DECLARE
         'opex_ishikawa_factors',
         'opex_swot_items',
         'opex_pareto_data',
-        'workspace_notes'
+        'workspace_notes',
+        'presentation_decks',
+        'dmaic_phases'
     ];
 BEGIN
     FOREACH tbl IN ARRAY tables LOOP
@@ -456,6 +520,26 @@ BEGIN
     END LOOP;
 END $$;
 
+-- RLS específico para presentation_slides vinculado por deck_id
+ALTER TABLE presentation_slides ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS presentation_slides_workspace_isolation_policy ON presentation_slides;
+CREATE POLICY presentation_slides_workspace_isolation_policy ON presentation_slides
+FOR ALL
+USING (
+    current_setting('app.bypass_rls', true) = 'on'
+    OR deck_id IN (
+        SELECT id FROM presentation_decks 
+        WHERE workspace_id = get_current_workspace_id()
+    )
+)
+WITH CHECK (
+    current_setting('app.bypass_rls', true) = 'on'
+    OR deck_id IN (
+        SELECT id FROM presentation_decks 
+        WHERE workspace_id = get_current_workspace_id()
+    )
+);
+
 -- Índices de alto rendimiento
 CREATE INDEX IF NOT EXISTS idx_projects_workspace ON projects(workspace_id);
 CREATE INDEX IF NOT EXISTS idx_project_tasks_workspace ON project_tasks(workspace_id);
@@ -463,6 +547,8 @@ CREATE INDEX IF NOT EXISTS idx_calendar_events_ws_date ON calendar_events(worksp
 CREATE INDEX IF NOT EXISTS idx_scrum_sprints_ws_proj ON scrum_sprints(workspace_id, project_id);
 CREATE INDEX IF NOT EXISTS idx_kanban_columns_ws_proj ON kanban_columns(workspace_id, project_id, position);
 CREATE INDEX IF NOT EXISTS idx_workspace_notes_ws ON workspace_notes(workspace_id);
+CREATE INDEX IF NOT EXISTS idx_presentation_decks_ws ON presentation_decks(workspace_id);
+CREATE INDEX IF NOT EXISTS idx_presentation_slides_deck_index ON presentation_slides(deck_id, slide_index ASC);
 CREATE INDEX IF NOT EXISTS idx_marketing_contacts_lookup ON marketing_contacts(audience_id, is_subscribed, bounced);
 CREATE INDEX IF NOT EXISTS idx_marketing_email_logs_campaign ON marketing_email_logs(campaign_id, status);
 CREATE INDEX IF NOT EXISTS idx_suppression_email ON marketing_suppression_list(email);

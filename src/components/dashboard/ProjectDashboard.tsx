@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { WorkflowCanvas } from '../workflow/WorkflowCanvas';
 import { MarketingCampaignModal } from '../marketing/MarketingCampaignModal';
 import { VirtualTodoList } from './VirtualTodoList';
+import { PresentationManager } from '../presentation/PresentationManager';
 import { Node, Edge } from 'reactflow';
 
 export interface TaskItem {
@@ -18,7 +19,7 @@ export const ProjectDashboard: React.FC<{ projectId: string; userRole: 'ADMIN' |
   projectId,
   userRole
 }) => {
-  const [activeTab, setActiveTab] = useState<'medicion' | 'ejecucion' | 'diseno'>('ejecucion');
+  const [activeTab, setActiveTab] = useState<'medicion' | 'ejecucion' | 'diseno' | 'presentaciones'>('ejecucion');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [priorityFilter, setPriorityFilter] = useState<string>('ALL');
   const [tasks, setTasks] = useState<TaskItem[]>([]);
@@ -222,7 +223,7 @@ export const ProjectDashboard: React.FC<{ projectId: string; userRole: 'ADMIN' |
           <span style={{ fontSize: '0.8rem', color: '#94A3B8' }}>Sesión activa · Rol: {userRole}</span>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {(['medicion', 'ejecucion', 'diseno'] as const).map(tab => (
+          {(['medicion', 'ejecucion', 'diseno', 'presentaciones'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -317,14 +318,23 @@ export const ProjectDashboard: React.FC<{ projectId: string; userRole: 'ADMIN' |
         </div>
       </section>
 
+      {/* Módulo de Presentaciones Ejecutivas asistidas por IA */}
+      {activeTab === 'presentaciones' && (
+        <div style={{ marginTop: 24, marginBottom: 24 }}>
+          <PresentationManager projectId={projectId} />
+        </div>
+      )}
+
       {/* Pizarrón React Flow */}
-      <WorkflowCanvas
-        nodes={nodes}
-        edges={edges}
-        userRole={userRole}
-        onNodesUpdate={setNodes}
-        onEdgesUpdate={setEdges}
-      />
+      {activeTab !== 'presentaciones' && (
+        <WorkflowCanvas
+          nodes={nodes}
+          edges={edges}
+          userRole={userRole}
+          onNodesUpdate={setNodes}
+          onEdgesUpdate={setEdges}
+        />
+      )}
 
       {/* Gestor To-Do con Desglose por IA */}
       <section style={{ marginTop: 24, background: '#0F172A', padding: 20, borderRadius: 8, border: '1px solid #334155' }}>
