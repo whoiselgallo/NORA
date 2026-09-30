@@ -10,7 +10,9 @@
     "test:integration": "tsc && node dist/testIntegration.js",
     "test:optimizations": "tsc && node dist/testOptimizations.js",
     "test:ai": "npx tsx server/testAIGateway.ts",
-    "test:presentation": "npx tsx server/testPresentationAI.ts"
+    "test:presentation": "npx tsx server/testPresentationAI.ts",
+    "test:orchestration": "tsc && node dist/testReactiveOrchestration.js",
+    "test:studio": "npx tsx server/testNexusStudio.ts"
   },
   "dependencies": {
     "@neon/config": "^1.8.2",
@@ -23,6 +25,7 @@
     "express": "^5.2.1",
     "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.4.0",
     "pg": "^8.23.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
@@ -35,6 +38,7 @@
     "@types/express": "^5.0.6",
     "@types/ioredis": "^4.28.10",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.3.0",
     "@types/node": "^26.6.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",

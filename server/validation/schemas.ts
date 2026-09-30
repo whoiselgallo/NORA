@@ -325,10 +325,135 @@ export const CompileDeliverableSchema = z.object({
   author_id: z.string().uuid().optional().nullable()
 });
 
+/**
+ * Esquemas para Cierre Formal de Proyectos y Consulta Asistida en Nexus
+ */
+export const ProjectCloseSchema = z.object({
+  client_sign_off_name: z
+    .string({ required_error: 'client_sign_off_name is required' })
+    .trim()
+    .min(2, 'client_sign_off_name must have at least 2 characters'),
+  client_feedback_rating: z
+    .number({ required_error: 'client_feedback_rating is required' })
+    .int()
+    .min(1, 'Rating must be at least 1')
+    .max(5, 'Rating cannot exceed 5'),
+  client_comments: z.string().max(2000).optional().nullable(),
+  final_roi_amount: z.number().nonnegative().optional(),
+  final_cycle_time_days: z.number().nonnegative().optional(),
+  final_sigma_level: z.number().min(1).max(6).optional()
+});
+
+export const NexusQuerySchema = z.object({
+  query: z
+    .string({ required_error: 'query is required' })
+    .trim()
+    .min(2, 'query must be at least 2 characters long'),
+  min_similarity: z.number().min(0).max(1).default(0.75).optional(),
+  domain_filter: z
+    .enum(['ARCHITECTURE_STACK', 'OPEX_ROOT_CAUSE', 'METRICS_AND_ROI', 'LESSONS_LEARNED', 'SOP_PROCEDURES', 'DOCUMENT_INGESTION'])
+    .optional()
+});
+
+// Nexus Architect Studio: Integraciones & Importador Universal
+export const ConnectIntegrationSchema = z.object({
+  provider: z.enum(['github', 'gitlab', 'google_tasks']),
+  credentials: z.object({
+    accessToken: z.string().min(1, 'accessToken is required'),
+    refreshToken: z.string().optional(),
+    webhookSecret: z.string().optional(),
+    tokenType: z.string().optional()
+  }).passthrough(),
+  metadata: z.record(z.unknown()).optional().default({})
+});
+
+export const LinkGitHubRepoSchema = z.object({
+  project_id: z.string().uuid(),
+  owner: z.string().min(1),
+  repo_name: z.string().min(1)
+});
+
+export const LinkGitLabProjectSchema = z.object({
+  project_id: z.string().uuid(),
+  gitlab_path: z.string().min(1)
+});
+
+export const ImportPayloadSchema = z.object({
+  project_id: z.string().uuid(),
+  format: z.enum(['JSON', 'CSV', 'TRELLO', 'MONDAY', 'ASANA', 'JIRA']),
+  data: z.union([z.array(z.record(z.unknown())), z.string()]),
+  mapping: z.object({
+    titleColumn: z.string().optional(),
+    descriptionColumn: z.string().optional(),
+    priorityColumn: z.string().optional(),
+    statusColumn: z.string().optional(),
+    dueDateColumn: z.string().optional(),
+    assigneeColumn: z.string().optional()
+  }).optional()
+});
+
+export const NexusOnboardingSessionSchema = z.object({
+  // Vector 1: Arquetipo de Proyecto
+  archetype: z.enum([
+    'BIOLINK',
+    'LANDING_PAGE',
+    'DIGITAL_MENU',
+    'BRAND_IDENTITY',
+    'CORPORATE_WEB',
+    'WEB_WITH_API',
+    'ECOMMERCE',
+    'SAAS_WEBAPP',
+    'OPEX_MANAGEMENT'
+  ]),
+
+  // Vector 2: Datos del Propietario (Cliente)
+  client_name: z.string().trim().min(2, 'El nombre o razón social debe tener al menos 2 caracteres').max(255),
+  client_email: z.string().trim().email('Correo electrónico del representante no es válido'),
+  company_name: z.string().trim().max(255).optional().nullable(),
+  target_domain: z.string().trim().max(255).optional().nullable(),
+
+  // Vector 3: Matriz RACI del Equipo de Trabajo
+  raci: z.object({
+    tech_lead_name: z.string().trim().max(255).optional().nullable(),
+    tech_lead_email: z.string().trim().email().optional().nullable(),
+    project_manager_name: z.string().trim().max(255).optional().nullable(),
+    project_manager_email: z.string().trim().email().optional().nullable(),
+    collaborators: z.array(z.object({
+      name: z.string().trim().min(2),
+      email: z.string().trim().email()
+    })).optional().default([])
+  }).optional().default({}),
+
+  // Vector 4: Requerimientos Técnicos e Integraciones
+  technical: z.object({
+    repository_provider: z.enum(['GITHUB', 'GITLAB', 'BLUEPRINT_GENERATED']).default('BLUEPRINT_GENERATED'),
+    github_repo: z.string().trim().max(255).optional().nullable(),
+    payment_gateway: z.enum(['NONE', 'STRIPE', 'CLIP', 'MERCADOPAGO']).default('NONE'),
+    enable_google_tasks: z.boolean().default(false)
+  }).optional().default({}),
+
+  // Vector 5: Marco Comercial & Modelo de Contratación
+  commercial: z.object({
+    package_code: z.string().trim().min(2, 'Debe especificar el código del paquete de servicio'),
+    payment_terms: z.enum(['50/50', '30/30/40', 'MONTHLY_LICENSE', 'ANNUAL']).default('50/50'),
+    target_delivery_date: z.string().optional().nullable(),
+    custom_price: z.number().positive().optional().nullable()
+  }),
+
+  // Metadatos adicionales del proyecto
+  project_name: z.string().trim().min(3, 'El nombre del proyecto debe tener al menos 3 caracteres').max(255),
+  project_description: z.string().trim().max(2000).optional().nullable()
+});
+
 export type TaskMutation = z.infer<typeof TaskMutationSchema>;
 export type TaskCreate = z.infer<typeof TaskCreateSchema>;
 export type GitHubWebhookPayload = z.infer<typeof GitHubWebhookSchema>;
 export type CreateCampaignInput = z.infer<typeof CreateCampaignSchema>;
 export type CreateTemplateInput = z.infer<typeof CreateTemplateSchema>;
 export type SubscribeContactInput = z.infer<typeof SubscribeContactSchema>;
+export type ProjectCloseInput = z.infer<typeof ProjectCloseSchema>;
+export type NexusQueryInput = z.infer<typeof NexusQuerySchema>;
+export type NexusOnboardingSessionInput = z.infer<typeof NexusOnboardingSessionSchema>;
+
+
 

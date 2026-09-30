@@ -29,10 +29,23 @@ export class MasterWebhookHandler {
 
     const client = await this.pool.connect();
     try {
+      // Resolver project_id y workspace_id desde project_webhook_configs si la routing_key está registrada
+      let routingConfig: { project_id: string; workspace_id: string } | null = null;
+      if (routingKey && routingKey !== 'default') {
+        const cfgRes = await client.query(
+          `SELECT project_id, workspace_id FROM project_webhook_configs WHERE routing_key = $1 AND is_active = true`,
+          [routingKey]
+        );
+        if (cfgRes.rows.length > 0) {
+          routingConfig = cfgRes.rows[0];
+        }
+      }
+
       // 1. MANEJO DE ALERTA DE CALENDARIO MAESTRO
       if (payload.event === 'CALENDAR_EVENT_ALERT') {
-        const { eventId, title, dueDate, priority, workspaceId, projectId, isOverdue } = payload;
-        const wsId = workspaceId || DEFAULT_WORKSPACE_ID;
+        const { eventId, title, dueDate, priority, workspaceId, projectId: rawProjId, isOverdue } = payload;
+        const projectId = rawProjId || routingConfig?.project_id;
+        const wsId = workspaceId || routingConfig?.workspace_id || DEFAULT_WORKSPACE_ID;
 
         // Actualizar alert_triggered = true
         if (eventId) {
@@ -112,10 +125,10 @@ export class MasterWebhookHandler {
           workspaceId: providedWsId
         } = payload;
 
-        let projectId = providedProjectId;
-        let wsId = providedWsId || DEFAULT_WORKSPACE_ID;
+        let projectId = providedProjectId || routingConfig?.project_id;
+        let wsId = providedWsId || routingConfig?.workspace_id || DEFAULT_WORKSPACE_ID;
 
-        // Si no se proporcionó projectId, buscarlo por repositorio o workspace
+        // Si no se proporcionó projectId ni se halló en routingConfig, buscarlo por defecto
         if (!projectId) {
           const prjRes = await client.query(`SELECT id, workspace_id FROM projects LIMIT 1`);
           if (prjRes.rows.length > 0) {

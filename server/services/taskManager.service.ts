@@ -33,6 +33,15 @@ export class TaskManagerService {
     }
 
     return await withWorkspaceClient(this.pool, workspaceId, async (client: PoolClient) => {
+      // 1.2 Bloqueo inmutable si el proyecto está ARCHIVADO
+      const projCheck = await client.query(
+        `SELECT p.status FROM projects p JOIN project_tasks pt ON pt.project_id = p.id WHERE pt.id = $1`,
+        [taskId]
+      );
+      if (projCheck.rows[0]?.status === 'ARCHIVED') {
+        throw new Error('PROJECT_IS_ARCHIVED_READ_ONLY: El proyecto se encuentra archivado. Las tareas están en modo solo lectura inmutable.');
+      }
+
       // 1.5 Mapeo a columna Kanban homónima y validación estricta de WIP limits
       const statusToColPos: Record<string, number> = {
         TODO: 0,

@@ -11,9 +11,16 @@ import { CalendarService } from '../services/calendar.service';
 import { AgileService } from '../services/agile.service';
 import { OpexService } from '../services/opex.service';
 import { NotesService } from '../services/notes.service';
+import { OrchestratorService } from '../services/orchestrator.service';
+import { DmaicService, DmaicPhaseType } from '../services/dmaic.service';
+import { BrandEnforcerService } from '../services/brandEnforcer.service';
+import { ProjectClosureService } from '../services/projectClosure.service';
+import { NexusBrainService } from '../services/nexusBrain.service';
+import { NexusOnboardingService } from '../services/nexusOnboarding.service';
 import { createMarketingRouter } from './marketing.routes';
 import { createAIRoutes } from './ai.routes';
 import { createPresentationRoutes } from './presentation.routes';
+import { createNexusStudioRouter } from './nexusStudio.routes';
 import { authenticateNeonAuth, requireRole } from '../middleware/auth.middleware';
 import { requireWorkspace, DEFAULT_WORKSPACE_ID, withWorkspaceClient } from '../middleware/workspace.middleware';
 import { validateBody } from '../middleware/validate.middleware';
@@ -34,7 +41,14 @@ import {
   CreateParetoDataSchema,
   CreateNoteSchema,
   UpdateNoteSchema,
-  MasterWebhookPayloadSchema
+  MasterWebhookPayloadSchema,
+  UpdateDmaicPhaseSchema,
+  ApproveTollgateSchema,
+  CreateCorrectiveActionSchema,
+  CompileDeliverableSchema,
+  ProjectCloseSchema,
+  NexusQuerySchema,
+  NexusOnboardingSessionSchema
 } from '../validation/schemas';
 
 export function createApiRouter(
@@ -44,14 +58,20 @@ export function createApiRouter(
 ): Router {
   const router = Router();
   const cache = dagCacheService || new DagCacheService();
-  const taskService = new TaskManagerService(pool, io, cache);
+  const orchestrator = new OrchestratorService(pool, io);
+  const dmaicService = new DmaicService(pool, orchestrator);
+  const brandEnforcerService = new BrandEnforcerService(pool);
+  const taskService = new TaskManagerService(pool, io, cache, orchestrator);
   const webhookHandler = new GitHubWebhookHandler(pool, io, cache);
-  const masterWebhookHandler = new MasterWebhookHandler(pool, io, cache);
   const campaignDispatcher = new CampaignDispatcherService(pool, io, undefined, cache);
+  const masterWebhookHandler = new MasterWebhookHandler(pool, io, cache, dmaicService, orchestrator, campaignDispatcher);
   const calendarService = new CalendarService(pool);
   const agileService = new AgileService(pool);
   const opexService = new OpexService(pool);
   const notesService = new NotesService(pool, io);
+  const projectClosureService = new ProjectClosureService(pool, io, cache);
+  const nexusBrainService = new NexusBrainService(pool, io);
+  const nexusOnboardingService = new NexusOnboardingService(pool, io);
 
   // Middleware global de aislamiento multi-tenant de Workspace
   router.use(requireWorkspace(pool));
@@ -69,10 +89,11 @@ export function createApiRouter(
   // Webhook GitHub Telemetry
   router.post('/telemetry/github', webhookHandler.handleWebhook);
 
-  // Subrutas de Marketing & AI Gateway
+  // Subrutas de Marketing, AI Gateway & Nexus Architect Studio
   router.use('/marketing', createMarketingRouter(pool, io, campaignDispatcher));
   router.use('/ai', createAIRoutes(pool, io));
   router.use('/presentations', createPresentationRoutes(pool, io));
+  router.use(createNexusStudioRouter(pool, io));
 
   // ==========================================================================
   // 1. WORKSPACES MULTI-TENANT
@@ -175,6 +196,169 @@ export function createApiRouter(
     }
   });
 
+  // --------------------------------------------------------------------------
+  // CIERRE FORMAL, SNAPSHOT INMUTABLE & BIBLIOTECA DE ARCHIVADOS
+  // --------------------------------------------------------------------------
+  router.get('/projects/archived', authenticateNeonAuth, async (req: Request, res: Response) => {
+    const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const { stack, minRating, startDate, endDate, search } = req.query as {
+      stack?: string;
+      minRating?: string;
+      startDate?: string;
+      endDate?: string;
+      search?: string;
+    };
+
+    try {
+      const archived = await projectClosureService.getArchivedProjects(wsId, {
+        stack,
+        minRating: minRating ? parseInt(minRating, 10) : undefined,
+        startDate,
+        endDate,
+        search
+      });
+      res.json(archived);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post(
+    '/projects/:projectId/close',
+    authenticateNeonAuth,
+    requireRole(['ADMIN', 'COLLABORATOR']),
+    validateBody(ProjectCloseSchema),
+    async (req: Request, res: Response) => {
+      const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+      const projectId = Array.isArray(req.params.projectId) ? req.params.projectId[0] : req.params.projectId;
+      const closedBy = req.user?.sub || null;
+
+      try {
+        const result = await projectClosureService.closeAndArchiveProject(
+          wsId,
+          projectId,
+          req.body,
+          closedBy
+        );
+        res.status(201).json({ success: true, ...result });
+      } catch (err: any) {
+        if (err.message.includes('PROJECT_ALREADY_ARCHIVED')) {
+          res.status(409).json({ error: err.message });
+        } else {
+          res.status(500).json({ error: err.message });
+        }
+      }
+    }
+  );
+
+  router.get('/projects/:projectId/snapshot', authenticateNeonAuth, async (req: Request, res: Response) => {
+    const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const projectId = Array.isArray(req.params.projectId) ? req.params.projectId[0] : req.params.projectId;
+
+    try {
+      const snapshot = await projectClosureService.getProjectSnapshot(wsId, projectId);
+      res.json(snapshot);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // --------------------------------------------------------------------------
+  // CEREBRO DE CONOCIMIENTO CONTINUO DE NEXUS (PGVECTOR & RAG)
+  // --------------------------------------------------------------------------
+  router.post(
+    '/nexus/query',
+    authenticateNeonAuth,
+    validateBody(NexusQuerySchema),
+    async (req: Request, res: Response) => {
+      const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+      const { query, min_similarity, domain_filter } = req.body;
+
+      try {
+        const result = await nexusBrainService.queryNexus(
+          wsId,
+          query,
+          min_similarity,
+          domain_filter
+        );
+        res.json(result);
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    }
+  );
+
+  router.get('/nexus/suggestions/ishikawa', authenticateNeonAuth, async (req: Request, res: Response) => {
+    const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const { problem, category } = req.query as { problem?: string; category?: string };
+
+    try {
+      const suggestions = await nexusBrainService.suggestPreventiveIshikawa(
+        wsId,
+        problem || 'Fricción operativa y mitigación de fallos técnicos',
+        category
+      );
+      res.json(suggestions);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.get('/nexus/stats', authenticateNeonAuth, async (req: Request, res: Response) => {
+    const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+    try {
+      const stats = await nexusBrainService.getNexusStats(wsId);
+      res.json(stats);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // --------------------------------------------------------------------------
+  // MOTOR DE ONBOARDING ASISTIDO POR NEXUS, CONTRATOS & GRAFOS DAG
+  // --------------------------------------------------------------------------
+  router.get('/nexus/onboarding/catalog', async (_req: Request, res: Response) => {
+    try {
+      const catalog = await nexusOnboardingService.getServiceCatalog();
+      res.json(catalog);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.post(
+    '/nexus/onboarding/session',
+    validateBody(NexusOnboardingSessionSchema),
+    async (req: Request, res: Response) => {
+      try {
+        const creatorUserId = (req.user as any)?.sub || null;
+        const result = await nexusOnboardingService.processOnboardingSession(req.body, creatorUserId);
+        res.status(201).json({
+          success: true,
+          message: 'Espacio de trabajo, contrato oficial y topología DAG aprovisionados exitosamente por Nexus.',
+          ...result
+        });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    }
+  );
+
+  router.get('/nexus/onboarding/contract/:projectId', authenticateNeonAuth, async (req: Request, res: Response) => {
+    const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const projectId = req.params.projectId as string;
+    try {
+      const contract = await nexusOnboardingService.getProjectContract(wsId, projectId);
+      if (!contract) {
+        res.status(404).json({ error: 'Contrato comercial no encontrado para el proyecto especificado.' });
+        return;
+      }
+      res.json(contract);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   // ==========================================================================
   // 3. TAREAS DEL PROYECTO & SINCRONIZACIÓN CON CALENDARIO
   // ==========================================================================
@@ -202,6 +386,12 @@ export function createApiRouter(
 
       try {
         const newTask = await withWorkspaceClient(pool, wsId, async (client) => {
+          // Bloqueo inmutable si el proyecto está ARCHIVADO
+          const pCheck = await client.query('SELECT status FROM projects WHERE id = $1', [projectId]);
+          if (pCheck.rows[0]?.status === 'ARCHIVED') {
+            throw new Error('PROJECT_IS_ARCHIVED_READ_ONLY: El proyecto está formalmente archivado en modo inmutable. No se admiten nuevas tareas.');
+          }
+
           const insertTaskRes = await client.query(
             `INSERT INTO project_tasks (
               workspace_id, project_id, title, description, priority, status,
@@ -697,6 +887,140 @@ export function createApiRouter(
       res.status(500).json({ error: err.message });
     }
   });
+
+  // ==========================================================================
+  // 8. GESTIÓN DMAIC & TOLLGATES (DEFINE -> BLUEPRINT DAG -> EJECUCIÓN)
+  // ==========================================================================
+
+  router.get('/projects/:id/dmaic', authenticateNeonAuth, async (req: Request, res: Response) => {
+    const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const projectId = req.params.id as string;
+
+    try {
+      const phases = await dmaicService.getPhases(wsId, projectId);
+      res.json(phases);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.get('/projects/:id/dmaic/:phase', authenticateNeonAuth, async (req: Request, res: Response) => {
+    const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const projectId = req.params.id as string;
+    const rawPhase = Array.isArray(req.params.phase) ? req.params.phase[0] : req.params.phase;
+    const phase = rawPhase.toUpperCase() as DmaicPhaseType;
+
+    try {
+      const phaseData = await dmaicService.getPhase(wsId, projectId, phase);
+      if (!phaseData) {
+        res.status(404).json({ error: `DMAIC phase '${phase}' not found.` });
+        return;
+      }
+      res.json(phaseData);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  router.put(
+    '/projects/:id/dmaic/:phase',
+    authenticateNeonAuth,
+    validateBody(UpdateDmaicPhaseSchema),
+    async (req: Request, res: Response) => {
+      const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+      const projectId = req.params.id as string;
+      const rawPhase = Array.isArray(req.params.phase) ? req.params.phase[0] : req.params.phase;
+      const phase = rawPhase.toUpperCase() as DmaicPhaseType;
+
+      try {
+        const updated = await dmaicService.updatePhase(wsId, projectId, phase, req.body);
+        res.json(updated);
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    }
+  );
+
+  router.post(
+    '/projects/:id/dmaic/:phase/approve',
+    authenticateNeonAuth,
+    requireRole('ADMIN'),
+    validateBody(ApproveTollgateSchema),
+    async (req: Request, res: Response) => {
+      const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+      const projectId = req.params.id as string;
+      const rawPhase = Array.isArray(req.params.phase) ? req.params.phase[0] : req.params.phase;
+      const phase = rawPhase.toUpperCase() as DmaicPhaseType;
+      const approvedBy = req.body.approved_by || req.user?.sub || null;
+
+      try {
+        const result = await dmaicService.approveTollgate(wsId, projectId, phase, approvedBy);
+        res.json({
+          success: true,
+          message: `Tollgate for phase '${phase}' approved successfully.`,
+          phase: result.phase,
+          blueprint: result.blueprint
+        });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    }
+  );
+
+  // ==========================================================================
+  // 9. BUCLE OPEX: ACCIÓN CORRECTIVA AUTOMÁTICA
+  // ==========================================================================
+
+  router.post(
+    '/projects/:id/opex/corrective-action',
+    authenticateNeonAuth,
+    validateBody(CreateCorrectiveActionSchema),
+    async (req: Request, res: Response) => {
+      const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+      const projectId = req.params.id as string;
+
+      try {
+        const correctiveTask = await opexService.createCorrectiveAction(wsId, projectId, req.body);
+        res.status(201).json({
+          success: true,
+          message: 'Acción correctiva creada y conectada al DAG y cronograma de Gantt.',
+          task: correctiveTask
+        });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    }
+  );
+
+  // ==========================================================================
+  // 10. COMPILADOR AUTOMÁTICO DE ENTREGABLES TSOLUTIONS IPIDD (16:9)
+  // ==========================================================================
+
+  router.post(
+    '/projects/:id/compile-deliverable',
+    authenticateNeonAuth,
+    validateBody(CompileDeliverableSchema),
+    async (req: Request, res: Response) => {
+      const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+      const projectId = req.params.id as string;
+      const authorId = req.body.author_id || req.user?.sub || null;
+
+      try {
+        const deliverable = await brandEnforcerService.compileProjectDeliverable(
+          wsId,
+          projectId,
+          authorId
+        );
+        res.status(201).json({
+          success: true,
+          message: 'Entregable ejecutivo compilado exitosamente con tokens oficiales TSolutions IPIDD.',
+          deliverable
+        });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    }
+  );
 
   return router;
 }

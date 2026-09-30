@@ -10,6 +10,7 @@ import { CampaignDispatcherService } from './services/campaignDispatcher.service
 import { DagCacheService } from './services/dagCache.service';
 import { createEmailBatchWorker } from './workers/emailQueue.worker';
 import { createCalendarAlertScheduler } from './workers/calendarAlert.worker';
+import { createNexusKnowledgeWorker } from './workers/nexusKnowledge.worker';
 
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
@@ -88,6 +89,14 @@ try {
   console.log('✓ BullMQ Calendar Alert Scheduler initialized.');
 } catch (err: any) {
   console.warn('Note: Redis connection for Calendar Alert Scheduler skipped:', err.message);
+}
+
+// Iniciar worker de asimilación de conocimiento en el cerebro Nexus (BullMQ + pgvector)
+try {
+  createNexusKnowledgeWorker(pool, io);
+  console.log('✓ BullMQ Nexus Knowledge Assimilation Worker initialized (concurrency: 3).');
+} catch (err: any) {
+  console.warn('Note: Redis connection for Nexus Knowledge Worker skipped:', err.message);
 }
 
 const PORT = process.env.PORT || 4000;

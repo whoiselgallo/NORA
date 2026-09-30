@@ -39,6 +39,9 @@ export class OrchestratorService {
           lazyConnect: true
         });
 
+        this.pubClient.on('error', () => { this.isRedisConnected = false; });
+        this.subClient.on('error', () => { this.isRedisConnected = false; });
+
         this.pubClient.connect().then(() => {
           this.isRedisConnected = true;
           this.setupSubscriber();
