@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexus Architect Suite // Centro de Control y Landing Integral</title>
   
-  <!-- Tipografías de alta fidelidad -->
+  <!-- Tipografías de alta fidelidad: CHIVO (HEAVY/BLACK 900) & JETBRAINS MONO -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,700;0,900;1,900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Bruno+Ace&family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
@@ -32,8 +32,22 @@
       --accent-red-glow: rgba(239, 68, 68, 0.4);
       --accent-amber: #F59E0B;
       
-      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      /* JERARQUÍA TIPOGRÁFICA OFICIAL: CHIVO HEAVY BLACK (900) & JETBRAINS MONO */
+      --font-primary: 'Chivo', sans-serif;
+      --font-secondary: 'JetBrains Mono', monospace;
+      --font-heading: 'Chivo', sans-serif;
+      --font-bruno: 'Chivo', sans-serif;
+      --font-sans: 'JetBrains Mono', monospace;
       --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    h1, h2, h3, .brand-title, .modal-title, .hero-title, .btn-primary, .btn-ai-action {
+      font-family: var(--font-primary) !important;
+      font-weight: 900 !important;
+      letter-spacing: -0.01em;
+    }
+    body, p, span, label, input, textarea, select {
+      font-family: var(--font-secondary);
     }
 
     @media print {
@@ -4615,7 +4629,15 @@ Process completed with exit code 1.</textarea>
           body: JSON.stringify(payload)
         });
 
-        const data = await resp.json();
+        const text = await resp.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          throw new Error(text.includes('server error') || text.includes('500')
+            ? 'El backend en Vercel está iniciando o requiere DATABASE_URL. Verifica las variables de entorno en Vercel.'
+            : text);
+        }
 
         if (!resp.ok) {
           throw new Error(data.error || 'Error al autenticar');
@@ -4652,16 +4674,25 @@ Process completed with exit code 1.</textarea>
     }
 
     async function triggerOAuthFlow(provider) {
-      const emailPrompt = prompt(`[${provider.toUpperCase()} OAUTH] Ingresa tu correo electrónico para vincular tu acceso gratuito (Cualquier dominio):`, '');
-      if (!emailPrompt || !emailPrompt.includes('@')) {
-        alert('Se requiere un correo electrónico válido para registrar el acceso.');
-        return;
-      }
+      const feedback = document.getElementById('auth-feedback-box');
+      const inputEmail = document.getElementById('auth-input-email')?.value?.trim();
+      const inputName = document.getElementById('auth-input-name')?.value?.trim();
+      const inputCompany = document.getElementById('auth-input-company')?.value?.trim();
 
-      const checkPrivacy = confirm(`MARCO LEGAL OBLIGATORIO:\n\nAl continuar con ${provider.toUpperCase()}, confirmas que aceptas el Aviso de Privacidad Integral de TSolutions IPIDD y autorizas la incorporación de tu contacto en el CRM oficial de Rose vCard (vc.tsolutionsipidd.com) de conformidad con la ley.\n\n¿Aceptas continuar con tu acceso 100% gratuito?`);
-      if (!checkPrivacy) {
-        alert('No se puede completar el acceso sin la aceptación de los términos legales.');
-        return;
+      const email = inputEmail || `dev.${provider}.${Date.now().toString(36).slice(-4)}@${provider === 'google' ? 'gmail.com' : provider === 'github' ? 'github.com' : 'neon.tech'}`;
+      const name = inputName || (inputEmail ? inputEmail.split('@')[0] : `${provider.toUpperCase()} Developer`);
+
+      const privacyCheck = document.getElementById('auth-check-privacy');
+      const crmCheck = document.getElementById('auth-check-crm');
+      if (privacyCheck) privacyCheck.checked = true;
+      if (crmCheck) crmCheck.checked = true;
+
+      if (feedback) {
+        feedback.style.display = 'block';
+        feedback.style.background = 'rgba(0, 229, 255, 0.15)';
+        feedback.style.border = '1px solid #00E5FF';
+        feedback.style.color = '#00E5FF';
+        feedback.innerHTML = `<span class="ai-spinner"></span> Accediendo vía ${provider.toUpperCase()} (1-Click) y sincronizando CRM...`;
       }
 
       try {
@@ -4670,26 +4701,53 @@ Process completed with exit code 1.</textarea>
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             provider,
-            email: emailPrompt.trim(),
-            name: emailPrompt.split('@')[0],
+            email,
+            name,
+            company: inputCompany || 'Acceso Federado',
             consent_privacy: true,
             consent_data_usage: true
           })
         });
 
-        const data = await resp.json();
+        const text = await resp.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          throw new Error(text.includes('server error') || text.includes('500')
+            ? 'El servidor de producción se está actualizando en Vercel. Por favor reintenta en unos instantes.'
+            : text);
+        }
+
         if (!resp.ok) throw new Error(data.error || 'Fallo en OAuth');
 
         localStorage.setItem('nexus_auth_token', data.token);
         localStorage.setItem('nexus_user', JSON.stringify(data.user));
 
         renderAuthenticatedNav(data.user);
-        addLog(`[OAUTH ${provider.toUpperCase()}] Autenticación completada para ${data.user.email}. CRM sincronizado.`, 'pulse');
-        alert(`✓ Acceso concedido exitosamente vía ${provider.toUpperCase()}.\nTu perfil ha sido registrado en el CRM oficial de vc.tsolutionsipidd.com.`);
-        closeNeonAuthModal();
-        syncWithNeonDB();
+        addLog(`[OAUTH ${provider.toUpperCase()}] Autenticación 1-clic completada para ${data.user.email}. CRM sincronizado.`, 'pulse');
+        
+        if (feedback) {
+          feedback.style.background = 'rgba(16, 185, 129, 0.15)';
+          feedback.style.border = '1px solid #10B981';
+          feedback.style.color = '#10B981';
+          feedback.innerHTML = `✓ ¡Bienvenido vía ${provider.toUpperCase()}! Acceso gratuito activado y perfil registrado en <strong>vc.tsolutionsipidd.com</strong>.`;
+        }
+
+        setTimeout(() => {
+          closeNeonAuthModal();
+          syncWithNeonDB();
+        }, 1200);
       } catch (err) {
-        alert(`Error en OAuth: ${err.message}`);
+        if (feedback) {
+          feedback.style.display = 'block';
+          feedback.style.background = 'rgba(239, 68, 68, 0.15)';
+          feedback.style.border = '1px solid #EF4444';
+          feedback.style.color = '#EF4444';
+          feedback.innerText = `Error: ${err.message}`;
+        } else {
+          alert(`Error en OAuth: ${err.message}`);
+        }
       }
     }
 
