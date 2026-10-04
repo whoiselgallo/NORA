@@ -898,7 +898,313 @@
       .hero-title { font-size: 2.1rem; }
       .top-nav { flex-direction: column; gap: 12px; align-items: flex-start; }
       .nav-actions { width: 100%; justify-content: space-between; }
-      .apps-grid { grid-template-columns: 1fr; }
+    /* =========================================================================
+       SECCIÓN DE ACCESO POR NECESIDADES DE USUARIO & NEON AUTH WIDGETS
+       ========================================================================= */
+    .user-needs-hub {
+      margin: 30px 0 45px 0;
+      background: linear-gradient(180deg, rgba(13, 19, 31, 0.85) 0%, rgba(6, 9, 15, 0.98) 100%);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      border-radius: 20px;
+      padding: 30px 26px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    .needs-header {
+      margin-bottom: 22px;
+    }
+    .needs-header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--accent-cyan);
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .needs-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.55rem;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .needs-header p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+    .needs-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .need-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .need-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: transparent;
+      transition: background 0.25s ease;
+    }
+    .need-card:hover {
+      border-color: rgba(0, 242, 254, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .need-card.active {
+      border-color: var(--accent-cyan);
+      background: #141E33;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+    }
+    .need-card.active::before {
+      background: linear-gradient(90deg, #FF6B00, #00E5FF);
+    }
+    .need-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .need-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .need-badge {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+    }
+    .badge-orange { background: rgba(255, 107, 0, 0.15); color: #FF6B00; border: 1px solid rgba(255, 107, 0, 0.3); }
+    .need-card h3 {
+      font-size: 1.05rem;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .need-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 14px;
+      flex-grow: 1;
+    }
+    .need-checklist {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .need-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-need-action {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .need-card.active .btn-need-action,
+    .btn-need-action:hover {
+      background: #FF6B00;
+      color: #0A0D14;
+      border-color: #FF6B00;
+      font-weight: 700;
+      box-shadow: 0 0 14px rgba(255, 107, 0, 0.4);
+    }
+
+    /* AUTH WIDGET TOP BAR */
+    .auth-nav-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(13, 19, 31, 0.85);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 4px 12px;
+      border-radius: 24px;
+      font-size: 0.75rem;
+    }
+    .auth-user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF6B00, #00E5FF);
+      color: #0A0D14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.75rem;
+    }
+    .btn-auth-login-trigger {
+      background: linear-gradient(90deg, rgba(255, 107, 0, 0.2), rgba(0, 229, 255, 0.2));
+      border: 1px solid #FF6B00;
+      color: #FFFFFF;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+      transition: all 0.2s ease;
+    }
+    .btn-auth-login-trigger:hover {
+      box-shadow: 0 0 25px rgba(255, 107, 0, 0.6);
+      transform: translateY(-1px);
+    }
+    .btn-logout-small {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .btn-logout-small:hover {
+      color: var(--accent-red);
+    }
+
+    /* OAUTH & LEGAL MODAL STYLES */
+    .oauth-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .btn-oauth {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: #121722;
+      color: #FFFFFF;
+    }
+    .btn-oauth:hover {
+      border-color: #00E5FF;
+      background: #18233A;
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.25);
+    }
+    .btn-oauth.google:hover { border-color: #4285F4; box-shadow: 0 0 14px rgba(66, 133, 244, 0.3); }
+    .btn-oauth.github:hover { border-color: #FFFFFF; box-shadow: 0 0 14px rgba(255, 255, 255, 0.3); }
+    .btn-oauth.neon:hover { border-color: #00E5FF; box-shadow: 0 0 14px rgba(0, 229, 255, 0.4); }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      margin: 18px 0;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .auth-divider:not(:empty)::before { margin-right: 12px; }
+    .auth-divider:not(:empty)::after { margin-left: 12px; }
+
+    .legal-consent-card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 107, 0, 0.3);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .legal-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      line-height: 1.4;
+    }
+    .legal-checkbox-label input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: #FF6B00;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .legal-link {
+      color: var(--accent-cyan);
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .legal-link:hover {
+      color: #FF6B00;
+    }
+    .legal-doc-container {
+      max-height: 60vh;
+      overflow-y: auto;
+      padding: 16px;
+      background: #0A0D14;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #F8FAFC;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .legal-doc-container h4 {
+      color: #00E5FF;
+      margin: 16px 0 8px 0;
+      font-family: 'Space Grotesk', sans-serif;
     }
   </style>
 </head>
@@ -956,6 +1262,23 @@
       <a href="https://github.com/whoiselgallo/antigravity-instruction-architect" target="_blank" rel="noopener" class="btn-repo">
         <span>GitHub Repository ↗</span>
       </a>
+
+      <!-- WIDGET DE AUTENTICACIÓN NEON OAUTH & CRM -->
+      <div id="auth-nav-widget" style="display:flex; align-items:center; gap:8px; margin-left: 6px;">
+        <button class="btn-auth-login-trigger" id="btn-open-neon-auth" onclick="openNeonAuthModal('signup')">
+          <span>🔑 Acceder / Registro Gratis</span>
+          <span style="font-size:0.65rem; background:rgba(0,229,255,0.2); padding:1px 6px; border-radius:10px; color:#00E5FF;">100% Libre</span>
+        </button>
+        <div id="user-profile-pill" style="display:none;" class="auth-nav-pill">
+          <div class="auth-user-avatar" id="nav-user-initials">U</div>
+          <div style="display:flex; flex-direction:column; line-height:1.2;">
+            <span id="nav-user-name" style="font-weight:700; color:#FFF; font-size:0.75rem;">Usuario</span>
+            <span id="nav-user-email" style="font-size:0.65rem; color:var(--text-dim); font-family:var(--font-mono);">email@dominio.com</span>
+          </div>
+          <span id="nav-user-role-badge" style="background:#10B981; color:#0A0D14; font-size:0.6rem; font-weight:800; padding:1px 6px; border-radius:4px; font-family:var(--font-mono);">CLIENT</span>
+          <button class="btn-logout-small" onclick="logoutUser()" title="Cerrar sesión">✕</button>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -980,8 +1303,8 @@
       <div class="hero-metrics-grid">
         <div class="hero-stat-card">
           <div class="stat-label">Esquema Relacional</div>
-          <div class="stat-value" id="stat-tables">15 Tablas</div>
-          <div class="stat-detail">Neon PostgreSQL AWS Cloud</div>
+          <div class="stat-value" id="stat-tables">46 Tablas</div>
+          <div class="stat-detail">Neon PostgreSQL • 10 Subsistemas</div>
         </div>
         <div class="hero-stat-card">
           <div class="stat-label">Latencia WebSockets</div>
@@ -997,6 +1320,95 @@
           <div class="stat-label">Despachador de Correos</div>
           <div class="stat-value" style="color: var(--accent-purple);">BullMQ + Redis</div>
           <div class="stat-detail">RFC 8058 & Umbral ≥95%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         PANEL PRINCIPAL: ACCESO ORGANIZADO POR NECESIDADES DE USUARIO (ROLES)
+         ========================================================================= -->
+    <section class="user-needs-hub" id="user-needs-hub">
+      <div class="needs-header">
+        <div class="needs-header-tag">
+          <span>🧭 ARQUITECTURA GUIADA POR OBJETIVOS</span>
+          <span>•</span>
+          <span>ROLES & RUTAS DE VALOR DIRECTO</span>
+        </div>
+        <h2>¿Qué deseas lograr en esta sesión?</h2>
+        <p>Elige tu perfil o tu necesidad operativa para activar y enfocar instantáneamente el espacio de trabajo adecuado:</p>
+      </div>
+
+      <div class="needs-cards-grid">
+        <!-- RUTA 1: PROSPECTOS & NUEVOS PROYECTOS -->
+        <div class="need-card active" id="need-card-prospect" onclick="activateUserJourney('prospect')">
+          <div class="need-top">
+            <div class="need-icon" style="background: rgba(0, 229, 255, 0.12); border-color: #00E5FF; color:#00E5FF;">🌟</div>
+            <span class="need-badge badge-cyan">Exploración & Cotización</span>
+          </div>
+          <h3>1. Soy Nuevo / Prospecto</h3>
+          <p>Deseo cotizar soluciones, simular arquetipos técnicos (Rose vCard, Identidad, E-Commerce), estructurar directivas con IA o estimar el retorno de inversión.</p>
+          <ul class="need-checklist">
+            <li><span style="color:#00E5FF;">✓</span> Catálogo oficial de 13 paquetes en 3 dominios</li>
+            <li><span style="color:#00E5FF;">✓</span> Alta exprés en Nexus Onboarding Console</li>
+            <li><span style="color:#00E5FF;">✓</span> Acceso 100% gratuito sin tarjetas</li>
+          </ul>
+          <button class="btn-need-action" onclick="event.stopPropagation(); openNexusOnboardingModal();">
+            <span>Iniciar Onboarding Gratis →</span>
+          </button>
+        </div>
+
+        <!-- RUTA 2: CLIENTES ACTIVOS -->
+        <div class="need-card" id="need-card-client" onclick="activateUserJourney('client')">
+          <div class="need-top">
+            <div class="need-icon" style="background: rgba(255, 107, 0, 0.12); border-color: #FF6B00; color:#FF6B00;">📊</div>
+            <span class="need-badge badge-orange">Visibilidad Total</span>
+          </div>
+          <h3>2. Soy Cliente con Proyecto</h3>
+          <p>Quiero auditar el estado del flujo DAG de mi sistema, consultar en lenguaje natural al Cerebro Nexus RAG o descargar actas y mazos ejecutivos 16:9.</p>
+          <ul class="need-checklist">
+            <li><span style="color:#FF6B00;">✓</span> Grafo reactivo DAG en tiempo real (Rojo/Verde)</li>
+            <li><span style="color:#FF6B00;">✓</span> Consultas semánticas con Cerebro Nexus</li>
+            <li><span style="color:#FF6B00;">✓</span> Diapositivas ejecutivas y modelos de ROI</li>
+          </ul>
+          <button class="btn-need-action" onclick="event.stopPropagation(); openNexusChatModal();">
+            <span>Preguntar a Cerebro Nexus 🧠</span>
+          </button>
+        </div>
+
+        <!-- RUTA 3: COLABORADORES & EQUIPO TÉCNICO -->
+        <div class="need-card" id="need-card-engineer" onclick="activateUserJourney('engineer')">
+          <div class="need-top">
+            <div class="need-icon" style="background: rgba(16, 185, 129, 0.12); border-color: #10B981; color:#10B981;">🛠️</div>
+            <span class="need-badge" style="background:rgba(16,185,129,0.15); color:#10B981; border:1px solid rgba(16,185,129,0.3);">Mesa Técnica</span>
+          </div>
+          <h3>3. Soy Colaborador / Dev</h3>
+          <p>Necesito gestionar el backlog de tareas To-Do, disparar webhooks de prueba CI/CD, sincronizar sprints de agilidad o diseñar con CAD vectorial.</p>
+          <ul class="need-checklist">
+            <li><span style="color:#10B981;">✓</span> Transición binaria de tareas a Verde en el DAG</li>
+            <li><span style="color:#10B981;">✓</span> Generador de Lockups técnicos SVG</li>
+            <li><span style="color:#10B981;">✓</span> Consola de Webhooks HMAC-SHA256</li>
+          </ul>
+          <button class="btn-need-action" onclick="event.stopPropagation(); scrollToShowcase();">
+            <span>Simulador de Tareas & DAG ⚡</span>
+          </button>
+        </div>
+
+        <!-- RUTA 4: TECH LEADS & OPEX ADMINS -->
+        <div class="need-card" id="need-card-admin" onclick="activateUserJourney('admin')">
+          <div class="need-top">
+            <div class="need-icon" style="background: rgba(245, 158, 11, 0.12); border-color: #F59E0B; color:#F59E0B;">⚡</div>
+            <span class="need-badge badge-amber">Gobernanza & OPEX</span>
+          </div>
+          <h3>4. Soy Tech Lead / Admin</h3>
+          <p>Supervisión integral de arquitectura, cierre formal inmutable de proyectos (DMAIC Control), campañas BullMQ y auditoría en Neon PostgreSQL.</p>
+          <ul class="need-checklist">
+            <li><span style="color:#F59E0B;">✓</span> Cierre inmutable de proyecto con snapshot</li>
+            <li><span style="color:#F59E0B;">✓</span> Biblioteca de proyectos archivados</li>
+            <li><span style="color:#F59E0B;">✓</span> Motor de Campañas BullMQ con RFC 8058</li>
+          </ul>
+          <button class="btn-need-action" onclick="event.stopPropagation(); openProjectClosureModal();">
+            <span>Cierre Inmutable de Proyecto 🔒</span>
+          </button>
         </div>
       </div>
     </section>
@@ -1402,9 +1814,13 @@
       <a href="PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES MPS AYALA..html" target="_blank">Soluciones Digitales MPS</a>
       <span>•</span>
       <a href="https://github.com/whoiselgallo/antigravity-instruction-architect" target="_blank">GitHub Repository</a>
+      <span>•</span>
+      <a href="#" onclick="openPrivacyModal(); return false;" style="color:var(--accent-cyan);">Aviso de Privacidad</a>
+      <span>•</span>
+      <a href="#" onclick="openDataUsageModal(); return false;" style="color:#FF6B00;">Términos & CRM vc.tsolutionsipidd.com</a>
     </div>
     <div class="footer-copy">
-      © 2026 Nexus Architect Suite // Desplegado en Vercel & Neon PostgreSQL. Arquitectura de alto rendimiento.
+      © 2026 Nexus Architect Suite • TSolutions IPIDD S.A.S. de C.V. // Desplegado en Vercel & Neon PostgreSQL AWS Cloud. Acceso Público y Gratuito.
     </div>
   </footer>
 
@@ -1420,6 +1836,228 @@
       </div>
     </div>
   </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL PRINCIPAL: NEON OAUTH & AUTENTICACIÓN GRATUITA CRM                   -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="neon-auth-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.92); backdrop-filter:blur(10px); z-index:99999; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:540px; background:#0D131F; border:2px solid #00E5FF; box-shadow:0 0 35px rgba(0,229,255,0.35); border-radius:18px; padding:28px 24px; position:relative; max-height:92vh; overflow-y:auto;">
+      
+      <!-- BOTÓN CERRAR -->
+      <button onclick="closeNeonAuthModal()" style="position:absolute; top:16px; right:16px; background:transparent; border:none; color:var(--text-dim); font-size:1.2rem; cursor:pointer; padding:4px 8px; border-radius:6px;">✕</button>
+
+      <!-- BRAND HEADER -->
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="display:inline-flex; width:48px; height:48px; border:2px solid #FF6B00; box-shadow:0 0 15px rgba(255,107,0,0.5); clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background:rgba(255,107,0,0.15); align-items:center; justify-content:center; font-family:'Bruno Ace', sans-serif; font-size:1.4rem; color:#FFF; margin-bottom:10px;">
+          TS
+        </div>
+        <div style="font-size:0.68rem; font-family:var(--font-mono); color:#00E5FF; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">
+          TSOLUTIONS IPIDD • ACCESO INSTITUCIONAL
+        </div>
+        <h2 id="auth-modal-title" style="font-family:'Space Grotesk', sans-serif; font-size:1.4rem; color:#FFF; margin-bottom:4px;">
+          Acceso Gratuito a Nexus Suite
+        </h2>
+        <p style="font-size:0.78rem; color:#94A3B8; font-style:italic;">
+          "Tecnología instalada. Conocimiento transferido. Negocios escalados."
+        </p>
+        <div style="display:inline-block; margin-top:8px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#10B981; font-size:0.68rem; font-family:var(--font-mono); font-weight:700; padding:3px 10px; border-radius:12px;">
+          ✓ ACCESO 100% LIBRE • ACEPTA CUALQUIER DOMINIO DE CORREO
+        </div>
+      </div>
+
+      <!-- BOTONES DE AUTENTICACIÓN SOCIAL OAUTH -->
+      <div class="oauth-btn-group">
+        <button class="btn-oauth google" onclick="triggerOAuthFlow('google')">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.2C.6 9.2 0 11.5 0 14s.6 4.8 1.6 6.8l3.7-3.1z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5.1L1.6 16.3C3.5 20.1 7.4 23 12 23z"/></svg>
+          <span>Continuar con Google Workspace</span>
+        </button>
+
+        <button class="btn-oauth github" onclick="triggerOAuthFlow('github')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          <span>Continuar con GitHub Developer</span>
+        </button>
+
+        <button class="btn-oauth neon" onclick="triggerOAuthFlow('neon')">
+          <span style="color:#00E5FF; font-weight:800; font-family:var(--font-mono);">⚡</span>
+          <span>Continuar con Neon Auth Identity</span>
+        </button>
+      </div>
+
+      <!-- DIVISOR -->
+      <div class="auth-divider">O REGISTRO DIRECTO CON CUALQUIER CORREO</div>
+
+      <!-- FORMULARIO DIRECTO -->
+      <form id="form-neon-auth" onsubmit="handleAuthFormSubmit(event)">
+        
+        <div id="auth-field-name-group" style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.75rem; color:#94A3B8; margin-bottom:4px;">Nombre Completo:</label>
+          <input type="text" id="auth-input-name" class="modal-input" placeholder="Ej: Ing. Laura Mendoza" style="width:100%; box-sizing:border-box;" required />
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.75rem; color:#94A3B8; margin-bottom:4px;">Correo Electrónico (Cualquier dominio):</label>
+          <input type="email" id="auth-input-email" class="modal-input" placeholder="tu.nombre@tuempresa.com o @gmail.com" style="width:100%; box-sizing:border-box;" required />
+        </div>
+
+        <div id="auth-field-company-group" style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.75rem; color:#94A3B8; margin-bottom:4px;">Empresa / Proyecto (Opcional):</label>
+          <input type="text" id="auth-input-company" class="modal-input" placeholder="Ej: Soluciones Industriales del Norte" style="width:100%; box-sizing:border-box;" />
+        </div>
+
+        <div id="auth-field-role-group" style="margin-bottom:14px;">
+          <label style="display:block; font-size:0.75rem; color:#94A3B8; margin-bottom:4px;">Tipo de Perfil de Acceso:</label>
+          <select id="auth-input-role" class="modal-input" style="width:100%; box-sizing:border-box; background:#06090F; color:#FFF;">
+            <option value="CLIENT">CLIENT — Cliente / Stakeholder (Visor DAG, Cotizaciones y Entregables)</option>
+            <option value="COLLABORATOR">COLLABORATOR — Ingeniero / Desarrollador (Gestión To-Do y Workflows)</option>
+          </select>
+        </div>
+
+        <!-- TARJETA DE CONSENTIMIENTO LEGAL (OBLIGATORIA) -->
+        <div class="legal-consent-card">
+          <label class="legal-checkbox-label">
+            <input type="checkbox" id="auth-check-privacy" required />
+            <span>
+              He leído y acepto el 
+              <a href="#" onclick="openPrivacyModal(); return false;" class="legal-link">Aviso de Privacidad Integral</a>
+              de TSolutions IPIDD para el tratamiento seguro de mis datos personales.
+            </span>
+          </label>
+
+          <label class="legal-checkbox-label">
+            <input type="checkbox" id="auth-check-crm" required />
+            <span>
+              Autorizo voluntariamente el tratamiento de mis datos para el acceso gratuito a la suite y su vinculación al CRM oficial de Rose vCard 
+              (<a href="#" onclick="openDataUsageModal(); return false;" class="legal-link">vc.tsolutionsipidd.com</a>)
+              para recibir seguimiento comercial, soporte técnico y actualizaciones (desuscripción en 1 clic en todo momento según RFC 8058).
+            </span>
+          </label>
+        </div>
+
+        <!-- MENSAJE DE ESTADO / ERROR -->
+        <div id="auth-feedback-box" style="display:none; padding:10px; border-radius:8px; font-size:0.78rem; margin-bottom:12px; font-family:var(--font-mono);"></div>
+
+        <!-- BOTÓN SUBMIT -->
+        <button type="submit" id="btn-submit-auth" class="btn-primary" style="width:100%; padding:12px; font-size:0.9rem; justify-content:center; background:#FF6B00; border-color:#FF6B00; box-shadow:0 0 20px rgba(255,107,0,0.45);">
+          <span>🚀 Entrar y Desbloquear Acceso Gratuito</span>
+        </button>
+
+      </form>
+
+      <!-- SWITCH ENTRE LOGIN Y REGISTRO -->
+      <div style="text-align:center; margin-top:16px;">
+        <span id="auth-switch-prompt" style="font-size:0.76rem; color:#94A3B8;">¿Ya tienes acceso previo?</span>
+        <button id="btn-auth-switch" onclick="toggleAuthMode()" style="background:transparent; border:none; color:#00E5FF; font-weight:700; font-size:0.76rem; cursor:pointer; text-decoration:underline; margin-left:4px;">
+          Ingresa directamente aquí
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL LEGAL 1: AVISO DE PRIVACIDAD INTEGRAL TSOLUTIONS IPIDD             -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="privacy-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.94); backdrop-filter:blur(10px); z-index:100000; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:800px; background:#0D131F; border:1px solid #00E5FF; border-radius:16px; padding:28px; box-shadow:0 0 35px rgba(0,229,255,0.3); display:flex; flex-direction:column; max-height:90vh;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:14px; margin-bottom:16px;">
+        <div>
+          <span style="font-size:0.7rem; font-family:var(--font-mono); color:#00E5FF;">MARCO NORMATIVO LFPDPPP & ESTÁNDARES INTERNACIONALES</span>
+          <h3 style="color:#FFF; font-family:'Space Grotesk', sans-serif; font-size:1.3rem;">Aviso de Privacidad Integral</h3>
+        </div>
+        <button onclick="closePrivacyModal()" style="background:transparent; border:none; color:#FFF; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="legal-doc-container">
+        <h4>1. Identidad y Domicilio del Responsable</h4>
+        <p><strong>TSolutions IPIDD</strong> (Tecnologías y Soluciones Integrales IPIDD S.A.S. de C.V.), con plataformas oficiales en <em>vc.tsolutionsipidd.com</em>, <em>identidad.tsolutionsipidd.com</em> y <em>www.tsolutionsipidd.com</em>, es el responsable del uso y protección de sus datos personales, y al respecto le informa lo siguiente de conformidad con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) y estándares globales de protección de la información.</p>
+
+        <h4>2. Datos Personales Recabados</h4>
+        <p>Para las finalidades señaladas en el presente aviso, recabamos las siguientes categorías de datos personales al registrarse voluntariamente en Nexus Architect Suite:</p>
+        <ul style="margin:8px 0 12px 20px;">
+          <li>Nombre completo o denominación profesional.</li>
+          <li>Dirección de correo electrónico (personal o corporativa, aceptando cualquier dominio).</li>
+          <li>Empresa, organización o proyecto técnico vinculado (opcional).</li>
+          <li>Rol de usuario preferido dentro del sistema.</li>
+          <li>Metadatos técnicos de navegación, sello de tiempo de consentimiento y dirección IP con fines de seguridad e idempotencia.</li>
+        </ul>
+
+        <h4>3. Finalidades Primarias del Tratamiento</h4>
+        <p>Los datos personales que recabamos son necesarios para prestar el servicio solicitado:</p>
+        <ul style="margin:8px 0 12px 20px;">
+          <li>Aprovisionar su cuenta y credencial de acceso 100% gratuita a la suite Nexus Architect.</li>
+          <li>Permitir el uso de los simuladores DAG, asistentes de IA (Prompt Architect, DevOps Triage, Task Planner), modelos de ROI y herramientas CAD.</li>
+          <li>Generar auditoría y trazabilidad en la base de datos Neon PostgreSQL.</li>
+        </ul>
+
+        <h4>4. Finalidades Secundarias (Nutrición del CRM vc.tsolutionsipidd.com)</h4>
+        <p>De manera adicional, utilizaremos su información de contacto para finalidades secundarias que nos permiten brindarle una mejor atención:</p>
+        <ul style="margin:8px 0 12px 20px;">
+          <li>Incorporación de su perfil de contacto en el CRM oficial de Rose vCard (<em>vc.tsolutionsipidd.com</em>).</li>
+          <li>Envío de comunicaciones técnicas, nuevas versiones de la suite, propuestas de servicios digitales e invitaciones a sesiones ejecutivas.</li>
+          <li>Seguimiento a cotizaciones y proyectos solicitados mediante la consola de Onboarding.</li>
+        </ul>
+        <p><em>En caso de que no desee que sus datos personales sean tratados para estas finalidades secundarias, usted puede en cualquier momento hacer clic en el enlace de desuscripción instantánea (RFC 8058) incluido en cada correo o comunicarlo a privacidad@tsolutionsipidd.com.</em></p>
+
+        <h4>5. Ejercicio de Derechos ARCO</h4>
+        <p>Usted tiene derecho a conocer qué datos personales tenemos de usted, para qué los utilizamos y las condiciones del uso que les damos (Acceso). Asimismo, es su derecho solicitar la corrección de su información personal (Rectificación); que la eliminemos de nuestros registros o bases de datos (Cancelación); así como oponerse al uso de sus datos para fines específicos (Oposición). Para el ejercicio de cualquiera de los derechos ARCO, envíe una solicitud al correo oficial: <strong>privacidad@tsolutionsipidd.com</strong>.</p>
+
+        <h4>6. Transferencia de Datos</h4>
+        <p>TSolutions IPIDD no vende ni comercializa sus datos personales con terceros ajenos. Las únicas transferencias realizadas corresponden al alojamiento seguro de la infraestructura tecnológica en Neon PostgreSQL (AWS) y servicios de nube de alta disponibilidad bajo estrictos acuerdos de confidencialidad.</p>
+
+        <h4>7. Modificaciones al Aviso de Privacidad</h4>
+        <p>El presente aviso de privacidad puede sufrir modificaciones derivadas de nuevos requerimientos legales o de mejoras en nuestros servicios. Cualquier cambio será publicado de forma visible en esta plataforma.</p>
+        <p style="margin-top:16px; font-size:0.75rem; color:#94A3B8;">Fecha de última actualización: Octubre 2026 • Versión 2026.1</p>
+      </div>
+
+      <div style="margin-top:16px; text-align:right;">
+        <button onclick="closePrivacyModal()" class="btn-primary" style="padding:8px 20px;">
+          <span>Entendido y Cerrar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL LEGAL 2: AVISO DE USO DE DATOS Y NUTRICIÓN DE CRM (vc.tsolutionsipidd.com) -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="data-usage-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.94); backdrop-filter:blur(10px); z-index:100000; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:740px; background:#0D131F; border:1px solid #FF6B00; border-radius:16px; padding:28px; box-shadow:0 0 35px rgba(255,107,0,0.3); display:flex; flex-direction:column; max-height:90vh;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:14px; margin-bottom:16px;">
+        <div>
+          <span style="font-size:0.7rem; font-family:var(--font-mono); color:#FF6B00;">DECLARACIÓN DE GRATUIDAD & RELACIONAMIENTO CRM</span>
+          <h3 style="color:#FFF; font-family:'Space Grotesk', sans-serif; font-size:1.3rem;">Términos de Acceso Libre y Nutrición de CRM</h3>
+        </div>
+        <button onclick="closeDataUsageModal()" style="background:transparent; border:none; color:#FFF; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="legal-doc-container">
+        <h4>1. Principio de Acceso Libre y Gratuidad</h4>
+        <p>El acceso a <strong>Nexus Architect Suite</strong> es completamente libre y no genera cargo económico alguno, requerimiento de tarjeta de crédito ni compromiso forzoso de contratación para el usuario.</p>
+
+        <h4>2. Justificación de Registro y Nutrición del CRM</h4>
+        <p>El único requisito para acceder a las herramientas avanzadas consiste en identificar al usuario mediante un correo electrónico válido de cualquier dominio. Este mecanismo permite:</p>
+        <ul style="margin:8px 0 12px 20px;">
+          <li>Nutrir la base de prospección y relacionamiento del ecosistema de tarjetas digitales y servicios <strong>Rose vCard (vc.tsolutionsipidd.com)</strong>.</li>
+          <li>Vincular las cotizaciones y directivas generadas a un interlocutor formal.</li>
+          <li>Garantizar la trazabilidad y mitigar el uso abusivo de endpoints de IA y bases de datos.</li>
+        </ul>
+
+        <h4>3. Garantía Anti-Spam y Desuscripción RFC 8058</h4>
+        <p>TSolutions IPIDD respeta plenamente su bandeja de entrada. Toda comunicación enviada a través de nuestro motor de mercadotecnia cumple con el estándar de la IETF <strong>RFC 8058 (One-Click Unsubscribe)</strong> y la verificación inmediata contra listas de supresión. Usted puede cancelar la suscripción en cualquier instante con un solo clic sin trámites engorrosos.</p>
+
+        <h4>4. Autorización Expresa</h4>
+        <p>Al marcar la casilla correspondiente durante el registro o inicio de sesión, usted otorga su consentimiento expreso e informado para los fines descritos en esta declaración y en el Aviso de Privacidad Integral.</p>
+        <p style="margin-top:16px; font-size:0.75rem; color:#94A3B8;">Plataformas Asociadas: vc.tsolutionsipidd.com • identidad.tsolutionsipidd.com • www.tsolutionsipidd.com</p>
+      </div>
+
+      <div style="margin-top:16px; text-align:right;">
+        <button onclick="closeDataUsageModal()" class="btn-primary" style="padding:8px 20px; background:#FF6B00; border-color:#FF6B00;">
+          <span>Aceptar y Regresar al Registro</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ========================================================================= -->
   <!-- MODAL 1: CEREBRO CONTINUO NEXUS (PGVECTOR CHAT & REASONING)               -->
@@ -2097,7 +2735,6 @@
         btn.innerText = '🚀 Confirmar & Aprovisionar Proyecto';
       }
     }
-  </script>
 
     function filterCards(category) {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -3774,8 +4411,279 @@ Process completed with exit code 1.</textarea>
       }
     }
 
+    // =========================================================================
+    // JAVASCRIPT: NEON OAUTH, CRM SYNC & USER JOURNEYS LAUNCHPAD
+    // =========================================================================
+    let currentAuthMode = 'signup'; // 'signup' | 'login'
+    let currentActiveJourney = 'prospect';
+
+    function initAuthSession() {
+      try {
+        const storedToken = localStorage.getItem('nexus_auth_token');
+        const storedUser = localStorage.getItem('nexus_user');
+        if (storedToken && storedUser) {
+          const user = JSON.parse(storedUser);
+          renderAuthenticatedNav(user);
+        } else {
+          renderGuestNav();
+        }
+      } catch (err) {
+        console.warn('Error reading stored session:', err);
+        renderGuestNav();
+      }
+    }
+
+    function renderAuthenticatedNav(user) {
+      const btnOpen = document.getElementById('btn-open-neon-auth');
+      const profilePill = document.getElementById('user-profile-pill');
+      const initials = document.getElementById('nav-user-initials');
+      const nameEl = document.getElementById('nav-user-name');
+      const emailEl = document.getElementById('nav-user-email');
+      const roleBadge = document.getElementById('nav-user-role-badge');
+      const roleSelector = document.getElementById('user-role-selector');
+
+      if (btnOpen) btnOpen.style.display = 'none';
+      if (profilePill) profilePill.style.display = 'inline-flex';
+
+      const userName = user.name || user.email?.split('@')[0] || 'Usuario';
+      if (initials) initials.innerText = userName.charAt(0).toUpperCase();
+      if (nameEl) nameEl.innerText = userName;
+      if (emailEl) emailEl.innerText = user.email || '';
+      if (roleBadge) {
+        roleBadge.innerText = user.role || 'CLIENT';
+        roleBadge.style.background = user.role === 'ADMIN' ? '#10B981' : user.role === 'COLLABORATOR' ? '#00E5FF' : '#FF6B00';
+        roleBadge.style.color = '#0A0D14';
+      }
+      if (roleSelector && user.role) {
+        roleSelector.value = user.role;
+      }
+    }
+
+    function renderGuestNav() {
+      const btnOpen = document.getElementById('btn-open-neon-auth');
+      const profilePill = document.getElementById('user-profile-pill');
+      if (btnOpen) btnOpen.style.display = 'inline-flex';
+      if (profilePill) profilePill.style.display = 'none';
+    }
+
+    function openNeonAuthModal(mode = 'signup') {
+      currentAuthMode = mode;
+      const modal = document.getElementById('neon-auth-modal');
+      const title = document.getElementById('auth-modal-title');
+      const nameGroup = document.getElementById('auth-field-name-group');
+      const compGroup = document.getElementById('auth-field-company-group');
+      const roleGroup = document.getElementById('auth-field-role-group');
+      const nameInput = document.getElementById('auth-input-name');
+      const btnSubmit = document.getElementById('btn-submit-auth');
+      const switchPrompt = document.getElementById('auth-switch-prompt');
+      const btnSwitch = document.getElementById('btn-auth-switch');
+      const feedback = document.getElementById('auth-feedback-box');
+
+      if (feedback) feedback.style.display = 'none';
+
+      if (mode === 'signup') {
+        title.innerText = 'Acceso Gratuito a Nexus Suite';
+        if (nameGroup) nameGroup.style.display = 'block';
+        if (compGroup) compGroup.style.display = 'block';
+        if (roleGroup) roleGroup.style.display = 'block';
+        if (nameInput) nameInput.required = true;
+        btnSubmit.innerHTML = '<span>🚀 Entrar y Desbloquear Acceso Gratuito</span>';
+        switchPrompt.innerText = '¿Ya tienes acceso previo?';
+        btnSwitch.innerText = 'Ingresa directamente aquí';
+      } else {
+        title.innerText = 'Iniciar Sesión en Nexus Suite';
+        if (nameGroup) nameGroup.style.display = 'none';
+        if (compGroup) compGroup.style.display = 'none';
+        if (roleGroup) roleGroup.style.display = 'none';
+        if (nameInput) nameInput.required = false;
+        btnSubmit.innerHTML = '<span>🔑 Iniciar Sesión Instantánea</span>';
+        switchPrompt.innerText = '¿Aún no tienes cuenta?';
+        btnSwitch.innerText = 'Regístrate 100% gratis';
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeNeonAuthModal() {
+      const modal = document.getElementById('neon-auth-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function toggleAuthMode() {
+      openNeonAuthModal(currentAuthMode === 'signup' ? 'login' : 'signup');
+    }
+
+    async function handleAuthFormSubmit(e) {
+      e.preventDefault();
+      const feedback = document.getElementById('auth-feedback-box');
+      const btnSubmit = document.getElementById('btn-submit-auth');
+      const email = document.getElementById('auth-input-email').value.trim();
+      const name = document.getElementById('auth-input-name')?.value?.trim();
+      const company = document.getElementById('auth-input-company')?.value?.trim();
+      const role = document.getElementById('auth-input-role')?.value || 'CLIENT';
+      const checkPrivacy = document.getElementById('auth-check-privacy')?.checked;
+      const checkCrm = document.getElementById('auth-check-crm')?.checked;
+
+      feedback.style.display = 'none';
+
+      if (!checkPrivacy || !checkCrm) {
+        feedback.style.display = 'block';
+        feedback.style.background = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.border = '1px solid #EF4444';
+        feedback.style.color = '#EF4444';
+        feedback.innerText = '⚠ Debes aceptar el Aviso de Privacidad y autorizar la vinculación al CRM oficial de vc.tsolutionsipidd.com para acceder de forma gratuita.';
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<span class="ai-spinner"></span> Procesando credencial gratuita...';
+
+      const endpoint = currentAuthMode === 'signup' ? '/api/v1/auth/signup' : '/api/v1/auth/login';
+      const payload = {
+        email,
+        name: name || email.split('@')[0],
+        company,
+        role,
+        consent_privacy: checkPrivacy,
+        consent_data_usage: checkCrm,
+        provider: 'neon_oauth'
+      };
+
+      try {
+        const resp = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await resp.json();
+
+        if (!resp.ok) {
+          throw new Error(data.error || 'Error al autenticar');
+        }
+
+        // Guardar sesión
+        localStorage.setItem('nexus_auth_token', data.token);
+        localStorage.setItem('nexus_user', JSON.stringify(data.user));
+
+        feedback.style.display = 'block';
+        feedback.style.background = 'rgba(16, 185, 129, 0.15)';
+        feedback.style.border = '1px solid #10B981';
+        feedback.style.color = '#10B981';
+        feedback.innerHTML = `✓ ¡Bienvenido, ${escapeHtml(data.user.name)}! Acceso gratuito activado y lead sincronizado al CRM de <strong>vc.tsolutionsipidd.com</strong>.`;
+
+        renderAuthenticatedNav(data.user);
+        addLog(`[NEON AUTH] Sesión iniciada: ${data.user.email} (${data.user.role}) • Sincronizado a CRM vc.tsolutionsipidd.com`, 'transition');
+
+        setTimeout(() => {
+          closeNeonAuthModal();
+          syncWithNeonDB();
+        }, 1400);
+
+      } catch (err) {
+        feedback.style.display = 'block';
+        feedback.style.background = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.border = '1px solid #EF4444';
+        feedback.style.color = '#EF4444';
+        feedback.innerText = `Error: ${err.message}`;
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = currentAuthMode === 'signup' ? '<span>🚀 Entrar y Desbloquear Acceso Gratuito</span>' : '<span>🔑 Iniciar Sesión Instantánea</span>';
+      }
+    }
+
+    async function triggerOAuthFlow(provider) {
+      const emailPrompt = prompt(`[${provider.toUpperCase()} OAUTH] Ingresa tu correo electrónico para vincular tu acceso gratuito (Cualquier dominio):`, '');
+      if (!emailPrompt || !emailPrompt.includes('@')) {
+        alert('Se requiere un correo electrónico válido para registrar el acceso.');
+        return;
+      }
+
+      const checkPrivacy = confirm(`MARCO LEGAL OBLIGATORIO:\n\nAl continuar con ${provider.toUpperCase()}, confirmas que aceptas el Aviso de Privacidad Integral de TSolutions IPIDD y autorizas la incorporación de tu contacto en el CRM oficial de Rose vCard (vc.tsolutionsipidd.com) de conformidad con la ley.\n\n¿Aceptas continuar con tu acceso 100% gratuito?`);
+      if (!checkPrivacy) {
+        alert('No se puede completar el acceso sin la aceptación de los términos legales.');
+        return;
+      }
+
+      try {
+        const resp = await fetch('/api/v1/auth/neon-oauth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            provider,
+            email: emailPrompt.trim(),
+            name: emailPrompt.split('@')[0],
+            consent_privacy: true,
+            consent_data_usage: true
+          })
+        });
+
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Fallo en OAuth');
+
+        localStorage.setItem('nexus_auth_token', data.token);
+        localStorage.setItem('nexus_user', JSON.stringify(data.user));
+
+        renderAuthenticatedNav(data.user);
+        addLog(`[OAUTH ${provider.toUpperCase()}] Autenticación completada para ${data.user.email}. CRM sincronizado.`, 'pulse');
+        alert(`✓ Acceso concedido exitosamente vía ${provider.toUpperCase()}.\nTu perfil ha sido registrado en el CRM oficial de vc.tsolutionsipidd.com.`);
+        closeNeonAuthModal();
+        syncWithNeonDB();
+      } catch (err) {
+        alert(`Error en OAuth: ${err.message}`);
+      }
+    }
+
+    function logoutUser() {
+      if (confirm('¿Deseas cerrar tu sesión actual?')) {
+        localStorage.removeItem('nexus_auth_token');
+        localStorage.removeItem('nexus_user');
+        renderGuestNav();
+        addLog('[NEON AUTH] Sesión cerrada. Regresando a modo visitante.', 'transition');
+        alert('Sesión cerrada correctamente.');
+      }
+    }
+
+    function openPrivacyModal() {
+      document.getElementById('privacy-modal').style.display = 'flex';
+    }
+    function closePrivacyModal() {
+      document.getElementById('privacy-modal').style.display = 'none';
+    }
+
+    function openDataUsageModal() {
+      document.getElementById('data-usage-modal').style.display = 'flex';
+    }
+    function closeDataUsageModal() {
+      document.getElementById('data-usage-modal').style.display = 'none';
+    }
+
+    function activateUserJourney(journey) {
+      currentActiveJourney = journey;
+      const cards = ['prospect', 'client', 'engineer', 'admin'];
+      cards.forEach(c => {
+        const el = document.getElementById(`need-card-${c}`);
+        if (el) el.classList.toggle('active', c === journey);
+      });
+
+      if (journey === 'prospect') {
+        filterCards('commercial');
+        addLog('[JOURNEY] Ruta Prospectos & Cotizaciones activada. Mostrando Arquetipos, ROI y Onboarding.', 'transition');
+      } else if (journey === 'client') {
+        filterCards('all');
+        addLog('[JOURNEY] Ruta Cliente Activo: Enfoque en Topología DAG, Cerebro Nexus y Entregables 16:9.', 'transition');
+      } else if (journey === 'engineer') {
+        filterCards('core');
+        addLog('[JOURNEY] Ruta Colaborador / Ingeniería: Backlog To-Do, Lockups SVG y Webhooks CI/CD.', 'transition');
+      } else if (journey === 'admin') {
+        filterCards('all');
+        addLog('[JOURNEY] Ruta Gobernanza & Admin: Cierre Inmutable, Campañas BullMQ y Telemetría SRE.', 'transition');
+      }
+    }
+
     // INICIALIZACIÓN AUTOMÁTICA
     window.addEventListener('DOMContentLoaded', () => {
+      initAuthSession();
       syncWithNeonDB();
       // Polling ligero de sincronización cada 12 segundos
       setInterval(syncWithNeonDB, 12000);

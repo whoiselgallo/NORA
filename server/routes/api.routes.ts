@@ -21,6 +21,7 @@ import { createMarketingRouter } from './marketing.routes';
 import { createAIRoutes } from './ai.routes';
 import { createPresentationRoutes } from './presentation.routes';
 import { createNexusStudioRouter } from './nexusStudio.routes';
+import { createAuthRouter } from './auth.routes';
 import { authenticateNeonAuth, requireRole } from '../middleware/auth.middleware';
 import { requireWorkspace, DEFAULT_WORKSPACE_ID, withWorkspaceClient } from '../middleware/workspace.middleware';
 import { validateBody } from '../middleware/validate.middleware';
@@ -94,6 +95,7 @@ export function createApiRouter(
   router.use('/ai', createAIRoutes(pool, io));
   router.use('/presentations', createPresentationRoutes(pool, io));
   router.use(createNexusStudioRouter(pool, io));
+  router.use('/auth', createAuthRouter(pool, io));
 
   // ==========================================================================
   // 1. WORKSPACES MULTI-TENANT
