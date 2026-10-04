@@ -123,3 +123,21 @@ export interface OperationalProjectContext {
     activeTasks: number;
   }>;
 }
+
+// ==========================================
+// 6. CAD SVG VECTOR DESIGN AGENT
+// ==========================================
+export const CadSvgDesignSchema = z.object({
+  svgCode: z.string().min(1),
+  designType: z.enum(['ISOTIPO', 'LOGOTIPO', 'IMAGOTIPO', 'ISOLOGO']),
+  brandName: z.string().min(1),
+  conceptRationale: z.string().min(1),
+  geometricFormulas: z.string().min(1),
+  viewBox: z.string().min(1),
+  colorPalette: z.array(z.string()).min(1),
+  cssFontImport: z.string().optional(),
+  suggestedUse: z.string().optional()
+});
+
+export type CadSvgDesign = z.infer<typeof CadSvgDesignSchema>;
+

@@ -103,5 +103,54 @@ export function createAIRoutes(pool: Pool, io?: SocketIOServer): Router {
   router.get('/executive-report/:projectId', handleExecutiveReport);
   router.post('/executive-report', handleExecutiveReport);
 
+  // 6. CAD SVG Vector Design Agent
+  const handleCadSvgGenerate = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const {
+        designType,
+        brandName,
+        industry,
+        visualConcept,
+        colorPalette,
+        geometricStyle,
+        includeConstructionGuides,
+        workspaceId
+      } = req.body;
+
+      if (!designType || !brandName || !visualConcept) {
+        res.status(400).json({
+          error: 'Campos requeridos faltantes: "designType", "brandName" y "visualConcept" son obligatorios.'
+        });
+        return;
+      }
+
+      const validTypes = ['ISOTIPO', 'LOGOTIPO', 'IMAGOTIPO', 'ISOLOGO'];
+      if (!validTypes.includes(designType)) {
+        res.status(400).json({
+          error: `Tipo de diseño inválido. Valores permitidos: ${validTypes.join(', ')}`
+        });
+        return;
+      }
+
+      const design = await aiGateway.generateCadSvgDesign({
+        designType,
+        brandName,
+        industry,
+        visualConcept,
+        colorPalette,
+        geometricStyle,
+        includeConstructionGuides: Boolean(includeConstructionGuides),
+        workspaceId
+      });
+
+      res.status(200).json({ success: true, design });
+    } catch (err: unknown) {
+      console.error('[AI CAD SVG Agent Error]:', err);
+      res.status(500).json({ error: (err as Error).message });
+    }
+  };
+  router.post('/cad/generate-svg', handleCadSvgGenerate);
+  router.post('/cad-svg', handleCadSvgGenerate);
+
   return router;
 }

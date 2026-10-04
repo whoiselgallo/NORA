@@ -12,7 +12,9 @@ import {
   ExecutiveStatusReport,
   ExecutiveStatusReportSchema,
   TaskPlanner,
-  TaskPlannerSchema
+  TaskPlannerSchema,
+  CadSvgDesign,
+  CadSvgDesignSchema
 } from '../types/aiGateway.types';
 import {
   GeneratedPresentation,
@@ -890,4 +892,340 @@ ${projectContextStr}`;
 
     return { deck, slides: insertedSlides };
   }
+
+  /**
+   * 7. CAD SVG VECTOR DESIGN AGENT
+   * Generación y construcción de Identidad de Marca técnica (Isotipo, Logotipo, Imagotipo, Isologo)
+   * exclusivamente en formato SVG puro, nutrido con tokens corporativos y geometría analítica.
+   */
+  public async generateCadSvgDesign(params: {
+    designType: 'ISOTIPO' | 'LOGOTIPO' | 'IMAGOTIPO' | 'ISOLOGO';
+    brandName: string;
+    industry?: string;
+    visualConcept: string;
+    colorPalette?: string;
+    geometricStyle?: string;
+    includeConstructionGuides?: boolean;
+    workspaceId?: string;
+  }): Promise<CadSvgDesign> {
+    const isIso = params.designType === 'ISOTIPO';
+    const isLogo = params.designType === 'LOGOTIPO';
+    const isImago = params.designType === 'IMAGOTIPO';
+    const isIsologo = params.designType === 'ISOLOGO';
+
+    const systemPrompt = `Actúa como Master CAD Vectorial Architect & Creative Technologist especializado estrictamente en código SVG (Scalable Vector Graphics) puro, estándar W3C y de nivel de producción corporativa.
+
+OBJETIVO CRÍTICO:
+Construir desde cero un diseño de identidad visual técnica de alta precisión geométrica y estética "Dark Tech / Cyber Industrial" exclusivamente con código XML/SVG válido.
+
+DISTINCIÓN FUNDAMENTAL DE IDENTIDAD VISUAL:
+1. "ISOTIPO": Es únicamente el símbolo o ícono gráfico autónomo, abstracto, geométrico o figurativo. NO contiene el nombre tipográfico de la marca. Debe tener una proporción cuadrada (viewBox="0 0 800 800") con simetría axial o radial de alto impacto.
+2. "LOGOTIPO": Es exclusivamente el tratamiento gráfico/tipográfico o lettering vectorizado del nombre de la marca ("${params.brandName}"). Sin símbolo externo. Emplea trazados vectoriales, cortes angulares, tracking amplio y jerarquías limpias (viewBox="0 0 1000 300").
+3. "IMAGOTIPO": Es la unión armónica y coordinada de ISOTIPO (símbolo) + LOGOTIPO (texto). Conviven juntos pero separados:
+   - En variante horizontal: Isotipo a la izquierda (dimensiones X por X) y Logotipo + Bajada técnica a la derecha, con área de protección de 0.5X (viewBox="0 0 1200 450").
+   - En variante vertical: Isotipo centrado arriba y Logotipo centrado abajo (viewBox="0 0 800 800").
+4. "ISOLOGO": El símbolo y el texto tipográfico forman un solo elemento indivisible, fundidos dentro de un contorno o contenedor geométrico (emblema técnico, escudo hexagonal, badge con marco micro-impreso) donde el texto no puede retirarse sin romper la forma (viewBox="0 0 800 800").
+
+REGLAS DE CONSTRUCCIÓN VECTORIAL Y TOKENS TSOLUTIONS IPIDD:
+- Paleta Institucional Dark Tech:
+  * Naranja Energy: #FF6B00 (Acento Primario, CTAs, energía y dinamismo)
+  * Aqua Turquesa: #00E5FF (Acento Tecnológico, micro-circuitos, resplandores IA)
+  * Negro Profundo: #0A0D14 (Fondo base)
+  * Midnight Panel: #121722 (Superficie secundaria)
+  * Blanco Puro: #FFFFFF (Texto principal o trazados clave)
+  * Humo / Slate: #94A3B8 (Líneas de cota, metadatos y retículas)
+  * Dorado Prestigio: #F59E0B (Distintivos especiales)
+- Geometría de Precisión:
+  * Hexágonos regulares: Vértices a 60° calculados con (R * cos(θ), R * sin(θ)) o polígonos con clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%).
+  * Proporción Áurea (Phi = 1.618) en proporciones de altura, radios de curvatura y espaciado de seguridad.
+  * Curvas de Bézier cúbicas (C) y cuadráticas (Q) para transiciones fluidas.
+  * Definiciones <defs> ricas: <linearGradient>, <radialGradient>, filtros de resplandor glow (<feGaussianBlur stdDeviation="6"/>, <feMerge>) y patrones técnicos <pattern>.
+- PUREZA TÉCNICA OBLIGATORIA:
+  * NO uses etiquetas HTML ni scripts en el SVG.
+  * El código SVG debe ser completamente autocontenido en la propiedad "svgCode" del JSON de respuesta.
+  * Debe incluir xmlns="http://www.w3.org/2000/svg" y el viewBox correspondiente.
+  * Si se activan guías técnicas (${params.includeConstructionGuides ? 'SÍ' : 'NO'}), dibuja líneas de cota punteadas (stroke-dasharray="4,4"), círculos de radio auxiliar y anotaciones técnicas CAD en color #94A3B8 con opacidad 0.35.
+
+FORMATO DE SALIDA JSON REQUERIDO:
+{
+  "svgCode": "<svg viewBox=... xmlns=...>...</svg>",
+  "designType": "${params.designType}",
+  "brandName": "${params.brandName}",
+  "conceptRationale": "Explicación de la semiótica, geometría y balance cromático",
+  "geometricFormulas": "Ecuaciones matemáticas, ángulos y proporciones aplicadas",
+  "viewBox": "0 0 W H",
+  "colorPalette": ["#FF6B00", "#00E5FF", "#0A0D14", ...],
+  "cssFontImport": "URL de Google Fonts para fuentes usadas si aplica",
+  "suggestedUse": "Recomendaciones de uso"
+}`;
+
+    const userPrompt = `DISEÑA LA SIGUIENTE IDENTIDAD VECTORIAL CAD EN FORMATO SVG:
+- Tipo Solicitado: ${params.designType}
+- Nombre de la Entidad/Marca: "${params.brandName}"
+- Industria / Sector: "${params.industry || 'Ingeniería de Software & Arquitectura de Sistemas'}"
+- Concepto Visual o Metáfora: "${params.visualConcept}"
+- Paleta Solicitada: "${params.colorPalette || 'TSolutions Oficial (Naranja #FF6B00, Aqua #00E5FF, Dark #0A0D14)'}"
+- Estilo Geométrico: "${params.geometricStyle || 'Hexagonal Técnico Dark Tech con Resplandores Glow'}"
+- Incluir Guías de Construcción CAD: ${params.includeConstructionGuides ? 'SÍ' : 'NO'}
+
+Genera el código SVG vectorial completo y exacto sin omitir detalles.`;
+
+    return this.callLLM<CadSvgDesign>({
+      systemPrompt,
+      userPrompt,
+      temperature: 0.25,
+      schema: CadSvgDesignSchema,
+      fallbackGenerator: () => {
+        // GENERADOR VECTORIAL DETERMINÍSTICO MATEMÁTICO (Hexágonos, Bezier, Malla y Glows)
+        const brand = params.brandName || 'TSOLUTIONS';
+        const guides = params.includeConstructionGuides;
+
+        let viewBox = '0 0 800 800';
+        let svgBody = '';
+
+        if (isIso) {
+          // ISOTIPO PURO: Hexágono tecnológico concéntrico con nódulos de energía y gradientes
+          viewBox = '0 0 800 800';
+          svgBody = `
+            <!-- ISOTIPO CAD DETERMINÍSTICO • GEOMETRÍA SAGRADA HEXAGONAL -->
+            <defs>
+              <linearGradient id="cadGradEnergy" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF6B00" stop-opacity="1" />
+                <stop offset="100%" stop-color="#FF9E00" stop-opacity="0.85" />
+              </linearGradient>
+              <linearGradient id="cadGradCyan" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00E5FF" stop-opacity="1" />
+                <stop offset="100%" stop-color="#0088FF" stop-opacity="0.9" />
+              </linearGradient>
+              <filter id="cadGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="8" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- FONDO DARK TECH CON REJILLA -->
+            <rect width="800" height="800" fill="#0A0D14" rx="16" />
+            <g opacity="0.06" stroke="#FFFFFF" stroke-width="1">
+              <path d="M0,200 H800 M0,400 H800 M0,600 H800 M200,0 V800 M400,0 V800 M600,0 V800" />
+            </g>
+
+            ${guides ? `
+              <!-- GUÍAS DE CONSTRUCCIÓN CAD (Cotas y Proporciones) -->
+              <g stroke="#94A3B8" stroke-width="1" stroke-dasharray="4,6" opacity="0.4">
+                <circle cx="400" cy="400" r="280" fill="none" />
+                <circle cx="400" cy="400" r="173" fill="none" />
+                <line x1="400" y1="50" x2="400" y2="750" />
+                <line x1="50" y1="400" x2="750" y2="400" />
+                <line x1="140" y1="250" x2="660" y2="550" />
+                <line x1="140" y1="550" x2="660" y2="250" />
+                <text x="415" y="110" fill="#00E5FF" font-family="'JetBrains Mono', monospace" font-size="11">R_EXT = 280.00px</text>
+                <text x="415" y="240" fill="#FF6B00" font-family="'JetBrains Mono', monospace" font-size="11">R_INT = 173.06px (Φ RATIO)</text>
+              </g>
+            ` : ''}
+
+            <!-- HEXÁGONO BASE EXTERNO -->
+            <polygon points="400,120 642,260 642,540 400,680 158,540 158,260" 
+                     fill="#121722" stroke="url(#cadGradEnergy)" stroke-width="4" filter="url(#cadGlow)" />
+
+            <!-- NÚCLEO VECTORIAL INTERNO: VÓRTICE TECNOLÓGICO -->
+            <polygon points="400,227 550,313 550,487 400,573 250,487 250,313" 
+                     fill="none" stroke="url(#cadGradCyan)" stroke-width="3" stroke-dasharray="12,6" />
+
+            <!-- SÍMBOLO CENTRAL: LIGADURA T-S GEOMÉTRICA DE ALTA VELOCIDAD -->
+            <g transform="translate(400,400)" filter="url(#cadGlow)">
+              <!-- Segmento T Superior -->
+              <path d="M-90,-70 L90,-70 L75,-40 L-75,-40 Z" fill="url(#cadGradEnergy)" />
+              <path d="M-15,-40 L15,-40 L15,10 L-15,10 Z" fill="url(#cadGradEnergy)" />
+              <!-- Sinuosidad S Hexagonal Angular -->
+              <path d="M-60,0 L40,0 L60,35 L-40,35 L-20,70 L80,70 L95,95 L-65,95 L-85,60 L20,60 L0,25 L-80,25 Z" fill="url(#cadGradCyan)" />
+              <!-- Nódulos de Conexión -->
+              <circle cx="-90" cy="-70" r="5" fill="#FFFFFF" />
+              <circle cx="90" cy="-70" r="5" fill="#FFFFFF" />
+              <circle cx="95" cy="95" r="5" fill="#00E5FF" />
+              <circle cx="-65" cy="95" r="5" fill="#FF6B00" />
+            </g>
+          `;
+        } else if (isLogo) {
+          // LOGOTIPO PURO: Lettering Vectorial Técnico con tracking amplio y acento de kerning
+          viewBox = '0 0 1000 320';
+          svgBody = `
+            <defs>
+              <linearGradient id="cadGradEnergy" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#FF6B00" />
+                <stop offset="100%" stop-color="#FF9E00" />
+              </linearGradient>
+              <filter id="cadGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <rect width="1000" height="320" fill="#0A0D14" rx="12" />
+            <g opacity="0.05" stroke="#FFFFFF" stroke-width="1">
+              <path d="M0,80 H1000 M0,160 H1000 M0,240 H1000" />
+            </g>
+
+            ${guides ? `
+              <g stroke="#94A3B8" stroke-width="1" stroke-dasharray="3,3" opacity="0.35">
+                <line x1="60" y1="185" x2="940" y2="185" />
+                <line x1="60" y1="120" x2="940" y2="120" />
+                <text x="60" y="70" fill="#00E5FF" font-family="'JetBrains Mono', monospace" font-size="10">BASELINE = 185.00px // CAP_HEIGHT = 65.00px</text>
+              </g>
+            ` : ''}
+
+            <!-- MARCA TIPOGRÁFICA PRINCIPAL -->
+            <text x="500" y="180" text-anchor="middle" font-family="'Bruno Ace', 'Space Grotesk', sans-serif" 
+                  font-size="64" font-weight="900" fill="#FFFFFF" letter-spacing="12" filter="url(#cadGlow)">
+              ${brand.toUpperCase()}
+            </text>
+
+            <!-- SUBTÍTULO TECNOLÓGICO -->
+            <text x="500" y="235" text-anchor="middle" font-family="'JetBrains Mono', monospace" 
+                  font-size="14" font-weight="700" fill="#00E5FF" letter-spacing="8">
+              SYSTEM ARCHITECTURE &bull; OPEX &bull; AI SCALABILITY
+            </text>
+
+            <!-- TRAZADOS DECORATIVOS DE ANCLAJE -->
+            <path d="M120,205 L300,205" stroke="url(#cadGradEnergy)" stroke-width="3" />
+            <path d="M700,205 L880,205" stroke="url(#cadGradEnergy)" stroke-width="3" />
+          `;
+        } else if (isImago) {
+          // IMAGOTIPO HORIZONTAL: Símbolo Isotipo a la izquierda + Logotipo a la derecha
+          viewBox = '0 0 1200 450';
+          svgBody = `
+            <defs>
+              <linearGradient id="cadGradEnergy" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF6B00" />
+                <stop offset="100%" stop-color="#FF9E00" />
+              </linearGradient>
+              <linearGradient id="cadGradCyan" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00E5FF" />
+                <stop offset="100%" stop-color="#0088FF" />
+              </linearGradient>
+              <filter id="cadGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <rect width="1200" height="450" fill="#0A0D14" rx="16" />
+            <g opacity="0.04" stroke="#FFFFFF" stroke-width="1">
+              <path d="M0,150 H1200 M0,300 H1200 M400,0 V450" />
+            </g>
+
+            ${guides ? `
+              <g stroke="#94A3B8" stroke-width="1" stroke-dasharray="4,4" opacity="0.35">
+                <rect x="50" y="60" width="320" height="320" fill="none" />
+                <line x1="400" y1="40" x2="400" y2="410" stroke="#FF6B00" />
+                <text x="415" y="60" fill="#FF6B00" font-family="'JetBrains Mono', monospace" font-size="11">PROTECTION_MARGIN = 80px (0.5X)</text>
+              </g>
+            ` : ''}
+
+            <!-- 1. ISOTIPO INTEGRADO (IZQUIERDA) -->
+            <g transform="translate(210, 225) scale(0.65)" filter="url(#cadGlow)">
+              <polygon points="0,-220 190,-110 190,110 0,220 -190,110 -190,-110" 
+                       fill="#121722" stroke="url(#cadGradEnergy)" stroke-width="6" />
+              <polygon points="0,-150 130,-75 130,75 0,150 -130,75 -130,-75" 
+                       fill="none" stroke="url(#cadGradCyan)" stroke-width="4" stroke-dasharray="14,7" />
+              <!-- Símbolo T-S central -->
+              <path d="M-70,-50 L70,-50 L55,-25 L-55,-25 Z" fill="url(#cadGradEnergy)" />
+              <path d="M-12,-25 L12,-25 L12,15 L-12,15 Z" fill="url(#cadGradEnergy)" />
+              <path d="M-50,10 L30,10 L45,40 L-30,40 L-15,65 L60,65 L70,85 L-50,85 L-65,55 L15,55 L0,25 L-60,25 Z" fill="url(#cadGradCyan)" />
+            </g>
+
+            <!-- 2. LOGOTIPO Y BAJADA (DERECHA) -->
+            <g transform="translate(480, 215)">
+              <text x="0" y="20" font-family="'Bruno Ace', 'Space Grotesk', sans-serif" 
+                    font-size="62" font-weight="900" fill="#FFFFFF" letter-spacing="6" filter="url(#cadGlow)">
+                ${brand.toUpperCase()}
+              </text>
+              <text x="4" y="65" font-family="'Space Grotesk', sans-serif" 
+                    font-size="20" font-weight="700" fill="#00E5FF" letter-spacing="4">
+                TECNOLOGÍAS &amp; SOLUCIONES INTEGRALES
+              </text>
+              <text x="4" y="100" font-family="'JetBrains Mono', monospace" 
+                    font-size="12" fill="#94A3B8" letter-spacing="3">
+                TECNOLOGÍA INSTALADA &bull; CONOCIMIENTO TRANSFERIDO
+              </text>
+              <line x1="0" y1="120" x2="620" y2="120" stroke="url(#cadGradEnergy)" stroke-width="2" />
+            </g>
+          `;
+        } else {
+          // ISOLOGO: Emblema / Sello indivisible
+          viewBox = '0 0 800 800';
+          svgBody = `
+            <defs>
+              <linearGradient id="cadGradEnergy" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF6B00" />
+                <stop offset="100%" stop-color="#FF9E00" />
+              </linearGradient>
+              <linearGradient id="cadGradCyan" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00E5FF" />
+                <stop offset="100%" stop-color="#0088FF" />
+              </linearGradient>
+              <filter id="cadGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <rect width="800" height="800" fill="#0A0D14" rx="16" />
+            
+            <!-- ESCUDO CONTENEDOR INDIVISIBLE (ISOLOGO) -->
+            <polygon points="400,80 680,240 680,560 400,720 120,560 120,240" 
+                     fill="#121722" stroke="url(#cadGradEnergy)" stroke-width="5" filter="url(#cadGlow)" />
+            <polygon points="400,110 650,255 650,545 400,690 150,545 150,255" 
+                     fill="none" stroke="url(#cadGradCyan)" stroke-width="2" stroke-dasharray="8,6" opacity="0.8" />
+
+            <!-- ISOTIPO CENTRAL FUSIONADO -->
+            <g transform="translate(400, 340) scale(0.7)" filter="url(#cadGlow)">
+              <polygon points="0,-160 140,-80 140,80 0,160 -140,80 -140,-80" fill="#0A0D14" stroke="#FF6B00" stroke-width="4" />
+              <circle cx="0" cy="0" r="45" fill="#00E5FF" opacity="0.8" filter="url(#cadGlow)" />
+            </g>
+
+            <!-- TEXTO INCORPORADO INDIVISIBLE -->
+            <text x="400" y="520" text-anchor="middle" font-family="'Bruno Ace', sans-serif" 
+                  font-size="34" font-weight="900" fill="#FFFFFF" letter-spacing="6">
+              ${brand.toUpperCase()}
+            </text>
+            <text x="400" y="560" text-anchor="middle" font-family="'JetBrains Mono', monospace" 
+                  font-size="13" font-weight="700" fill="#00E5FF" letter-spacing="4">
+              IPIDD &bull; VERIFIED 2026
+            </text>
+            <text x="400" y="620" text-anchor="middle" font-family="'Space Grotesk', sans-serif" 
+                  font-size="11" fill="#94A3B8" letter-spacing="2">
+              SYSTEM ARCHITECTURE &bull; OPEX
+            </text>
+          `;
+        }
+
+        const fullSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="100%" height="100%">\n${svgBody}\n</svg>`;
+
+        return {
+          svgCode: fullSvg.trim(),
+          designType: params.designType,
+          brandName: params.brandName,
+          conceptRationale: `Diseño ${params.designType} generado bajo parámetros de ingeniería y tokens oficiales TSolutions IPIDD. Aplica simetría radial de 60 grados, resplandores gaussianos y balance de luminancias Dark Tech.`,
+          geometricFormulas: `Polígono regular de 6 vértices con radio cartesiano, proporción áurea Phi=1.618 y kerning normalizado a 12pt de separación.`,
+          viewBox,
+          colorPalette: ['#FF6B00', '#00E5FF', '#0A0D14', '#121722', '#FFFFFF', '#94A3B8'],
+          cssFontImport: 'https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap',
+          suggestedUse: 'Ideal para pantallas Dark Tech, lockups de documentación de ingeniería, favicons de 512x512 y estampado vectorial en gran formato.'
+        };
+      }
+    });
+  }
 }
+

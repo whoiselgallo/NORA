@@ -153,6 +153,18 @@
     .btn-danger { background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #FCA5A5; }
     .btn-danger:hover { background: var(--red); color: #fff; }
 
+    .ai-type-btn.active {
+      border-color: #00E5FF !important;
+      background: rgba(0, 229, 255, 0.15) !important;
+      color: #00E5FF !important;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     /* LAYOUT PRINCIPAL */
     main {
       flex: 1;
@@ -588,9 +600,10 @@
     <!-- PANEL LATERAL DE EDICIÓN Y GESTIÓN -->
     <aside class="controls-section">
       <div class="tabs-header">
-        <button class="tab-btn active" onclick="switchTab('design')">🎨 ESTILOS &amp; TEXTOS</button>
+        <button class="tab-btn active" onclick="switchTab('design')">🎨 ESTILOS</button>
         <button class="tab-btn" onclick="switchTab('code')">💻 CÓDIGO SVG</button>
         <button class="tab-btn" onclick="switchTab('library')">📂 BIBLIOTECA</button>
+        <button class="tab-btn" id="btn-tab-agent" onclick="switchTab('ai-cad-agent')" style="color:#00E5FF; font-weight:800; border-bottom-color:transparent;">⚡ AGENTE CAD IA</button>
       </div>
 
       <!-- TAB 1: MODIFICADOR DE ESTILOS, TIPOGRAFÍA Y TEXTOS -->
@@ -759,6 +772,127 @@
           </div>
           <div id="libraryListContainer" style="overflow-y:auto; max-height:360px;">
             <!-- Lista generada dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: AGENTE CAD IA • GENERADOR DE IDENTIDAD VECTORIAL DESDE CERO -->
+      <div class="tab-content" id="tab-ai-cad-agent">
+        <div class="section-card" style="border: 1px solid rgba(0, 229, 255, 0.4); background: linear-gradient(180deg, #101928 0%, #0c121d 100%); box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);">
+          <div class="section-title" style="color: #00E5FF; border-bottom-color: rgba(0, 229, 255, 0.25);">
+            <span>⚡ AGENTE CAD IA // VECTOR ARCHITECT</span>
+            <span class="badge" style="font-size:9px; background:rgba(255,107,0,0.2); color:#FF6B00; border:1px solid #FF6B00; padding:2px 6px; border-radius:4px;">PRODUCCIÓN W3C</span>
+          </div>
+
+          <p style="font-size: 11px; color: #94A3B8; line-height: 1.4;">
+            Asistente de inteligencia artificial y geometría vectorial analítica para diseñar <strong>Isotipos</strong>, <strong>Logotipos</strong>, <strong>Imagotipos</strong> e <strong>Isologos</strong> desde cero en código <code style="color:#00E5FF;">.SVG</code> puro.
+          </p>
+
+          <!-- TIPO DE IDENTIDAD -->
+          <div class="form-group">
+            <label style="color:#00E5FF; font-weight:700;">Tipo de Identidad Gráfica:</label>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+              <button type="button" class="btn btn-outline ai-type-btn active" id="btnTypeIsotipo" onclick="selectAiDesignType('ISOTIPO')" style="font-size:10px; padding:6px 8px; justify-content:flex-start;">
+                💎 Isotipo (Símbolo Puro)
+              </button>
+              <button type="button" class="btn btn-outline ai-type-btn" id="btnTypeLogotipo" onclick="selectAiDesignType('LOGOTIPO')" style="font-size:10px; padding:6px 8px; justify-content:flex-start;">
+                🔤 Logotipo (Lettering)
+              </button>
+              <button type="button" class="btn btn-outline ai-type-btn" id="btnTypeImagotipo" onclick="selectAiDesignType('IMAGOTIPO')" style="font-size:10px; padding:6px 8px; justify-content:flex-start;">
+                ⚖️ Imagotipo (Símbolo + Texto)
+              </button>
+              <button type="button" class="btn btn-outline ai-type-btn" id="btnTypeIsologo" onclick="selectAiDesignType('ISOLOGO')" style="font-size:10px; padding:6px 8px; justify-content:flex-start;">
+                🛡️ Isologo (Emblema Fusionado)
+              </button>
+            </div>
+            <input type="hidden" id="aiCadDesignType" value="ISOTIPO">
+          </div>
+
+          <!-- NOMBRE DE LA MARCA / ENTIDAD -->
+          <div class="form-group">
+            <label>Nombre de Marca o Proyecto:</label>
+            <input type="text" id="aiCadBrandName" value="TSOLUTIONS IPIDD" placeholder="Ej. NEXUS LABS, FERRETODO, CYBERGUARD...">
+          </div>
+
+          <!-- SECTOR / INDUSTRIA -->
+          <div class="form-group">
+            <label>Industria o Sector Técnico:</label>
+            <input type="text" id="aiCadIndustry" value="Arquitectura de Sistemas, OPEX & Transformación Digital" placeholder="Ej. Logística, Seguridad, Fintech, Ferretería...">
+          </div>
+
+          <!-- CONCEPTO VISUAL Y METÁFORA -->
+          <div class="form-group">
+            <label>Concepto Visual / Metáfora Geométrica:</label>
+            <textarea id="aiCadVisualConcept" rows="3" style="width:100%; background:var(--input-bg); border:1px solid var(--border); color:#FFF; font-family:inherit; font-size:11px; padding:8px; border-radius:5px; resize:vertical;">Hexágono regular concéntrico de 6 vértices con corte angular a 60°, nodo central de alta energía y ligadura estilizada T-S con resplandor glow y degradados cibernéticos.</textarea>
+          </div>
+
+          <!-- PALETA Y ESTILO -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Paleta Cromática:</label>
+              <select id="aiCadPalette" style="background:var(--input-bg); color:#FFF; border:1px solid var(--border); font-size:11px; padding:5px; border-radius:5px;">
+                <option value="TSOLUTIONS_OFFICIAL">TSolutions Oficial (Naranja #FF6B00 / Aqua #00E5FF)</option>
+                <option value="CYBER_NEON">Cyber Neon (Cyan #06B6D4 / Magenta #EC4899)</option>
+                <option value="MINIMAL_DARK">Minimal Dark (Blanco #FFFFFF / Slate #64748B)</option>
+                <option value="GOLD_PRESTIGE">Dorado Prestigio (Gold #F59E0B / Amber #D97706)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Estilo Geométrico:</label>
+              <select id="aiCadGeoStyle" style="background:var(--input-bg); color:#FFF; border:1px solid var(--border); font-size:11px; padding:5px; border-radius:5px;">
+                <option value="HEXAGONAL_TECHNICAL">Hexagonal Sagrado (60° Radial)</option>
+                <option value="GOLDEN_RATIO">Proporción Áurea (Phi = 1.618)</option>
+                <option value="ISOMETRIC_CIRCUITS">Circuitos e Isometría 3D</option>
+                <option value="BAUHAUS_MINIMAL">Bauhaus Tech Minimal</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- GUÍAS TÉCNICAS CAD -->
+          <div class="form-group" style="flex-direction:row; align-items:center; gap:8px;">
+            <input type="checkbox" id="aiCadGuides" checked style="accent-color:#00E5FF; cursor:pointer;">
+            <label for="aiCadGuides" style="margin:0; font-size:11px; cursor:pointer; color:#CBD5E1;">
+              Dibujar Cotas y Guías Técnicas de Construcción CAD
+            </label>
+          </div>
+
+          <!-- PRESETS RÁPIDOS -->
+          <div class="form-group">
+            <label style="font-size:10px; color:#94A3B8;">Presets de Arquitectura:</label>
+            <div style="display:flex; flex-wrap:wrap; gap:4px;">
+              <button type="button" class="btn btn-outline" style="font-size:9px; padding:3px 6px;" onclick="loadAiCadPreset('tsolutions_iso')">⚡ Isotipo TSolutions</button>
+              <button type="button" class="btn btn-outline" style="font-size:9px; padding:3px 6px;" onclick="loadAiCadPreset('tsolutions_imago')">📐 Imagotipo Horizontal</button>
+              <button type="button" class="btn btn-outline" style="font-size:9px; padding:3px 6px;" onclick="loadAiCadPreset('cyber_logo')">🔤 Wordmark Cyber</button>
+              <button type="button" class="btn btn-outline" style="font-size:9px; padding:3px 6px;" onclick="loadAiCadPreset('shield_isologo')">🛡️ Emblema Isologo</button>
+            </div>
+          </div>
+
+          <!-- BOTÓN GENERAR -->
+          <button type="button" class="btn" id="btnRunAiCad" onclick="generateAiCadSvg()" style="background:#FF6B00; color:#0A0D14; font-weight:800; font-size:12px; padding:10px; border-radius:6px; justify-content:center; box-shadow:0 0 15px rgba(255,107,0,0.4);">
+            <span>⚡ CONSTRUIR IDENTIDAD EN CÓDIGO SVG</span>
+          </button>
+        </div>
+
+        <!-- RESULTADO Y ANÁLISIS GEOMÉTRICO DEL AGENTE -->
+        <div id="aiCadResultCard" class="section-card" style="display:none; border:1px solid rgba(255,107,0,0.4); background:#0c121d;">
+          <div class="section-title" style="color:#FF6B00;">
+            <span>📐 MEMORIA TÉCNICA DEL DISEÑO</span>
+            <span id="aiCadResultBadge" class="badge" style="font-size:9px; color:#00E5FF; border:1px solid #00E5FF; padding:1px 6px; border-radius:3px;">ISOTIPO</span>
+          </div>
+
+          <div id="aiCadRationale" style="font-size:11px; color:#F8FAFC; line-height:1.4;"></div>
+          <div id="aiCadFormulas" style="font-size:10px; font-family:'JetBrains Mono', monospace; color:#00E5FF; background:#070B14; padding:8px; border-radius:4px; border:1px solid rgba(0,229,255,0.2);"></div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <div id="aiCadPaletteChips" style="display:flex; gap:4px;"></div>
+            <div style="display:flex; gap:6px;">
+              <button type="button" class="btn btn-success" onclick="downloadCurrentAiSvg()" style="font-size:10px; padding:5px 8px;">
+                📥 Descargar .SVG
+              </button>
+              <button type="button" class="btn btn-outline" onclick="copyCurrentAiSvg()" style="font-size:10px; padding:5px 8px;">
+                📋 Copiar Código
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1691,19 +1825,214 @@
 
     // TABS Y NAVEGACIÓN
     function switchTab(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderBottomColor = 'transparent';
+      });
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
 
       if (tabId === 'design') {
-        document.querySelector("button[onclick=\"switchTab('design')\"]").classList.add('active');
+        const btn = document.querySelector("button[onclick=\"switchTab('design')\"]");
+        if (btn) btn.classList.add('active');
         document.getElementById('tab-design').classList.add('active');
       } else if (tabId === 'code') {
-        document.querySelector("button[onclick=\"switchTab('code')\"]").classList.add('active');
+        const btn = document.querySelector("button[onclick=\"switchTab('code')\"]");
+        if (btn) btn.classList.add('active');
         document.getElementById('tab-code').classList.add('active');
       } else if (tabId === 'library') {
-        document.querySelector("button[onclick=\"switchTab('library')\"]").classList.add('active');
+        const btn = document.querySelector("button[onclick=\"switchTab('library')\"]");
+        if (btn) btn.classList.add('active');
         document.getElementById('tab-library').classList.add('active');
+      } else if (tabId === 'ai-cad-agent') {
+        const btn = document.getElementById('btn-tab-agent');
+        if (btn) {
+          btn.classList.add('active');
+          btn.style.borderBottomColor = '#00E5FF';
+        }
+        const tabEl = document.getElementById('tab-ai-cad-agent');
+        if (tabEl) tabEl.classList.add('active');
       }
+    }
+
+    // =========================================================================
+    // AGENTE CAD IA: CONSTRUCTOR DE IDENTIDAD VECTORIAL .SVG DESDE CERO
+    // =========================================================================
+    let latestAiCadDesign = null;
+
+    function selectAiDesignType(type) {
+      document.getElementById('aiCadDesignType').value = type;
+      document.querySelectorAll('.ai-type-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      if (type === 'ISOTIPO') {
+        document.getElementById('btnTypeIsotipo').classList.add('active');
+        document.getElementById('aiCadVisualConcept').value = 'Hexágono regular concéntrico de 6 vértices con corte angular a 60°, nodo central de alta energía y ligadura estilizada T-S con resplandor glow y degradados cibernéticos.';
+      } else if (type === 'LOGOTIPO') {
+        document.getElementById('btnTypeLogotipo').classList.add('active');
+        document.getElementById('aiCadVisualConcept').value = 'Wordmark tipográfico futurista con mayúsculas de alto impacto, cortes diagonales de 45° en vértices, tracking expandido de 12pt y líneas de anclaje de precisión tecnológica.';
+      } else if (type === 'IMAGOTIPO') {
+        document.getElementById('btnTypeImagotipo').classList.add('active');
+        document.getElementById('aiCadVisualConcept').value = 'Composición horizontal balanceada: Isotipo hexagonal tecnológico a la izquierda y Logotipo en tipografía Bruno Ace a la derecha, con área de seguridad de 0.5X y bajada institucional.';
+      } else if (type === 'ISOLOGO') {
+        document.getElementById('btnTypeIsologo').classList.add('active');
+        document.getElementById('aiCadVisualConcept').value = 'Emblema técnico hexagonal indivisible tipo sello de verificación militar/industrial, con monograma central, micro-circuitos y texto perimetral integrado.';
+      }
+      showToast('Modo de Identidad seleccionado: ' + type);
+    }
+
+    function loadAiCadPreset(presetKey) {
+      if (presetKey === 'tsolutions_iso') {
+        selectAiDesignType('ISOTIPO');
+        document.getElementById('aiCadBrandName').value = 'TSOLUTIONS IPIDD';
+        document.getElementById('aiCadIndustry').value = 'Arquitectura de Sistemas, OPEX & Transformación Digital';
+        document.getElementById('aiCadPalette').value = 'TSOLUTIONS_OFFICIAL';
+        document.getElementById('aiCadGeoStyle').value = 'HEXAGONAL_TECHNICAL';
+        document.getElementById('aiCadVisualConcept').value = 'Isotipo oficial TSolutions IPIDD: hexágono regular exterior #121722 con borde Naranja Energy #FF6B00 (clip-path de 6 vértices), vórtice interior en Aqua Turquesa #00E5FF y ligadura de corte técnico.';
+      } else if (presetKey === 'tsolutions_imago') {
+        selectAiDesignType('IMAGOTIPO');
+        document.getElementById('aiCadBrandName').value = 'TSOLUTIONS IPIDD';
+        document.getElementById('aiCadIndustry').value = 'Tecnologías y Soluciones Integrales IPIDD S.A.S. de C.V.';
+        document.getElementById('aiCadPalette').value = 'TSOLUTIONS_OFFICIAL';
+        document.getElementById('aiCadGeoStyle').value = 'GOLDEN_RATIO';
+        document.getElementById('aiCadVisualConcept').value = 'Imagotipo corporativo en formato horizontal 1200x450. Isotipo hexagonal a la izquierda con radio áureo y Wordmark tipográfico en Bruno Ace a la derecha con lema institucional oficial.';
+      } else if (presetKey === 'cyber_logo') {
+        selectAiDesignType('LOGOTIPO');
+        document.getElementById('aiCadBrandName').value = 'NEXUS SRE';
+        document.getElementById('aiCadIndustry').value = 'Ciberseguridad y Monitoreo de Alta Disponibilidad';
+        document.getElementById('aiCadPalette').value = 'CYBER_NEON';
+        document.getElementById('aiCadGeoStyle').value = 'ISOMETRIC_CIRCUITS';
+        document.getElementById('aiCadVisualConcept').value = 'Marca tipográfica pura con efecto glitch y líneas de circuito impreso, letras vectorizadas con filetes de neón y bajada técnica de ingeniería.';
+      } else if (presetKey === 'shield_isologo') {
+        selectAiDesignType('ISOLOGO');
+        document.getElementById('aiCadBrandName').value = 'AYALA FERRETODO';
+        document.getElementById('aiCadIndustry').value = 'Suministros Industriales & Herramientas de Alta Resistencia';
+        document.getElementById('aiCadPalette').value = 'GOLD_PRESTIGE';
+        document.getElementById('aiCadGeoStyle').value = 'BAUHAUS_MINIMAL';
+        document.getElementById('aiCadVisualConcept').value = 'Escudo de protección industrial hexagonal con martillo y engranaje estilizados en el núcleo, tipografía perimetral y sello de calidad verificada 2026.';
+      }
+      showToast('Preset de arquitectura cargado.');
+    }
+
+    async function generateAiCadSvg() {
+      const designType = document.getElementById('aiCadDesignType').value;
+      const brandName = document.getElementById('aiCadBrandName').value.trim();
+      const industry = document.getElementById('aiCadIndustry').value.trim();
+      const visualConcept = document.getElementById('aiCadVisualConcept').value.trim();
+      const colorPalette = document.getElementById('aiCadPalette').value;
+      const geometricStyle = document.getElementById('aiCadGeoStyle').value;
+      const includeGuides = document.getElementById('aiCadGuides').checked;
+      const btn = document.getElementById('btnRunAiCad');
+
+      if (!brandName || !visualConcept) {
+        alert('Por favor ingresa el nombre de la marca y el concepto visual.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span style="display:inline-block; animation:spin 1s linear infinite;">⚙️</span> <span>Construyendo Código SVG con Agente CAD...</span>`;
+
+      try {
+        const res = await fetch('/api/v1/ai/cad/generate-svg', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            designType,
+            brandName,
+            industry,
+            visualConcept,
+            colorPalette,
+            geometricStyle,
+            includeConstructionGuides: includeGuides
+          })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `Error HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const design = data.design;
+        latestAiCadDesign = design;
+
+        // 1. Inyectar SVG en el viewport de visualización principal
+        renderPreview(design.svgCode);
+
+        // 2. Actualizar editor de código SVG directo
+        document.getElementById('rawSvgEditor').value = design.svgCode;
+
+        // 3. Registrar como nuevo elemento en la base de datos de la plataforma CAD
+        const newId = 'ai_' + design.designType.toLowerCase() + '_' + Date.now();
+        db[newId] = {
+          name: `⚡ [${design.designType}] ${design.brandName}`,
+          docTitle: `${design.designType} // ${design.brandName.toUpperCase()}`,
+          docId: `CAD-TS-${Math.floor(1000 + Math.random() * 9000)}`,
+          wordmark: design.brandName,
+          descriptor: design.conceptRationale.slice(0, 45) + '...',
+          fontWordmark: 'Bruno Ace',
+          fontDescriptor: 'Space Grotesk',
+          trackWordmark: 0.1,
+          trackDesc: 0.2,
+          strokeWidth: 2,
+          colorStroke: design.colorPalette[0] || '#FF6B00',
+          colorDim: design.colorPalette[1] || '#00E5FF',
+          colorBg: design.colorPalette[2] || '#0A0D14',
+          svg: design.svgCode
+        };
+        activeId = newId;
+        saveDatabase();
+
+        // 4. Mostrar Memoria Técnica en el panel del agente
+        const resultCard = document.getElementById('aiCadResultCard');
+        resultCard.style.display = 'flex';
+        document.getElementById('aiCadResultBadge').innerText = design.designType;
+        document.getElementById('aiCadRationale').innerText = design.conceptRationale;
+        document.getElementById('aiCadFormulas').innerHTML = `<strong>📐 FÓRMULAS & COTAS:</strong><br>${design.geometricFormulas}<br><strong>VIEWBOX:</strong> ${design.viewBox}`;
+
+        const chipsContainer = document.getElementById('aiCadPaletteChips');
+        chipsContainer.innerHTML = (design.colorPalette || []).map(c => `
+          <div title="${c}" style="width:16px; height:16px; border-radius:3px; background:${c}; border:1px solid rgba(255,255,255,0.2);"></div>
+        `).join('');
+
+        // 5. Ajustar fondo a Dark Tech para máxima fidelidad
+        setBg('dark');
+        showToast(`✓ ${design.designType} generado y renderizado con éxito en SVG puro.`);
+      } catch (err) {
+        console.error('[AI CAD Agent Error]:', err);
+        alert('Error al generar diseño CAD: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>⚡ CONSTRUIR IDENTIDAD EN CÓDIGO SVG</span>`;
+      }
+    }
+
+    function downloadCurrentAiSvg() {
+      if (!latestAiCadDesign || !latestAiCadDesign.svgCode) {
+        showToast('No hay diseño activo del agente para descargar.');
+        return;
+      }
+      const blob = new Blob([latestAiCadDesign.svgCode], { type: 'image/svg+xml;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      const safeName = (latestAiCadDesign.brandName || 'diseno').replace(/[^a-zA-Z0-9_\-]/g, '_');
+      a.download = `${safeName}_${latestAiCadDesign.designType}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Archivo .SVG descargado.');
+    }
+
+    function copyCurrentAiSvg() {
+      if (!latestAiCadDesign || !latestAiCadDesign.svgCode) {
+        showToast('No hay diseño activo para copiar.');
+        return;
+      }
+      navigator.clipboard.writeText(latestAiCadDesign.svgCode).then(() => {
+        showToast('¡Código SVG copiado al portapapeles!');
+      }).catch(() => {
+        showToast('Error al copiar.');
+      });
     }
 
     function setBg(type) {

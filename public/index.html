@@ -3471,6 +3471,7 @@ Process completed with exit code 1.</textarea>
     let currentPresentationSlides = [];
     let currentPresentationIndex = 0;
     let currentPresentationTitle = '';
+    let currentPresentationDeckId = '';
 
     async function triggerAISlideEngine() {
       document.getElementById('modal-title').innerText = '📽️ AI Slide Engine: Diapositivas Ejecutivas TSolutions IPIDD';
@@ -3552,6 +3553,7 @@ Process completed with exit code 1.</textarea>
         const data = await res.json();
         currentPresentationSlides = data.slides || [];
         currentPresentationTitle = data.deck.title;
+        currentPresentationDeckId = data.deck.id;
         currentPresentationIndex = 0;
 
         box.innerHTML = `
@@ -3567,8 +3569,8 @@ Process completed with exit code 1.</textarea>
                 <button onclick="launchFullscreenPresenter()" style="background:#FF6B00; color:#0A0D14; border:none; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.75rem; cursor:pointer;">
                   ▶ Presentar [F]
                 </button>
-                <button onclick="window.print()" style="background:rgba(255,255,255,0.1); color:#FFF; border:1px solid rgba(255,255,255,0.2); padding:6px 12px; border-radius:20px; font-size:0.75rem; cursor:pointer;">
-                  🖨 PDF
+                <button onclick="exportPresentationToPDF('${data.deck.id}')" style="background:rgba(0,229,255,0.15); color:#00E5FF; border:1px solid rgba(0,229,255,0.4); padding:6px 12px; border-radius:20px; font-size:0.75rem; font-weight:700; cursor:pointer;">
+                  🖨️ Exportar PDF 16:9
                 </button>
               </div>
             </div>
@@ -3651,6 +3653,7 @@ Process completed with exit code 1.</textarea>
         const data = await res.json();
         currentPresentationSlides = data.slides || [];
         currentPresentationTitle = data.deck.title;
+        currentPresentationDeckId = deckId;
         currentPresentationIndex = 0;
 
         box.innerHTML = `
@@ -3661,8 +3664,8 @@ Process completed with exit code 1.</textarea>
                 <button onclick="launchFullscreenPresenter()" style="background:#FF6B00; color:#0A0D14; border:none; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.75rem; cursor:pointer;">
                   ▶ Presentar [F]
                 </button>
-                <button onclick="window.print()" style="background:rgba(255,255,255,0.1); color:#FFF; border:1px solid rgba(255,255,255,0.2); padding:6px 12px; border-radius:20px; font-size:0.75rem; cursor:pointer;">
-                  🖨 PDF
+                <button onclick="exportPresentationToPDF('${deckId}')" style="background:rgba(0,229,255,0.15); color:#00E5FF; border:1px solid rgba(0,229,255,0.4); padding:6px 12px; border-radius:20px; font-size:0.75rem; font-weight:700; cursor:pointer;">
+                  🖨️ Exportar PDF 16:9
                 </button>
               </div>
             </div>
@@ -3838,6 +3841,62 @@ Process completed with exit code 1.</textarea>
           </div>
         </div>
       `;
+    }
+
+    // EXPORTADOR MULTI-PÁGINA 16:9 A PDF
+    function exportPresentationToPDF(deckId) {
+      const targetId = deckId || currentPresentationDeckId;
+      if (targetId) {
+        window.open(`/api/v1/presentations/${targetId}/export-pdf`, '_blank');
+        addLog(`[PDF EXPORT] Abriendo vista de exportación 16:9 en alta fidelidad (Mazo: ${targetId})...`, 'pulse');
+        return;
+      }
+
+      if (currentPresentationSlides.length === 0) {
+        alert('No hay diapositivas disponibles para exportar.');
+        return;
+      }
+
+      const printWin = window.open('', '_blank');
+      if (!printWin) {
+        alert('Por favor habilita las ventanas emergentes (popups) para exportar el PDF.');
+        return;
+      }
+
+      const slidesHTML = currentPresentationSlides.map((s, idx) => `
+        <div style="width:100vw; height:100vh; max-width:100vw; max-height:100vh; aspect-ratio:16/9; background:#0A0D14; page-break-after:always; break-after:page; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; -webkit-print-color-adjust:exact; print-color-adjust:exact;">
+          ${renderSlideHTML(s, idx + 1, currentPresentationSlides.length)}
+        </div>
+      `).join('');
+
+      printWin.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <title>${currentPresentationTitle || 'Presentación Ejecutiva TSolutions IPIDD'}</title>
+          <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+          <style>
+            @page { size: landscape; margin: 0; }
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body { background: #0A0D14; color: #FFF; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            @media print {
+              .no-print { display: none !important; }
+              body { background: #0A0D14 !important; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="no-print" style="position:sticky; top:0; z-index:999; background:#121722; padding:12px 24px; border-bottom:1px solid #FF6B00; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-family:'Bruno Ace', sans-serif; color:#FFF; font-size:14px;">${currentPresentationTitle || 'Presentación Ejecutiva'} — Vista 16:9</span>
+            <button onclick="window.print()" style="background:#FF6B00; color:#0A0D14; border:none; padding:8px 18px; border-radius:20px; font-weight:800; cursor:pointer;">🖨️ Imprimir / Guardar como PDF</button>
+          </div>
+          ${slidesHTML}
+        </body>
+        </html>
+      `);
+      printWin.document.close();
+      addLog(`[PDF EXPORT] Ventana de exportación generada en memoria (${currentPresentationSlides.length} diapositivas).`, 'pulse');
     }
 
     // REPRODUCTOR PANTALLA COMPLETA
