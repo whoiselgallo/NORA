@@ -67,6 +67,18 @@ export function createMarketingRouter(
     }
   );
 
+  // 2b. Listar campañas y métricas de despacho
+  router.get('/campaigns', async (_req: Request, res: Response) => {
+    try {
+      const result = await pool.query(
+        `SELECT * FROM marketing_campaigns ORDER BY created_at DESC LIMIT 50`
+      );
+      res.json(result.rows);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   // 3. Suscripción de contacto a lista de audiencia (validación estricta de email)
   router.post(
     '/contacts/subscribe',
