@@ -25,8 +25,8 @@ export function requireWorkspace(pool: Pool) {
 
       const workspaceId = headerWs || queryWs || userClaimWs || DEFAULT_WORKSPACE_ID;
 
-      // Validación de formato UUID
-      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      // Validación de formato UUID (soporta versiones 1-5 y UUIDs especiales como DEFAULT_WORKSPACE_ID)
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if (!uuidRegex.test(workspaceId)) {
         res.status(400).json({
           error: 'Invalid workspace ID format. Must be a valid UUID.'
