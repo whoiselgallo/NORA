@@ -19,10 +19,16 @@ import {
   NexusQuerySchema
 } from '../validation/schemas';
 
-// Configuración de Multer para almacenamiento seguro en disco con límite de 25 MB
-const uploadDir = path.join(process.cwd(), 'uploads', 'documents');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+import os from 'os';
+
+// Configuración de Multer para almacenamiento seguro (compatible con entornos serverless /tmp)
+const uploadDir = path.join(os.tmpdir(), 'uploads', 'documents');
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (dirErr: any) {
+  console.warn('Notice: upload directory deferred/inaccessible:', dirErr.message);
 }
 
 const storage = multer.diskStorage({

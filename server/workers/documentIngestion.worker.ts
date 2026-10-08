@@ -15,7 +15,7 @@ export interface DocumentIngestionJobData {
 
 export function createDocumentIngestionQueue(redisUrl?: string): Queue<DocumentIngestionJobData> {
   const connectionUrl = redisUrl || process.env.REDIS_URL || 'redis://127.0.0.1:6379';
-  return new Queue<DocumentIngestionJobData>('nexus-doc-ingestion-queue', {
+  const queue = new Queue<DocumentIngestionJobData>('nexus-doc-ingestion-queue', {
     connection: { url: connectionUrl },
     defaultJobOptions: {
       attempts: 3,
@@ -24,6 +24,10 @@ export function createDocumentIngestionQueue(redisUrl?: string): Queue<DocumentI
       removeOnFail: false
     }
   });
+  queue.on('error', (err) => {
+    console.warn('BullMQ nexus-doc-ingestion-queue connection warning:', err.message);
+  });
+  return queue;
 }
 
 export function createDocumentIngestionWorker(

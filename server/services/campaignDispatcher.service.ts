@@ -50,6 +50,9 @@ export class CampaignDispatcherService {
         removeOnFail: false
       }
     });
+    this.batchQueue.on('error', (err) => {
+      console.warn('BullMQ email-marketing-batch-queue connection warning:', err.message);
+    });
   }
 
   public getQueue(): Queue<EmailBatchJobData> {
