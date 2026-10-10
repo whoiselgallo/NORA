@@ -294,6 +294,43 @@ export const MasterWebhookPayloadSchema = z.object({
   isOverdue: z.boolean().optional()
 });
 
+// Subdominios Hijos Integrados al Webhook Master
+export const SupportedChildSubdomainsEnum = z.enum([
+  'vc.tsolutionsipidd.com',
+  'tsolutionsipidd.com',
+  'admin.lacuevadelguero.com',
+  's.tsolutionsipidd.com',
+  'm.tsolutionsipidd.com',
+  'lacuevadelguero.com',
+  's.lacuevadelguero.com'
+]);
+
+export const ChildSubdomainKeyEnum = z.enum([
+  'vc',
+  'main_tsolutions',
+  'admin_lacueva',
+  's_tsolutions',
+  'm_tsolutions',
+  'main_lacueva',
+  's_lacueva'
+]);
+
+export const ChildWebhookPayloadSchema = z.object({
+  domain: SupportedChildSubdomainsEnum.optional(),
+  subdomain_key: ChildSubdomainKeyEnum.optional(),
+  event: z.string().optional(),
+  event_type: z.string().optional(),
+  timestamp: z.string().optional(),
+  source: z.string().optional(),
+  workspace_id: z.string().uuid().optional(),
+  project_id: z.string().uuid().optional(),
+  signature: z.string().optional(),
+  data: z.record(z.unknown()).optional(),
+  payload: z.record(z.unknown()).optional()
+}).passthrough();
+
+export type ChildWebhookPayload = z.infer<typeof ChildWebhookPayloadSchema>;
+
 // DMAIC & OPEX Corrective Action Schemas
 export const UpdateDmaicPhaseSchema = z.object({
   charter_problem_statement: z.string().optional(),

@@ -5,6 +5,7 @@ import { BlueprintEngineService } from '../services/blueprintEngine.service';
 import { TaskManagerService } from '../services/taskManager.service';
 import { GitHubWebhookHandler } from '../webhooks/github.handler';
 import { MasterWebhookHandler } from '../webhooks/master.handler';
+import { ChildDomainWebhooksHandler } from '../webhooks/childDomains.handler';
 import { CampaignDispatcherService } from '../services/campaignDispatcher.service';
 import { DagCacheService } from '../services/dagCache.service';
 import { CalendarService } from '../services/calendar.service';
@@ -43,6 +44,7 @@ import {
   CreateNoteSchema,
   UpdateNoteSchema,
   MasterWebhookPayloadSchema,
+  ChildWebhookPayloadSchema,
   UpdateDmaicPhaseSchema,
   ApproveTollgateSchema,
   CreateCorrectiveActionSchema,
@@ -73,6 +75,7 @@ export function createApiRouter(
   const projectClosureService = new ProjectClosureService(pool, io, cache);
   const nexusBrainService = new NexusBrainService(pool, io);
   const nexusOnboardingService = new NexusOnboardingService(pool, io);
+  const childWebhooksHandler = new ChildDomainWebhooksHandler(pool, io, masterWebhookHandler);
 
   // Middleware global de aislamiento multi-tenant de Workspace
   router.use(requireWorkspace(pool));
@@ -80,11 +83,73 @@ export function createApiRouter(
   // ==========================================================================
   // WEBHOOKS
   // ==========================================================================
+  // Catálogo de subdominios hijos y rutas de ingesta registradas
+  router.get('/webhooks/subdomains', childWebhooksHandler.listChildSubdomains);
+
+  // Gateway unificado inteligente (enrutamiento por host / header / payload)
+  router.post(
+    '/webhooks/gateway',
+    validateBody(ChildWebhookPayloadSchema),
+    childWebhooksHandler.handleGatewayWebhook
+  );
+
   // Webhook Master centralizado para telemetría CI/CD y alertas de calendario
   router.post(
     '/webhooks/master/:routingKey',
     validateBody(MasterWebhookPayloadSchema),
     masterWebhookHandler.handleMasterWebhook
+  );
+
+  // --------------------------------------------------------------------------
+  // WEBHOOKS HIJOS DEDICADOS POR SUBDOMINIO
+  // --------------------------------------------------------------------------
+  // 1. vc.tsolutionsipidd.com (Videoconferencia, Salas Virtuales, WebRTC)
+  router.post(
+    '/webhooks/child/vc',
+    validateBody(ChildWebhookPayloadSchema),
+    childWebhooksHandler.handleVcWebhook
+  );
+
+  // 2. tsolutionsipidd.com (Dominio Principal Corporativo & Leads)
+  router.post(
+    '/webhooks/child/main',
+    validateBody(ChildWebhookPayloadSchema),
+    childWebhooksHandler.handleMainTsolutionsWebhook
+  );
+
+  // 3. admin.lacuevadelguero.com (Panel Administrativo & POS)
+  router.post(
+    '/webhooks/child/lacueva-admin',
+    validateBody(ChildWebhookPayloadSchema),
+    childWebhooksHandler.handleAdminLaCuevaWebhook
+  );
+
+  // 4. s.tsolutionsipidd.com (Storage, Assets, CDN & Microservicios)
+  router.post(
+    '/webhooks/child/s-tsolutions',
+    validateBody(ChildWebhookPayloadSchema),
+    childWebhooksHandler.handleStorageTsolutionsWebhook
+  );
+
+  // 5. m.tsolutionsipidd.com (Móvil, PWA y Mesa de Trabajo)
+  router.post(
+    '/webhooks/child/m-tsolutions',
+    validateBody(ChildWebhookPayloadSchema),
+    childWebhooksHandler.handleMobileTsolutionsWebhook
+  );
+
+  // 6. lacuevadelguero.com (Portal Comercial La Cueva del Güero)
+  router.post(
+    '/webhooks/child/lacueva',
+    validateBody(ChildWebhookPayloadSchema),
+    childWebhooksHandler.handleMainLaCuevaWebhook
+  );
+
+  // 7. s.lacuevadelguero.com (Sucursales, Delivery & Pasarelas de Pago)
+  router.post(
+    '/webhooks/child/lacueva-s',
+    validateBody(ChildWebhookPayloadSchema),
+    childWebhooksHandler.handleBranchesLaCuevaWebhook
   );
 
   // Webhook GitHub Telemetry
