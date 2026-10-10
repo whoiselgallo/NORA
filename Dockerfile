@@ -29,11 +29,16 @@ COPY public/ ./public/
 RUN npm run build
 
 # ------------------------------------------------------------------------------
-# FASE 2: RUNNER (PRODUCCIÓN & SEGURIDAD)
+# FASE 2: RUNNER (PRODUCCIÓN, SEGURIDAD & ZERO CVEs)
 # ------------------------------------------------------------------------------
 FROM node:20-alpine AS runner
 
 WORKDIR /app
+
+# Aplicar actualizaciones de parches de seguridad y certificados limpios
+RUN apk --no-cache upgrade && \
+    apk --no-cache add ca-certificates && \
+    rm -rf /var/cache/apk/*
 
 # Definir variables de entorno de producción
 ENV NODE_ENV=production
@@ -56,12 +61,12 @@ COPY --from=builder --chown=appuser:nodejs /app/scripts ./scripts
 # Cambiar contexto al usuario seguro no-root
 USER appuser
 
-# Exponer el puerto de servicio HTTP / WebSockets / Cloud Run
+# Exponer el puerto de servicio HTTP / WebSockets
 EXPOSE 8080
 
-# Healthcheck para monitorización de salud del contenedor
+# Healthcheck nativo ultraligero contra endpoint /health
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/v1/workspaces || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
 
 # Comando de arranque del servidor unificado (Express, Socket.IO y Workers BullMQ)
 CMD ["node", "dist/index.js"]

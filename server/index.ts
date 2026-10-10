@@ -11,6 +11,8 @@ import { DagCacheService } from './services/dagCache.service';
 import { createEmailBatchWorker } from './workers/emailQueue.worker';
 import { createCalendarAlertScheduler } from './workers/calendarAlert.worker';
 import { createNexusKnowledgeWorker } from './workers/nexusKnowledge.worker';
+import { createStructuredLogger, getSloMetricsSnapshot } from './middleware/structuredLogger.middleware';
+import { DiscordAlertsService } from './services/discordAlerts.service';
 
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
@@ -35,6 +37,27 @@ const pool = new Pool({
 // Inicializar capa de caché Redis del DAG con soporte multi-workspace
 const dagCache = new DagCacheService();
 
+// Middleware de Logs Estructurados para Google Cloud Logging y Cloud Trace (Meta 5)
+app.use(createStructuredLogger());
+
+// Health check para Google Cloud Run, Kubernetes y Uptime Checks (Meta 5)
+app.get('/health', (_req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    service: 'tsolutions-nexus-platform',
+    version: '1.0.0'
+  });
+});
+
+// Endpoint de métricas de confiabilidad SLI / SLO en tiempo real (Meta 5)
+app.get('/api/v1/metrics/slo', (_req: Request, res: Response) => {
+  res.status(200).json({
+    slo_target: '99.9%',
+    metrics: getSloMetricsSnapshot()
+  });
+});
+
 // Middleware rawBody para validación HMAC de webhooks de GitHub
 app.use(cors());
 app.use(
@@ -55,8 +78,18 @@ app.use('/v1', apiRouter);
 app.use('/api', apiRouter);
 
 // Middleware global de captura de errores para garantizar respuestas JSON
-app.use((err: any, _req: Request, res: Response, _next: any) => {
+app.use((err: any, req: Request, res: Response, _next: any) => {
   console.error('[API Unhandled Error]:', err);
+  
+  // Despacho no bloqueante de alertas SRE a Discord / Slack ($0/mes)
+  DiscordAlertsService.getInstance()
+    .sendErrorAlert(err, {
+      route: req.originalUrl || req.path,
+      method: req.method,
+      ip: req.ip
+    })
+    .catch(() => {});
+
   res.status(err.status || 500).json({
     error: err.message || 'Internal Server Error',
     code: err.code || 'SERVER_ERROR'
@@ -119,5 +152,5 @@ if (!process.env.VERCEL) {
   });
 }
 
-export { app, server, pool, io, dagCache };
+export { app, server, pool, io, dagCache, DiscordAlertsService };
 export default app;

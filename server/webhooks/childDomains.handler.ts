@@ -279,6 +279,45 @@ export class ChildDomainWebhooksHandler {
   };
 
   /**
+   * Diagnóstico y Verificación de Estado (GET / HEAD Health Check) para Webhooks Hijos
+   */
+  public handleChildWebhookHealth = async (req: Request, res: Response): Promise<void> => {
+    const rawChildKey = req.params.childKey;
+    const childKey = (Array.isArray(rawChildKey) ? rawChildKey[0] : rawChildKey || '').toLowerCase();
+    const matched = Object.values(REGISTERED_CHILD_SUBDOMAINS).find(
+      s => s.endpoint_path.toLowerCase().endsWith(childKey) || s.subdomain_key.toLowerCase() === childKey
+    );
+
+    if (matched) {
+      res.status(200).json({
+        status: 'online',
+        service: 'TSolutions Child Webhook Ingestion Engine',
+        domain: matched.domain,
+        subdomain_key: matched.subdomain_key,
+        display_name: matched.display_name,
+        purpose: matched.purpose,
+        endpoint_path: matched.endpoint_path,
+        accepted_methods: ['POST'],
+        expected_content_type: 'application/json',
+        sample_payload: {
+          event: 'TEST_PING',
+          timestamp: new Date().toISOString(),
+          data: { ping: true }
+        }
+      });
+      return;
+    }
+
+    res.status(200).json({
+      status: 'online',
+      service: 'TSolutions Child Webhook Ingestion Engine',
+      accepted_methods: ['POST'],
+      expected_content_type: 'application/json',
+      registered_subdomains: Object.keys(REGISTERED_CHILD_SUBDOMAINS)
+    });
+  };
+
+  /**
    * Registro en Neon DB y delegación directa al Webhook Master
    */
   private async processAndDelegate(

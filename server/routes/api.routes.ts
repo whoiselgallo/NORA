@@ -26,6 +26,8 @@ import { createAuthRouter } from './auth.routes';
 import { authenticateNeonAuth, requireRole } from '../middleware/auth.middleware';
 import { requireWorkspace, DEFAULT_WORKSPACE_ID, withWorkspaceClient } from '../middleware/workspace.middleware';
 import { validateBody } from '../middleware/validate.middleware';
+import { createWebhookRateLimiter } from '../middleware/webhookSecurity.middleware';
+import { WebhookQueueService } from '../services/webhookQueue.service';
 import {
   TaskCreateSchema,
   TaskStatusUpdateSchema,
@@ -76,15 +78,34 @@ export function createApiRouter(
   const nexusBrainService = new NexusBrainService(pool, io);
   const nexusOnboardingService = new NexusOnboardingService(pool, io);
   const childWebhooksHandler = new ChildDomainWebhooksHandler(pool, io, masterWebhookHandler);
+  const webhookQueueService = new WebhookQueueService(pool, io);
+  const webhookRateLimiter = createWebhookRateLimiter({ windowMs: 60000, maxRequests: 120 });
 
   // Middleware global de aislamiento multi-tenant de Workspace
   router.use(requireWorkspace(pool));
 
   // ==========================================================================
-  // WEBHOOKS
+  // WEBHOOKS (CON RATE LIMITING Y MONITOREO DE COLA ASÍNCRONA)
   // ==========================================================================
+  router.use('/webhooks', webhookRateLimiter);
+
   // Catálogo de subdominios hijos y rutas de ingesta registradas
   router.get('/webhooks/subdomains', childWebhooksHandler.listChildSubdomains);
+
+  // TS-WH-08 & TS-WH-10: Métricas en vivo de cola de despacho y Dead Letter Queue (DLQ)
+  router.get('/webhooks/queue/stats', (_req, res) => {
+    res.json(webhookQueueService.getStats());
+  });
+
+  // TS-WH-07 & TS-WH-10: Replay de evento fallido en Dead Letter Queue
+  router.post('/webhooks/dlq/:dlqId/replay', (req, res) => {
+    const job = webhookQueueService.replayDlqEntry(req.params.dlqId);
+    if (!job) {
+      res.status(404).json({ error: 'Registro DLQ no encontrado' });
+      return;
+    }
+    res.json({ success: true, message: 'Evento reencolado desde la DLQ', job });
+  });
 
   // Gateway unificado inteligente (enrutamiento por host / header / payload)
   router.post(
@@ -151,6 +172,9 @@ export function createApiRouter(
     validateBody(ChildWebhookPayloadSchema),
     childWebhooksHandler.handleBranchesLaCuevaWebhook
   );
+
+  // Verificación de estado, diagnóstico e inspección (GET / HEAD) para cualquier webhook hijo
+  router.get('/webhooks/child/:childKey', childWebhooksHandler.handleChildWebhookHealth);
 
   // Webhook GitHub Telemetry
   router.post('/telemetry/github', webhookHandler.handleWebhook);

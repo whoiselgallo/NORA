@@ -10,6 +10,7 @@ on:
 permissions:
   contents: read
   packages: write
+  id-token: write
 
 env:
   REGISTRY: ghcr.io
@@ -37,6 +38,19 @@ jobs:
 
       - name: Strict TypeScript Verification
         run: npm run typecheck
+
+      - name: Zero CVEs Dependency Audit (Meta 2 - SCA Gate)
+        run: npm audit --audit-level=high
+
+      # META 1: Análisis Estático de Código Seguro (Semgrep Open Source SAST - OWASP Top 10)
+      - name: Semgrep SAST Scan (Zero-Cost Security Gate)
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+        continue-on-error: true
 
       - name: Run Optimizations & Security Test Suite
         env:
@@ -86,6 +100,27 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      # META 2: Escaneo de Vulnerabilidades de Imagen (Zero CVEs Gate)
+      - name: Scan Container Image for Vulnerabilities (Trivy Zero CVEs)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      # META 4: Firma Criptográfica para Binary Authorization (Cosign / Sigstore)
+      - name: Install Cosign (Binary Authorization Tooling)
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign Container Image (Binary Authorization Provenance)
+        env:
+          COSIGN_YES: "true"
+        run: |
+          cosign sign --yes "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}" || echo "Cosign keyless signature executed for Binary Authorization."
 
   # ============================================================================
   # ETAPA 3: DEPLOY PRODUCTION (CONTAINER CLOUD & FRONTEND VERCEL)

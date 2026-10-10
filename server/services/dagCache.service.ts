@@ -40,34 +40,45 @@ export interface ProjectWorkflowDAG {
 export class DagCacheService {
   private redis: Redis | null = null;
   private isConnected: boolean = false;
+  private memoryCache: Map<string, { data: string; expiresAt: number }> = new Map();
   private readonly defaultTtlSeconds: number = 86400; // 24 horas
 
   constructor(redisUrl?: string) {
-    const url = redisUrl || process.env.REDIS_URL || 'redis://127.0.0.1:6379';
-    try {
-      this.redis = new Redis(url, {
-        lazyConnect: true,
-        maxRetriesPerRequest: 1,
-        connectTimeout: 2000,
-        enableOfflineQueue: false,
-        retryStrategy: (times) => {
-          if (times > 3) return null;
-          return Math.min(times * 500, 2000);
-        }
-      });
+    const url = redisUrl || process.env.UPSTASH_REDIS_URL || process.env.REDIS_URL;
+    
+    if (url) {
+      try {
+        const isTls = url.startsWith('rediss://');
+        this.redis = new Redis(url, {
+          lazyConnect: true,
+          maxRetriesPerRequest: 1,
+          connectTimeout: 2500,
+          enableOfflineQueue: false,
+          tls: isTls ? { rejectUnauthorized: false } : undefined,
+          retryStrategy: (times) => {
+            if (times > 3) return null;
+            return Math.min(times * 500, 2000);
+          }
+        });
 
-      this.redis.on('connect', () => {
-        this.isConnected = true;
-      });
+        this.redis.on('connect', () => {
+          this.isConnected = true;
+          console.log('✓ DagCacheService connected to Redis / Upstash.');
+        });
 
-      this.redis.on('error', () => {
+        this.redis.on('error', () => {
+          this.isConnected = false;
+        });
+
+        this.redis.connect().catch(() => {
+          this.isConnected = false;
+        });
+      } catch {
         this.isConnected = false;
-      });
-
-      this.redis.connect().catch(() => {
-        this.isConnected = false;
-      });
-    } catch {
+        this.redis = null;
+      }
+    } else {
+      // Sin URL de Redis configurada: Operación 100% en memoria ($0/mes, Zero-Cost)
       this.isConnected = false;
       this.redis = null;
     }
@@ -81,25 +92,45 @@ export class DagCacheService {
   }
 
   /**
-   * Consulta la caché en memoria del grafo DAG en Redis bajo ws:WORKSPACE_ID:project:PROJECT_ID:dag
+   * Consulta la caché en memoria del grafo DAG (Redis/Upstash con fallback a proceso)
    */
   public async getDag(
     projectId: string,
     workspaceId: string = DEFAULT_WORKSPACE_ID
   ): Promise<ProjectWorkflowDAG | null> {
-    if (!this.redis || !this.isConnected) return null;
+    const key = this.getKey(projectId, workspaceId);
 
-    try {
-      const data = await this.redis.get(this.getKey(projectId, workspaceId));
-      if (!data) return null;
-      return JSON.parse(data) as ProjectWorkflowDAG;
-    } catch {
-      return null;
+    // 1. Probar Redis / Upstash si está conectado
+    if (this.redis && this.isConnected) {
+      try {
+        const data = await this.redis.get(key);
+        if (data) {
+          return JSON.parse(data) as ProjectWorkflowDAG;
+        }
+      } catch {
+        // Fallback a memoria
+      }
     }
+
+    // 2. Fallback a caché en memoria de proceso ($0/mes, Zero-Cost)
+    const memEntry = this.memoryCache.get(key);
+    if (memEntry) {
+      if (Date.now() < memEntry.expiresAt) {
+        try {
+          return JSON.parse(memEntry.data) as ProjectWorkflowDAG;
+        } catch {
+          this.memoryCache.delete(key);
+        }
+      } else {
+        this.memoryCache.delete(key);
+      }
+    }
+
+    return null;
   }
 
   /**
-   * Guarda la topología del grafo DAG en Redis con TTL de 24 horas (86400s)
+   * Guarda la topología del grafo DAG en Redis/Upstash y memoria local con TTL
    */
   public async setDag(
     projectId: string,
@@ -107,35 +138,49 @@ export class DagCacheService {
     workspaceId: string = DEFAULT_WORKSPACE_ID,
     ttlSeconds: number = this.defaultTtlSeconds
   ): Promise<void> {
-    if (!this.redis || !this.isConnected) return;
+    const key = this.getKey(projectId, workspaceId);
+    const payload = JSON.stringify({
+      ...dag,
+      workspace_id: workspaceId,
+      cached_at: new Date().toISOString()
+    });
 
-    try {
-      const payload = JSON.stringify({
-        ...dag,
-        workspace_id: workspaceId,
-        cached_at: new Date().toISOString()
-      });
-      await this.redis.set(this.getKey(projectId, workspaceId), payload, 'EX', ttlSeconds);
-    } catch {
-      // Degradación elegante
+    // Guardar en memoria siempre como fallback instantáneo (0ms latency)
+    this.memoryCache.set(key, {
+      data: payload,
+      expiresAt: Date.now() + ttlSeconds * 1000
+    });
+
+    // Persistir en Redis / Upstash si está conectado
+    if (this.redis && this.isConnected) {
+      try {
+        await this.redis.set(key, payload, 'EX', ttlSeconds);
+      } catch {
+        // Degradación elegante
+      }
     }
   }
 
   /**
-   * Borrado atómico de la clave namespaciada en Redis.
+   * Borrado atómico de la clave namespaciada en Redis y memoria local
    */
   public async invalidateDag(
     projectId: string,
     workspaceId: string = DEFAULT_WORKSPACE_ID
   ): Promise<boolean> {
-    if (!this.redis || !this.isConnected) return false;
+    const key = this.getKey(projectId, workspaceId);
+    const deletedMem = this.memoryCache.delete(key);
 
-    try {
-      const deleted = await this.redis.del(this.getKey(projectId, workspaceId));
-      return deleted > 0;
-    } catch {
-      return false;
+    if (this.redis && this.isConnected) {
+      try {
+        const deleted = await this.redis.del(key);
+        return deleted > 0 || deletedMem;
+      } catch {
+        return deletedMem;
+      }
     }
+
+    return deletedMem;
   }
 
   public async invalidateProjectDag(
