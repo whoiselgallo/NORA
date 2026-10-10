@@ -1,5 +1,6 @@
 .vercel
 .env*
+!.env.example
 .vscode/
 Thumbs.db
 *.tmp
