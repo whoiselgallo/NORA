@@ -1482,20 +1482,42 @@
       color: #FF6B00;
     }
     .legal-doc-container {
-      max-height: 60vh;
+      flex: 1 1 auto;
+      min-height: 0;
       overflow-y: auto;
-      padding: 16px;
-      background: #0A0D14;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      padding: 20px 24px;
+      background: rgba(8, 12, 22, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
       color: #F8FAFC;
-      font-size: 0.85rem;
-      line-height: 1.6;
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    .legal-doc-container::-webkit-scrollbar {
+      width: 7px;
+    }
+    .legal-doc-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
+    }
+    .legal-doc-container::-webkit-scrollbar-thumb {
+      background: rgba(0, 242, 254, 0.45);
+      border-radius: 4px;
+    }
+    .legal-doc-container::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-cyan);
     }
     .legal-doc-container h4 {
-      color: #00E5FF;
-      margin: 16px 0 8px 0;
-      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent-cyan);
+      margin: 20px 0 8px 0;
+      font-family: var(--font-primary);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+    .legal-doc-container h4:first-child {
+      margin-top: 0;
     }
 
     /* =========================================================================
@@ -2993,17 +3015,17 @@
   <!-- ========================================================================= -->
   <!-- MODAL LEGAL 1: AVISO DE PRIVACIDAD INTEGRAL TSOLUTIONS IPIDD             -->
   <!-- ========================================================================= -->
-  <div class="modal-backdrop" id="privacy-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.94); backdrop-filter:blur(10px); z-index:100000; justify-content:center; align-items:center; padding:20px;">
-    <div style="width:100%; max-width:800px; background:#0D131F; border:1px solid #00E5FF; border-radius:16px; padding:28px; box-shadow:0 0 35px rgba(0,229,255,0.3); display:flex; flex-direction:column; max-height:90vh;">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:14px; margin-bottom:16px;">
+  <div class="modal-backdrop" id="privacy-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.75); backdrop-filter:blur(24px) saturate(190%); -webkit-backdrop-filter:blur(24px) saturate(190%); z-index:100000; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+    <div style="width:min(820px, 94vw); max-height:min(86vh, 720px); height:auto; background:rgba(10,15,28,0.75); backdrop-filter:blur(30px) saturate(190%); -webkit-backdrop-filter:blur(30px) saturate(190%); border:1px solid rgba(0,242,254,0.4); border-radius:18px; box-shadow:0 25px 60px -15px rgba(0,0,0,0.9), 0 0 35px -5px rgba(0,242,254,0.25); display:flex; flex-direction:column; overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding:18px 24px; flex-shrink:0;">
         <div>
-          <span style="font-size:0.7rem; font-family:var(--font-mono); color:#00E5FF;">MARCO NORMATIVO LFPDPPP & ESTÁNDARES INTERNACIONALES</span>
-          <h3 style="color:#FFF; font-family:'Space Grotesk', sans-serif; font-size:1.3rem;">Aviso de Privacidad Integral</h3>
+          <span style="font-size:0.7rem; font-family:var(--font-mono); color:var(--accent-cyan);">MARCO NORMATIVO LFPDPPP & ESTÁNDARES INTERNACIONALES</span>
+          <h3 style="color:#FFF; font-family:var(--font-primary); font-size:1.3rem; font-weight:900; margin:4px 0 0;">Aviso de Privacidad Integral</h3>
         </div>
-        <button onclick="closePrivacyModal()" style="background:transparent; border:none; color:#FFF; font-size:1.4rem; cursor:pointer;">✕</button>
+        <button onclick="closePrivacyModal()" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#FFF; font-size:1.2rem; cursor:pointer; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent-cyan)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">✕</button>
       </div>
 
-      <div class="legal-doc-container">
+      <div class="legal-doc-container" style="flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:20px 24px; margin:0; border:none; border-radius:0; background:transparent;">
         <h4>1. Identidad y Domicilio del Responsable</h4>
         <p><strong>TSolutions IPIDD</strong> (Tecnologías y Soluciones Integrales IPIDD S.A.S. de C.V.), con plataformas oficiales en <em>vc.tsolutionsipidd.com</em>, <em>identidad.tsolutionsipidd.com</em> y <em>www.tsolutionsipidd.com</em>, es el responsable del uso y protección de sus datos personales, y al respecto le informa lo siguiente de conformidad con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) y estándares globales de protección de la información.</p>
 
@@ -3045,8 +3067,8 @@
         <p style="margin-top:16px; font-size:0.75rem; color:#94A3B8;">Fecha de última actualización: Octubre 2026 • Versión 2026.1</p>
       </div>
 
-      <div style="margin-top:16px; text-align:right;">
-        <button onclick="closePrivacyModal()" class="btn-primary" style="padding:8px 20px;">
+      <div style="padding:14px 24px; border-top:1px solid rgba(255,255,255,0.08); background:rgba(6,9,15,0.5); display:flex; justify-content:flex-end; flex-shrink:0;">
+        <button onclick="closePrivacyModal()" class="btn-primary" style="padding:9px 24px; font-size:0.85rem;">
           <span>Entendido y Cerrar</span>
         </button>
       </div>
@@ -3056,17 +3078,17 @@
   <!-- ========================================================================= -->
   <!-- MODAL LEGAL 2: AVISO DE USO DE DATOS Y NUTRICIÓN DE CRM (vc.tsolutionsipidd.com) -->
   <!-- ========================================================================= -->
-  <div class="modal-backdrop" id="data-usage-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.94); backdrop-filter:blur(10px); z-index:100000; justify-content:center; align-items:center; padding:20px;">
-    <div style="width:100%; max-width:740px; background:#0D131F; border:1px solid #FF6B00; border-radius:16px; padding:28px; box-shadow:0 0 35px rgba(255,107,0,0.3); display:flex; flex-direction:column; max-height:90vh;">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:14px; margin-bottom:16px;">
+  <div class="modal-backdrop" id="data-usage-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.75); backdrop-filter:blur(24px) saturate(190%); -webkit-backdrop-filter:blur(24px) saturate(190%); z-index:100000; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+    <div style="width:min(820px, 94vw); max-height:min(86vh, 720px); height:auto; background:rgba(10,15,28,0.75); backdrop-filter:blur(30px) saturate(190%); -webkit-backdrop-filter:blur(30px) saturate(190%); border:1px solid rgba(255,107,0,0.4); border-radius:18px; box-shadow:0 25px 60px -15px rgba(0,0,0,0.9), 0 0 35px -5px rgba(255,107,0,0.25); display:flex; flex-direction:column; overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding:18px 24px; flex-shrink:0;">
         <div>
           <span style="font-size:0.7rem; font-family:var(--font-mono); color:#FF6B00;">DECLARACIÓN DE GRATUIDAD & RELACIONAMIENTO CRM</span>
-          <h3 style="color:#FFF; font-family:'Space Grotesk', sans-serif; font-size:1.3rem;">Términos de Acceso Libre y Nutrición de CRM</h3>
+          <h3 style="color:#FFF; font-family:var(--font-primary); font-size:1.3rem; font-weight:900; margin:4px 0 0;">Términos de Acceso Libre y Nutrición de CRM</h3>
         </div>
-        <button onclick="closeDataUsageModal()" style="background:transparent; border:none; color:#FFF; font-size:1.4rem; cursor:pointer;">✕</button>
+        <button onclick="closeDataUsageModal()" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#FFF; font-size:1.2rem; cursor:pointer; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; transition:all 0.2s;" onmouseover="this.style.borderColor='#FF6B00'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">✕</button>
       </div>
 
-      <div class="legal-doc-container">
+      <div class="legal-doc-container" style="flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:20px 24px; margin:0; border:none; border-radius:0; background:transparent;">
         <h4>1. Principio de Acceso Libre y Gratuidad</h4>
         <p>El acceso a <strong>Nexus Architect Suite</strong> es completamente libre y no genera cargo económico alguno, requerimiento de tarjeta de crédito ni compromiso forzoso de contratación para el usuario.</p>
 
@@ -3086,8 +3108,8 @@
         <p style="margin-top:16px; font-size:0.75rem; color:#94A3B8;">Plataformas Asociadas: vc.tsolutionsipidd.com • identidad.tsolutionsipidd.com • www.tsolutionsipidd.com</p>
       </div>
 
-      <div style="margin-top:16px; text-align:right;">
-        <button onclick="closeDataUsageModal()" class="btn-primary" style="padding:8px 20px; background:#FF6B00; border-color:#FF6B00;">
+      <div style="padding:14px 24px; border-top:1px solid rgba(255,255,255,0.08); background:rgba(6,9,15,0.5); display:flex; justify-content:flex-end; flex-shrink:0;">
+        <button onclick="closeDataUsageModal()" class="btn-primary" style="padding:9px 24px; font-size:0.85rem; background:#FF6B00; border-color:#FF6B00; box-shadow:0 4px 15px rgba(255,107,0,0.3);">
           <span>Aceptar y Regresar al Registro</span>
         </button>
       </div>
