@@ -1974,6 +1974,589 @@
       overflow-x: auto;
       margin: 10px 0;
     }
+
+    /* =========================================================================
+       DISEÑO MOBILE-FIRST, VENTANAS EMPAQUETADAS, TARJETAS MAGNÉTICAS & GLOW
+       ========================================================================= */
+
+    /* NAVBAR MINIMALISTA RESPONSIVA */
+    .top-nav {
+      padding: calc(var(--safe-top) + 10px) 16px 10px !important;
+      gap: 12px !important;
+    }
+    @media (min-width: 768px) {
+      .top-nav {
+        padding: calc(var(--safe-top) + 12px) 28px 12px !important;
+      }
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      min-width: 0;
+      flex: 1;
+    }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      background: #121A2B;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+    }
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      gap: 2px;
+    }
+    .brand-text h1 {
+      font-size: clamp(0.88rem, 2.8vw, 1.18rem) !important;
+      font-weight: 900 !important;
+      color: #FFF !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .brand-motto {
+      font-size: clamp(0.62rem, 1.8vw, 0.74rem);
+      color: #00E5FF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      opacity: 0.95;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+    .nav-functional-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* VENTANA MODULAR EMPAQUETADA */
+    .module-windows-hub {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 10px;
+    }
+    .window-frame {
+      background: rgba(13, 19, 31, 0.78);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(0, 229, 255, 0.28);
+      border-radius: 18px;
+      overflow: visible;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(0, 229, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    .window-frame-header {
+      background: rgba(18, 23, 34, 0.96);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px 18px 0 0;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .window-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .window-dot.red { background: #EF4444; box-shadow: 0 0 6px rgba(239, 68, 68, 0.7); }
+    .window-dot.yellow { background: #F59E0B; box-shadow: 0 0 6px rgba(245, 158, 11, 0.7); }
+    .window-dot.green { background: #10B981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.7); }
+
+    .window-title-badge {
+      font-family: var(--font-primary);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.03em;
+    }
+    .window-tabs-bar {
+      display: flex;
+      gap: 8px;
+      padding: 12px 18px 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      scrollbar-width: none;
+    }
+    .window-tabs-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .window-tab-pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.22s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+    }
+    .window-tab-pill:hover, .window-tab-pill.active {
+      background: rgba(0, 229, 255, 0.14);
+      border-color: #00E5FF;
+      color: #00E5FF;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+    }
+    .window-tab-pill.active.tab-orange {
+      background: rgba(255, 107, 0, 0.14);
+      border-color: #FF6B00;
+      color: #FF6B00;
+      box-shadow: 0 0 16px rgba(255, 107, 0, 0.3);
+    }
+    .window-tab-pill.active.tab-green {
+      background: rgba(16, 185, 129, 0.14);
+      border-color: #10B981;
+      color: #10B981;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
+    }
+    .window-tab-pill.active.tab-purple {
+      background: rgba(168, 85, 247, 0.14);
+      border-color: #A855F7;
+      color: #A855F7;
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.3);
+    }
+
+    /* GRID RESPONSIVO MOBILE-FIRST */
+    .mag-cards-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+    @media (min-width: 640px) {
+      .mag-cards-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        padding: 20px;
+      }
+    }
+    @media (min-width: 1024px) {
+      .mag-cards-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+        padding: 24px;
+      }
+    }
+    @media (min-width: 1400px) {
+      .mag-cards-container {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+      }
+    }
+
+    /* TARJETAS MAGNÉTICAS SENSIBLES AL PUNTERO CON GLOW */
+    .magnetic-module-card {
+      position: relative;
+      background: #121A2B;
+      border: 1px solid rgba(0, 229, 255, 0.22);
+      border-radius: 14px;
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s, box-shadow 0.25s;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 12px rgba(0, 229, 255, 0.08);
+      cursor: pointer;
+      overflow: visible;
+      will-change: transform, box-shadow;
+      transform-style: preserve-3d;
+    }
+    .magnetic-module-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        320px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+        rgba(0, 229, 255, 0.18),
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .magnetic-module-card:hover::before {
+      opacity: 1;
+    }
+    .magnetic-module-card:hover {
+      border-color: #00E5FF !important;
+      box-shadow: 
+        0 18px 45px -10px rgba(0, 0, 0, 0.85),
+        0 0 32px rgba(0, 229, 255, 0.38) !important;
+      transform: translateY(-5px);
+    }
+    .magnetic-module-card.glow-orange:hover {
+      border-color: #FF6B00 !important;
+      box-shadow: 
+        0 18px 45px -10px rgba(0, 0, 0, 0.85),
+        0 0 32px rgba(255, 107, 0, 0.38) !important;
+    }
+    .magnetic-module-card.glow-green:hover {
+      border-color: #10B981 !important;
+      box-shadow: 
+        0 18px 45px -10px rgba(0, 0, 0, 0.85),
+        0 0 32px rgba(16, 185, 129, 0.38) !important;
+    }
+    .magnetic-module-card.glow-purple:hover {
+      border-color: #A855F7 !important;
+      box-shadow: 
+        0 18px 45px -10px rgba(0, 0, 0, 0.85),
+        0 0 32px rgba(168, 85, 247, 0.38) !important;
+    }
+    .magnetic-module-card.glow-amber:hover {
+      border-color: #F59E0B !important;
+      box-shadow: 
+        0 18px 45px -10px rgba(0, 0, 0, 0.85),
+        0 0 32px rgba(245, 158, 11, 0.38) !important;
+    }
+
+    /* BADGES Y CABECERA DE TARJETA */
+    .mag-card-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-protocol {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      color: #00E5FF;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 190px;
+    }
+    .badge-protocol.orange {
+      background: rgba(255, 107, 0, 0.1);
+      border-color: rgba(255, 107, 0, 0.3);
+      color: #FF6B00;
+    }
+    .badge-protocol.green {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10B981;
+    }
+    .badge-protocol.purple {
+      background: rgba(168, 85, 247, 0.1);
+      border-color: rgba(168, 85, 247, 0.3);
+      color: #A855F7;
+    }
+
+    .btn-info-tooltip-trigger {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      color: #FFF;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-info-tooltip-trigger:hover {
+      background: #00E5FF;
+      color: #0A0D14;
+      box-shadow: 0 0 10px #00E5FF;
+    }
+
+    .mag-card-main {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .mag-card-icon-box {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .mag-card-title-group h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #FFF;
+      margin-bottom: 2px;
+      line-height: 1.25;
+    }
+    .mag-card-title-group p.sub {
+      font-size: 0.74rem;
+      color: #94A3B8;
+      font-family: var(--font-mono);
+    }
+    .mag-card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      flex-grow: 1;
+    }
+
+    /* TOOLTIP ENRIQUECIDO FLOTANTE / EXPANDIBLE */
+    .mag-card-tooltip {
+      position: absolute;
+      bottom: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      width: min(340px, 92vw);
+      background: rgba(10, 15, 28, 0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(0, 229, 255, 0.45);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 229, 255, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 999;
+    }
+    .magnetic-module-card:hover .mag-card-tooltip,
+    .magnetic-module-card.tooltip-open .mag-card-tooltip {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .mag-card-tooltip h4 {
+      font-family: var(--font-primary);
+      font-size: 0.84rem;
+      font-weight: 900;
+      color: #00E5FF;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tooltip-block {
+      margin-bottom: 8px;
+      font-size: 0.74rem;
+      line-height: 1.45;
+    }
+    .tooltip-block .label {
+      color: #FF6B00;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      display: block;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+    }
+    .tooltip-block .content {
+      color: #E2E8F0;
+    }
+
+    .mag-card-action-btn {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(2, 132, 199, 0.2));
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      color: #00E5FF;
+      font-family: var(--font-primary);
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      min-height: 42px;
+    }
+    .mag-card-action-btn:hover {
+      background: linear-gradient(135deg, #00E5FF, #0284C7);
+      color: #0A0D14;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+    }
+    .mag-card-action-btn.btn-orange {
+      border-color: rgba(255, 107, 0, 0.35);
+      color: #FF6B00;
+      background: rgba(255, 107, 0, 0.12);
+    }
+    .mag-card-action-btn.btn-orange:hover {
+      background: linear-gradient(135deg, #FF6B00, #E65100);
+      color: #FFF;
+      box-shadow: 0 0 20px rgba(255, 107, 0, 0.4);
+    }
+
+    /* INSTRUCTIVO CON MODALES TRANSPARENTES Y SLIDERS */
+    .instructivo-glass-box {
+      width: min(860px, 94vw);
+      max-height: 90vh;
+      max-height: 90dvh;
+      background: rgba(10, 15, 28, 0.76) !important;
+      backdrop-filter: blur(28px) saturate(200%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+      border: 1px solid rgba(0, 229, 255, 0.38) !important;
+      border-radius: 20px !important;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 45px rgba(0, 229, 255, 0.25) !important;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .instructivo-header {
+      padding: 18px 24px;
+      background: rgba(18, 23, 34, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .instructivo-step-progress {
+      display: flex;
+      gap: 8px;
+      padding: 14px 24px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .step-dot-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-dim);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .step-dot-chip.active {
+      background: rgba(0, 229, 255, 0.15);
+      border-color: #00E5FF;
+      color: #00E5FF;
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+    }
+    .instructivo-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .instructivo-slide {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .instructivo-slide.active {
+      display: flex;
+    }
+
+    /* SLIDERS INTERACTIVOS PARA CONEXIÓN EXTERIOR */
+    .slider-interactive-card {
+      background: rgba(18, 26, 43, 0.65);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    .slider-range-input {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: #0A0D14;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+    .slider-range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #00E5FF;
+      box-shadow: 0 0 14px #00E5FF;
+      cursor: pointer;
+      border: 2px solid #0A0D14;
+    }
+    .slider-metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+    }
+    .slider-metric-chip {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .slider-metric-chip .label {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      color: #94A3B8;
+      text-transform: uppercase;
+    }
+    .slider-metric-chip .value {
+      font-family: 'Bruno Ace', monospace;
+      font-size: 1.15rem;
+      color: #00E5FF;
+      margin-top: 3px;
+    }
+
+    .instructivo-footer {
+      padding: 16px 24px;
+      background: rgba(18, 23, 34, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
@@ -1983,8 +2566,8 @@
     <a href="#" class="brand-wrap">
       <div class="brand-logo">Δ</div>
       <div class="brand-text">
-        <h1>Nexus Architect Suite <span class="badge-tag">v2.5 Enterprise</span></h1>
-        <p>Ecosistema Centralizado de Arquitectura, Telemetría y Marketing</p>
+        <h1>TSolutions IPIDD • Nexus Architect Studio <span class="badge-tag">v2.5 Enterprise</span></h1>
+        <p>Tecnología instalada. Conocimiento transferido. Negocios escalados.</p>
       </div>
     </a>
 
@@ -2017,6 +2600,9 @@
 
     <!-- SECCIÓN: OPERACIONES Y CONSOLAS -->
     <div class="drawer-section-title">⚡ Ecosistema & Consolas</div>
+    <button class="drawer-link-btn" onclick="closeBurgerNav(); openInstructivoModal();" style="border-color: rgba(255, 107, 0, 0.4); background: rgba(255, 107, 0, 0.12); color: #FF6B00; font-weight: bold;">
+      <span>💡 Instructivo Interactivo (Sliders 3D)</span>
+    </button>
     <button class="drawer-link-btn" onclick="closeBurgerNav(); openNexusOnboardingModal();" style="border-color: rgba(0, 229, 255, 0.4); background: rgba(0, 229, 255, 0.1);">
       <span>🚀 Nexus Onboarding Console</span>
     </button>
@@ -2331,220 +2917,698 @@
       </div>
     </section>
 
-    <!-- MATRIZ DE MÓDULOS DEL PROYECTO -->
-    <section>
+    <!-- HUB DE VENTANAS MODULARES Y TARJETAS MAGNÉTICAS CON GLOW -->
+    <section class="module-windows-hub" id="module-windows-hub">
       <div class="section-header">
         <div class="section-title-wrap">
-          <h2><span>❖</span> Catálogo Central de Módulos y Herramientas</h2>
-          <p>Selecciona cualquier herramienta para acceder de forma instantánea a sus funciones operativas.</p>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span style="font-family:var(--font-mono); font-size:0.75rem; color:#FF6B00; text-transform:uppercase; letter-spacing:0.08em;">VENTANAS OPERATIVAS &amp; ARQUITECTURA DISTRIBUIDA</span>
+            <span class="badge-tag" style="background:rgba(0,229,255,0.15); color:#00E5FF; border:1px solid rgba(0,229,255,0.3); font-size:0.65rem;">18 MÓDULOS CONECTADOS</span>
+          </div>
+          <h2><span>❖</span> Ventanas de Trabajo Empaquetadas &amp; Tarjetas Magnéticas</h2>
+          <p>Módulos agrupados por dominios operacionales. Pasa el puntero para experimentar la física magnética con sombras radiantes (Glow), consulta el tooltip informativo o pulsa para orquestar la función objetivo.</p>
         </div>
-        <div class="quick-filter-bar">
-          <button class="filter-btn active" onclick="filterCards('all')">Todos (7)</button>
-          <button class="filter-btn" onclick="filterCards('core')">Ingeniería & DAG</button>
-          <button class="filter-btn" onclick="filterCards('ai')">IA & Directivas</button>
-          <button class="filter-btn" onclick="filterCards('marketing')">Marketing</button>
-          <button class="filter-btn" onclick="filterCards('commercial')">Comercial & ROI</button>
+
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button class="btn-primary" onclick="openInstructivoModal()" style="padding:8px 16px; font-size:0.8rem; background:#FF6B00; border-color:#FF6B00; box-shadow:0 0 16px rgba(255,107,0,0.4);">
+            <span>💡 Abrir Instructivo con Sliders 3D</span>
+          </button>
         </div>
       </div>
 
-      <div class="apps-grid">
+      <!-- BARRA DE PESTAÑAS PARA LAS VENTANAS -->
+      <div class="window-tabs-bar">
+        <button class="window-tab-btn active" onclick="filterWindowCategory('all')">Todas las Ventanas (18)</button>
+        <button class="window-tab-btn" onclick="filterWindowCategory('nexus')">🚀 Ingesta &amp; Nexus Brain (4)</button>
+        <button class="window-tab-btn" onclick="filterWindowCategory('dag')">🕸️ DAG &amp; Telemetría (4)</button>
+        <button class="window-tab-btn" onclick="filterWindowCategory('opex')">🛠️ OPEX &amp; DMAIC (3)</button>
+        <button class="window-tab-btn" onclick="filterWindowCategory('legal')">📜 Legal Tech &amp; Contratos (3)</button>
+        <button class="window-tab-btn" onclick="filterWindowCategory('ops')">⚡ Operaciones &amp; Marketing (4)</button>
+      </div>
 
-        <!-- CARD 1: WORKSPACE DAG & REACT FLOW -->
-        <div class="app-card featured" data-category="core">
-          <div class="app-card-top">
-            <div class="app-icon" style="background: rgba(0, 242, 254, 0.1); border-color: rgba(0, 242, 254, 0.3);">
-              🕸️
-            </div>
-            <span class="app-badge badge-cyan">DAG Engine Live</span>
+      <!-- ========================================================================= -->
+      <!-- VENTANA 1: INGESTA, ONBOARDING & CEREBRO CONTINUO NEXUS                   -->
+      <!-- ========================================================================= -->
+      <div class="window-frame" data-window-group="nexus" style="margin-bottom:28px;">
+        <div class="window-frame-header">
+          <div class="window-controls">
+            <span class="window-dot red"></span>
+            <span class="window-dot yellow"></span>
+            <span class="window-dot green"></span>
           </div>
-          <h3>Lienzo de Workflow DAG & Telemetría</h3>
-          <p>
-            Grafo interactivo con React Flow (@xyflow/react). Visualiza los 5 nodos secuenciales de arquitectura con mutación de color binaria (Rojo y Verde), sincronización reactiva <200ms y bloqueo de edición para rol CLIENT.
-          </p>
-          <div class="feature-tag-list">
-            <span class="tech-pill">React Flow</span>
-            <span class="tech-pill">WebSocket Rooms</span>
-            <span class="tech-pill">Binary Color Algorithm</span>
-            <span class="tech-pill">Role Guard</span>
+          <div class="window-title">
+            <span>🚀</span> VENTANA 01: INGESTA, ONBOARDING MULTI-TENANT &amp; CEREBRO CONTINUO NEXUS (PGVECTOR)
           </div>
-          <div class="app-card-actions">
-            <button class="btn-primary" onclick="scrollToShowcase()">
-              <span>Ver Grafo DAG en Vivo</span> →
-            </button>
-            <button class="btn-secondary" onclick="openNexusLearning('dag')">
-              <span>📚 Nexus Learning</span>
-            </button>
-          </div>
+          <span class="window-badge" style="background:rgba(0,229,255,0.12); color:#00E5FF; border-color:rgba(0,229,255,0.3);">
+            4 MÓDULOS ACTIVOS
+          </span>
         </div>
 
-        <!-- CARD 2: PROMPT ARCHITECT -->
-        <div class="app-card" data-category="ai">
-          <div class="app-card-top">
-            <div class="app-icon" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
-              🧠
+        <div class="window-frame-body">
+          <div class="window-grid">
+
+            <!-- CARD 1: ONBOARDING CONSOLE -->
+            <div class="magnetic-module-card" style="--glow-color:#00E5FF;" onclick="openNexusOnboardingModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-onboarding');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-onboarding">
+                <div class="tooltip-title">🚀 Nexus Onboarding Engine</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Clasifica el alcance del requerimiento mediante un intake interactivo de 5 vectores (Arquetipo, Propietario, Matriz RACI, Integraciones y Esquema de Pagos).<br>
+                  <strong>¿Para qué sirve?:</strong> Aprovisiona en milisegundos un workspace aislado con RLS en Neon PostgreSQL, compila el contrato BrandEnforcer y siembra el DAG en estado RED.<br>
+                  <strong>Endpoint / VM:</strong> <code>POST /api/v1/nexus/onboarding/session</code> • Neon PostgreSQL RLS
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(0,229,255,0.12); border-color:rgba(0,229,255,0.35); color:#00E5FF;">
+                🚀
+              </div>
+              <div class="card-title">Nexus Onboarding Console</div>
+              <div class="card-role-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.3);">
+                5 Vectores • RLS Multi-Tenant
+              </div>
+              <p class="card-desc">
+                Motor interactivo para dar de alta clientes, resolver stack tecnológico, sembrar el grafo DAG de 5 fases en estado RED y aprovisionar tenants en Neon DB.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openNexusOnboardingModal();">
+                  <span>Aprovisionar Proyecto</span> ➔
+                </button>
+              </div>
             </div>
-            <span class="app-badge badge-purple">AI Generator</span>
-          </div>
-          <h3>Antigravity Prompt Architect</h3>
-          <p>
-            Área de trabajo en texto plano para ideas de proyectos. Procesa tu texto descriptivo y pre-rellena automáticamente el checklist interactivo de desarrollo de 5 fases para generar directivas de sistema precisas.
-          </p>
-          <div class="feature-tag-list">
-            <span class="tech-pill">Idea Parser</span>
-            <span class="tech-pill">5-Phase Checklist</span>
-            <span class="tech-pill">System Directive Exporter</span>
-            <span class="tech-pill">Local Storage Sync</span>
-          </div>
-          <div class="app-card-actions">
-            <a href="prompt_architect.html" class="btn-primary">
-              <span>Abrir Prompt Architect</span> ↗
-            </a>
-            <button class="btn-secondary" onclick="openNexusLearning('prompt')">
-              <span>📚 Nexus Learning</span>
-            </button>
+
+            <!-- CARD 2: CEREBRO NEXUS PGVECTOR -->
+            <div class="magnetic-module-card" style="--glow-color:#FF6B00;" onclick="openNexusChatModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-nexus-brain');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-nexus-brain">
+                <div class="tooltip-title">🧠 Cerebro Nexus (IA RAG)</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Ejecuta búsquedas semánticas de similitud de coseno sobre embeddings de 1536 dimensiones con índice HNSW en Neon PostgreSQL.<br>
+                  <strong>¿Para qué sirve?:</strong> Asiste en tiempo real a los ingenieros capitalizando el conocimiento histórico de proyectos cerrados (lecciones aprendidas, Ishikawa y 5W).<br>
+                  <strong>Endpoint / VM:</strong> <code>POST /api/v1/nexus/query</code> • pgvector Neon Tech (&lt;100ms)
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(255,107,0,0.12); border-color:rgba(255,107,0,0.35); color:#FF6B00;">
+                🧠
+              </div>
+              <div class="card-title">Cerebro Continuo Nexus (RAG)</div>
+              <div class="card-role-badge" style="background:rgba(255,107,0,0.15); color:#FF6B00; border-color:rgba(255,107,0,0.3);">
+                pgvector (1536-D) • HNSW Index
+              </div>
+              <p class="card-desc">
+                Memoria técnica institucional de TSolutions IPIDD. Consulta diagnósticos previos, soluciones arquitectónicas y correlaciones OPEX históricas.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openNexusChatModal();" style="background:#FF6B00; border-color:#FF6B00;">
+                  <span>Consultar Memoria</span> ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- CARD 3: ARCHIVED PROJECTS LIBRARY -->
+            <div class="magnetic-module-card" style="--glow-color:#10B981;" onclick="openArchivedLibraryModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-archived');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-archived">
+                <div class="tooltip-title">🏛️ Biblioteca de Proyectos Archivados</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Almacena y presenta el historial inmutable de proyectos completados con filtros por stack, industria y calificación del cliente.<br>
+                  <strong>¿Para qué sirve?:</strong> Permite consultar en modo de solo lectura el Snapshot JSONB íntegro de cada entrega, métricas Six Sigma y actas ejecutivas firmadas.<br>
+                  <strong>Endpoint / VM:</strong> <code>GET /api/v1/projects/archived</code> • Snapshot JSONB inmutable
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(16,185,129,0.12); border-color:rgba(16,185,129,0.35); color:#10B981;">
+                🏛️
+              </div>
+              <div class="card-title">Biblioteca de Archivados</div>
+              <div class="card-role-badge" style="background:rgba(16,185,129,0.15); color:#10B981; border-color:rgba(16,185,129,0.3);">
+                Snapshot Inmutable • Read-Only
+              </div>
+              <p class="card-desc">
+                Repositorio formal de proyectos cerrados con su topología DAG en verde, historial de telemetría, matrices DMAIC y actas ejecutivas selladas.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openArchivedLibraryModal();" style="background:#10B981; border-color:#10B981;">
+                  <span>Ver Proyectos</span> ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- CARD 4: INTEGRATION HUB -->
+            <div class="magnetic-module-card" style="--glow-color:#A855F7;" onclick="openIntegrationHubModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-hub');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-hub">
+                <div class="tooltip-title">🔄 Integration Hub &amp; Conectores</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Centraliza los conectores externos de la plataforma: Google Tasks, GitHub Repositories, Stripe/Clip y Webhook Listeners.<br>
+                  <strong>¿Para qué sirve?:</strong> Garantiza sincronización bidireccional de tareas y flujos de trabajo sin duplicar esfuerzo manual ni perder trazabilidad.<br>
+                  <strong>Endpoint / VM:</strong> <code>GET /api/v1/integrations/status</code> • Multi-Provider Sync
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(168,85,247,0.12); border-color:rgba(168,85,247,0.35); color:#A855F7;">
+                🔄
+              </div>
+              <div class="card-title">Integration Hub &amp; Conectores</div>
+              <div class="card-role-badge" style="background:rgba(168,85,247,0.15); color:#A855F7; border-color:rgba(168,85,247,0.3);">
+                Google Tasks • GitHub • Stripe
+              </div>
+              <p class="card-desc">
+                Consola de vinculación y orquestación con proveedores de terceros, gestión de llaves API y monitoreo de sincronizaciones en segundo plano.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openIntegrationHubModal();" style="background:#A855F7; border-color:#A855F7;">
+                  <span>Configurar Hub</span> ➔
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
+      </div>
 
-        <!-- CARD 3: TO-DO TASK MANAGER -->
-        <div class="app-card" data-category="core">
-          <div class="app-card-top">
-            <div class="app-icon" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
-              ✓
-            </div>
-            <span class="app-badge badge-green">Colaborativo</span>
+      <!-- ========================================================================= -->
+      <!-- VENTANA 2: ARQUITECTURA, GRAFO DAG & CI/CD TELEMETRY                      -->
+      <!-- ========================================================================= -->
+      <div class="window-frame" data-window-group="dag" style="margin-bottom:28px;">
+        <div class="window-frame-header">
+          <div class="window-controls">
+            <span class="window-dot red"></span>
+            <span class="window-dot yellow"></span>
+            <span class="window-dot green"></span>
           </div>
-          <h3>Gestor de Tareas To-Do Binario</h3>
-          <p>
-            Gestor de tareas manuales con prioridades (Low, Medium, High, Critical) vinculado a los nodos del grafo. Cuando el 100% de las tareas de un nodo pasan a DONE, el nodo transmuta de inmediato a GREEN.
-          </p>
-          <div class="feature-tag-list">
-            <span class="tech-pill">Task CRUD</span>
-            <span class="tech-pill">Role: COLLABORATOR</span>
-            <span class="tech-pill">Real-time Pulse</span>
-            <span class="tech-pill">Neon DB Persisted</span>
+          <div class="window-title">
+            <span>🕸️</span> VENTANA 02: INGENIERÍA DE ARQUITECTURA, LIENZO DAG &amp; CI/CD TELEMETRY
           </div>
-          <div class="app-card-actions">
-            <button class="btn-primary" onclick="syncWithNeonDB()">
-              <span>🔄 Sincronizar Neon DB</span>
-            </button>
-            <button class="btn-secondary" onclick="openNexusLearning('dag')">
-              <span>📚 Nexus Learning</span>
-            </button>
-          </div>
+          <span class="window-badge" style="background:rgba(0,242,254,0.12); color:#00E5FF; border-color:rgba(0,242,254,0.3);">
+            4 MÓDULOS ACTIVOS
+          </span>
         </div>
 
-        <!-- CARD 4: EMAIL MARKETING BULLMQ -->
-        <div class="app-card" data-category="marketing">
-          <div class="app-card-top">
-            <div class="app-icon" style="background: rgba(255, 0, 127, 0.1); border-color: rgba(255, 0, 127, 0.3);">
-              ✉
+        <div class="window-frame-body">
+          <div class="window-grid">
+
+            <!-- CARD 5: REACT FLOW DAG CANVAS -->
+            <div class="magnetic-module-card" style="--glow-color:#00E5FF;" onclick="scrollToShowcase()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-dag');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-dag">
+                <div class="tooltip-title">🕸️ Lienzo DAG React Flow Live</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Renderiza interactivamente los 5 nodos de arquitectura técnica con transiciones binarias automáticas (Rojo / Verde).<br>
+                  <strong>¿Para qué sirve?:</strong> Monitorea en vivo el avance real del proyecto, sincroniza salas WebSocket en &lt;200ms y aplica guardas de rol RBAC.<br>
+                  <strong>Endpoint / VM:</strong> <code>GET /api/v1/projects/:id/workflow</code> • React Flow Canvas
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(0,229,255,0.12); border-color:rgba(0,229,255,0.35); color:#00E5FF;">
+                🕸️
+              </div>
+              <div class="card-title">Lienzo DAG &amp; Telemetría</div>
+              <div class="card-role-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.3);">
+                React Flow • Binary Color State
+              </div>
+              <p class="card-desc">
+                Visualización gráfica del flujo de desarrollo de 5 etapas secuenciales, sincronización por WebSockets y bloqueo automático para rol CLIENT.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); scrollToShowcase();">
+                  <span>Ver Grafo en Vivo</span> ➔
+                </button>
+              </div>
             </div>
-            <span class="app-badge badge-magenta">BullMQ + Redis</span>
-          </div>
-          <h3>Motor de Mercadotecnia y Envíos Masivos</h3>
-          <p>
-            Segmentación de audiencias con verificación contra listas de supresión, cabeceras RFC 8058 One-Click Unsubscribe, inyección de píxel 1x1, enlaces 302 y regla de completado ≥95% para validar el nodo de marketing a GREEN.
-          </p>
-          <div class="feature-tag-list">
-            <span class="tech-pill">BullMQ Queue</span>
-            <span class="tech-pill">Suppression List</span>
-            <span class="tech-pill">Pixel Tracking</span>
-            <span class="tech-pill">95% Success Trigger</span>
-          </div>
-          <div class="app-card-actions">
-            <button class="btn-primary" onclick="inspectBullMQQueue()">
-              <span>⚡ Inspeccionar BullMQ</span>
-            </button>
-            <button class="btn-secondary" onclick="openNexusLearning('marketing')">
-              <span>📚 Nexus Learning</span>
-            </button>
+
+            <!-- CARD 6: WEBHOOK MASTER CI/CD -->
+            <div class="magnetic-module-card" style="--glow-color:#38BDF8;" onclick="inspectGitHubTelemetry()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-webhook');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-webhook">
+                <div class="tooltip-title">⚡ Webhook Master &amp; HMAC-SHA256</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Recibe eventos de GitHub Actions y valida la cabecera <code>X-Hub-Signature-256</code> con algoritmo HMAC-SHA256.<br>
+                  <strong>¿Para qué sirve?:</strong> Cambia de forma automática el nodo 4 (DevOps) de RED a GREEN tras una corrida exitosa de CI/CD.<br>
+                  <strong>Endpoint / VM:</strong> <code>POST /api/v1/webhooks/github</code> • RFC 2104 Crypto Validator
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(56,189,248,0.12); border-color:rgba(56,189,248,0.35); color:#38BDF8;">
+                ⚡
+              </div>
+              <div class="card-title">Webhook Master CI/CD</div>
+              <div class="card-role-badge" style="background:rgba(56,189,248,0.15); color:#38BDF8; border-color:rgba(56,189,248,0.3);">
+                HMAC-SHA256 • GitHub Actions
+              </div>
+              <p class="card-desc">
+                Receptor criptográfico de eventos de despliegue y telemetría de pipelines para validación de calidad y mutación reactiva de nodos.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); inspectGitHubTelemetry();" style="background:#38BDF8; border-color:#38BDF8;">
+                  <span>Validar HMAC Ping</span> ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- CARD 7: PROMPT ARCHITECT -->
+            <div class="magnetic-module-card" style="--glow-color:#C084FC;" onclick="window.location.href='prompt_architect.html'">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-prompt');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-prompt">
+                <div class="tooltip-title">🧠 Antigravity Prompt Architect</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Ingiere descripciones de requerimientos técnicos en texto plano y autocompleta un checklist interactivo de 5 fases.<br>
+                  <strong>¿Para qué sirve?:</strong> Genera directivas de sistema estructuradas y robustas para asistentes de IA y agentes de desarrollo de código.<br>
+                  <strong>Endpoint / VM:</strong> <code>prompt_architect.html</code> • IDE Standalone Studio
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(192,132,252,0.12); border-color:rgba(192,132,252,0.35); color:#C084FC;">
+                🧠
+              </div>
+              <div class="card-title">Antigravity Prompt Architect</div>
+              <div class="card-role-badge" style="background:rgba(192,132,252,0.15); color:#C084FC; border-color:rgba(192,132,252,0.3);">
+                Idea Parser • System Directives
+              </div>
+              <p class="card-desc">
+                Entorno de diseño conceptual para convertir ideas no estructuradas en directivas de sistema de alta precisión con checklist de 5 fases.
+              </p>
+              <div class="card-actions">
+                <a href="prompt_architect.html" class="btn-card-action primary" style="background:#C084FC; border-color:#C084FC; text-decoration:none; display:flex; align-items:center; justify-content:center;">
+                  <span>Abrir Editor ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- CARD 8: CAD VECTORIAL LOCKUPS -->
+            <div class="magnetic-module-card" style="--glow-color:#00E5FF;" onclick="window.location.href='generador_lockups_tecnicos.html'">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-cad');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-cad">
+                <div class="tooltip-title">📐 Generador de Lockups Técnicos SVG</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Diseña y genera lockups vectoriales, sellos de aprobación técnica, diagramas CAD y marcas de agua de ingeniería.<br>
+                  <strong>¿Para qué sirve?:</strong> Produce especificaciones visuales en formatos SVG puros y PNG rasterizados para integración en contratos y planos.<br>
+                  <strong>Endpoint / VM:</strong> <code>generador_lockups_tecnicos.html</code> • SVG Engine Vectorial
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(0,229,255,0.12); border-color:rgba(0,229,255,0.35); color:#00E5FF;">
+                📐
+              </div>
+              <div class="card-title">Generador de Lockups CAD SVG</div>
+              <div class="card-role-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.3);">
+                SVG 2.0 • Sello de Ingeniería
+              </div>
+              <p class="card-desc">
+                Suite de dibujo y maquetado vectorial con tokens oficiales de marca TSolutions IPIDD para rotular planos y actas ejecutivas.
+              </p>
+              <div class="card-actions">
+                <a href="generador_lockups_tecnicos.html" class="btn-card-action primary" style="background:#00E5FF; border-color:#00E5FF; color:#0A0D14; text-decoration:none; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                  <span>Abrir Diseñador ↗</span>
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
+      </div>
 
-        <!-- CARD 5: CAD VECTORIAL Y LOCKUPS -->
-        <div class="app-card" data-category="core">
-          <div class="app-card-top">
-            <div class="app-icon" style="background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-              📐
-            </div>
-            <span class="app-badge badge-cyan">Diseño SVG CAD</span>
+      <!-- ========================================================================= -->
+      <!-- VENTANA 3: GESTIÓN OPEX, DMAIC & SIX SIGMA                                -->
+      <!-- ========================================================================= -->
+      <div class="window-frame" data-window-group="opex" style="margin-bottom:28px;">
+        <div class="window-frame-header">
+          <div class="window-controls">
+            <span class="window-dot red"></span>
+            <span class="window-dot yellow"></span>
+            <span class="window-dot green"></span>
           </div>
-          <h3>Generador de Lockups Técnicos Vectoriales</h3>
-          <p>
-            Suite visual de diseño vectorial para generar lockups de arquitectura, sellos técnicos, diagramas de ingeniería y exportación limpia en formatos SVG de alta precisión y rasterizados PNG.
-          </p>
-          <div class="feature-tag-list">
-            <span class="tech-pill">SVG Engine</span>
-            <span class="tech-pill">Technical Lockups</span>
-            <span class="tech-pill">Vector Exports</span>
-            <span class="tech-pill">Canvas Studio</span>
+          <div class="window-title">
+            <span>🛠️</span> VENTANA 03: GESTIÓN OPEX, METODOLOGÍA DMAIC &amp; CONTROL SIX SIGMA
           </div>
-          <div class="app-card-actions">
-            <a href="generador_lockups_tecnicos.html" class="btn-primary">
-              <span>Abrir Diseñador CAD</span> ↗
-            </a>
-            <button class="btn-secondary" onclick="openNexusLearning('cad')">
-              <span>📚 Nexus Learning</span>
-            </button>
-          </div>
+          <span class="window-badge" style="background:rgba(245,158,11,0.12); color:#F59E0B; border-color:rgba(245,158,11,0.3);">
+            3 MÓDULOS ACTIVOS
+          </span>
         </div>
 
-        <!-- CARD 6: PROPUESTAS COMERCIALES & ROI -->
-        <div class="app-card" data-category="commercial">
-          <div class="app-card-top">
-            <div class="app-icon" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
-              📊
+        <div class="window-frame-body">
+          <div class="window-grid">
+
+            <!-- CARD 9: DMAIC TOLLGATES -->
+            <div class="magnetic-module-card" style="--glow-color:#F59E0B;" onclick="openDmaicTollgateModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-dmaic');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-dmaic">
+                <div class="tooltip-title">🛠️ Tollgates DMAIC Six Sigma</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Gestiona las 5 compuertas de calidad industrial (Define, Measure, Analyze, Improve, Control) con checklist de pase obligatorio.<br>
+                  <strong>¿Para qué sirve?:</strong> Asegura que ninguna solución técnica se implemente sin métricas de variabilidad demostradas y causa raíz aislada.<br>
+                  <strong>Endpoint / VM:</strong> <code>GET /api/v1/opex/dmaic/tollgates</code> • Six Sigma Engine
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(245,158,11,0.12); border-color:rgba(245,158,11,0.35); color:#F59E0B;">
+                🛠️
+              </div>
+              <div class="card-title">Tollgates DMAIC (5 Compuertas)</div>
+              <div class="card-role-badge" style="background:rgba(245,158,11,0.15); color:#F59E0B; border-color:rgba(245,158,11,0.3);">
+                D-M-A-I-C • Six Sigma Gate
+              </div>
+              <p class="card-desc">
+                Comprobación estricta de entregables: Definición del problema, medición del DPMO, análisis estadístico, mejoras y plan de control inmutable.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openDmaicTollgateModal();" style="background:#F59E0B; border-color:#F59E0B; color:#0A0D14; font-weight:bold;">
+                  <span>Auditar Tollgates</span> ➔
+                </button>
+              </div>
             </div>
-            <span class="app-badge badge-amber">Finanzas & ROI</span>
-          </div>
-          <h3>Modelos de Proyección Comercial y ROI</h3>
-          <p>
-            Documentación ejecutiva y modelo de retorno de inversión para el proyecto de modernización MPS Ayala. Incluye cálculo de optimización operativa, amortización fiscal y desglose de servicios.
-          </p>
-          <div class="feature-tag-list">
-            <span class="tech-pill">ROI Projections</span>
-            <span class="tech-pill">Tax Strategy</span>
-            <span class="tech-pill">Executive Reports</span>
-            <span class="tech-pill">Client Facing</span>
-          </div>
-          <div class="app-card-actions">
-            <a href="MPS_AYALA_PROPUESTA_ROI_001.html" class="btn-primary" target="_blank">
-              <span>Informe ROI ↗</span>
-            </a>
-            <button class="btn-secondary" onclick="openNexusLearning('presentation')">
-              <span>📚 Nexus Learning</span>
-            </button>
+
+            <!-- CARD 10: ISHIKAWA 6M & PARETO -->
+            <div class="magnetic-module-card" style="--glow-color:#FF6B00;" onclick="openIshikawaModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-ishikawa');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-ishikawa">
+                <div class="tooltip-title">🐟 Ishikawa 6M &amp; Pareto 80/20</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Mapea causas raíz en espina de pescado (Método, Máquina, Mano de obra, Material, Medición, Medio ambiente) y jerarquiza con Pareto.<br>
+                  <strong>¿Para qué sirve?:</strong> Enfoca los esfuerzos en el 20% de factores críticos que causan el 80% de las fallas operativas o técnicas.<br>
+                  <strong>Endpoint / VM:</strong> <code>GET /api/v1/opex/ishikawa</code> • Nexus Preventive Assistant
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(255,107,0,0.12); border-color:rgba(255,107,0,0.35); color:#FF6B00;">
+                🐟
+              </div>
+              <div class="card-title">Ishikawa 6M &amp; Matriz de Pareto</div>
+              <div class="card-role-badge" style="background:rgba(255,107,0,0.15); color:#FF6B00; border-color:rgba(255,107,0,0.3);">
+                Espina de Pescado • Regla 80/20
+              </div>
+              <p class="card-desc">
+                Desglose analítico de incidentes técnicos asistido por Nexus para sugerir correlaciones y contramedidas con proyectos previos cerrados.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openIshikawaModal();" style="background:#FF6B00; border-color:#FF6B00;">
+                  <span>Abrir Matriz</span> ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- CARD 11: 5 WHYS & COUNTERMEASURES -->
+            <div class="magnetic-module-card" style="--glow-color:#00E5FF;" onclick="openFiveWhysModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-5w');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-5w">
+                <div class="tooltip-title">🔍 5 Porqués &amp; Contramedidas DAG</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Aplica 5 iteraciones causales profundas a incidentes y conecta la causa identificada a tareas directas en el gestor To-Do.<br>
+                  <strong>¿Para qué sirve?:</strong> Elimina causas de raíz en lugar de aplicar parches cosméticos y las persiste como vectores de aprendizaje en Nexus.<br>
+                  <strong>Endpoint / VM:</strong> <code>GET /api/v1/opex/five-whys</code> • Task Bridge Engine
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(0,229,255,0.12); border-color:rgba(0,229,255,0.35); color:#00E5FF;">
+                🔍
+              </div>
+              <div class="card-title">5 Porqués &amp; Contramedidas DAG</div>
+              <div class="card-role-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.3);">
+                Root Cause Iteration • Task Sync
+              </div>
+              <p class="card-desc">
+                Interrogatorio sistemático para aislar la causa fundamental de desvíos en el tiempo de ciclo o fallos de compilación CI/CD.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openFiveWhysModal();">
+                  <span>Ejecutar Análisis</span> ➔
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
+      </div>
 
-        <!-- CARD 7: API CONSOLE & WEBHOOKS -->
-        <div class="app-card" data-category="core">
-          <div class="app-card-top">
-            <div class="app-icon" style="background: rgba(148, 163, 184, 0.1); border-color: rgba(148, 163, 184, 0.3);">
-              ⚡
-            </div>
-            <span class="app-badge badge-cyan">Backend API</span>
+      <!-- ========================================================================= -->
+      <!-- VENTANA 4: LEGAL TECH, CONTRATOS & ENTREGABLES                            -->
+      <!-- ========================================================================= -->
+      <div class="window-frame" data-window-group="legal" style="margin-bottom:28px;">
+        <div class="window-frame-header">
+          <div class="window-controls">
+            <span class="window-dot red"></span>
+            <span class="window-dot yellow"></span>
+            <span class="window-dot green"></span>
           </div>
-          <h3>Consola de Servicios REST y Webhooks</h3>
-          <p>
-            Especificación de endpoints backend, validador de firmas HMAC-SHA256 para GitHub Webhooks (X-Hub-Signature-256), y conexión en vivo a la base de datos distribuida Neon PostgreSQL.
-          </p>
-          <div class="feature-tag-list">
-            <span class="tech-pill">Express + TS</span>
-            <span class="tech-pill">HMAC-SHA256 Auth</span>
-            <span class="tech-pill">Neon Connection Pool</span>
-            <span class="tech-pill">REST v1</span>
+          <div class="window-title">
+            <span>📜</span> VENTANA 04: LEGAL TECH, CONTRATOS BRANDENFORCER &amp; CIERRE INMUTABLE
           </div>
-          <div class="app-card-actions">
-            <button class="btn-primary" onclick="inspectGitHubTelemetry()">
-              <span>⚡ Verificar HMAC-SHA256</span>
-            </button>
-            <button class="btn-secondary" onclick="openNexusLearning('cicd')">
-              <span>📚 Nexus Learning</span>
-            </button>
-          </div>
+          <span class="window-badge" style="background:rgba(16,185,129,0.12); color:#10B981; border-color:rgba(16,185,129,0.3);">
+            3 MÓDULOS ACTIVOS
+          </span>
         </div>
 
+        <div class="window-frame-body">
+          <div class="window-grid">
+
+            <!-- CARD 12: CONTRATOS OFICIALES -->
+            <div class="magnetic-module-card" style="--glow-color:#10B981;" onclick="openContractViewerModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-contracts');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-contracts">
+                <div class="tooltip-title">📜 Contratos Oficiales BrandEnforcer</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Compila contratos comerciales estandarizados (Software Master, Licencia vCard, Cesión de Derechos) con tokens oficiales.<br>
+                  <strong>¿Para qué sirve?:</strong> Establece SLAs, cláusulas de propiedad intelectual, esquemas de pago y confidencialidad con cumplimiento LFPDPPP.<br>
+                  <strong>Endpoint / VM:</strong> <code>GET /api/v1/nexus/onboarding/contracts</code> • LegalTech Compiler
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(16,185,129,0.12); border-color:rgba(16,185,129,0.35); color:#10B981;">
+                📜
+              </div>
+              <div class="card-title">Contratos Oficiales BrandEnforcer</div>
+              <div class="card-role-badge" style="background:rgba(16,185,129,0.15); color:#10B981; border-color:rgba(16,185,129,0.3);">
+                Tokens IPIDD • LFPDPPP &amp; SLA
+              </div>
+              <p class="card-desc">
+                Documentos legales formalizados con tipografías Bruno Ace, Space Grotesk, logotipo vectorial y estipulación de tarifas en MXN/USD.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openContractViewerModal();" style="background:#10B981; border-color:#10B981;">
+                  <span>Ver Contratos</span> ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- CARD 13: PRESENTACIÓN 16:9 -->
+            <div class="magnetic-module-card" style="--glow-color:#F59E0B;" onclick="window.open('MPS_AYALA_PROPUESTA_ROI_001.html', '_blank')">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-deck');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-deck">
+                <div class="tooltip-title">📊 Mazo Ejecutivo 16:9 &amp; Pitch Deck</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Despliega un deck de diapositivas interactivas en proporción 16:9 con análisis de ROI, cronograma y arquitectura técnica.<br>
+                  <strong>¿Para qué sirve?:</strong> Facilita la presentación formal de la propuesta comercial ante directores y stakeholders para aprobación de proyecto.<br>
+                  <strong>Endpoint / VM:</strong> <code>MPS_AYALA_PROPUESTA_ROI_001.html</code> • Executive Slide Engine
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(245,158,11,0.12); border-color:rgba(245,158,11,0.35); color:#F59E0B;">
+                📊
+              </div>
+              <div class="card-title">Mazo Ejecutivo 16:9 &amp; Propuesta ROI</div>
+              <div class="card-role-badge" style="background:rgba(245,158,11,0.15); color:#F59E0B; border-color:rgba(245,158,11,0.3);">
+                Pitch Deck 16:9 • Retorno Inversión
+              </div>
+              <p class="card-desc">
+                Presentación de alto impacto con cálculo de retorno financiero, amortización fiscal, desglose de servicios y valor económico agregado.
+              </p>
+              <div class="card-actions">
+                <a href="MPS_AYALA_PROPUESTA_ROI_001.html" target="_blank" class="btn-card-action primary" style="background:#F59E0B; border-color:#F59E0B; color:#0A0D14; font-weight:bold; text-decoration:none; display:flex; align-items:center; justify-content:center;">
+                  <span>Abrir Deck ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- CARD 14: CIERRE INMUTABLE -->
+            <div class="magnetic-module-card" style="--glow-color:#FF6B00;" onclick="openProjectClosureModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-closure');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-closure">
+                <div class="tooltip-title">🔒 Cierre Inmutable &amp; Sellado BullMQ</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Cambia el estado a <code>ARCHIVED</code>, bloquea mutaciones, genera el snapshot JSONB y emite el Acta de Cierre oficial.<br>
+                  <strong>¿Para qué sirve?:</strong> Encola el proyecto en BullMQ para que el worker asimile lecciones y vectores en la base semántica de Nexus.<br>
+                  <strong>Endpoint / VM:</strong> <code>POST /api/v1/projects/:id/close</code> • BullMQ Queue Worker
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(255,107,0,0.12); border-color:rgba(255,107,0,0.35); color:#FF6B00;">
+                🔒
+              </div>
+              <div class="card-title">Cierre Inmutable de Proyecto</div>
+              <div class="card-role-badge" style="background:rgba(255,107,0,0.15); color:#FF6B00; border-color:rgba(255,107,0,0.3);">
+                Sign-Off Formal • BullMQ Ingestion
+              </div>
+              <p class="card-desc">
+                Sellado final con firma del cliente, calificación 1 a 5, cálculo del nivel Sigma final y congelamiento inmutable de tareas y nodos.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openProjectClosureModal();" style="background:#FF6B00; border-color:#FF6B00;">
+                  <span>Cierre &amp; Sellado</span> ➔
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- VENTANA 5: OPERACIONES ÁGILES & MARKETING BULLMQ                          -->
+      <!-- ========================================================================= -->
+      <div class="window-frame" data-window-group="ops" style="margin-bottom:28px;">
+        <div class="window-frame-header">
+          <div class="window-controls">
+            <span class="window-dot red"></span>
+            <span class="window-dot yellow"></span>
+            <span class="window-dot green"></span>
+          </div>
+          <div class="window-title">
+            <span>⚡</span> VENTANA 05: OPERACIONES ÁGILES, TAREAS TO-DO &amp; MARKETING BULLMQ
+          </div>
+          <span class="window-badge" style="background:rgba(255,0,127,0.12); color:#FF007F; border-color:rgba(255,0,127,0.3);">
+            4 MÓDULOS ACTIVOS
+          </span>
+        </div>
+
+        <div class="window-frame-body">
+          <div class="window-grid">
+
+            <!-- CARD 15: TO-DO TASK MANAGER -->
+            <div class="magnetic-module-card" style="--glow-color:#10B981;" onclick="syncWithNeonDB()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-tasks');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-tasks">
+                <div class="tooltip-title">✓ Gestor To-Do Binario</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Gestiona tareas operativas con prioridades y mutaciones atómicas persistidas en Neon PostgreSQL.<br>
+                  <strong>¿Para qué sirve?:</strong> Al alcanzar el 100% de tareas DONE en un nodo, conmuta automáticamente dicho nodo a GREEN en el grafo DAG.<br>
+                  <strong>Endpoint / VM:</strong> <code>PATCH /api/v1/tasks/:id/status</code> • Neon DB Task Pool
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(16,185,129,0.12); border-color:rgba(16,185,129,0.35); color:#10B981;">
+                ✓
+              </div>
+              <div class="card-title">Gestor de Tareas To-Do Binario</div>
+              <div class="card-role-badge" style="background:rgba(16,185,129,0.15); color:#10B981; border-color:rgba(16,185,129,0.3);">
+                Task CRUD • Role: COLLABORATOR
+              </div>
+              <p class="card-desc">
+                Backlog interactivo con control de concurrencia y vinculación directa a cada una de las 5 fases del pipeline arquitectónico.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); syncWithNeonDB();" style="background:#10B981; border-color:#10B981;">
+                  <span>Sincronizar Tareas</span> ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- CARD 16: EMAIL MARKETING BULLMQ -->
+            <div class="magnetic-module-card" style="--glow-color:#FF007F;" onclick="inspectBullMQQueue()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-bullmq');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-bullmq">
+                <div class="tooltip-title">✉ Motor de Mercadotecnia BullMQ</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Procesa campañas masivas con Redis, control de rebotes, píxeles de rastreo y desuscripción RFC 8058.<br>
+                  <strong>¿Para qué sirve?:</strong> Conmuta el nodo 5 (Marketing) a GREEN cuando se verifica una tasa de entrega auditada &ge;95%.<br>
+                  <strong>Endpoint / VM:</strong> <code>POST /api/v1/marketing/campaigns</code> • BullMQ Redis Worker
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(255,0,127,0.12); border-color:rgba(255,0,127,0.35); color:#FF007F;">
+                ✉
+              </div>
+              <div class="card-title">Motor Marketing BullMQ</div>
+              <div class="card-role-badge" style="background:rgba(255,0,127,0.15); color:#FF007F; border-color:rgba(255,0,127,0.3);">
+                BullMQ + Redis • RFC 8058 One-Click
+              </div>
+              <p class="card-desc">
+                Campañas masivas segmentadas, protección contra spam, listas de supresión y regla de éxito &ge;95% para certificación final.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); inspectBullMQQueue();" style="background:#FF007F; border-color:#FF007F;">
+                  <span>Inspeccionar Cola</span> ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- CARD 17: MODELO FINANCIERO ROI -->
+            <div class="magnetic-module-card" style="--glow-color:#F59E0B;" onclick="window.open('MPS_AYALA_PROPUESTA_ROI_001.html', '_blank')">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-roi');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-roi">
+                <div class="tooltip-title">📊 Modelo Financiero ROI &amp; Payback</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Modela matemáticamente el retorno de inversión, payback mensual, ahorro en costos de falla y valor presente neto.<br>
+                  <strong>¿Para qué sirve?:</strong> Valida la viabilidad económica del proyecto y sustenta decisiones de inversión tecnológica ante dirección.<br>
+                  <strong>Endpoint / VM:</strong> <code>MPS_AYALA_PROPUESTA_ROI_001.html#financial-model</code> • Financial Calc
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(245,158,11,0.12); border-color:rgba(245,158,11,0.35); color:#F59E0B;">
+                📊
+              </div>
+              <div class="card-title">Modelo Financiero &amp; ROI</div>
+              <div class="card-role-badge" style="background:rgba(245,158,11,0.15); color:#F59E0B; border-color:rgba(245,158,11,0.3);">
+                Payback 3-6 Meses • Amortización
+              </div>
+              <p class="card-desc">
+                Cálculo de eficiencia económica, reducción de costos operativos y balance costo-beneficio de la infraestructura moderna.
+              </p>
+              <div class="card-actions">
+                <a href="MPS_AYALA_PROPUESTA_ROI_001.html" target="_blank" class="btn-card-action primary" style="background:#F59E0B; border-color:#F59E0B; color:#0A0D14; font-weight:bold; text-decoration:none; display:flex; align-items:center; justify-content:center;">
+                  <span>Ver Modelo ROI ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- CARD 18: CALENDARIO MAESTRO DE ENTREGAS -->
+            <div class="magnetic-module-card" style="--glow-color:#00E5FF;" onclick="openCalendarEventsModal()">
+              <button class="card-info-trigger" onclick="event.stopPropagation(); toggleCardTooltip('tt-card-calendar');" aria-label="Ver detalles">&#9432;</button>
+              
+              <div class="card-tooltip" id="tt-card-calendar">
+                <div class="tooltip-title">📅 Calendario Maestro de Entregas</div>
+                <div class="tooltip-desc">
+                  <strong>¿Qué hace?:</strong> Programa hitos clave, sprints de entrega, sesiones de revisión con clientes y simulaciones de lanzamiento.<br>
+                  <strong>¿Para qué sirve?:</strong> Evita desvíos en el tiempo de ciclo (Cycle Time) y garantiza el cumplimiento estricto de SLAs pactados.<br>
+                  <strong>Endpoint / VM:</strong> <code>GET /api/v1/projects/milestones</code> • Timeline Scheduler
+                </div>
+              </div>
+
+              <div class="card-icon-wrap" style="background:rgba(0,229,255,0.12); border-color:rgba(0,229,255,0.35); color:#00E5FF;">
+                📅
+              </div>
+              <div class="card-title">Calendario Maestro de Entregas</div>
+              <div class="card-role-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.3);">
+                Sprints • Hitos Contractuales
+              </div>
+              <p class="card-desc">
+                Cronograma de hitos críticos, fechas de corte de anticipos y liquidaciones, y estimaciones de tiempo de entrega por arquetipo.
+              </p>
+              <div class="card-actions">
+                <button class="btn-card-action primary" onclick="event.stopPropagation(); openCalendarEventsModal();">
+                  <span>Ver Calendario</span> ➔
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </section>
 
@@ -3327,6 +4391,608 @@
 
       <div id="snapshot-tab-body" style="flex:1; overflow-y:auto; padding:24px;">
         <!-- Contenido dinámico del tab -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: INSTRUCTIVO TRANSPARENTE INTERACTIVO CON SLIDERS 3D               -->
+  <!-- ========================================================================= -->
+  <div class="instructivo-modal-backdrop" id="instructivo-transparent-modal" style="display:none;" onclick="if(event.target === this) closeInstructivoModal()">
+    <div class="instructivo-modal-card">
+      <!-- HEADER CON GLASSMORPHISM Y ESTILO NEÓN -->
+      <div class="instructivo-header">
+        <div class="instructivo-header-title">
+          <div class="instructivo-header-icon">💡</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.15rem; color:#FFF; margin:0; letter-spacing:0.04em;">
+              INSTRUCTIVO OPERATIVO // NEXUS ARCHITECT
+            </h3>
+            <p style="font-family:'Space Grotesk', sans-serif; font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">
+              Guía interactiva paso a paso con simulación de variables del entorno exterior
+            </p>
+          </div>
+        </div>
+        <button class="instructivo-close-btn" onclick="closeInstructivoModal()" aria-label="Cerrar Instructivo">✕</button>
+      </div>
+
+      <!-- STEP INDICATOR -->
+      <div class="instructivo-step-indicator" id="instructivo-step-dots">
+        <div class="step-dot active" onclick="setInstructivoSlide(1)"><span>1</span> Calibración</div>
+        <div class="step-dot" onclick="setInstructivoSlide(2)"><span>2</span> Grafo DAG</div>
+        <div class="step-dot" onclick="setInstructivoSlide(3)"><span>3</span> Six Sigma</div>
+        <div class="step-dot" onclick="setInstructivoSlide(4)"><span>4</span> Memoria RAG</div>
+        <div class="step-dot" onclick="setInstructivoSlide(5)"><span>5</span> ROI &amp; Payback</div>
+      </div>
+
+      <!-- BODY: SLIDES INTERACTIVOS CON SLIDERS -->
+      <div class="instructivo-body">
+
+        <!-- SLIDE 1: CALIBRACIÓN DE INVERSIÓN Y ARQUETIPO -->
+        <div class="instructivo-slide active" id="instructivo-slide-1">
+          <div class="instructivo-slide-badge">PASO 01 // CALIBRACIÓN DE ENTRADA</div>
+          <h4 style="font-size:1.25rem; color:#FFF; margin:0 0 8px 0; font-family:'Space Grotesk', sans-serif;">
+            1. Calibración de Inversión &amp; Selección de Arquetipo
+          </h4>
+          <p style="font-size:0.85rem; color:#94A3B8; line-height:1.6; margin-bottom:20px;">
+            El motor de onboarding clasifica la naturaleza del requerimiento. Mueve el control deslizante para simular el presupuesto de tu cliente y observar en tiempo real la recomendación técnica y el retorno estimado.
+          </p>
+
+          <div class="slider-interactive-box">
+            <div class="slider-control-row">
+              <span class="slider-label">Presupuesto / Inversión Estimada:</span>
+              <span class="slider-val-display" id="disp-slider-roi">$12,500 MXN</span>
+            </div>
+            <input type="range" class="glass-range-slider" id="slider-roi-amount" min="3500" max="120000" step="1500" value="12500" oninput="updateInstructivoSlider('roi', this.value)" />
+
+            <div class="slider-metric-chips-grid">
+              <div class="slider-metric-chip">
+                <div class="label">Arquetipo Sugerido</div>
+                <div class="value" id="chip-archetype-name" style="color:#00E5FF; font-size:0.95rem;">LANDING_PAGE</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Hosting / Cloud</div>
+                <div class="value" id="chip-hosting-name" style="color:#FF6B00; font-size:0.95rem;">Vercel CDN</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Ciclo de Entrega</div>
+                <div class="value" id="chip-delivery-time" style="color:#10B981; font-size:0.95rem;">~7 días</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Contrato Aplicable</div>
+                <div class="value" id="chip-contract-type" style="color:#C084FC; font-size:0.85rem;">Master Software</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2: TOPOLOGÍA DAG & SINCRONIZACIÓN -->
+        <div class="instructivo-slide" id="instructivo-slide-2">
+          <div class="instructivo-slide-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.4);">
+            PASO 02 // WORKFLOW REACT FLOW
+          </div>
+          <h4 style="font-size:1.25rem; color:#FFF; margin:0 0 8px 0; font-family:'Space Grotesk', sans-serif;">
+            2. Grafo de Dependencias Técnicas (DAG) &amp; Webhooks
+          </h4>
+          <p style="font-size:0.85rem; color:#94A3B8; line-height:1.6; margin-bottom:20px;">
+            El desarrollo se rige por un DAG de 5 fases estrictas. Desliza para simular el avance de tareas completadas y observa cómo los nodos transmutan entre RED y GREEN en tiempo real.
+          </p>
+
+          <div class="slider-interactive-box">
+            <div class="slider-control-row">
+              <span class="slider-label">Porcentaje de Avance del Proyecto:</span>
+              <span class="slider-val-display" id="disp-slider-dag" style="color:#00E5FF;">40% COMPLETADO</span>
+            </div>
+            <input type="range" class="glass-range-slider" id="slider-dag-progress" min="0" max="100" step="20" value="40" oninput="updateInstructivoSlider('dag', this.value)" />
+
+            <div class="slider-metric-chips-grid">
+              <div class="slider-metric-chip">
+                <div class="label">Nodos en GREEN</div>
+                <div class="value" id="chip-dag-green" style="color:#10B981;">2 / 5</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Nodos Pendientes (RED)</div>
+                <div class="value" id="chip-dag-red" style="color:#EF4444;">3 / 5</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Webhook CI/CD HMAC</div>
+                <div class="value" id="chip-dag-hmac" style="color:#38BDF8; font-size:0.85rem;">SYNC PENDING</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Latencia WebSocket</div>
+                <div class="value" style="color:#00E5FF;">&lt;45 ms</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3: CONTROL DE CALIDAD SIX SIGMA -->
+        <div class="instructivo-slide" id="instructivo-slide-3">
+          <div class="instructivo-slide-badge" style="background:rgba(245,158,11,0.15); color:#F59E0B; border-color:rgba(245,158,11,0.4);">
+            PASO 03 // CALIDAD DMAIC
+          </div>
+          <h4 style="font-size:1.25rem; color:#FFF; margin:0 0 8px 0; font-family:'Space Grotesk', sans-serif;">
+            3. Control Estadístico Lean Six Sigma &amp; DPMO
+          </h4>
+          <p style="font-size:0.85rem; color:#94A3B8; line-height:1.6; margin-bottom:20px;">
+            Medición rigurosa de defectos antes de liberar entregables. Ajusta el nivel Sigma (σ) para calcular matemáticamente los Defectos por Millón de Oportunidades y el estado del Tollgate.
+          </p>
+
+          <div class="slider-interactive-box">
+            <div class="slider-control-row">
+              <span class="slider-label">Nivel de Calidad Sigma (σ):</span>
+              <span class="slider-val-display" id="disp-slider-sigma" style="color:#F59E0B;">5.9 σ (World Class)</span>
+            </div>
+            <input type="range" class="glass-range-slider" id="slider-sigma-level" min="3.0" max="6.0" step="0.1" value="5.9" oninput="updateInstructivoSlider('sigma', this.value)" />
+
+            <div class="slider-metric-chips-grid">
+              <div class="slider-metric-chip">
+                <div class="label">DPMO (Defectos/Millón)</div>
+                <div class="value" id="chip-dpmo-val" style="color:#00E5FF;">1.5 DPMO</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Rendimiento (Yield)</div>
+                <div class="value" id="chip-yield-val" style="color:#10B981;">99.9998%</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Compuerta Tollgate</div>
+                <div class="value" id="chip-tollgate-status" style="color:#F59E0B; font-size:0.85rem;">CONTROL APROBADO</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Ishikawa 6M</div>
+                <div class="value" style="color:#C084FC; font-size:0.85rem;">0 Crecientes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4: MEMORIA CONTINUA NEXUS PGVECTOR -->
+        <div class="instructivo-slide" id="instructivo-slide-4">
+          <div class="instructivo-slide-badge" style="background:rgba(168,85,247,0.15); color:#C084FC; border-color:rgba(168,85,247,0.4);">
+            PASO 04 // IA VECTORIAL
+          </div>
+          <h4 style="font-size:1.25rem; color:#FFF; margin:0 0 8px 0; font-family:'Space Grotesk', sans-serif;">
+            4. Memoria Continua de Nexus &amp; Búsqueda HNSW
+          </h4>
+          <p style="font-size:0.85rem; color:#94A3B8; line-height:1.6; margin-bottom:20px;">
+            Nexus capitaliza lecciones aprendidas de proyectos cerrados en Neon PostgreSQL con pgvector. Ajusta el umbral de similitud de coseno para filtrar la especificidad de los fragmentos recuperados.
+          </p>
+
+          <div class="slider-interactive-box">
+            <div class="slider-control-row">
+              <span class="slider-label">Umbral de Similitud Coseno (Cosine):</span>
+              <span class="slider-val-display" id="disp-slider-cosine" style="color:#C084FC;">≥ 0.75 (Alta Afinidad)</span>
+            </div>
+            <input type="range" class="glass-range-slider" id="slider-cosine-thresh" min="0.50" max="0.95" step="0.05" value="0.75" oninput="updateInstructivoSlider('cosine', this.value)" />
+
+            <div class="slider-metric-chips-grid">
+              <div class="slider-metric-chip">
+                <div class="label">Fragmentos Devueltos</div>
+                <div class="value" id="chip-cosine-count" style="color:#00E5FF;">Top 5</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Dimensión Vectorial</div>
+                <div class="value" style="color:#FF6B00;">1,536-D</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Latencia Índice HNSW</div>
+                <div class="value" style="color:#10B981;">&lt;85 ms</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Asimilación BullMQ</div>
+                <div class="value" style="color:#38BDF8; font-size:0.85rem;">100% AUTOMÁTICA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 5: RETORNO DE INVERSIÓN (ROI) -->
+        <div class="instructivo-slide" id="instructivo-slide-5">
+          <div class="instructivo-slide-badge" style="background:rgba(16,185,129,0.15); color:#10B981; border-color:rgba(16,185,129,0.4);">
+            PASO 05 // MODELO FINANCIERO
+          </div>
+          <h4 style="font-size:1.25rem; color:#FFF; margin:0 0 8px 0; font-family:'Space Grotesk', sans-serif;">
+            5. Modelo Financiero ROI &amp; Retorno Operativo (Payback)
+          </h4>
+          <p style="font-size:0.85rem; color:#94A3B8; line-height:1.6; margin-bottom:20px;">
+            La tecnología instalada debe transferir conocimiento y escalar negocios. Modela el horizonte de amortización en meses para proyectar la rentabilidad total de la solución.
+          </p>
+
+          <div class="slider-interactive-box">
+            <div class="slider-control-row">
+              <span class="slider-label">Horizonte de Recuperación (Meses):</span>
+              <span class="slider-val-display" id="disp-slider-months" style="color:#10B981;">4 Meses (Payback Rápido)</span>
+            </div>
+            <input type="range" class="glass-range-slider" id="slider-roi-months" min="1" max="18" step="1" value="4" oninput="updateInstructivoSlider('months', this.value)" />
+
+            <div class="slider-metric-chips-grid">
+              <div class="slider-metric-chip">
+                <div class="label">Multiplicador ROI</div>
+                <div class="value" id="chip-roi-multiplier" style="color:#FF6B00;">4.8x</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Ahorro Anual Estimado</div>
+                <div class="value" id="chip-roi-savings" style="color:#00E5FF;">$180,000 MXN</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Amortización Fiscal</div>
+                <div class="value" style="color:#10B981;">100% Deducible</div>
+              </div>
+              <div class="slider-metric-chip">
+                <div class="label">Estado de Sellado</div>
+                <div class="value" style="color:#C084FC; font-size:0.85rem;">INMUTABLE CERT</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FOOTER DEL INSTRUCTIVO CON BOTONES DE NAVEGACIÓN -->
+      <div class="instructivo-footer">
+        <button class="btn-secondary" id="btn-inst-prev" onclick="changeInstructivoStep(-1)" style="padding:10px 18px; font-size:0.82rem;">
+          ← Anterior
+        </button>
+
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button class="btn-primary" onclick="closeInstructivoModal(); openNexusOnboardingModal();" style="padding:10px 20px; font-size:0.85rem; background:#FF6B00; border-color:#FF6B00; box-shadow:0 0 16px rgba(255,107,0,0.4);">
+            <span>🚀 Iniciar Onboarding Real</span>
+          </button>
+          <button class="btn-secondary" id="btn-inst-next" onclick="changeInstructivoStep(1)" style="padding:10px 18px; font-size:0.82rem; border-color:var(--accent-cyan); color:var(--accent-cyan);">
+            Siguiente →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL SECUNDARIO: TOLLGATES DMAIC SIX SIGMA                               -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="dmaic-tollgates-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.92); backdrop-filter:blur(10px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:850px; background:#0A0D14; border:1px solid rgba(245,158,11,0.4); box-shadow:0 0 35px rgba(245,158,11,0.25); border-radius:16px; display:flex; flex-direction:column; overflow:hidden;">
+      <div style="padding:18px 24px; background:#121722; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:rgba(245,158,11,0.2); border:1px solid #F59E0B; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🛠️</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.15rem; color:#FFF; margin:0;">AUDITORÍA DE TOLLGATES DMAIC</h3>
+            <p style="font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">Control de compuertas de calidad industrial con criterios de aprobación</p>
+          </div>
+        </div>
+        <button onclick="closeDmaicTollgateModal()" style="background:transparent; border:none; color:#94A3B8; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="padding:24px; overflow-y:auto; max-height:75vh; display:flex; flex-direction:column; gap:14px;">
+        <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.95rem;">1. Define (Definir el Problema)</div>
+            <span style="background:rgba(16,185,129,0.2); color:#10B981; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:bold;">APROBADO ✓</span>
+          </div>
+          <p style="font-size:0.8rem; color:#94A3B8; margin:0 0 10px 0;">Alcance del proyecto delimitado, mapa SIPOC inicial y matriz de requerimientos críticos del cliente (CTQ).</p>
+          <div style="font-size:0.72rem; color:#E2E8F0; font-family:'JetBrains Mono', monospace;">• Project Charter firmado • Voces del Cliente (VOC) mapeadas</div>
+        </div>
+
+        <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.95rem;">2. Measure (Medir la Variabilidad)</div>
+            <span style="background:rgba(16,185,129,0.2); color:#10B981; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:bold;">APROBADO ✓</span>
+          </div>
+          <p style="font-size:0.8rem; color:#94A3B8; margin:0 0 10px 0;">Línea base de defectos por millón (DPMO = 1.5) y tiempo de ciclo actual cronometrado en 7 días.</p>
+          <div style="font-size:0.72rem; color:#E2E8F0; font-family:'JetBrains Mono', monospace;">• Sistema de Medición R&amp;R validado • Cpk &gt; 1.67</div>
+        </div>
+
+        <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.95rem;">3. Analyze (Aislar Causa Raíz)</div>
+            <span style="background:rgba(16,185,129,0.2); color:#10B981; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:bold;">APROBADO ✓</span>
+          </div>
+          <p style="font-size:0.8rem; color:#94A3B8; margin:0 0 10px 0;">Espina de pescado Ishikawa 6M y análisis de los 5 Porqués vinculados a contramedidas operativas.</p>
+          <div style="font-size:0.72rem; color:#E2E8F0; font-family:'JetBrains Mono', monospace;">• Regla de Pareto 80/20 comprobada • Causa fundamental aislada</div>
+        </div>
+
+        <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.95rem;">4. Improve (Implementar Mejoras)</div>
+            <span style="background:rgba(245,158,11,0.2); color:#F59E0B; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:bold;">EN EJECUCIÓN ⚡</span>
+          </div>
+          <p style="font-size:0.8rem; color:#94A3B8; margin:0 0 10px 0;">Despliegue del grafo DAG, automatización CI/CD con GitHub Webhooks y pruebas de carga.</p>
+          <div style="font-size:0.72rem; color:#E2E8F0; font-family:'JetBrains Mono', monospace;">• Tareas To-Do vinculadas en PostgreSQL • Verificación &ge;95% BullMQ</div>
+        </div>
+
+        <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.95rem;">5. Control (Estandarizar &amp; Archivar)</div>
+            <span style="background:rgba(255,107,0,0.2); color:#FF6B00; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:bold;">BLOQUEO PREVIO 🔒</span>
+          </div>
+          <p style="font-size:0.8rem; color:#94A3B8; margin:0 0 10px 0;">Cierre inmutable con snapshot JSONB, absorción semántica en Nexus y emisión de certificado oficial.</p>
+          <div style="font-size:0.72rem; color:#E2E8F0; font-family:'JetBrains Mono', monospace;">• Estado ARCHIVED programado • Asimilación pgvector BullMQ</div>
+        </div>
+      </div>
+
+      <div style="padding:14px 24px; background:#06090F; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end;">
+        <button onclick="closeDmaicTollgateModal()" class="btn-primary" style="padding:8px 20px; font-size:0.82rem; background:#F59E0B; border-color:#F59E0B; color:#0A0D14; font-weight:bold;">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL SECUNDARIO: ISHIKAWA 6M & PARETO                                    -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="ishikawa-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.92); backdrop-filter:blur(10px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:920px; background:#0A0D14; border:1px solid rgba(255,107,0,0.4); box-shadow:0 0 35px rgba(255,107,0,0.25); border-radius:16px; display:flex; flex-direction:column; overflow:hidden;">
+      <div style="padding:18px 24px; background:#121722; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:rgba(255,107,0,0.2); border:1px solid #FF6B00; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🐟</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.15rem; color:#FFF; margin:0;">DIAGRAMA DE ISHIKAWA 6M &amp; REGLA 80/20</h3>
+            <p style="font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">Mapeo de causas raíz asistido por sugerencias preventivas de Nexus</p>
+          </div>
+        </div>
+        <button onclick="closeIshikawaModal()" style="background:transparent; border:none; color:#94A3B8; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="padding:24px; overflow-y:auto; max-height:75vh; display:flex; flex-direction:column; gap:16px;">
+        <div style="background:rgba(255,107,0,0.08); border-left:4px solid #FF6B00; padding:12px 16px; border-radius:4px; font-size:0.8rem; color:#F8FAFC;">
+          <strong>Nexus Asistencia Preventiva:</strong> Basado en proyectos previos archivados, el 80% de las fallas de CI/CD se concentraron en las categorías <em>Método (Branches mal nombradas)</em> y <em>Maquinaria (Timeouts de contenedores Docker)</em>.
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.85rem; margin-bottom:6px;">1. MÉTODO</div>
+            <div style="font-size:0.78rem; color:#94A3B8;">• Falta de verificación de llaves antes del build.<br>• Falta de validación estricta de esquemas Zod en requests.</div>
+          </div>
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.85rem; margin-bottom:6px;">2. MAQUINARIA</div>
+            <div style="font-size:0.78rem; color:#94A3B8;">• Cuellos de botella en memoria de runner GitHub.<br>• Límites de conexiones en Neon pool sin transacciones atómicas.</div>
+          </div>
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.85rem; margin-bottom:6px;">3. MANO DE OBRA</div>
+            <div style="font-size:0.78rem; color:#94A3B8;">• Desconocimiento de directivas de rol RBAC.<br>• Omisión del checklist de 5 fases en inicio de sprint.</div>
+          </div>
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.85rem; margin-bottom:6px;">4. MATERIAL</div>
+            <div style="font-size:0.78rem; color:#94A3B8;">• Dependencias de npm incompatibles en ESM.<br>• Contratos sin cláusula de terminación expresa.</div>
+          </div>
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.85rem; margin-bottom:6px;">5. MEDICIÓN</div>
+            <div style="font-size:0.78rem; color:#94A3B8;">• Umbral de entrega en BullMQ fijado por debajo de 95%.<br>• Registro tardío de defectos en etapa de Control.</div>
+          </div>
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px;">
+            <div style="font-weight:bold; color:#00E5FF; font-size:0.85rem; margin-bottom:6px;">6. MEDIO AMBIENTE</div>
+            <div style="font-size:0.78rem; color:#94A3B8;">• Diferencias entre entornos Windows/Linux de Docker.<br>• Latencia geográfica hacia Vercel Edge.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px 24px; background:#06090F; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end;">
+        <button onclick="closeIshikawaModal()" class="btn-primary" style="padding:8px 20px; font-size:0.82rem; background:#FF6B00; border-color:#FF6B00;">
+          Cerrar Análisis
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL SECUNDARIO: 5 PORQUÉS & CONTRAMEDIDAS DAG                           -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="five-whys-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.92); backdrop-filter:blur(10px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:780px; background:#0A0D14; border:1px solid rgba(0,229,255,0.4); box-shadow:0 0 35px rgba(0,229,255,0.25); border-radius:16px; display:flex; flex-direction:column; overflow:hidden;">
+      <div style="padding:18px 24px; background:#121722; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:rgba(0,229,255,0.2); border:1px solid #00E5FF; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🔍</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.15rem; color:#FFF; margin:0;">ANÁLISIS DE LOS 5 PORQUÉS &amp; CONTRAMEDIDAS</h3>
+            <p style="font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">Cadena lógica causal enlazada a tareas del gestor To-Do</p>
+          </div>
+        </div>
+        <button onclick="closeFiveWhysModal()" style="background:transparent; border:none; color:#94A3B8; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="padding:24px; overflow-y:auto; max-height:75vh; display:flex; flex-direction:column; gap:12px;">
+        <div style="background:#121722; border-left:4px solid #00E5FF; padding:12px 16px; border-radius:6px;">
+          <div style="font-size:0.72rem; color:#00E5FF; font-family:'JetBrains Mono', monospace; font-weight:bold;">1. ¿POR QUÉ FALLÓ EL DESPLIEGUE EN PRODUCCIÓN?</div>
+          <div style="font-size:0.85rem; color:#FFF; margin-top:4px;">Porque el webhook de GitHub devolvió un error de firma inválida (HTTP 401).</div>
+        </div>
+        <div style="background:#121722; border-left:4px solid #00E5FF; padding:12px 16px; border-radius:6px;">
+          <div style="font-size:0.72rem; color:#00E5FF; font-family:'JetBrains Mono', monospace; font-weight:bold;">2. ¿POR QUÉ ERA INVÁLIDA LA FIRMA HMAC?</div>
+          <div style="font-size:0.85rem; color:#FFF; margin-top:4px;">Porque el payload JSON recibido no correspondía con el secreto configurado en el repositorio.</div>
+        </div>
+        <div style="background:#121722; border-left:4px solid #00E5FF; padding:12px 16px; border-radius:6px;">
+          <div style="font-size:0.72rem; color:#00E5FF; font-family:'JetBrains Mono', monospace; font-weight:bold;">3. ¿POR QUÉ HABÍA DISCREPANCIA EN EL SECRETO?</div>
+          <div style="font-size:0.85rem; color:#FFF; margin-top:4px;">Porque el secreto fue regenerado manualmente sin actualizar la variable de entorno en Vercel.</div>
+        </div>
+        <div style="background:#121722; border-left:4px solid #00E5FF; padding:12px 16px; border-radius:6px;">
+          <div style="font-size:0.72rem; color:#00E5FF; font-family:'JetBrains Mono', monospace; font-weight:bold;">4. ¿POR QUÉ SE REGENERÓ MANUALMENTE?</div>
+          <div style="font-size:0.85rem; color:#FFF; margin-top:4px;">Porque no existía un pipeline automatizado para rotación criptográfica de secretos.</div>
+        </div>
+        <div style="background:#121722; border-left:4px solid #FF6B00; padding:12px 16px; border-radius:6px; box-shadow:0 0 15px rgba(255,107,0,0.15);">
+          <div style="font-size:0.72rem; color:#FF6B00; font-family:'JetBrains Mono', monospace; font-weight:bold;">5. ¿POR QUÉ NO EXISTÍA EL PIPELINE AUTOMATIZADO? (CAUSA RAÍZ)</div>
+          <div style="font-size:0.85rem; color:#FFF; margin-top:4px;">Porque el módulo de Webhook Master no incluía verificación de paridad automática pre-commit.</div>
+          <div style="margin-top:10px; background:rgba(16,185,129,0.15); border:1px solid #10B981; border-radius:6px; padding:8px 12px; font-size:0.78rem; color:#10B981;">
+            ✓ <strong>Contramedida en DAG:</strong> Se creó la tarea crítica <em>"Automatizar validación HMAC en CI/CD"</em> ligada al nodo 4 (DevOps).
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px 24px; background:#06090F; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end;">
+        <button onclick="closeFiveWhysModal()" class="btn-primary" style="padding:8px 20px; font-size:0.82rem;">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL SECUNDARIO: VISOR DE CONTRATOS BRANDENFORCER                        -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="contract-viewer-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.92); backdrop-filter:blur(10px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:880px; background:#0A0D14; border:1px solid rgba(16,185,129,0.4); box-shadow:0 0 35px rgba(16,185,129,0.25); border-radius:16px; display:flex; flex-direction:column; overflow:hidden;">
+      <div style="padding:18px 24px; background:#121722; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:rgba(16,185,129,0.2); border:1px solid #10B981; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">📜</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.15rem; color:#FFF; margin:0;">CONTRATOS OFICIALES BRANDENFORCER</h3>
+            <p style="font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">Tokens oficiales de marca TSolutions IPIDD • LFPDPPP &amp; Cláusulas de Entrega</p>
+          </div>
+        </div>
+        <button onclick="closeContractViewerModal()" style="background:transparent; border:none; color:#94A3B8; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="padding:24px; overflow-y:auto; max-height:75vh; display:flex; flex-direction:column; gap:16px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:16px;">
+            <div style="font-size:0.7rem; color:#00E5FF; font-family:'JetBrains Mono', monospace;">PLANTILLA 01</div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.95rem; margin:4px 0;">Contrato Maestro de Software</div>
+            <p style="font-size:0.78rem; color:#94A3B8; margin:0 0 10px 0;">Para desarrollos a la medida, SaaS full-stack y APIs con Neon PostgreSQL.</p>
+            <div style="font-size:0.72rem; color:#10B981; font-family:'JetBrains Mono', monospace;">✓ SLA 99.9% • Esquema 50/50</div>
+          </div>
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:16px;">
+            <div style="font-size:0.7rem; color:#FF6B00; font-family:'JetBrains Mono', monospace;">PLANTILLA 02</div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.95rem; margin:4px 0;">Licencia SaaS Rose vCard</div>
+            <p style="font-size:0.78rem; color:#94A3B8; margin:0 0 10px 0;">Para tarjetas digitales NFC, biolinks y CRM oficial en vc.tsolutionsipidd.com.</p>
+            <div style="font-size:0.72rem; color:#FF6B00; font-family:'JetBrains Mono', monospace;">✓ Licencia Anual • Soporte VIP</div>
+          </div>
+          <div style="background:#121722; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:16px;">
+            <div style="font-size:0.7rem; color:#C084FC; font-family:'JetBrains Mono', monospace;">PLANTILLA 03</div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.95rem; margin:4px 0;">Cesión de Derechos de Marca</div>
+            <p style="font-size:0.78rem; color:#94A3B8; margin:0 0 10px 0;">Para manuales de identidad, tokens de color JSON, logotipos y assets CAD.</p>
+            <div style="font-size:0.72rem; color:#C084FC; font-family:'JetBrains Mono', monospace;">✓ Propiedad Intelectual 100% Cliente</div>
+          </div>
+        </div>
+
+        <div style="background:#0D131F; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:18px;">
+          <h4 style="font-size:0.95rem; color:#FFF; margin:0 0 10px 0; font-family:'Space Grotesk', sans-serif;">
+            Lema Oficial &amp; Tokens de Identidad Legal
+          </h4>
+          <p style="font-size:0.82rem; color:#94A3B8; line-height:1.5; margin:0;">
+            <em>"Tecnología instalada. Conocimiento transferido. Negocios escalados."</em><br>
+            Todos los contratos se compilan automáticamente con el número de folio UUID, sellado de tiempo UTC y vinculación de responsabilidad legal bajo la legislación mexicana aplicable.
+          </p>
+        </div>
+      </div>
+
+      <div style="padding:14px 24px; background:#06090F; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end;">
+        <button onclick="closeContractViewerModal()" class="btn-primary" style="padding:8px 20px; font-size:0.82rem; background:#10B981; border-color:#10B981;">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL SECUNDARIO: INTEGRATION HUB & STATUS                                -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="integration-hub-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.92); backdrop-filter:blur(10px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:760px; background:#0A0D14; border:1px solid rgba(168,85,247,0.4); box-shadow:0 0 35px rgba(168,85,247,0.25); border-radius:16px; display:flex; flex-direction:column; overflow:hidden;">
+      <div style="padding:18px 24px; background:#121722; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:rgba(168,85,247,0.2); border:1px solid #A855F7; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">🔄</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.15rem; color:#FFF; margin:0;">INTEGRATION HUB &amp; ESTADO DE CONECTORES</h3>
+            <p style="font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">Telemetría en vivo de servicios de terceros y credenciales sincronizadas</p>
+          </div>
+        </div>
+        <button onclick="closeIntegrationHubModal()" style="background:transparent; border:none; color:#94A3B8; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="padding:24px; overflow-y:auto; max-height:75vh; display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#121722; padding:14px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+          <div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.9rem;">Neon PostgreSQL Database</div>
+            <div style="font-size:0.75rem; color:#94A3B8;">Pool de conexiones Serverless &amp; pgvector (1536-D)</div>
+          </div>
+          <span style="background:rgba(16,185,129,0.2); color:#10B981; border:1px solid #10B981; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:bold;">ONLINE ✓</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#121722; padding:14px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+          <div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.9rem;">GitHub CI/CD Actions</div>
+            <div style="font-size:0.75rem; color:#94A3B8;">Webhook con firma criptográfica HMAC-SHA256</div>
+          </div>
+          <span style="background:rgba(56,189,248,0.2); color:#38BDF8; border:1px solid #38BDF8; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:bold;">CONFIGURADO ✓</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#121722; padding:14px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+          <div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.9rem;">BullMQ Redis Queue</div>
+            <div style="font-size:0.75rem; color:#94A3B8;">Worker de ingesta semántica y motor de correos RFC 8058</div>
+          </div>
+          <span style="background:rgba(255,0,127,0.2); color:#FF007F; border:1px solid #FF007F; padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:bold;">LISTO (STANDBY)</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#121722; padding:14px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+          <div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.9rem;">Google Tasks API</div>
+            <div style="font-size:0.75rem; color:#94A3B8;">Sincronización bidireccional con cuentas Google Workspace</div>
+          </div>
+          <span style="background:rgba(255,255,255,0.06); color:#94A3B8; border:1px solid rgba(255,255,255,0.15); padding:4px 10px; border-radius:6px; font-size:0.75rem; font-weight:bold;">DISPONIBLE (OPT-IN)</span>
+        </div>
+      </div>
+
+      <div style="padding:14px 24px; background:#06090F; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end;">
+        <button onclick="closeIntegrationHubModal()" class="btn-primary" style="padding:8px 20px; font-size:0.82rem; background:#A855F7; border-color:#A855F7;">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL SECUNDARIO: CALENDARIO MAESTRO DE ENTREGAS                          -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="calendar-events-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.92); backdrop-filter:blur(10px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div style="width:100%; max-width:760px; background:#0A0D14; border:1px solid rgba(0,229,255,0.4); box-shadow:0 0 35px rgba(0,229,255,0.25); border-radius:16px; display:flex; flex-direction:column; overflow:hidden;">
+      <div style="padding:18px 24px; background:#121722; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:rgba(0,229,255,0.2); border:1px solid #00E5FF; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">📅</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.15rem; color:#FFF; margin:0;">CALENDARIO MAESTRO DE ENTREGAS</h3>
+            <p style="font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">Cronograma de sprints, fechas de corte contractual y SLAs auditados</p>
+          </div>
+        </div>
+        <button onclick="closeCalendarEventsModal()" style="background:transparent; border:none; color:#94A3B8; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="padding:24px; overflow-y:auto; max-height:75vh; display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; gap:14px; background:#121722; padding:14px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+          <div style="color:#00E5FF; font-family:'Bruno Ace', monospace; font-size:1.2rem; min-width:60px;">DÍA 0</div>
+          <div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.88rem;">Kickoff, Aprovisionamiento &amp; Firma de Contrato</div>
+            <div style="font-size:0.75rem; color:#94A3B8; margin-top:2px;">Aislamiento RLS en Neon, anticipo 50% y generación de grafo DAG en RED.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:14px; background:#121722; padding:14px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+          <div style="color:#FF6B00; font-family:'Bruno Ace', monospace; font-size:1.2rem; min-width:60px;">DÍA 3</div>
+          <div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.88rem;">Revisión de Nodos 1 y 2 (Infraestructura y Backend)</div>
+            <div style="font-size:0.75rem; color:#94A3B8; margin-top:2px;">Pruebas de esquemas DDL, autenticación Neon Auth y validación de APIs.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:14px; background:#121722; padding:14px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+          <div style="color:#F59E0B; font-family:'Bruno Ace', monospace; font-size:1.2rem; min-width:60px;">DÍA 5</div>
+          <div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.88rem;">Entrega de Frontend React Flow &amp; Prueba de Telemetría</div>
+            <div style="font-size:0.75rem; color:#94A3B8; margin-top:2px;">Despliegue preliminar en Vercel Edge y pruebas de mutación binaria de color.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:14px; background:#121722; padding:14px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+          <div style="color:#10B981; font-family:'Bruno Ace', monospace; font-size:1.2rem; min-width:60px;">DÍA 7</div>
+          <div>
+            <div style="font-weight:bold; color:#FFF; font-size:0.88rem;">Cierre Inmutable, Liquidación &amp; Asimilación Nexus</div>
+            <div style="font-size:0.75rem; color:#94A3B8; margin-top:2px;">Liquidación del 50% restante, emisión del Acta Ejecutiva y paso a estado ARCHIVED.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px 24px; background:#06090F; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end;">
+        <button onclick="closeCalendarEventsModal()" class="btn-primary" style="padding:8px 20px; font-size:0.82rem;">
+          Cerrar
+        </button>
       </div>
     </div>
   </div>
@@ -5662,19 +7328,35 @@ Process completed with exit code 1.</textarea>
       messagesContainer.appendChild(loadingBubble);
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
+      const startTime = Date.now();
       try {
+        const token = localStorage.getItem('nexus_auth_token') || sessionStorage.getItem('nexus_auth_token');
+        const activeRole = (typeof currentRole !== 'undefined' ? currentRole : (document.getElementById('user-role-selector')?.value || 'COLLABORATOR'));
+
+        const reqHeaders = {
+          'Content-Type': 'application/json',
+          'x-user-role': activeRole
+        };
+        if (token) {
+          reqHeaders['Authorization'] = `Bearer ${token}`;
+        }
+
         const resp = await fetch('/api/v1/nexus/query', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: reqHeaders,
           body: JSON.stringify({
             query: queryText,
             domain_filter: domain || undefined,
-            min_similarity: 0.70
+            min_similarity: 0.60
           })
         });
 
-        const data = await resp.json();
+        const data = await resp.json().catch(() => ({}));
         document.getElementById('nexus-loading-indicator')?.remove();
+
+        if (!resp.ok) {
+          throw new Error(data.error || `Error HTTP ${resp.status} al consultar a Cerebro Nexus`);
+        }
 
         // 3. Render Nexus Answer
         const nexusBubble = document.createElement('div');
@@ -5702,10 +7384,10 @@ Process completed with exit code 1.</textarea>
                 ${data.sources.map(s => `
                   <div style="background:#0A0D14; border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:8px 12px; font-size:0.75rem;">
                     <div style="display:flex; justify-content:space-between; color:#00E5FF; margin-bottom:4px;">
-                      <strong>${escapeHtml(s.title)}</strong>
-                      <span>Afinidad: ${(s.similarity * 100).toFixed(1)}%</span>
+                      <strong>${escapeHtml(s.title || s.filename || 'Fragmento')}</strong>
+                      <span>Afinidad: ${((s.similarity || 0) * 100).toFixed(1)}%</span>
                     </div>
-                    <div style="color:#94A3B8; max-height:80px; overflow-y:auto; font-size:0.72rem; white-space:pre-wrap;">${escapeHtml(s.rawContent)}</div>
+                    <div style="color:#94A3B8; max-height:80px; overflow-y:auto; font-size:0.72rem; white-space:pre-wrap;">${escapeHtml(s.rawContent || '')}</div>
                   </div>
                 `).join('')}
               </div>
@@ -5713,12 +7395,14 @@ Process completed with exit code 1.</textarea>
           `;
         }
 
+        const latencyDisplay = typeof data.queryLatencyMs === 'number' ? data.queryLatencyMs : (Date.now() - startTime);
+
         nexusBubble.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
             <span style="font-family:'JetBrains Mono', monospace; font-size:0.68rem; color:#00E5FF;">NEXUS BRAIN</span>
             <span style="font-size:0.65rem; color:#64748B;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
-            <span style="font-family:'JetBrains Mono', monospace; font-size:0.65rem; color:${data.queryLatencyMs < 100 ? '#10B981' : '#F59E0B'};">
-              ⚡ ${data.queryLatencyMs}ms
+            <span style="font-family:'JetBrains Mono', monospace; font-size:0.65rem; color:${latencyDisplay < 100 ? '#10B981' : '#F59E0B'};">
+              ⚡ ${latencyDisplay}ms
             </span>
           </div>
           <div style="background:#121722; border:1px solid rgba(0,229,255,0.35); border-radius:10px; padding:16px 20px; color:#F8FAFC; font-size:0.88rem; line-height:1.6; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
@@ -5733,12 +7417,20 @@ Process completed with exit code 1.</textarea>
         document.getElementById('nexus-loading-indicator')?.remove();
         const errBubble = document.createElement('div');
         errBubble.style.alignSelf = 'flex-start';
+        errBubble.style.maxWidth = '90%';
         errBubble.innerHTML = `
-          <div style="background:#121722; border:1px solid #EF4444; border-radius:8px; padding:12px 18px; color:#EF4444; font-size:0.85rem;">
-            ⚠️ Error al consultar a Nexus: ${escapeHtml(err.message)}
+          <div style="background:#121722; border:1px solid #EF4444; border-radius:10px; padding:16px 20px; color:#EF4444; font-size:0.85rem; box-shadow:0 4px 20px rgba(239,68,68,0.2);">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-weight:bold;">
+              <span>⚠️ Error al consultar a Cerebro Nexus</span>
+            </div>
+            <div style="color:#FCA5A5; margin-bottom:10px; font-size:0.82rem;">${escapeHtml(err.message)}</div>
+            <button onclick="sendNexusQuery('${escapeHtml(queryText).replace(/'/g, "\\'")}')" style="background:rgba(239,68,68,0.15); border:1px solid #EF4444; color:#FFF; font-size:0.75rem; padding:6px 14px; border-radius:6px; cursor:pointer;">
+              ↻ Reintentar consulta
+            </button>
           </div>
         `;
         messagesContainer.appendChild(errBubble);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
       }
     }
 
@@ -6370,10 +8062,272 @@ Process completed with exit code 1.</textarea>
     }
 
     // =========================================================================
+    // CONTROLADOR DEL INSTRUCTIVO TRANSPARENTE INTERACTIVO (SLIDERS 3D)
+    // =========================================================================
+    let currentInstStep = 1;
+    const totalInstSteps = 5;
+
+    function openInstructivoModal() {
+      const modal = document.getElementById('instructivo-transparent-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+        setInstructivoSlide(currentInstStep);
+      }
+    }
+
+    function closeInstructivoModal() {
+      const modal = document.getElementById('instructivo-transparent-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function setInstructivoSlide(stepNum) {
+      currentInstStep = Math.max(1, Math.min(totalInstSteps, stepNum));
+      
+      // Actualizar slides visibles
+      for (let i = 1; i <= totalInstSteps; i++) {
+        const slide = document.getElementById(`instructivo-slide-${i}`);
+        if (slide) slide.classList.toggle('active', i === currentInstStep);
+      }
+
+      // Actualizar dots indicadores
+      const dotsContainer = document.getElementById('instructivo-step-dots');
+      if (dotsContainer) {
+        const dots = dotsContainer.querySelectorAll('.step-dot');
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx + 1 === currentInstStep);
+        });
+      }
+
+      // Habilitar/deshabilitar botones
+      const prevBtn = document.getElementById('btn-inst-prev');
+      const nextBtn = document.getElementById('btn-inst-next');
+      if (prevBtn) prevBtn.disabled = (currentInstStep === 1);
+      if (nextBtn) {
+        if (currentInstStep === totalInstSteps) {
+          nextBtn.innerText = 'Cerrar Instructivo ✓';
+        } else {
+          nextBtn.innerText = 'Siguiente →';
+        }
+      }
+    }
+
+    function changeInstructivoStep(dir) {
+      if (currentInstStep === totalInstSteps && dir > 0) {
+        closeInstructivoModal();
+        return;
+      }
+      setInstructivoSlide(currentInstStep + dir);
+    }
+
+    function updateInstructivoSlider(type, val) {
+      if (type === 'roi') {
+        const num = Number(val);
+        const disp = document.getElementById('disp-slider-roi');
+        if (disp) disp.innerText = `$${num.toLocaleString()} MXN`;
+
+        const chipArch = document.getElementById('chip-archetype-name');
+        const chipHost = document.getElementById('chip-hosting-name');
+        const chipTime = document.getElementById('chip-delivery-time');
+        const chipCont = document.getElementById('chip-contract-type');
+
+        if (num <= 5000) {
+          if (chipArch) chipArch.innerText = 'BIOLINK / VCARD';
+          if (chipHost) chipHost.innerText = 'Vercel Edge';
+          if (chipTime) chipTime.innerText = '~3 días';
+          if (chipCont) chipCont.innerText = 'Licencia SaaS vCard';
+        } else if (num <= 15000) {
+          if (chipArch) chipArch.innerText = 'LANDING_PAGE';
+          if (chipHost) chipHost.innerText = 'Vercel CDN';
+          if (chipTime) chipTime.innerText = '~7 días';
+          if (chipCont) chipCont.innerText = 'Master Software';
+        } else if (num <= 35000) {
+          if (chipArch) chipArch.innerText = 'WEB_WITH_API';
+          if (chipHost) chipHost.innerText = 'Cloud Run + Neon';
+          if (chipTime) chipTime.innerText = '~14 días';
+          if (chipCont) chipCont.innerText = 'Master Software';
+        } else if (num <= 70000) {
+          if (chipArch) chipArch.innerText = 'ECOMMERCE / SAAS';
+          if (chipHost) chipHost.innerText = 'Cloud Run + Redis';
+          if (chipTime) chipTime.innerText = '~21 días';
+          if (chipCont) chipCont.innerText = 'SaaS Multi-Tenant';
+        } else {
+          if (chipArch) chipArch.innerText = 'OPEX_MANAGEMENT';
+          if (chipHost) chipHost.innerText = 'Cluster + pgvector';
+          if (chipTime) chipTime.innerText = '~30 días';
+          if (chipCont) chipCont.innerText = 'Enterprise OPEX SLA';
+        }
+      } else if (type === 'dag') {
+        const pct = Number(val);
+        const disp = document.getElementById('disp-slider-dag');
+        if (disp) disp.innerText = `${pct}% COMPLETADO`;
+
+        const completedNodes = Math.round((pct / 100) * 5);
+        const redNodes = 5 - completedNodes;
+
+        const chipG = document.getElementById('chip-dag-green');
+        const chipR = document.getElementById('chip-dag-red');
+        const chipH = document.getElementById('chip-dag-hmac');
+
+        if (chipG) chipG.innerText = `${completedNodes} / 5`;
+        if (chipR) chipR.innerText = `${redNodes} / 5`;
+        if (chipH) chipH.innerText = (pct >= 80) ? 'VERIFIED (200 OK)' : 'SYNC PENDING';
+      } else if (type === 'sigma') {
+        const sig = Number(val);
+        const disp = document.getElementById('disp-slider-sigma');
+        if (disp) disp.innerText = `${sig.toFixed(1)} σ ${sig >= 5.5 ? '(World Class)' : (sig >= 4.5 ? '(Industria Avanzada)' : '(Operación Estándar)')}`;
+
+        let dpmo = 1.5;
+        let yld = '99.9998%';
+        if (sig < 3.5) { dpmo = 66807; yld = '93.3193%'; }
+        else if (sig < 4.0) { dpmo = 6210; yld = '99.3790%'; }
+        else if (sig < 4.5) { dpmo = 1350; yld = '99.8650%'; }
+        else if (sig < 5.0) { dpmo = 233; yld = '99.9767%'; }
+        else if (sig < 5.5) { dpmo = 32; yld = '99.9968%'; }
+        else if (sig < 5.9) { dpmo = 4; yld = '99.9996%'; }
+
+        const chipD = document.getElementById('chip-dpmo-val');
+        const chipY = document.getElementById('chip-yield-val');
+        const chipT = document.getElementById('chip-tollgate-status');
+
+        if (chipD) chipD.innerText = `${dpmo.toLocaleString()} DPMO`;
+        if (chipY) chipY.innerText = yld;
+        if (chipT) chipT.innerText = (sig >= 5.0) ? 'CONTROL APROBADO ✓' : 'REQUIERE DMAIC';
+      } else if (type === 'cosine') {
+        const cos = Number(val);
+        const disp = document.getElementById('disp-slider-cosine');
+        if (disp) disp.innerText = `≥ ${cos.toFixed(2)} (${cos >= 0.85 ? 'Máxima Precisión' : (cos >= 0.70 ? 'Alta Afinidad' : 'Exploratorio')})`;
+
+        const count = cos >= 0.85 ? 'Top 2' : (cos >= 0.70 ? 'Top 5' : 'Top 10');
+        const chipC = document.getElementById('chip-cosine-count');
+        if (chipC) chipC.innerText = count;
+      } else if (type === 'months') {
+        const m = Number(val);
+        const disp = document.getElementById('disp-slider-months');
+        if (disp) disp.innerText = `${m} Meses ${m <= 4 ? '(Payback Rápido)' : (m <= 8 ? '(Payback Promedio)' : '(Largo Plazo)')}`;
+
+        const mult = (18 / m).toFixed(1) + 'x';
+        const sav = `$${Math.round(45000 * (12 / m)).toLocaleString()} MXN`;
+
+        const chipM = document.getElementById('chip-roi-multiplier');
+        const chipS = document.getElementById('chip-roi-savings');
+
+        if (chipM) chipM.innerText = mult;
+        if (chipS) chipS.innerText = sav;
+      }
+    }
+
+    // =========================================================================
+    // FILTRADO DE VENTANAS Y VISIBILIDAD
+    // =========================================================================
+    function filterWindowCategory(group) {
+      document.querySelectorAll('.window-tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (window.event && window.event.target) window.event.target.classList.add('active');
+
+      const frames = document.querySelectorAll('.window-frame');
+      frames.forEach(frame => {
+        if (group === 'all' || frame.getAttribute('data-window-group') === group) {
+          frame.style.display = 'block';
+        } else {
+          frame.style.display = 'none';
+        }
+      });
+    }
+
+    // =========================================================================
+    // TOOLTIPS EN MÓVILES (TAP EN ÍCONO DE INFORMACIÓN ℹ️)
+    // =========================================================================
+    function toggleCardTooltip(tooltipId) {
+      const el = document.getElementById(tooltipId);
+      if (!el) return;
+      const isVisible = (el.style.opacity === '1');
+      
+      // Cerrar otros tooltips abiertos
+      document.querySelectorAll('.card-tooltip').forEach(tt => {
+        tt.style.opacity = '0';
+        tt.style.pointerEvents = 'none';
+        tt.style.visibility = 'hidden';
+      });
+
+      if (!isVisible) {
+        el.style.opacity = '1';
+        el.style.pointerEvents = 'auto';
+        el.style.visibility = 'visible';
+      }
+    }
+
+    // Cerrar tooltip si se hace tap fuera
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.magnetic-module-card')) {
+        document.querySelectorAll('.card-tooltip').forEach(tt => {
+          tt.style.opacity = '0';
+          tt.style.pointerEvents = 'none';
+          tt.style.visibility = 'hidden';
+        });
+      }
+    });
+
+    // =========================================================================
+    // MODALES SECUNDARIOS DE GESTIÓN Y OPERACIÓN
+    // =========================================================================
+    function openDmaicTollgateModal() {
+      const el = document.getElementById('dmaic-tollgates-modal');
+      if (el) el.style.display = 'flex';
+    }
+    function closeDmaicTollgateModal() {
+      const el = document.getElementById('dmaic-tollgates-modal');
+      if (el) el.style.display = 'none';
+    }
+
+    function openIshikawaModal() {
+      const el = document.getElementById('ishikawa-modal');
+      if (el) el.style.display = 'flex';
+    }
+    function closeIshikawaModal() {
+      const el = document.getElementById('ishikawa-modal');
+      if (el) el.style.display = 'none';
+    }
+
+    function openFiveWhysModal() {
+      const el = document.getElementById('five-whys-modal');
+      if (el) el.style.display = 'flex';
+    }
+    function closeFiveWhysModal() {
+      const el = document.getElementById('five-whys-modal');
+      if (el) el.style.display = 'none';
+    }
+
+    function openContractViewerModal() {
+      const el = document.getElementById('contract-viewer-modal');
+      if (el) el.style.display = 'flex';
+    }
+    function closeContractViewerModal() {
+      const el = document.getElementById('contract-viewer-modal');
+      if (el) el.style.display = 'none';
+    }
+
+    function openIntegrationHubModal() {
+      const el = document.getElementById('integration-hub-modal');
+      if (el) el.style.display = 'flex';
+    }
+    function closeIntegrationHubModal() {
+      const el = document.getElementById('integration-hub-modal');
+      if (el) el.style.display = 'none';
+    }
+
+    function openCalendarEventsModal() {
+      const el = document.getElementById('calendar-events-modal');
+      if (el) el.style.display = 'flex';
+    }
+    function closeCalendarEventsModal() {
+      const el = document.getElementById('calendar-events-modal');
+      if (el) el.style.display = 'none';
+    }
+
+    // =========================================================================
     // MOTOR DE TARJETAS MAGNÉTICAS CON SOMBRA RADIANTE Y FÍSICA 3D (60 FPS)
     // =========================================================================
     function initMagneticCards() {
-      const selector = '.app-card, .hero-stat-card, .flowchart-lifecycle-board, .magnetic-flow-card, .need-card, .prod-card, .sim-card';
+      const selector = '.app-card, .hero-stat-card, .flowchart-lifecycle-board, .magnetic-flow-card, .need-card, .prod-card, .sim-card, .magnetic-module-card';
       const cards = document.querySelectorAll(selector);
       if (!cards.length) return;
 

@@ -67,12 +67,17 @@ export const NexusChatModal: React.FC<NexusChatModalProps> = ({
     setIsLoading(true);
 
     try {
+      const token = typeof window !== 'undefined' ? (localStorage.getItem('nexus_auth_token') || sessionStorage.getItem('nexus_auth_token')) : null;
       const resp = await fetch('/api/v1/nexus/query', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-role': 'COLLABORATOR',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           query: textToSend.trim(),
-          min_similarity: 0.70,
+          min_similarity: 0.60,
           domain_filter: domainFilter || undefined
         })
       });

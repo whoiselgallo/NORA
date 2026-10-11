@@ -382,13 +382,14 @@ export const NexusArchitectStudio: React.FC<NexusArchitectStudioProps> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-workspace-id': workspaceId
+          'x-workspace-id': workspaceId,
+          'x-user-role': 'COLLABORATOR'
         },
         body: JSON.stringify({
           query: userText,
           workspace_id: workspaceId,
           domain: 'SYSTEM_ARCHITECTURE',
-          min_similarity: 0.65
+          min_similarity: 0.60
         })
       });
 

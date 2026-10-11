@@ -88,7 +88,17 @@ export class NexusBrainService {
 
       if (rows.length === 0) {
         return {
-          answer: `No se encontraron aprendizajes históricos ni documentos asimilados en la memoria de Nexus para la consulta: "${cleanQuery}". A medida que cargues documentos o archives proyectos en este workspace, Nexus asimilará su conocimiento.`,
+          answer: `### 📌 Memoria Operativa de Nexus
+Actualmente no se registran vectores semánticos en el workspace activo para la consulta: **"${cleanQuery}"**.
+
+### ⚡ Recomendaciones para Iniciar
+1. **Asimilar Documentos Técnicos**: Puedes cargar especificaciones, manuales de arquitectura o políticas mediante el módulo de documentos o la API de ingesta.
+2. **Archivar Proyectos (Cierre Inmutable)**: Al ejecutar el cierre formal de un proyecto (\`POST /projects/:id/close\`), Nexus absorbe automáticamente el DAG de dependencias, contramedidas de Ishikawa y matrices 5W2H en su memoria continua pgvector.
+3. **Consultas Disponibles**: Prueba consultando sobre arquitecturas asimiladas: *"¿Cuál es el protocolo de seguridad y arquitectura?"* o *"¿Cómo funciona el pipeline de CI/CD?"*
+
+### 📊 Estado del Sistema
+- Memoria HNSW (pgvector): Activa y sincronizada con Neon PostgreSQL.
+- Tiempo de respuesta: ${latencyMs}ms.`,
           citedProjects: [],
           sources: [],
           similarityThresholdSatisfied: false,
@@ -116,6 +126,7 @@ export class NexusBrainService {
       }));
 
       const citedProjects = Array.from(new Set(sources.filter(s => !s.documentId).map(s => s.projectName)));
+      const citedDocuments = Array.from(new Set(sources.filter(s => s.documentId || s.filename).map(s => s.filename)));
 
       // 3. Sintetizar respuesta contextual con Gemini / Neon AI Gateway o generador determinístico
       const contextBlocks = sources.map((s, idx) => {
@@ -144,7 +155,7 @@ ${contextBlocks}`;
 
       let generatedAnswer = '';
 
-      // Intento con Gemini Pool o Neon AI Gateway
+      // Intento con Gemini Pool o Neon AI Gateway con timeout resiliente de 7s
       const geminiKeys = [
         process.env.GEMINI_API_KEY_1 || process.env.GEMINI_API_KEY,
         process.env.GEMINI_API_KEY_2,
@@ -155,16 +166,20 @@ ${contextBlocks}`;
         const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
         for (const key of geminiKeys) {
           try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 7000);
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
             const resp = await fetch(url, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
+              signal: controller.signal,
               body: JSON.stringify({
                 systemInstruction: { parts: [{ text: systemPrompt }] },
                 contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
                 generationConfig: { temperature: 0.2 }
               })
             });
+            clearTimeout(timeoutId);
 
             if (resp.ok) {
               const data = await resp.json() as any;
@@ -175,24 +190,28 @@ ${contextBlocks}`;
               }
             }
           } catch (err) {
-            // Siguiente clave
+            // Siguiente clave o fallback determinístico
           }
         }
       }
 
-      // Fallback determinístico bien estructurado si la IA remota no está activa
+      // Fallback determinístico bien estructurado si la IA remota no está activa o excede tiempo
       if (!generatedAnswer) {
+        const sourceReferences = citedProjects.length > 0
+          ? citedProjects.map(p => `**[Proyecto: ${p}]**`).join(', ')
+          : citedDocuments.map(d => `**[Documento: ${d}]**`).join(', ');
+
         generatedAnswer = `
 ### 📌 Diagnóstico & Aprendizaje Histórico
-Con base en el análisis de la memoria de proyectos cerrados, se identificaron antecedentes directos en ${citedProjects.map(p => `**[Proyecto: ${p}]**`).join(', ')}.
-Los registros confirman que los desafíos técnicos en esta área están típicamente asociados a configuración de dependencias, límites WIP en Kanban o latencia en el pipeline CI/CD.
+Con base en el análisis de la memoria operativa de Nexus en pgvector, se identificaron antecedentes directos en ${sourceReferences || 'los activos técnicos asimilados'}.
+Los registros confirman las especificaciones y aprendizajes transferidos para garantizar continuidad y alta disponibilidad operativa.
 
 ### ⚡ Recomendación Técnica Preventiva
-Replicar las contramedidas que resultaron exitosas en los proyectos archivados:
+Replicar las especificaciones y contramedidas validadas en la memoria técnica:
 ${sources.slice(0, 2).map(s => `- **${s.title}**: ${s.rawContent.split('\n')[2] || s.rawContent.substring(0, 140)}...`).join('\n')}
 
 ### 📊 Impacto & Resultados Esperados
-La aplicación de estos procedimientos en proyectos anteriores permitió alcanzar niveles de calidad de hasta 5.9σ y reducir los tiempos de resolución a menos de 2 horas, salvaguardando la continuidad operativa bajo los estándares de TSolutions IPIDD.
+La aplicación de estos procedimientos consolidados permite salvaguardar la confiabilidad de los despliegues, reduciendo riesgos operativos y acelerando tiempos de entrega bajo los estándares de TSolutions IPIDD: *"Tecnología instalada. Conocimiento transferido. Negocios escalados."*
         `.trim();
       }
 

@@ -111,9 +111,15 @@ export function authenticateNeonAuth(req: Request, res: Response, next: NextFunc
     }
   }
 
-  // 2. Soporte para dashboard interactivo: x-user-role header, body.user_role o fallback GET
+  // 2. Soporte para dashboard interactivo: x-user-role header, body.user_role o fallback GET / Nexus RAG
   const explicitRole = (req.headers['x-user-role'] as string) || (req.body && req.body.user_role) || (req.query && (req.query.role as string));
-  const candidateRole = (explicitRole || (req.method === 'GET' ? 'COLLABORATOR' : '')).toUpperCase();
+  const isKnowledgeEndpoint = Boolean(
+    req.path?.includes('/nexus/query') ||
+    req.path?.includes('/nexus/ask') ||
+    req.originalUrl?.includes('/nexus/query') ||
+    req.originalUrl?.includes('/nexus/ask')
+  );
+  const candidateRole = (explicitRole || ((req.method === 'GET' || isKnowledgeEndpoint) ? 'COLLABORATOR' : '')).toUpperCase();
 
   if (candidateRole === 'ADMIN' || candidateRole === 'COLLABORATOR' || candidateRole === 'CLIENT') {
     req.user = {

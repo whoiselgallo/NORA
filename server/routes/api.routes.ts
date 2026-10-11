@@ -362,7 +362,7 @@ export function createApiRouter(
     authenticateNeonAuth,
     validateBody(NexusQuerySchema),
     async (req: Request, res: Response) => {
-      const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+      const wsId = req.workspaceId || (req.body && req.body.workspace_id) || (req.headers['x-workspace-id'] as string) || DEFAULT_WORKSPACE_ID;
       const { query, min_similarity, domain_filter } = req.body;
 
       try {
