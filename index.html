@@ -2557,6 +2557,423 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
+    /* =========================================================================
+       ARQUITECTURA EN CAPAS PROGRESIVAS (LAYERED WORKSPACE BUILDER MOBILE-FIRST)
+       Optimizado para Smartphones Gama Media (Galaxy A54/A55, Moto G84, Redmi Note 13)
+       y Gama Alta (iPhone 15/16 Pro Max, Galaxy S24 Ultra, Pixel 9)
+       ========================================================================= */
+    .layered-platform-shell {
+      position: relative;
+      width: 100%;
+      margin-bottom: 36px;
+    }
+
+    /* Barra de Progreso y Navegación por Capas (Sticky Mobile-First) */
+    .layer-stepper-bar {
+      position: sticky;
+      top: 64px;
+      z-index: 950;
+      background: rgba(10, 13, 20, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(0, 229, 255, 0.28);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 24px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65), 0 0 22px rgba(0, 229, 255, 0.12);
+    }
+
+    .layer-stepper-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .layer-stepper-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #00E5FF;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .layer-progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .layer-progress-fill {
+      height: 100%;
+      width: 25%;
+      background: linear-gradient(90deg, #FF6B00 0%, #00E5FF 100%);
+      border-radius: 999px;
+      transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+    }
+
+    .layer-steps-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+    }
+    .layer-steps-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .layer-step-pill {
+      scroll-snap-align: start;
+      flex: 1 0 auto;
+      min-height: 48px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      background: rgba(18, 23, 34, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      touch-action: manipulation;
+      text-align: left;
+      font-family: var(--font-primary);
+    }
+
+    .layer-step-pill:hover {
+      border-color: rgba(0, 229, 255, 0.4);
+      color: #FFF;
+    }
+
+    .layer-step-pill.active {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.22) 0%, rgba(0, 229, 255, 0.18) 100%);
+      border-color: #00E5FF;
+      color: #FFFFFF;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+    }
+
+    .layer-step-pill.completed {
+      border-color: rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.1);
+      color: #E2E8F0;
+    }
+
+    .layer-step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bruno Ace', monospace;
+      font-size: 0.78rem;
+      color: #FFF;
+      flex-shrink: 0;
+    }
+
+    .layer-step-pill.active .layer-step-num {
+      background: #FF6B00;
+      color: #FFF;
+      box-shadow: 0 0 10px rgba(255, 107, 0, 0.6);
+    }
+
+    .layer-step-pill.completed .layer-step-num {
+      background: #10B981;
+      color: #0A0D14;
+      font-weight: 900;
+    }
+
+    /* Contenedor de cada Capa */
+    .platform-layer-section {
+      display: none;
+      animation: layerFadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .platform-layer-section.active-layer {
+      display: block;
+    }
+
+    .layered-platform-shell.show-all-layers .platform-layer-section {
+      display: block;
+      margin-bottom: 36px;
+    }
+
+    @keyframes layerFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Paneles de Capa con Estética Glass & Glow */
+    .layer-window-card {
+      background: linear-gradient(180deg, rgba(18, 23, 34, 0.92) 0%, rgba(10, 13, 20, 0.96) 100%);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      border-radius: 20px;
+      padding: clamp(16px, 3.5vw, 32px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 229, 255, 0.08);
+      margin-bottom: 24px;
+    }
+
+    .layer-header-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .layer-tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(255, 107, 0, 0.15);
+      color: #FF6B00;
+      border: 1px solid rgba(255, 107, 0, 0.35);
+      margin-bottom: 8px;
+    }
+
+    /* Inputs Mobile-First (16px mínimo para evitar auto-zoom en iOS y Android) */
+    .mobile-safe-input,
+    .mobile-safe-select,
+    .mobile-safe-textarea {
+      width: 100%;
+      min-height: 48px;
+      background: rgba(6, 9, 15, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #FFFFFF;
+      font-size: 16px !important; /* Previene zoom brusco en iPhone y Samsung Galaxy */
+      font-family: var(--font-primary);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+
+    .mobile-safe-input:focus,
+    .mobile-safe-select:focus,
+    .mobile-safe-textarea:focus {
+      outline: none;
+      border-color: #00E5FF;
+      box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.2);
+    }
+
+    .form-field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #E2E8F0;
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+
+    .form-field-hint {
+      font-size: 0.72rem;
+      color: #94A3B8;
+      margin-top: 4px;
+    }
+
+    /* Botones Persuasivos (High-Conversion CTAs) */
+    .btn-persuasive-cta {
+      min-height: 52px;
+      padding: 14px 24px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: linear-gradient(135deg, #FF6B00 0%, #FF8800 55%, #00E5FF 100%);
+      background-size: 200% 200%;
+      color: #FFFFFF;
+      font-family: 'Space Grotesk', var(--font-primary);
+      font-size: 0.98rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 28px rgba(255, 107, 0, 0.45), 0 0 18px rgba(0, 229, 255, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      touch-action: manipulation;
+      text-decoration: none;
+    }
+
+    .btn-persuasive-cta:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 14px 34px rgba(255, 107, 0, 0.6), 0 0 25px rgba(0, 229, 255, 0.45);
+    }
+
+    .btn-persuasive-cta:active {
+      transform: scale(0.98);
+    }
+
+    .btn-persuasive-secondary {
+      min-height: 48px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      color: #00E5FF;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-persuasive-secondary:hover {
+      background: rgba(0, 229, 255, 0.2);
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.3);
+    }
+
+    /* Grillas Responsivas Mobile-First para el Project Charter */
+    .charter-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .charter-grid-3col {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .charter-grid-2col {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .charter-grid-3col {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Tarjetas Magnéticas de Miembros del Equipo y Documentos del Project Charter */
+    .charter-doc-card {
+      position: relative;
+      background: rgba(14, 19, 30, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+
+    .charter-doc-card.doc-ready {
+      border-color: rgba(16, 185, 129, 0.45);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45), 0 0 20px rgba(16, 185, 129, 0.12);
+    }
+
+    .charter-doc-card.doc-pending {
+      border-color: rgba(245, 158, 11, 0.45);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45), 0 0 20px rgba(245, 158, 11, 0.12);
+    }
+
+    .team-member-chip-card {
+      background: rgba(18, 25, 38, 0.95);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .team-member-chip-card:hover {
+      border-color: #00E5FF;
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.2);
+    }
+
+    /* Tarjetas de Propósito del Proyecto (Capa 02) y Selección de Herramientas (Capa 03) */
+    .purpose-selector-card {
+      position: relative;
+      background: rgba(14, 20, 32, 0.92);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      touch-action: manipulation;
+    }
+
+    .purpose-selector-card.selected-purpose {
+      background: linear-gradient(145deg, rgba(0, 229, 255, 0.14) 0%, rgba(255, 107, 0, 0.1) 100%);
+      border-color: #00E5FF;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 229, 255, 0.3);
+    }
+
+    .tool-Selectable-card {
+      position: relative;
+      background: rgba(14, 19, 30, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.25s ease;
+    }
+
+    .tool-Selectable-card.tool-selected {
+      border-color: #10B981;
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(14, 19, 30, 0.95) 100%);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 22px rgba(16, 185, 129, 0.22);
+    }
+
+    /* Optimización para Smartphones de Gama Media (360px - 430px) */
+    @media (max-width: 640px) {
+      .layer-stepper-bar {
+        top: 58px;
+        padding: 10px;
+        border-radius: 12px;
+      }
+      .layer-step-pill {
+        min-height: 46px;
+        padding: 6px 12px;
+        font-size: 0.78rem;
+      }
+      .btn-persuasive-cta {
+        width: 100%;
+        font-size: 0.92rem;
+        padding: 14px 16px;
+      }
+      .btn-persuasive-secondary {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -2666,6 +3083,567 @@
 
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="main-wrap">
+
+    <!-- =========================================================================
+         ARQUITECTURA EN CAPAS PROGRESIVAS (MOBILE-FIRST WORKSPACE BUILDER)
+         Guía paso a paso: Capa 01 (Project Charter) -> Capa 02 (Espacio) ->
+         Capa 03 (Herramientas por Tipo y Propósito) -> Capa 04 (Consola & DAG)
+         ========================================================================= -->
+    <div class="layered-platform-shell" id="layered-platform-shell">
+
+      <!-- BARRA DE NAVEGACIÓN DE CAPAS (STICKY & ACCESIBLE EN SMARTPHONES) -->
+      <div class="layer-stepper-bar" role="navigation" aria-label="Capas de Construcción del Workspace">
+        <div class="layer-stepper-top">
+          <div class="layer-stepper-brand">
+            <span>🧭 RUTA GUIADA POR CAPAS</span>
+            <span>•</span>
+            <span id="layer-current-status-label" style="color:#FF6B00;">CAPA 01 DE 04: PROJECT CHARTER &amp; ARRANQUE</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button type="button" class="btn-persuasive-secondary" onclick="toggleAllLayersMode()" id="btn-toggle-all-layers" style="min-height:36px; padding:6px 12px; font-size:0.74rem;">
+              <span>👁️ Ver Todas las Capas</span>
+            </button>
+            <button type="button" class="btn-persuasive-secondary" onclick="openInstructivoModal()" style="min-height:36px; padding:6px 12px; font-size:0.74rem; border-color:#FF6B00; color:#FF6B00; background:rgba(255,107,0,0.12);">
+              <span>💡 Simulador Sliders 3D</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="layer-progress-track">
+          <div class="layer-progress-fill" id="layer-progress-bar-fill" style="width: 25%;"></div>
+        </div>
+
+        <div class="layer-steps-scroll">
+          <button type="button" class="layer-step-pill active" id="step-pill-layer-1" onclick="switchPlatformLayer(1)">
+            <span class="layer-step-num" id="step-num-layer-1">01</span>
+            <div>
+              <div style="font-weight:800; font-size:0.82rem; color:#FFF;">Project Charter &amp; Equipo</div>
+              <div style="font-size:0.68rem; color:#94A3B8;">Nombre, Líder, Miembros &amp; Docs PMI</div>
+            </div>
+          </button>
+
+          <button type="button" class="layer-step-pill" id="step-pill-layer-2" onclick="switchPlatformLayer(2)">
+            <span class="layer-step-num" id="step-num-layer-2">02</span>
+            <div>
+              <div style="font-weight:800; font-size:0.82rem; color:#FFF;">Creación del Espacio</div>
+              <div style="font-size:0.68rem; color:#94A3B8;">Propósito, Tenant RLS &amp; Contrato</div>
+            </div>
+          </button>
+
+          <button type="button" class="layer-step-pill" id="step-pill-layer-3" onclick="switchPlatformLayer(3)">
+            <span class="layer-step-num" id="step-num-layer-3">03</span>
+            <div>
+              <div style="font-weight:800; font-size:0.82rem; color:#FFF;">Selección de Herramientas</div>
+              <div style="font-size:0.68rem; color:#94A3B8;">Por Tipo de Herramienta y Propósito</div>
+            </div>
+          </button>
+
+          <button type="button" class="layer-step-pill" id="step-pill-layer-4" onclick="switchPlatformLayer(4)">
+            <span class="layer-step-num" id="step-num-layer-4">04</span>
+            <div>
+              <div style="font-weight:800; font-size:0.82rem; color:#FFF;">Workspace &amp; Grafo DAG</div>
+              <div style="font-size:0.68rem; color:#94A3B8;">5 Ventanas, Telemetría &amp; Cierre</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- =========================================================================
+           CAPA 01: PROJECT CHARTER TRADICIONAL (IDENTIDAD, LÍDER, MIEMBROS Y DOCS)
+           ========================================================================= -->
+      <section class="platform-layer-section active-layer" id="platform-layer-1" aria-label="Capa 1: Project Charter Tradicional">
+        <div class="layer-window-card">
+          <div class="layer-header-banner">
+            <div>
+              <div class="layer-tag-pill">📋 CAPA 01 • ACTA DE CONSTITUCIÓN DEL PROYECTO (PROJECT CHARTER PMI / SIX SIGMA)</div>
+              <h1 style="font-size:clamp(1.35rem, 4vw, 2.1rem); font-weight:900; color:#FFF; margin:0 0 8px 0; line-height:1.2;">
+                Inicia tu Proyecto: <span class="gradient-text">Gobernanza, Equipo y Documentación de Arranque</span>
+              </h1>
+              <p style="font-size:0.9rem; color:#94A3B8; max-width:820px; margin:0; line-height:1.5;">
+                Define los cimientos formales de tu proyecto antes de aprovisionar la infraestructura. Esta capa estructura el <strong>Nombre del Proyecto</strong>, el <strong>Líder Responsable</strong>, los <strong>Miembros del Equipo (Matriz RACI)</strong> y los <strong>6 documentos obligatorios del Project Charter tradicional</strong>.
+              </p>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button type="button" class="btn-persuasive-secondary" onclick="autofillProjectCharterDemo()">
+                <span>⚡ Autocompletar con Plantilla Ejecutiva</span>
+              </button>
+              <button type="button" class="btn-persuasive-secondary" onclick="openFullCharterPreviewModal()" style="border-color:#10B981; color:#10B981; background:rgba(16,185,129,0.1);">
+                <span>📜 Ver Acta Oficial Completa</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- PASO 1.1: IDENTIDAD DEL PROYECTO Y LÍDER DEL PROYECTO -->
+          <div style="margin-bottom:28px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+              <h2 style="font-size:1.08rem; font-weight:800; color:#00E5FF; margin:0; display:flex; align-items:center; gap:8px;">
+                <span style="background:#00E5FF; color:#0A0D14; width:26px; height:26px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-family:'Bruno Ace', monospace; font-size:0.8rem;">1</span>
+                Identidad del Proyecto &amp; Liderazgo (Project Leader / Sponsor)
+              </h2>
+              <span style="font-family:var(--font-mono); font-size:0.72rem; color:#10B981; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); padding:3px 10px; border-radius:999px;">
+                FOLIO: <strong id="pc-folio-badge">CHR-2026-IPIDD-01</strong>
+              </span>
+            </div>
+
+            <div class="charter-grid-2col">
+              <div class="magnetic-module-card" style="--glow-color:#00E5FF; cursor:default;">
+                <label class="form-field-label" for="pc-project-name">📌 Nombre Oficial del Proyecto *</label>
+                <input type="text" id="pc-project-name" class="mobile-safe-input" value="Plataforma E-Commerce &amp; ERP Ferretodo" placeholder="Ej: Modernización Digital &amp; Automatización OPEX" oninput="syncCharterStateToLayers()" />
+                <div class="form-field-hint">Este nombre identificará tu Workspace aislado en Neon PostgreSQL, contratos y grafo DAG.</div>
+
+                <div style="margin-top:14px;">
+                  <label class="form-field-label" for="pc-project-objective">🎯 Objetivo Estratégico Resumido (Elevator Pitch)</label>
+                  <textarea id="pc-project-objective" class="mobile-safe-textarea" rows="2" oninput="syncCharterStateToLayers()" placeholder="Describe el resultado clave y valor de negocio a entregar...">Implementar una arquitectura distribuida con catálogo interactivo, pasarela de cobro, telemetría CI/CD y control de calidad Six Sigma con retorno proyectado en 4 meses.</textarea>
+                </div>
+              </div>
+
+              <div class="magnetic-module-card" style="--glow-color:#FF6B00; cursor:default;">
+                <div class="charter-grid-2col" style="gap:12px;">
+                  <div>
+                    <label class="form-field-label" for="pc-leader-name">👑 Líder del Proyecto (PM / Tech Lead) *</label>
+                    <input type="text" id="pc-leader-name" class="mobile-safe-input" value="Ing. David Gómez" placeholder="Nombre del Líder del Proyecto" oninput="syncCharterStateToLayers()" />
+                  </div>
+                  <div>
+                    <label class="form-field-label" for="pc-leader-email">✉️ Correo del Líder *</label>
+                    <input type="email" id="pc-leader-email" class="mobile-safe-input" value="dgomez@tsolutionsipidd.com" placeholder="lider@empresa.com" oninput="syncCharterStateToLayers()" />
+                  </div>
+                  <div>
+                    <label class="form-field-label" for="pc-sponsor-name">🏛️ Patrocinador / Cliente (Sponsor) *</label>
+                    <input type="text" id="pc-sponsor-name" class="mobile-safe-input" value="Lic. Fernando Almonte (Director)" placeholder="Quien autoriza el presupuesto" oninput="syncCharterStateToLayers()" />
+                  </div>
+                  <div>
+                    <label class="form-field-label" for="pc-budget-amount">💰 Presupuesto Autorizado &amp; Moneda</label>
+                    <input type="text" id="pc-budget-amount" class="mobile-safe-input" value="$28,500 MXN" placeholder="Ej: $28,500 MXN" oninput="syncCharterStateToLayers()" />
+                  </div>
+                </div>
+                <div class="form-field-hint" style="margin-top:10px;">
+                  El Líder del Proyecto recibe permisos <strong style="color:#00E5FF;">ADMIN / ACCOUNTABLE</strong> y el Patrocinador recibe acceso <strong style="color:#10B981;">OWNER / CLIENT</strong>.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 1.2: MIEMBROS DEL PROYECTO Y MATRIZ RACI -->
+          <div style="margin-bottom:28px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+              <div>
+                <h2 style="font-size:1.08rem; font-weight:800; color:#00E5FF; margin:0; display:flex; align-items:center; gap:8px;">
+                  <span style="background:#00E5FF; color:#0A0D14; width:26px; height:26px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-family:'Bruno Ace', monospace; font-size:0.8rem;">2</span>
+                  Miembros del Proyecto &amp; Asignación de Roles RACI
+                </h2>
+                <p style="font-size:0.78rem; color:#94A3B8; margin:4px 0 0 0;">
+                  Agrega a los integrantes que participarán en la ejecución, revisión de calidad o consulta técnica.
+                </p>
+              </div>
+              <span style="font-family:var(--font-mono); font-size:0.75rem; color:#00E5FF;" id="pc-members-counter-badge">
+                4 MIEMBROS ASIGNADOS
+              </span>
+            </div>
+
+            <!-- Formulario rápido Mobile-First para agregar miembro -->
+            <div style="background:rgba(10,14,23,0.9); border:1px solid rgba(0,229,255,0.22); border-radius:16px; padding:16px; margin-bottom:16px;">
+              <div class="charter-grid-3col" style="align-items:end;">
+                <div>
+                  <label class="form-field-label" for="pc-new-member-name">👤 Nombre del Integrante</label>
+                  <input type="text" id="pc-new-member-name" class="mobile-safe-input" placeholder="Ej: Ing. Sofía Valenzuela" />
+                </div>
+                <div>
+                  <label class="form-field-label" for="pc-new-member-role">🛠️ Especialidad / Rol en el Proyecto</label>
+                  <input type="text" id="pc-new-member-role" class="mobile-safe-input" placeholder="Ej: Arquitecta Cloud / QA Six Sigma" />
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                  <div style="flex:1; min-width:140px;">
+                    <label class="form-field-label" for="pc-new-member-raci">📊 Rol RACI</label>
+                    <select id="pc-new-member-raci" class="mobile-safe-select">
+                      <option value="R - Responsible (Ejecutor)">R — Ejecutor (Responsible)</option>
+                      <option value="A - Accountable (Aprobador)">A — Aprobador (Accountable)</option>
+                      <option value="C - Consulted (Experto)">C — Consultado (Consulted)</option>
+                      <option value="I - Informed (Stakeholder)">I — Informado (Informed)</option>
+                    </select>
+                  </div>
+                  <button type="button" class="btn-persuasive-cta" onclick="addCharterTeamMember()" style="min-height:48px; padding:10px 18px; font-size:0.85rem; align-self:flex-end;">
+                    <span>+ Añadir Miembro</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Botones persuasivos de 1 toque para celulares -->
+              <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; align-items:center;">
+                <span style="font-size:0.72rem; color:#94A3B8; font-family:var(--font-mono);">+ Adición Rápida 1-Toque:</span>
+                <button type="button" class="btn-persuasive-secondary" style="min-height:36px; padding:4px 10px; font-size:0.72rem;" onclick="quickAddPresetMember('Ing. Carlos Ruiz', 'Full-Stack &amp; Neon DB Dev', 'R - Responsible (Ejecutor)')">+ Dev Full-Stack</button>
+                <button type="button" class="btn-persuasive-secondary" style="min-height:36px; padding:4px 10px; font-size:0.72rem;" onclick="quickAddPresetMember('Mtra. Elena Torres', 'Black Belt Six Sigma / QA', 'A - Accountable (Aprobador)')">+ QA Six Sigma</button>
+                <button type="button" class="btn-persuasive-secondary" style="min-height:36px; padding:4px 10px; font-size:0.72rem;" onclick="quickAddPresetMember('Dis. Marco Vega', 'UI/UX &amp; Lockups CAD SVG', 'C - Consulted (Experto)')">+ Diseñador CAD/UI</button>
+                <button type="button" class="btn-persuasive-secondary" style="min-height:36px; padding:4px 10px; font-size:0.72rem;" onclick="quickAddPresetMember('Lic. Andrea Solís', 'Growth &amp; BullMQ Marketing', 'R - Responsible (Ejecutor)')">+ Especialista Marketing</button>
+              </div>
+            </div>
+
+            <!-- Lista de Tarjetas Magnéticas de Miembros -->
+            <div class="charter-grid-2col" id="pc-members-grid">
+              <!-- Se renderiza dinámicamente por JS -->
+            </div>
+          </div>
+
+          <!-- PASO 1.3: DOCUMENTACIÓN REQUERIDA PARA EL ARRANQUE SEGÚN PROJECT CHARTER TRADICIONAL -->
+          <div style="margin-bottom:28px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+              <div>
+                <h2 style="font-size:1.08rem; font-weight:800; color:#FF6B00; margin:0; display:flex; align-items:center; gap:8px;">
+                  <span style="background:#FF6B00; color:#FFF; width:26px; height:26px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-family:'Bruno Ace', monospace; font-size:0.8rem;">3</span>
+                  Documentación Requerida para el Arranque (Project Charter Estándar PMI)
+                </h2>
+                <p style="font-size:0.78rem; color:#94A3B8; margin:4px 0 0 0;">
+                  Toca cualquier tarjeta magnética para revisar, editar o validar los 6 anexos obligatorios de arranque.
+                </p>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-family:var(--font-mono); font-size:0.76rem; color:#10B981; font-weight:700;" id="pc-docs-progress-label">
+                  6 / 6 DOCUMENTOS VALIDADOS (100%)
+                </span>
+              </div>
+            </div>
+
+            <div class="charter-grid-3col" id="pc-docs-grid">
+              <!-- Renderizado dinámico de las 6 tarjetas magnéticas documentales del Project Charter -->
+            </div>
+          </div>
+
+          <!-- CTA PERSUASIVO DE CAPA 01 -> CAPA 02 -->
+          <div style="background:linear-gradient(90deg, rgba(255,107,0,0.12) 0%, rgba(0,229,255,0.12) 100%); border:1px solid rgba(0,229,255,0.35); border-radius:16px; padding:20px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+            <div>
+              <div style="font-family:var(--font-mono); font-size:0.72rem; color:#00E5FF; text-transform:uppercase;">✓ PASO 01 COMPLETADO • GOBERNANZA LISTA</div>
+              <div style="font-size:1.05rem; font-weight:800; color:#FFF; margin-top:2px;">¿Listo tu Project Charter y tu Equipo de Trabajo?</div>
+              <div style="font-size:0.8rem; color:#94A3B8;">Continúa a la Capa 02 para definir el propósito del proyecto y aprovisionar tu espacio aislado.</div>
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; width:auto;">
+              <button type="button" class="btn-persuasive-secondary" onclick="openFullCharterPreviewModal()">
+                <span>📄 Ver Project Charter Compilado</span>
+              </button>
+              <button type="button" class="btn-persuasive-cta" onclick="completeLayer1AndGoToLayer2()">
+                <span>🚀 Continuar a Capa 02: Creación del Espacio →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================================
+           CAPA 02: CREACIÓN DEL ESPACIO (WORKSPACE & PROPÓSITO DEL PROYECTO)
+           ========================================================================= -->
+      <section class="platform-layer-section" id="platform-layer-2" aria-label="Capa 2: Creación del Espacio y Propósito">
+        <div class="layer-window-card">
+          <div class="layer-header-banner">
+            <div>
+              <div class="layer-tag-pill" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.35);">🏗️ CAPA 02 • APROVISIONAMIENTO DEL ESPACIO DE TRABAJO (WORKSPACE MULTI-TENANT)</div>
+              <h2 style="font-size:clamp(1.35rem, 4vw, 2rem); font-weight:900; color:#FFF; margin:0 0 8px 0;">
+                Configura tu <span class="gradient-text">Espacio de Trabajo y Propósito del Proyecto</span>
+              </h2>
+              <p style="font-size:0.9rem; color:#94A3B8; max-width:820px; margin:0; line-height:1.5;">
+                Selecciona el <strong>Propósito Principal del Proyecto</strong>. Esto pre-seleccionará automáticamente el stack tecnológico, el contrato legal BrandEnforcer y el paquete de herramientas recomendadas en la Capa 03.
+              </p>
+            </div>
+            <button type="button" class="btn-persuasive-secondary" onclick="switchPlatformLayer(1)">
+              <span>← Editar Project Charter (Capa 01)</span>
+            </button>
+          </div>
+
+          <!-- RESUMEN HEREDADO DEL PROJECT CHARTER -->
+          <div style="background:rgba(6,9,15,0.85); border:1px solid rgba(0,229,255,0.28); border-radius:14px; padding:14px 18px; margin-bottom:24px; display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">
+            <div>
+              <div style="font-size:0.68rem; color:#94A3B8; font-family:var(--font-mono);">PROYECTO EN CONSTITUCIÓN</div>
+              <div style="font-size:0.95rem; font-weight:800; color:#FFF;" id="layer2-summary-project">Plataforma E-Commerce &amp; ERP Ferretodo</div>
+            </div>
+            <div>
+              <div style="font-size:0.68rem; color:#94A3B8; font-family:var(--font-mono);">LÍDER ASIGNADO (PM)</div>
+              <div style="font-size:0.92rem; font-weight:700; color:#00E5FF;" id="layer2-summary-leader">Ing. David Gómez</div>
+            </div>
+            <div>
+              <div style="font-size:0.68rem; color:#94A3B8; font-family:var(--font-mono);">EQUIPO &amp; DOCUMENTACIÓN</div>
+              <div style="font-size:0.92rem; font-weight:700; color:#10B981;" id="layer2-summary-team">4 Miembros • 6/6 Docs Charter ✓</div>
+            </div>
+            <div>
+              <div style="font-size:0.68rem; color:#94A3B8; font-family:var(--font-mono);">TENANT SLUG (NEON RLS)</div>
+              <div style="font-size:0.85rem; font-family:var(--font-mono); color:#FF6B00;" id="layer2-summary-slug">ws-plataforma-ecommerce-erp</div>
+            </div>
+          </div>
+
+          <!-- SELECCIÓN DEL PROPÓSITO DEL PROYECTO (5 GRUPOS POR PROPÓSITO) -->
+          <h3 style="font-size:1.05rem; font-weight:800; color:#FFF; margin:0 0 14px 0;">
+            🎯 1. Elige el Propósito Principal de tu Proyecto (Toca una Tarjeta Magnética):
+          </h3>
+          <div class="charter-grid-3col" id="purpose-cards-container" style="margin-bottom:26px;">
+
+            <!-- PROPÓSITO 1: SOFTWARE & SAAS -->
+            <div class="purpose-selector-card magnetic-module-card selected-purpose" data-purpose="software" style="--glow-color:#00E5FF;" onclick="selectProjectPurpose('software')">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:1.6rem;">💻</span>
+                <span class="badge-tag" style="background:rgba(0,229,255,0.18); color:#00E5FF; border:1px solid #00E5FF;">PROPÓSITO 01</span>
+              </div>
+              <div style="font-size:1.05rem; font-weight:800; color:#FFF;">Desarrollo de Software, SaaS &amp; APIs</div>
+              <p style="font-size:0.8rem; color:#94A3B8; margin:0; line-height:1.45;">
+                Para aplicaciones web full-stack, plataformas multi-tenant, APIs REST con Neon PostgreSQL y menús interactivos en tiempo real.
+              </p>
+              <div style="font-size:0.72rem; color:#00E5FF; font-family:var(--font-mono); margin-top:auto;">
+                ✓ Pre-activa: Lienzo DAG, Webhook CI/CD, Prompt Architect, Cerebro Nexus y Contrato Maestro.
+              </div>
+            </div>
+
+            <!-- PROPÓSITO 2: E-COMMERCE & COMERCIAL -->
+            <div class="purpose-selector-card magnetic-module-card" data-purpose="ecommerce" style="--glow-color:#FF6B00;" onclick="selectProjectPurpose('ecommerce')">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:1.6rem;">🛍️</span>
+                <span class="badge-tag" style="background:rgba(255,107,0,0.18); color:#FF6B00; border:1px solid #FF6B00;">PROPÓSITO 02</span>
+              </div>
+              <div style="font-size:1.05rem; font-weight:800; color:#FFF;">E-Commerce, Ventas &amp; Biolink CRM</div>
+              <p style="font-size:0.8rem; color:#94A3B8; margin:0; line-height:1.45;">
+                Para tiendas online con pasarela Stripe/Clip, Landing Pages de conversión directa y tarjetas digitales NFC (Rose vCard).
+              </p>
+              <div style="font-size:0.72rem; color:#FF6B00; font-family:var(--font-mono); margin-top:auto;">
+                ✓ Pre-activa: Onboarding Comercial, Modelo ROI, Mazo 16:9, Marketing BullMQ y Contratos.
+              </div>
+            </div>
+
+            <!-- PROPÓSITO 3: OPEX & SIX SIGMA -->
+            <div class="purpose-selector-card magnetic-module-card" data-purpose="opex" style="--glow-color:#F59E0B;" onclick="selectProjectPurpose('opex')">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:1.6rem;">🛠️</span>
+                <span class="badge-tag" style="background:rgba(245,158,11,0.18); color:#F59E0B; border:1px solid #F59E0B;">PROPÓSITO 03</span>
+              </div>
+              <div style="font-size:1.05rem; font-weight:800; color:#FFF;">Excelencia Operativa OPEX &amp; Six Sigma</div>
+              <p style="font-size:0.8rem; color:#94A3B8; margin:0; line-height:1.45;">
+                Para auditorías de calidad industrial, reducción de variabilidad (DPMO), análisis de causa raíz y mejora continua DMAIC.
+              </p>
+              <div style="font-size:0.72rem; color:#F59E0B; font-family:var(--font-mono); margin-top:auto;">
+                ✓ Pre-activa: Tollgates DMAIC, Ishikawa 6M, Pareto 80/20, 5 Porqués y Cierre Inmutable.
+              </div>
+            </div>
+
+            <!-- PROPÓSITO 4: IDENTIDAD & DISEÑO CAD -->
+            <div class="purpose-selector-card magnetic-module-card" data-purpose="branding" style="--glow-color:#C084FC;" onclick="selectProjectPurpose('branding')">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:1.6rem;">🎨</span>
+                <span class="badge-tag" style="background:rgba(192,132,252,0.18); color:#C084FC; border:1px solid #C084FC;">PROPÓSITO 04</span>
+              </div>
+              <div style="font-size:1.05rem; font-weight:800; color:#FFF;">Identidad Corporativa &amp; Diseño CAD SVG</div>
+              <p style="font-size:0.8rem; color:#94A3B8; margin:0; line-height:1.45;">
+                Para sistemas de diseño, tokens de marca JSON, sellos técnicos vectoriales SVG y contratos de cesión de propiedad intelectual.
+              </p>
+              <div style="font-size:0.72rem; color:#C084FC; font-family:var(--font-mono); margin-top:auto;">
+                ✓ Pre-activa: Generador Lockups CAD SVG, BrandEnforcer, Mazo Ejecutivo 16:9 y Biblioteca.
+              </div>
+            </div>
+
+            <!-- PROPÓSITO 5: MARKETING & AUTOMATIZACIÓN -->
+            <div class="purpose-selector-card magnetic-module-card" data-purpose="marketing" style="--glow-color:#FF007F;" onclick="selectProjectPurpose('marketing')">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:1.6rem;">📣</span>
+                <span class="badge-tag" style="background:rgba(255,0,127,0.18); color:#FF007F; border:1px solid #FF007F;">PROPÓSITO 05</span>
+              </div>
+              <div style="font-size:1.05rem; font-weight:800; color:#FFF;">Crecimiento, Automatización &amp; Campañas</div>
+              <p style="font-size:0.8rem; color:#94A3B8; margin:0; line-height:1.45;">
+                Para despliegues masivos de correo con BullMQ + Redis, desuscripción RFC 8058 en 1 clic, nutrición de CRM y seguimiento de conversión.
+              </p>
+              <div style="font-size:0.72rem; color:#FF007F; font-family:var(--font-mono); margin-top:auto;">
+                ✓ Pre-activa: Motor BullMQ RFC 8058, Integration Hub, Calendario Maestro y To-Do Binario.
+              </div>
+            </div>
+
+            <!-- PROPÓSITO 6: SUITE INTEGRAL ENTERPRISE -->
+            <div class="purpose-selector-card magnetic-module-card" data-purpose="all" style="--glow-color:#10B981;" onclick="selectProjectPurpose('all')">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:1.6rem;">🌐</span>
+                <span class="badge-tag" style="background:rgba(16,185,129,0.18); color:#10B981; border:1px solid #10B981;">FULL SUITE</span>
+              </div>
+              <div style="font-size:1.05rem; font-weight:800; color:#FFF;"> Transformación Integral Enterprise (18 Módulos)</div>
+              <p style="font-size:0.8rem; color:#94A3B8; margin:0; line-height:1.45;">
+                Habilita simultáneamente las 5 ventanas operativas: Ingeniería DAG, Cerebro Vectorial Nexus, Six Sigma DMAIC, LegalTech y Marketing.
+              </p>
+              <div style="font-size:0.72rem; color:#10B981; font-family:var(--font-mono); margin-top:auto;">
+                ✓ Pre-activa: Los 18 módulos completos del ecosistema Nexus v2.5.
+              </div>
+            </div>
+          </div>
+
+          <!-- CONFIGURACIÓN DE AISLAMIENTO DEL ESPACIO -->
+          <h3 style="font-size:1.05rem; font-weight:800; color:#FFF; margin:0 0 14px 0;">
+            🔐 2. Parámetros del Espacio de Trabajo (Workspace Governance):
+          </h3>
+          <div class="charter-grid-3col" style="margin-bottom:26px;">
+            <div>
+              <label class="form-field-label" for="ws-arquetipo-select">📦 Arquetipo Contractual Base</label>
+              <select id="ws-arquetipo-select" class="mobile-safe-select" onchange="syncCharterStateToLayers()">
+                <option value="ECOMMERCE">E-Commerce Completo (Cloud Run + Neon + Stripe)</option>
+                <option value="SAAS_WEBAPP">Aplicación Web SaaS Multi-Tenant</option>
+                <option value="WEB_WITH_API">Sitio Web con API REST &amp; Neon DB</option>
+                <option value="OPEX_MANAGEMENT">Herramienta de Gestión OPEX / Six Sigma</option>
+                <option value="LANDING_PAGE">Landing Page de Conversión Directa</option>
+                <option value="BIOLINK">Biolink / Rose vCard NFC (vc.tsolutionsipidd.com)</option>
+                <option value="DIGITAL_MENU">Menú Digital Interactivo QR</option>
+                <option value="BRAND_IDENTITY">Identidad Corporativa &amp; Design Tokens</option>
+                <option value="CORPORATE_WEB">Página Web Corporativa Headless</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-field-label" for="ws-rls-policy">🛡️ Nivel de Aislamiento &amp; Seguridad</label>
+              <select id="ws-rls-policy" class="mobile-safe-select">
+                <option value="RLS_STRICT">Neon PostgreSQL RLS Estricto + Cliente Read-Only (403)</option>
+                <option value="RLS_COLLAB">Workspace Colaborativo Multi-Rol (Admin + Devs)</option>
+                <option value="SANDBOX_BRANCH">Rama Efímera de Prueba (Neon Branching)</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-field-label" for="ws-payment-scheme">💳 Esquema de Hitos Financieros</label>
+              <select id="ws-payment-scheme" class="mobile-safe-select">
+                <option value="50/50">50% Anticipo en Arranque / 50% en Cierre Inmutable</option>
+                <option value="30/30/40">30% Kickoff / 30% Hito DAG / 40% Sign-Off</option>
+                <option value="ANNUAL">Licenciamiento Anual Todo Incluido</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- CTA PERSUASIVO CAPA 02 -> CAPA 03 -->
+          <div style="background:linear-gradient(90deg, rgba(0,229,255,0.12) 0%, rgba(16,185,129,0.12) 100%); border:1px solid rgba(0,229,255,0.35); border-radius:16px; padding:20px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+            <div>
+              <div style="font-family:var(--font-mono); font-size:0.72rem; color:#10B981; text-transform:uppercase;">✓ ESPACIO CONFIGURADO • AISLAMIENTO RLS LISTO</div>
+              <div style="font-size:1.05rem; font-weight:800; color:#FFF; margin-top:2px;">Siguiente paso: Personaliza las Herramientas de tu Workspace</div>
+              <div style="font-size:0.8rem; color:#94A3B8;">Hemos pre-seleccionado las herramientas óptimas según el propósito elegido. Puedes ajustarlas en la Capa 03.</div>
+            </div>
+            <button type="button" class="btn-persuasive-cta" onclick="completeLayer2AndGoToLayer3()">
+              <span>🧰 Pasar a Capa 03: Selección de Herramientas →</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================================
+           CAPA 03: SELECCIÓN DE HERRAMIENTAS (POR TIPO DE HERRAMIENTA Y PROPÓSITO)
+           ========================================================================= -->
+      <section class="platform-layer-section" id="platform-layer-3" aria-label="Capa 3: Selección de Herramientas del Workspace">
+        <div class="layer-window-card">
+          <div class="layer-header-banner">
+            <div>
+              <div class="layer-tag-pill" style="background:rgba(16,185,129,0.15); color:#10B981; border-color:rgba(16,185,129,0.35);">🧰 CAPA 03 • MATRIZ DE HERRAMIENTAS POR TIPO Y POR PROPÓSITO DEL PROYECTO</div>
+              <h2 style="font-size:clamp(1.35rem, 4vw, 2rem); font-weight:900; color:#FFF; margin:0 0 8px 0;">
+                Selecciona las <span class="gradient-text">Herramientas a Utilizar en tu Espacio</span>
+              </h2>
+              <p style="font-size:0.9rem; color:#94A3B8; max-width:820px; margin:0; line-height:1.5;">
+                Filtra el catálogo usando los dos ejes de organización: <strong>por Tipo de Herramienta</strong> o <strong>por Propósito del Proyecto</strong>. Activa las que formarán parte de tu Workspace o ábrelas directamente con un toque.
+              </p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span style="font-family:var(--font-mono); font-size:0.78rem; color:#10B981; background:rgba(16,185,129,0.12); border:1px solid #10B981; padding:6px 12px; border-radius:999px;" id="selected-tools-count-pill">
+                12 HERRAMIENTAS ACTIVAS
+              </span>
+              <button type="button" class="btn-persuasive-secondary" onclick="selectAllWorkspaceTools()" style="min-height:40px; padding:6px 12px; font-size:0.76rem;">
+                <span>✓ Activar Todas (18)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- EJE 1: FILTRAR POR TIPO DE HERRAMIENTA -->
+          <div style="margin-bottom:14px;">
+            <div style="font-size:0.74rem; font-family:var(--font-mono); color:#00E5FF; text-transform:uppercase; margin-bottom:8px; font-weight:700;">
+              🔹 Agrupar por Tipo de Herramienta:
+            </div>
+            <div class="window-tabs-bar" id="layer3-type-filters" style="margin-bottom:10px;">
+              <button type="button" class="window-tab-btn active" onclick="filterLayer3Tools('type', 'all', this)">Todas las Herramientas (18)</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('type', 'ai_rag', this)">🧠 IA, Prompts &amp; Memoria Vectorial</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('type', 'dag_cicd', this)">🕸️ Ingeniería, Grafo DAG &amp; CI/CD</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('type', 'opex_sigma', this)">🛠️ Calidad OPEX &amp; Six Sigma</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('type', 'legal_roi', this)">📜 LegalTech, Contratos &amp; ROI</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('type', 'ops_mkt', this)">⚡ Operaciones Ágiles &amp; Marketing</button>
+            </div>
+          </div>
+
+          <!-- EJE 2: FILTRAR POR PROPÓSITO DEL PROYECTO -->
+          <div style="margin-bottom:22px;">
+            <div style="font-size:0.74rem; font-family:var(--font-mono); color:#FF6B00; text-transform:uppercase; margin-bottom:8px; font-weight:700;">
+              🔸 Agrupar por Propósito del Proyecto:
+            </div>
+            <div class="window-tabs-bar" id="layer3-purpose-filters">
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('purpose', 'software', this)">💻 Propósito: Software &amp; SaaS</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('purpose', 'ecommerce', this)">🛍️ Propósito: E-Commerce &amp; Ventas</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('purpose', 'opex', this)">📊 Propósito: OPEX &amp; Six Sigma</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('purpose', 'branding', this)">🎨 Propósito: Identidad &amp; CAD</button>
+              <button type="button" class="window-tab-btn" onclick="filterLayer3Tools('purpose', 'marketing', this)">📣 Propósito: Marketing &amp; Growth</button>
+            </div>
+          </div>
+
+          <!-- GRID INTERACTIVO DE HERRAMIENTAS SELECCIONABLES -->
+          <div class="charter-grid-3col" id="layer3-tools-grid" style="margin-bottom:26px;">
+            <!-- Se renderiza dinámicamente con tarjetas magnéticas seleccionables y botones persuasivos -->
+          </div>
+
+          <!-- CTA PERSUASIVO CAPA 03 -> CAPA 04 (DESPLIEGUE DEL WORKSPACE) -->
+          <div style="background:linear-gradient(90deg, rgba(16,185,129,0.15) 0%, rgba(255,107,0,0.15) 100%); border:1px solid rgba(16,185,129,0.45); border-radius:16px; padding:22px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+            <div>
+              <div style="font-family:var(--font-mono); font-size:0.72rem; color:#10B981; text-transform:uppercase;">⚡ LISTO PARA ORQUESTACIÓN EN VIVO</div>
+              <div style="font-size:1.1rem; font-weight:800; color:#FFF; margin-top:2px;">¡Tu Workspace y tus Herramientas están Configurados!</div>
+              <div style="font-size:0.82rem; color:#94A3B8;">Despliega la Consola Operativa (Capa 04) o aprovisiona transaccionalmente en Neon PostgreSQL.</div>
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <button type="button" class="btn-persuasive-secondary" onclick="openNexusOnboardingModal()">
+                <span>🗄️ Aprovisionar en Neon DB (API)</span>
+              </button>
+              <button type="button" class="btn-persuasive-cta" onclick="launchConfiguredWorkspace()">
+                <span>🔥 Lanzar Workspace y Abrir Consola Operativa (Capa 04) →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================================
+           CAPA 04: CONSOLA OPERATIVA DEL WORKSPACE, VENTANAS EMPAQUETADAS Y GRAFO DAG
+           ========================================================================= -->
+      <section class="platform-layer-section" id="platform-layer-4" aria-label="Capa 4: Consola Operativa y Grafo DAG">
+
+        <!-- BANNER EJECUTIVO DEL WORKSPACE ACTIVO (CONECTADO A CAPAS 01, 02 Y 03) -->
+        <div style="background:linear-gradient(135deg, rgba(18,23,34,0.96) 0%, rgba(10,15,26,0.98) 100%); border:2px solid #00E5FF; border-radius:18px; padding:20px 24px; margin-bottom:28px; box-shadow:0 0 30px rgba(0,229,255,0.2);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+                <span class="badge-tag" style="background:#10B981; color:#0A0D14; font-weight:900;">WORKSPACE ACTIVO EN VIVO</span>
+                <span style="font-family:var(--font-mono); font-size:0.74rem; color:#00E5FF;" id="active-ws-folio-tag">CHR-2026-IPIDD-01</span>
+              </div>
+              <h2 style="font-size:clamp(1.25rem, 3.5vw, 1.75rem); font-weight:900; color:#FFF; margin:0;" id="active-ws-title">
+                Plataforma E-Commerce &amp; ERP Ferretodo
+              </h2>
+              <p style="font-size:0.84rem; color:#94A3B8; margin:4px 0 0 0;" id="active-ws-objective">
+                Implementar una arquitectura distribuida con catálogo interactivo, pasarela de cobro, telemetría CI/CD y control de calidad Six Sigma.
+              </p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="button" class="btn-persuasive-secondary" onclick="switchPlatformLayer(1)" style="min-height:42px; padding:8px 14px; font-size:0.78rem;">
+                <span>✏️ Editar Project Charter</span>
+              </button>
+              <button type="button" class="btn-persuasive-secondary" onclick="switchPlatformLayer(3)" style="min-height:42px; padding:8px 14px; font-size:0.78rem; border-color:#10B981; color:#10B981;">
+                <span>🧰 Ajustar Herramientas</span>
+              </button>
+              <button type="button" class="btn-persuasive-secondary" onclick="openFullCharterPreviewModal()" style="min-height:42px; padding:8px 14px; font-size:0.78rem; border-color:#FF6B00; color:#FF6B00;">
+                <span>📜 Acta Project Charter</span>
+              </button>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:12px; background:rgba(6,9,15,0.75); border-radius:12px; padding:14px;">
+            <div>
+              <div style="font-size:0.68rem; color:#94A3B8; font-family:var(--font-mono);">LÍDER DEL PROYECTO (PM)</div>
+              <div style="font-size:0.9rem; font-weight:800; color:#00E5FF;" id="active-ws-leader">Ing. David Gómez</div>
+            </div>
+            <div>
+              <div style="font-size:0.68rem; color:#94A3B8; font-family:var(--font-mono);">PATROCINADOR / SPONSOR</div>
+              <div style="font-size:0.9rem; font-weight:800; color:#FFF;" id="active-ws-sponsor">Lic. Fernando Almonte (Director)</div>
+            </div>
+            <div>
+              <div style="font-size:0.68rem; color:#94A3B8; font-family:var(--font-mono);">MIEMBROS &amp; DOCUMENTOS</div>
+              <div style="font-size:0.9rem; font-weight:800; color:#10B981;" id="active-ws-team-docs">4 Miembros • 6/6 Docs Charter</div>
+            </div>
+            <div>
+              <div style="font-size:0.68rem; color:#94A3B8; font-family:var(--font-mono);">HERRAMIENTAS HABILITADAS</div>
+              <div style="font-size:0.9rem; font-weight:800; color:#FF6B00;" id="active-ws-tools-count">18 Módulos Listos</div>
+            </div>
+          </div>
+        </div>
 
     <!-- HERO SECTION -->
     <section class="hero-box">
