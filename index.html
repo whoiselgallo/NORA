@@ -4766,7 +4766,90 @@
       </div>
     </section>
 
+      </section><!-- Fin de #platform-layer-4 -->
+    </div><!-- Fin de #layered-platform-shell -->
+
   </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL TRANSPARENTE: EDITOR DE DOCUMENTO INDIVIDUAL DEL PROJECT CHARTER    -->
+  <!-- ========================================================================= -->
+  <div class="instructivo-modal-backdrop" id="charter-doc-editor-modal" style="display:none;" onclick="if(event.target === this) closeCharterDocModal()">
+    <div class="instructivo-modal-card" style="max-width:720px;">
+      <div class="instructivo-header">
+        <div class="instructivo-header-title">
+          <div class="instructivo-header-icon" id="charter-doc-modal-icon">📋</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.05rem; color:#FFF; margin:0;" id="charter-doc-modal-title">
+              DOCUMENTO DE ARRANQUE // PROJECT CHARTER
+            </h3>
+            <p style="font-family:'Space Grotesk', sans-serif; font-size:0.75rem; color:#00E5FF; margin:2px 0 0 0;" id="charter-doc-modal-subtitle">
+              Estándar PMI / PMBOK &amp; Six Sigma Define Phase
+            </p>
+          </div>
+        </div>
+        <button class="instructivo-close-btn" onclick="closeCharterDocModal()" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="instructivo-body" style="padding:20px 24px;">
+        <div style="margin-bottom:14px;">
+          <label class="form-field-label" for="charter-doc-modal-textarea">Contenido Formal del Anexo Documental:</label>
+          <textarea id="charter-doc-modal-textarea" class="mobile-safe-textarea" rows="6" style="font-family:var(--font-primary); line-height:1.55;"></textarea>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; background:rgba(0,229,255,0.07); border:1px solid rgba(0,229,255,0.22); border-radius:12px; padding:12px 14px;">
+          <div style="font-size:0.78rem; color:#E2E8F0;">
+            <strong>Guía PMI:</strong> Asegúrate de que este apartado sea medible, verificable y consensuado con el Líder y el Patrocinador.
+          </div>
+          <button type="button" class="btn-persuasive-secondary" onclick="restoreCharterDocTemplate()" style="min-height:38px; padding:6px 12px; font-size:0.75rem;">
+            <span>⚡ Cargar Plantilla Recomendada</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="instructivo-footer">
+        <button type="button" class="btn-secondary" onclick="closeCharterDocModal()">Cancelar</button>
+        <button type="button" class="btn-persuasive-cta" onclick="saveCharterDocModal()" style="min-height:44px; padding:10px 22px; font-size:0.88rem;">
+          <span>✓ Guardar y Validar Documento</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL TRANSPARENTE: VISTA PREVIA OFICIAL DEL ACTA DE CONSTITUCIÓN         -->
+  <!-- ========================================================================= -->
+  <div class="instructivo-modal-backdrop" id="full-charter-preview-modal" style="display:none;" onclick="if(event.target === this) closeFullCharterPreviewModal()">
+    <div class="instructivo-modal-card" style="max-width:920px; max-height:90vh; display:flex; flex-direction:column;">
+      <div class="instructivo-header">
+        <div class="instructivo-header-title">
+          <div class="instructivo-header-icon">📜</div>
+          <div>
+            <h3 style="font-family:'Bruno Ace', sans-serif; font-size:1.1rem; color:#FFF; margin:0;">
+              ACTA DE CONSTITUCIÓN DEL PROYECTO (PROJECT CHARTER)
+            </h3>
+            <p style="font-family:'Space Grotesk', sans-serif; font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">
+              Documento Oficial de Arranque • TSolutions IPIDD • Gobernanza PMI &amp; Six Sigma
+            </p>
+          </div>
+        </div>
+        <button class="instructivo-close-btn" onclick="closeFullCharterPreviewModal()" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="instructivo-body" id="full-charter-preview-body" style="padding:24px; overflow-y:auto; flex:1;">
+        <!-- Se genera dinámicamente con todos los datos de las Capas 01, 02 y 03 -->
+      </div>
+
+      <div class="instructivo-footer">
+        <button type="button" class="btn-secondary" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-persuasive-secondary" onclick="closeFullCharterPreviewModal()">Cerrar Vista</button>
+          <button type="button" class="btn-persuasive-cta" onclick="closeFullCharterPreviewModal(); switchPlatformLayer(2);" style="min-height:44px; padding:10px 20px; font-size:0.86rem;">
+            <span>🚀 Aprobar Charter e Ir a Creación del Espacio →</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -9302,10 +9385,597 @@ Process completed with exit code 1.</textarea>
     }
 
     // =========================================================================
+    // MOTOR DE LA PLATAFORMA EN CAPAS PROGRESIVAS (PROJECT CHARTER -> WORKSPACE)
+    // =========================================================================
+    let activePlatformLayer = 1;
+    let showAllLayersFlag = false;
+    let activeProjectPurpose = 'software';
+    let currentEditingCharterDocId = null;
+
+    // 1. Miembros del Equipo del Proyecto (Matriz RACI Inicial)
+    let charterTeamMembers = [
+      { id: 'tm-1', name: 'Ing. David Gómez', role: 'Principal Tech Lead & Arquitectura', raci: 'A - Accountable (Aprobador)' },
+      { id: 'tm-2', name: 'Mtra. Sofía Valenzuela', role: 'Project Manager & Six Sigma Control', raci: 'R - Responsible (Ejecutor)' },
+      { id: 'tm-3', name: 'Ing. Carlos Ruiz', role: 'Full-Stack Developer (Neon DB + React)', raci: 'R - Responsible (Ejecutor)' },
+      { id: 'tm-4', name: 'Lic. Fernando Almonte', role: 'Sponsor Ejecutivo / Cliente Owner', raci: 'I - Informed (Stakeholder)' }
+    ];
+
+    // 2. Los 6 Documentos Requeridos para el Arranque según el Project Charter Tradicional (PMI / PMBOK)
+    const charterStartupDocs = [
+      {
+        id: 'doc-business-case',
+        icon: '📈',
+        title: '1. Caso de Negocio & Justificación (Business Case)',
+        category: 'VIABILIDAD & ROI',
+        validated: true,
+        glow: '#00E5FF',
+        content: 'Justificación Estratégica: Digitalizar y automatizar el flujo comercial y operativo para reducir el tiempo de ciclo en un 45%, eliminar reprocesos manuales y alcanzar un retorno de inversión (Payback) en 4 meses con amortización fiscal deducible al 100%.'
+      },
+      {
+        id: 'doc-objectives-kpis',
+        icon: '🎯',
+        title: '2. Objetivos Medibles y Criterios de Éxito (SMART / Six Sigma)',
+        category: 'MÉTRICAS & SLA',
+        validated: true,
+        glow: '#10B981',
+        content: '1. Disponibilidad de plataforma >= 99.9% en Vercel Edge y Neon PostgreSQL.\n2. Latencia de sincronización del Grafo DAG < 180ms.\n3. Nivel de calidad objetivo: 5.9 Sigma (<= 1.5 DPMO).\n4. Tasa de entregabilidad de campañas BullMQ >= 95%.'
+      },
+      {
+        id: 'doc-scope-statement',
+        icon: '🔭',
+        title: '3. Enunciado del Alcance (In-Scope / Out-of-Scope)',
+        category: 'LÍMITES DE ALCANCE',
+        validated: true,
+        glow: '#FF6B00',
+        content: 'INCLUYE (In-Scope): Aprovisionamiento de Workspace con aislamiento RLS, diseño de arquitectura DAG de 5 nodos, integración de webhooks HMAC-SHA256, contratos BrandEnforcer y memoria vectorial pgvector.\nNO INCLUYE (Out-of-Scope): Hardware físico en sitio ni licencias de ERP propietarios de terceros no especificados.'
+      },
+      {
+        id: 'doc-risks-assumptions',
+        icon: '⚠️',
+        title: '4. Registro de Riesgos Iniciales, Supuestos y Restricciones',
+        category: 'MITIGACIÓN & RIESGOS',
+        validated: true,
+        glow: '#F59E0B',
+        content: 'Riesgo 01: Retraso en entrega de accesos DNS o llaves API por parte del cliente -> Mitigación: Uso de entorno Sandbox preconfigurado.\nRiesgo 02: Fallas de compilación en CI/CD -> Mitigación: Análisis preventivo con Ishikawa 6M asistido por Cerebro Nexus.'
+      },
+      {
+        id: 'doc-milestones-budget',
+        icon: '📅',
+        title: '5. Cronograma de Hitos Maestros y Presupuesto Base',
+        category: 'CRONOGRAMA & HITOS',
+        validated: true,
+        glow: '#C084FC',
+        content: '• Hito 1 (Día 0): Firma de Project Charter, Contrato Oficial y Anticipo 50%.\n• Hito 2 (Día 3): Nodos de Infraestructura y Backend en GREEN.\n• Hito 3 (Día 5): UI React Flow y Telemetría Webhook validadas.\n• Hito 4 (Día 7): Cierre Inmutable (ARCHIVED) y Liquidación 50%.'
+      },
+      {
+        id: 'doc-governance-signoff',
+        icon: '🛡️',
+        title: '6. Criterios de Aceptación y Gobernanza (Sign-Off)',
+        category: 'APROBACIÓN FORMAL',
+        validated: true,
+        glow: '#38BDF8',
+        content: 'El proyecto se dará por concluido formalmente cuando los 5 nodos del Grafo DAG se encuentren en estado GREEN, se aprueben los Tollgates DMAIC y el Patrocinador firme el Acta Ejecutiva de Cierre Inmutable.'
+      }
+    ];
+
+    // 3. Catálogo de las 18 Herramientas Clasificadas por TIPO y por PROPÓSITO
+    const workspaceToolsCatalog = [
+      { id: 'tool-onboarding', icon: '🚀', name: 'Nexus Onboarding Console', type: 'ai_rag', purposes: ['software', 'ecommerce', 'opex', 'branding', 'marketing'], badge: '5 Vectores • RLS', desc: 'Clasifica requerimientos, aprovisiona el tenant en Neon DB y siembra el grafo DAG.', actionLabel: 'Abrir Onboarding', run: () => openNexusOnboardingModal() },
+      { id: 'tool-nexus-brain', icon: '🧠', name: 'Cerebro Continuo Nexus (RAG)', type: 'ai_rag', purposes: ['software', 'opex', 'ecommerce'], badge: 'pgvector 1536-D', desc: 'Memoria semántica HNSW que cita proyectos cerrados y previene errores técnicos.', actionLabel: 'Consultar IA', run: () => openNexusChatModal() },
+      { id: 'tool-prompt-arch', icon: '🎯', name: 'Antigravity Prompt Architect', type: 'ai_rag', purposes: ['software', 'branding', 'marketing'], badge: 'Checklist 5 Fases', desc: 'Transforma ideas en texto plano en directivas de sistema estructuradas para IA.', actionLabel: 'Abrir Editor ↗', run: () => { window.location.href = 'prompt_architect.html'; } },
+      { id: 'tool-dag-canvas', icon: '🕸️', name: 'Lienzo de Workflow DAG Live', type: 'dag_cicd', purposes: ['software', 'opex', 'ecommerce'], badge: 'React Flow • <180ms', desc: 'Grafo interactivo de 5 nodos con transición binaria Roja/Verde en tiempo real.', actionLabel: 'Ver Grafo DAG', run: () => { switchPlatformLayer(4); scrollToShowcase(); } },
+      { id: 'tool-webhook-hmac', icon: '⚡', name: 'Webhook Master CI/CD HMAC', type: 'dag_cicd', purposes: ['software', 'opex'], badge: 'HMAC-SHA256', desc: 'Valida firmas criptográficas de GitHub Actions y pasa el nodo DevOps a GREEN.', actionLabel: 'Validar HMAC', run: () => inspectGitHubTelemetry() },
+      { id: 'tool-cad-svg', icon: '📐', name: 'Generador de Lockups CAD SVG', type: 'dag_cicd', purposes: ['branding', 'software'], badge: 'Motor SVG 2.0', desc: 'Diseña sellos técnicos vectoriales, diagramas de arquitectura y exporta SVG/PNG.', actionLabel: 'Abrir CAD ↗', run: () => { window.location.href = 'generador_lockups_tecnicos.html'; } },
+      { id: 'tool-integration-hub', icon: '🔄', name: 'Integration Hub & Conectores', type: 'dag_cicd', purposes: ['software', 'ecommerce', 'marketing'], badge: 'Google & GitHub', desc: 'Orquesta la sincronización con Google Tasks, repositorios GitHub y pasarelas.', actionLabel: 'Ver Conectores', run: () => openIntegrationHubModal() },
+      { id: 'tool-dmaic', icon: '🛠️', name: 'Tollgates DMAIC (5 Compuertas)', type: 'opex_sigma', purposes: ['opex', 'software'], badge: 'Lean Six Sigma', desc: 'Audita las 5 fases industriales (Define, Measure, Analyze, Improve, Control).', actionLabel: 'Auditar DMAIC', run: () => openDmaicTollgateModal() },
+      { id: 'tool-ishikawa', icon: '🐟', name: 'Diagrama Ishikawa 6M & Pareto', type: 'opex_sigma', purposes: ['opex', 'software'], badge: 'Regla 80/20 + IA', desc: 'Espina de pescado en 6 ramas industriales con sugerencias preventivas de Nexus.', actionLabel: 'Abrir Matriz 6M', run: () => openIshikawaModal() },
+      { id: 'tool-5whys', icon: '🔍', name: '5 Porqués & Contramedidas DAG', type: 'opex_sigma', purposes: ['opex', 'software'], badge: 'Root Cause Sync', desc: 'Interrogatorio causal de 5 niveles enlazado directamente a tareas del grafo DAG.', actionLabel: 'Ejecutar 5W', run: () => openFiveWhysModal() },
+      { id: 'tool-contracts', icon: '📜', name: 'Contratos Oficiales BrandEnforcer', type: 'legal_roi', purposes: ['ecommerce', 'software', 'branding', 'opex', 'marketing'], badge: 'LFPDPPP & SLA', desc: 'Compila contratos legales personalizados con tokens oficiales de TSolutions IPIDD.', actionLabel: 'Ver Contratos', run: () => openContractViewerModal() },
+      { id: 'tool-pitch-deck', icon: '📊', name: 'Mazo Ejecutivo 16:9 & Pitch Deck', type: 'legal_roi', purposes: ['ecommerce', 'branding', 'marketing'], badge: 'Presentación 16:9', desc: 'Diapositivas ejecutivas de alto impacto para comités directivos y ventas.', actionLabel: 'Abrir Deck ↗', run: () => window.open('MPS_AYALA_PROPUESTA_ROI_001.html', '_blank') },
+      { id: 'tool-roi-model', icon: '💰', name: 'Modelo Financiero ROI & Payback', type: 'legal_roi', purposes: ['ecommerce', 'opex', 'software'], badge: 'Payback 3-6 Meses', desc: 'Calculadora financiera de retorno de inversión, ahorro OPEX y deducción fiscal.', actionLabel: 'Ver ROI ↗', run: () => window.open('MPS_AYALA_PROPUESTA_ROI_001.html', '_blank') },
+      { id: 'tool-closure', icon: '🔒', name: 'Cierre Inmutable & Snapshot JSONB', type: 'legal_roi', purposes: ['opex', 'software', 'ecommerce', 'branding'], badge: 'Estado ARCHIVED', desc: 'Congela mutaciones, emite el certificado final y vectoriza aprendizajes en BullMQ.', actionLabel: 'Sellar Proyecto', run: () => openProjectClosureModal() },
+      { id: 'tool-archived-lib', icon: '🏛️', name: 'Biblioteca de Proyectos Archivados', type: 'ops_mkt', purposes: ['opex', 'software', 'branding'], badge: 'Snapshot Read-Only', desc: 'Consulta histórica de proyectos concluidos, métricas Six Sigma y actas firmadas.', actionLabel: 'Ver Biblioteca', run: () => openArchivedLibraryModal() },
+      { id: 'tool-todo-tasks', icon: '✓', name: 'Gestor de Tareas To-Do Binario', type: 'ops_mkt', purposes: ['software', 'ecommerce', 'opex', 'branding', 'marketing'], badge: 'CRUD Neon DB', desc: 'Backlog colaborativo que conmuta nodos del DAG a GREEN al llegar al 100% DONE.', actionLabel: 'Sincronizar To-Do', run: () => syncWithNeonDB() },
+      { id: 'tool-bullmq-mkt', icon: '✉️', name: 'Motor Marketing BullMQ (RFC 8058)', type: 'ops_mkt', purposes: ['marketing', 'ecommerce'], badge: 'Redis • >=95% Éxito', desc: 'Despacho masivo con listas de supresión, píxel 1x1 y baja en 1 clic RFC 8058.', actionLabel: 'Inspeccionar Cola', run: () => inspectBullMQQueue() },
+      { id: 'tool-calendar', icon: '📅', name: 'Calendario Maestro de Entregas', type: 'ops_mkt', purposes: ['software', 'ecommerce', 'opex', 'branding', 'marketing'], badge: 'Hitos & Sprints', desc: 'Cronograma de sprints, fechas de corte de anticipos y monitoreo de SLAs.', actionLabel: 'Ver Calendario', run: () => openCalendarEventsModal() }
+    ];
+
+    let selectedWorkspaceToolIds = new Set(workspaceToolsCatalog.map(t => t.id));
+    let currentLayer3FilterAxis = 'type';
+    let currentLayer3FilterValue = 'all';
+
+    function switchPlatformLayer(layerNum) {
+      activePlatformLayer = layerNum;
+      const shell = document.getElementById('layered-platform-shell');
+      if (shell && showAllLayersFlag) {
+        showAllLayersFlag = false;
+        shell.classList.remove('show-all-layers');
+        const btnAll = document.getElementById('btn-toggle-all-layers');
+        if (btnAll) btnAll.innerHTML = '<span>👁️ Ver Todas las Capas</span>';
+      }
+
+      const layerTitles = {
+        1: 'CAPA 01 DE 04: PROJECT CHARTER & ARRANQUE',
+        2: 'CAPA 02 DE 04: CREACIÓN DEL ESPACIO (WORKSPACE)',
+        3: 'CAPA 03 DE 04: SELECCIÓN DE HERRAMIENTAS',
+        4: 'CAPA 04 DE 04: CONSOLA OPERATIVA & GRAFO DAG EN VIVO'
+      };
+
+      const statusLbl = document.getElementById('layer-current-status-label');
+      if (statusLbl) statusLbl.innerText = layerTitles[layerNum] || '';
+
+      const progressFill = document.getElementById('layer-progress-bar-fill');
+      if (progressFill) progressFill.style.width = `${layerNum * 25}%`;
+
+      for (let i = 1; i <= 4; i++) {
+        const sec = document.getElementById(`platform-layer-${i}`);
+        const pill = document.getElementById(`step-pill-layer-${i}`);
+        const numBadge = document.getElementById(`step-num-layer-${i}`);
+        if (sec) sec.classList.toggle('active-layer', i === layerNum);
+        if (pill) {
+          pill.classList.toggle('active', i === layerNum);
+          pill.classList.toggle('completed', i < layerNum);
+        }
+        if (numBadge) {
+          numBadge.innerText = i < layerNum ? '✓' : `0${i}`;
+        }
+      }
+
+      syncCharterStateToLayers();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleAllLayersMode() {
+      const shell = document.getElementById('layered-platform-shell');
+      const btnAll = document.getElementById('btn-toggle-all-layers');
+      if (!shell) return;
+      showAllLayersFlag = !showAllLayersFlag;
+      shell.classList.toggle('show-all-layers', showAllLayersFlag);
+      if (btnAll) {
+        btnAll.innerHTML = showAllLayersFlag
+          ? '<span>🧭 Volver a Modo Guiado Paso a Paso</span>'
+          : '<span>👁️ Ver Todas las Capas</span>';
+      }
+    }
+
+    function renderCharterTeamMembers() {
+      const grid = document.getElementById('pc-members-grid');
+      const counter = document.getElementById('pc-members-counter-badge');
+      if (counter) counter.innerText = `${charterTeamMembers.length} MIEMBROS ASIGNADOS`;
+      if (!grid) return;
+
+      grid.innerHTML = charterTeamMembers.map(m => `
+        <div class="team-member-chip-card magnetic-module-card" style="--glow-color:#00E5FF; padding:14px 16px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; background:rgba(0,229,255,0.15); border:1px solid #00E5FF; display:flex; align-items:center; justify-content:center; font-weight:900; color:#00E5FF; font-family:'Bruno Ace', monospace; flex-shrink:0;">
+              ${escapeHtml(m.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase())}
+            </div>
+            <div>
+              <div style="font-weight:800; color:#FFF; font-size:0.92rem;">${escapeHtml(m.name)}</div>
+              <div style="font-size:0.76rem; color:#94A3B8;">${escapeHtml(m.role)}</div>
+              <span style="display:inline-block; margin-top:4px; font-size:0.66rem; font-family:var(--font-mono); padding:2px 8px; border-radius:6px; background:rgba(255,107,0,0.16); color:#FF6B00; border:1px solid rgba(255,107,0,0.35);">
+                ${escapeHtml(m.raci)}
+              </span>
+            </div>
+          </div>
+          <button type="button" onclick="removeCharterTeamMember('${m.id}')" style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); color:#EF4444; width:36px; height:36px; border-radius:10px; cursor:pointer; font-size:0.9rem; flex-shrink:0;" title="Quitar miembro">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function addCharterTeamMember() {
+      const nameEl = document.getElementById('pc-new-member-name');
+      const roleEl = document.getElementById('pc-new-member-role');
+      const raciEl = document.getElementById('pc-new-member-raci');
+      const name = nameEl?.value?.trim();
+      const role = roleEl?.value?.trim() || 'Especialista de Proyecto';
+      const raci = raciEl?.value || 'R - Responsible (Ejecutor)';
+
+      if (!name) {
+        alert('Por favor ingresa el nombre del miembro del proyecto.');
+        nameEl?.focus();
+        return;
+      }
+
+      charterTeamMembers.push({
+        id: 'tm-' + Date.now(),
+        name,
+        role,
+        raci
+      });
+
+      if (nameEl) nameEl.value = '';
+      if (roleEl) roleEl.value = '';
+      renderCharterTeamMembers();
+      syncCharterStateToLayers();
+    }
+
+    function quickAddPresetMember(name, role, raci) {
+      if (charterTeamMembers.some(m => m.name === name)) {
+        addLog(`[PROJECT CHARTER] ${name} ya forma parte del equipo.`, 'normal');
+        return;
+      }
+      charterTeamMembers.push({
+        id: 'tm-' + Date.now() + '-' + Math.random().toString(36).slice(2, 5),
+        name,
+        role,
+        raci
+      });
+      renderCharterTeamMembers();
+      syncCharterStateToLayers();
+    }
+
+    function removeCharterTeamMember(memberId) {
+      if (charterTeamMembers.length <= 1) {
+        alert('El proyecto debe contar con al menos 1 integrante en la matriz RACI.');
+        return;
+      }
+      charterTeamMembers = charterTeamMembers.filter(m => m.id !== memberId);
+      renderCharterTeamMembers();
+      syncCharterStateToLayers();
+    }
+
+    function renderCharterStartupDocs() {
+      const grid = document.getElementById('pc-docs-grid');
+      const progressLbl = document.getElementById('pc-docs-progress-label');
+      const validCount = charterStartupDocs.filter(d => d.validated).length;
+      const pct = Math.round((validCount / charterStartupDocs.length) * 100);
+
+      if (progressLbl) {
+        progressLbl.innerText = `${validCount} / ${charterStartupDocs.length} DOCUMENTOS VALIDADOS (${pct}%)`;
+        progressLbl.style.color = validCount === charterStartupDocs.length ? '#10B981' : '#F59E0B';
+      }
+      if (!grid) return;
+
+      grid.innerHTML = charterStartupDocs.map(doc => `
+        <div class="charter-doc-card magnetic-module-card ${doc.validated ? 'doc-ready' : 'doc-pending'}" style="--glow-color:${doc.glow}; cursor:pointer;" onclick="openCharterDocModal('${doc.id}')">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <span style="font-size:1.45rem;">${doc.icon}</span>
+            <span style="font-family:var(--font-mono); font-size:0.66rem; font-weight:800; padding:3px 9px; border-radius:999px; background:${doc.validated ? 'rgba(16,185,129,0.18)' : 'rgba(245,158,11,0.18)'}; color:${doc.validated ? '#10B981' : '#F59E0B'}; border:1px solid ${doc.validated ? '#10B981' : '#F59E0B'};">
+              ${doc.validated ? '✓ VALIDADO PMI' : '⏳ POR REVISAR'}
+            </span>
+          </div>
+          <div style="font-size:0.68rem; font-family:var(--font-mono); color:${doc.glow};">${escapeHtml(doc.category)}</div>
+          <div style="font-size:0.96rem; font-weight:800; color:#FFF; line-height:1.3;">${escapeHtml(doc.title)}</div>
+          <p style="font-size:0.78rem; color:#94A3B8; margin:0; line-height:1.45; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">
+            ${escapeHtml(doc.content)}
+          </p>
+          <div style="display:flex; gap:8px; margin-top:auto; padding-top:8px;">
+            <button type="button" class="btn-card-action primary" style="flex:1; min-height:42px;" onclick="event.stopPropagation(); openCharterDocModal('${doc.id}')">
+              <span>📝 Editar / Revisar</span>
+            </button>
+            <button type="button" class="btn-card-action" style="min-height:42px; padding:6px 12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); color:#FFF;" onclick="event.stopPropagation(); toggleCharterDocStatus('${doc.id}')" title="Cambiar estado de validación">
+              ${doc.validated ? '✓' : '○'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleCharterDocStatus(docId) {
+      const doc = charterStartupDocs.find(d => d.id === docId);
+      if (doc) {
+        doc.validated = !doc.validated;
+        renderCharterStartupDocs();
+        syncCharterStateToLayers();
+      }
+    }
+
+    function openCharterDocModal(docId) {
+      const doc = charterStartupDocs.find(d => d.id === docId);
+      if (!doc) return;
+      currentEditingCharterDocId = docId;
+
+      const iconEl = document.getElementById('charter-doc-modal-icon');
+      const titleEl = document.getElementById('charter-doc-modal-title');
+      const subEl = document.getElementById('charter-doc-modal-subtitle');
+      const txtEl = document.getElementById('charter-doc-modal-textarea');
+
+      if (iconEl) iconEl.innerText = doc.icon;
+      if (titleEl) titleEl.innerText = doc.title;
+      if (subEl) subEl.innerText = `${doc.category} • Requisito Oficial de Arranque (Project Charter)`;
+      if (txtEl) txtEl.value = doc.content;
+
+      const modal = document.getElementById('charter-doc-editor-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeCharterDocModal() {
+      const modal = document.getElementById('charter-doc-editor-modal');
+      if (modal) modal.style.display = 'none';
+      currentEditingCharterDocId = null;
+    }
+
+    function saveCharterDocModal() {
+      if (!currentEditingCharterDocId) return;
+      const doc = charterStartupDocs.find(d => d.id === currentEditingCharterDocId);
+      const txtEl = document.getElementById('charter-doc-modal-textarea');
+      if (doc && txtEl) {
+        doc.content = txtEl.value.trim() || doc.content;
+        doc.validated = true;
+      }
+      closeCharterDocModal();
+      renderCharterStartupDocs();
+      syncCharterStateToLayers();
+    }
+
+    function restoreCharterDocTemplate() {
+      const txtEl = document.getElementById('charter-doc-modal-textarea');
+      if (!txtEl || !currentEditingCharterDocId) return;
+      const doc = charterStartupDocs.find(d => d.id === currentEditingCharterDocId);
+      if (doc) txtEl.value = doc.content;
+    }
+
+    function autofillProjectCharterDemo() {
+      charterStartupDocs.forEach(d => { d.validated = true; });
+      renderCharterStartupDocs();
+      syncCharterStateToLayers();
+      addLog('[PROJECT CHARTER] Los 6 documentos de arranque PMI fueron validados con plantilla ejecutiva.', 'transition');
+    }
+
+    function openFullCharterPreviewModal() {
+      const projName = document.getElementById('pc-project-name')?.value || 'Proyecto Sin Título';
+      const projObj = document.getElementById('pc-project-objective')?.value || '';
+      const leaderName = document.getElementById('pc-leader-name')?.value || 'Por asignar';
+      const leaderEmail = document.getElementById('pc-leader-email')?.value || '';
+      const sponsorName = document.getElementById('pc-sponsor-name')?.value || 'Por asignar';
+      const budget = document.getElementById('pc-budget-amount')?.value || '$28,500 MXN';
+
+      const body = document.getElementById('full-charter-preview-body');
+      if (body) {
+        body.innerHTML = `
+          <div style="background:#0A0D14; border:1px solid rgba(0,229,255,0.35); border-radius:14px; padding:20px; margin-bottom:18px;">
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px; margin-bottom:14px;">
+              <div>
+                <div style="font-family:var(--font-mono); font-size:0.72rem; color:#FF6B00;">TSOLUTIONS IPIDD • ACTA DE CONSTITUCIÓN DEL PROYECTO</div>
+                <h2 style="font-size:1.35rem; color:#FFF; margin:4px 0 0 0;">${escapeHtml(projName)}</h2>
+              </div>
+              <div style="text-align:right; font-family:var(--font-mono); font-size:0.75rem; color:#00E5FF;">
+                <div>FOLIO: CHR-2026-IPIDD-01</div>
+                <div style="color:#10B981;">ESTADO: APROBADO PARA ARRANQUE</div>
+              </div>
+            </div>
+            <p style="font-size:0.86rem; color:#E2E8F0; line-height:1.5; margin:0 0 14px 0;">
+              <strong>Objetivo Estratégico:</strong> ${escapeHtml(projObj)}
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; background:#121722; padding:12px; border-radius:10px;">
+              <div>
+                <div style="font-size:0.68rem; color:#94A3B8;">LÍDER DEL PROYECTO (PM)</div>
+                <div style="font-size:0.88rem; font-weight:700; color:#00E5FF;">${escapeHtml(leaderName)}</div>
+                <div style="font-size:0.72rem; color:#94A3B8;">${escapeHtml(leaderEmail)}</div>
+              </div>
+              <div>
+                <div style="font-size:0.68rem; color:#94A3B8;">PATROCINADOR / SPONSOR</div>
+                <div style="font-size:0.88rem; font-weight:700; color:#FFF;">${escapeHtml(sponsorName)}</div>
+              </div>
+              <div>
+                <div style="font-size:0.68rem; color:#94A3B8;">PRESUPUESTO AUTORIZADO</div>
+                <div style="font-size:0.95rem; font-weight:800; color:#FF6B00;">${escapeHtml(budget)}</div>
+              </div>
+              <div>
+                <div style="font-size:0.68rem; color:#94A3B8;">HERRAMIENTAS SELECCIONADAS</div>
+                <div style="font-size:0.88rem; font-weight:700; color:#10B981;">${selectedWorkspaceToolIds.size} Módulos Activos</div>
+              </div>
+            </div>
+          </div>
+
+          <h4 style="color:#00E5FF; font-size:0.92rem; margin:0 0 10px 0;">👥 Miembros del Proyecto &amp; Matriz RACI (${charterTeamMembers.length})</h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:18px;">
+            ${charterTeamMembers.map(m => `
+              <div style="background:#121722; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 12px;">
+                <div style="font-weight:700; color:#FFF; font-size:0.85rem;">${escapeHtml(m.name)}</div>
+                <div style="font-size:0.74rem; color:#94A3B8;">${escapeHtml(m.role)}</div>
+                <div style="font-size:0.68rem; color:#FF6B00; font-family:var(--font-mono); margin-top:4px;">${escapeHtml(m.raci)}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <h4 style="color:#FF6B00; font-size:0.92rem; margin:0 0 10px 0;">📋 Anexos Documentales del Project Charter (6 Pilares PMI)</h4>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            ${charterStartupDocs.map(d => `
+              <div style="background:#121722; border-left:3px solid ${d.glow}; border-radius:6px; padding:12px 14px;">
+                <div style="font-weight:800; color:#FFF; font-size:0.86rem;">${d.icon} ${escapeHtml(d.title)}</div>
+                <div style="font-size:0.78rem; color:#CBD5E1; margin-top:4px; white-space:pre-line; line-height:1.45;">${escapeHtml(d.content)}</div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      const modal = document.getElementById('full-charter-preview-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeFullCharterPreviewModal() {
+      const modal = document.getElementById('full-charter-preview-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function syncCharterStateToLayers() {
+      const projName = document.getElementById('pc-project-name')?.value?.trim() || 'Proyecto Nexus';
+      const projObj = document.getElementById('pc-project-objective')?.value?.trim() || '';
+      const leaderName = document.getElementById('pc-leader-name')?.value?.trim() || 'Líder Asignado';
+      const sponsorName = document.getElementById('pc-sponsor-name')?.value?.trim() || 'Sponsor Ejecutivo';
+      const validDocs = charterStartupDocs.filter(d => d.validated).length;
+
+      const slug = 'ws-' + projName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 28);
+
+      // Actualizar Capa 02
+      const l2Proj = document.getElementById('layer2-summary-project');
+      const l2Lead = document.getElementById('layer2-summary-leader');
+      const l2Team = document.getElementById('layer2-summary-team');
+      const l2Slug = document.getElementById('layer2-summary-slug');
+      if (l2Proj) l2Proj.innerText = projName;
+      if (l2Lead) l2Lead.innerText = leaderName;
+      if (l2Team) l2Team.innerText = `${charterTeamMembers.length} Miembros • ${validDocs}/6 Docs Charter ✓`;
+      if (l2Slug) l2Slug.innerText = slug;
+
+      // Actualizar Banner de Capa 04 (Consola Operativa)
+      const w4Title = document.getElementById('active-ws-title');
+      const w4Obj = document.getElementById('active-ws-objective');
+      const w4Lead = document.getElementById('active-ws-leader');
+      const w4Spon = document.getElementById('active-ws-sponsor');
+      const w4Team = document.getElementById('active-ws-team-docs');
+      const w4Tools = document.getElementById('active-ws-tools-count');
+      if (w4Title) w4Title.innerText = projName;
+      if (w4Obj) w4Obj.innerText = projObj;
+      if (w4Lead) w4Lead.innerText = leaderName;
+      if (w4Spon) w4Spon.innerText = sponsorName;
+      if (w4Team) w4Team.innerText = `${charterTeamMembers.length} Miembros • ${validDocs}/6 Docs Charter`;
+      if (w4Tools) w4Tools.innerText = `${selectedWorkspaceToolIds.size} Módulos Activos`;
+
+      // Sincronizar también con los inputs del modal de Onboarding transaccional
+      const obProjInput = document.getElementById('ob-project-name');
+      const obClientInput = document.getElementById('ob-client-name');
+      const obLeadInput = document.getElementById('ob-tech-lead-name');
+      if (obProjInput) obProjInput.value = projName;
+      if (obClientInput) obClientInput.value = sponsorName;
+      if (obLeadInput) obLeadInput.value = leaderName;
+    }
+
+    function selectProjectPurpose(purpose) {
+      activeProjectPurpose = purpose;
+      document.querySelectorAll('.purpose-selector-card').forEach(card => {
+        card.classList.toggle('selected-purpose', card.getAttribute('data-purpose') === purpose);
+      });
+
+      // Pre-seleccionar herramientas recomendadas para ese propósito
+      if (purpose === 'all') {
+        selectedWorkspaceToolIds = new Set(workspaceToolsCatalog.map(t => t.id));
+      } else {
+        selectedWorkspaceToolIds = new Set(
+          workspaceToolsCatalog.filter(t => t.purposes.includes(purpose)).map(t => t.id)
+        );
+      }
+
+      renderLayer3ToolsGrid();
+      syncCharterStateToLayers();
+    }
+
+    function renderLayer3ToolsGrid() {
+      const grid = document.getElementById('layer3-tools-grid');
+      const countPill = document.getElementById('selected-tools-count-pill');
+      if (countPill) countPill.innerText = `${selectedWorkspaceToolIds.size} HERRAMIENTAS ACTIVAS`;
+      if (!grid) return;
+
+      const filtered = workspaceToolsCatalog.filter(tool => {
+        if (currentLayer3FilterAxis === 'type') {
+          return currentLayer3FilterValue === 'all' || tool.type === currentLayer3FilterValue;
+        } else {
+          return currentLayer3FilterValue === 'all' || tool.purposes.includes(currentLayer3FilterValue);
+        }
+      });
+
+      const typeNames = {
+        ai_rag: '🧠 IA & Memoria Vectorial',
+        dag_cicd: '🕸️ Ingeniería DAG & CI/CD',
+        opex_sigma: '🛠️ Calidad OPEX & Six Sigma',
+        legal_roi: '📜 LegalTech, Contratos & ROI',
+        ops_mkt: '⚡ Operaciones & Marketing'
+      };
+
+      grid.innerHTML = filtered.map(tool => {
+        const isSelected = selectedWorkspaceToolIds.has(tool.id);
+        return `
+          <div class="tool-Selectable-card magnetic-module-card ${isSelected ? 'tool-selected' : ''}" style="--glow-color:${isSelected ? '#10B981' : '#00E5FF'};">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:1.45rem;">${tool.icon}</span>
+                <span style="font-size:0.68rem; font-family:var(--font-mono); color:#00E5FF; background:rgba(0,229,255,0.12); padding:2px 8px; border-radius:6px;">
+                  ${escapeHtml(tool.badge)}
+                </span>
+              </div>
+              <span style="font-size:0.68rem; font-family:var(--font-mono); font-weight:800; padding:3px 8px; border-radius:999px; background:${isSelected ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.06)'}; color:${isSelected ? '#10B981' : '#94A3B8'}; border:1px solid ${isSelected ? '#10B981' : 'rgba(255,255,255,0.12)'};">
+                ${isSelected ? '✓ ACTIVA' : 'OPCIONAL'}
+              </span>
+            </div>
+
+            <div style="font-size:0.7rem; color:#FF6B00; font-family:var(--font-mono);">
+              ${escapeHtml(typeNames[tool.type] || '')}
+            </div>
+            <div style="font-size:1rem; font-weight:800; color:#FFF;">${escapeHtml(tool.name)}</div>
+            <p style="font-size:0.78rem; color:#94A3B8; margin:0; line-height:1.45;">
+              ${escapeHtml(tool.desc)}
+            </p>
+
+            <div style="display:flex; gap:8px; margin-top:auto; padding-top:10px; flex-wrap:wrap;">
+              <button type="button" class="btn-card-action" style="flex:1; min-height:42px; background:${isSelected ? 'rgba(16,185,129,0.18)' : 'rgba(255,255,255,0.06)'}; border:1px solid ${isSelected ? '#10B981' : 'rgba(255,255,255,0.2)'}; color:${isSelected ? '#10B981' : '#FFF'}; font-weight:700;" onclick="toggleWorkspaceToolSelection('${tool.id}')">
+                <span>${isSelected ? '✓ En tu Workspace' : '+ Agregar al Espacio'}</span>
+              </button>
+              <button type="button" class="btn-card-action primary" style="min-height:42px; padding:6px 14px;" onclick="triggerCatalogToolAction('${tool.id}')">
+                <span>⚡ ${escapeHtml(tool.actionLabel)}</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterLayer3Tools(axis, value, btnEl) {
+      currentLayer3FilterAxis = axis;
+      currentLayer3FilterValue = value;
+      document.querySelectorAll('#layer3-type-filters .window-tab-btn, #layer3-purpose-filters .window-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      renderLayer3ToolsGrid();
+    }
+
+    function toggleWorkspaceToolSelection(toolId) {
+      if (selectedWorkspaceToolIds.has(toolId)) {
+        selectedWorkspaceToolIds.delete(toolId);
+      } else {
+        selectedWorkspaceToolIds.add(toolId);
+      }
+      renderLayer3ToolsGrid();
+      syncCharterStateToLayers();
+    }
+
+    function selectAllWorkspaceTools() {
+      selectedWorkspaceToolIds = new Set(workspaceToolsCatalog.map(t => t.id));
+      renderLayer3ToolsGrid();
+      syncCharterStateToLayers();
+    }
+
+    function triggerCatalogToolAction(toolId) {
+      const tool = workspaceToolsCatalog.find(t => t.id === toolId);
+      if (tool && typeof tool.run === 'function') {
+        tool.run();
+      }
+    }
+
+    function completeLayer1AndGoToLayer2() {
+      const projName = document.getElementById('pc-project-name')?.value?.trim();
+      const leaderName = document.getElementById('pc-leader-name')?.value?.trim();
+      if (!projName || !leaderName) {
+        alert('Por favor completa el Nombre del Proyecto y el Líder del Proyecto para constituir el Project Charter.');
+        return;
+      }
+      addLog(`[CAPA 01 -> CAPA 02] Project Charter '${projName}' validado con líder ${leaderName} y ${charterTeamMembers.length} miembros.`, 'transition');
+      switchPlatformLayer(2);
+    }
+
+    function completeLayer2AndGoToLayer3() {
+      addLog(`[CAPA 02 -> CAPA 03] Espacio configurado con propósito '${activeProjectPurpose}'. Pasando a selección de herramientas.`, 'transition');
+      switchPlatformLayer(3);
+    }
+
+    function launchConfiguredWorkspace() {
+      syncCharterStateToLayers();
+      addLog(`[WORKSPACE ACTIVO] Espacio lanzado con ${selectedWorkspaceToolIds.size} herramientas habilitadas y Project Charter firmado.`, 'pulse');
+      switchPlatformLayer(4);
+    }
+
+    function initLayeredWorkspaceBuilder() {
+      renderCharterTeamMembers();
+      renderCharterStartupDocs();
+      renderLayer3ToolsGrid();
+      syncCharterStateToLayers();
+    }
+
+    // =========================================================================
     // MOTOR DE TARJETAS MAGNÉTICAS CON SOMBRA RADIANTE Y FÍSICA 3D (60 FPS)
     // =========================================================================
     function initMagneticCards() {
-      const selector = '.app-card, .hero-stat-card, .flowchart-lifecycle-board, .magnetic-flow-card, .need-card, .prod-card, .sim-card, .magnetic-module-card';
+      const selector = '.app-card, .hero-stat-card, .flowchart-lifecycle-board, .magnetic-flow-card, .need-card, .prod-card, .sim-card, .magnetic-module-card, .charter-doc-card, .purpose-selector-card, .tool-Selectable-card';
       const cards = document.querySelectorAll(selector);
       if (!cards.length) return;
 
@@ -9347,6 +10017,7 @@ Process completed with exit code 1.</textarea>
 
     // INICIALIZACIÓN AUTOMÁTICA
     window.addEventListener('DOMContentLoaded', () => {
+      initLayeredWorkspaceBuilder();
       initAuthSession();
       syncWithNeonDB();
       initMagneticCards();
@@ -9359,10 +10030,10 @@ Process completed with exit code 1.</textarea>
       if (e.key === 'Escape') {
         closeModal();
         closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
       }
-      if (e.key === '1') scrollToShowcase();
-      if (e.key === '2') window.location.href = 'prompt_architect.html';
-      if (e.key === '3') window.location.href = 'generador_lockups_tecnicos.html';
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
     });
   </script>
 
