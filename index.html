@@ -2974,6 +2974,397 @@
         width: 100%;
       }
     }
+
+    /* =========================================================================
+       UX DE HOJAS DE TRABAJO EMPAQUETADAS (WORKSHEET PACKAGES & ZERO-SCROLL HUB)
+       - Delimitación visual clara por sección simulando una Hoja de Trabajo
+       - Agrupación interna en Paquetes de Datos y Paquetes de Funciones/Docs
+       - Separador técnico + Espacio de Seguridad entre cada Hoja de Trabajo
+       - Tarjetas Magnéticas Pequeñas / Botones en Página Principal por Capas
+       - Documentos/Archivos en Modales; solo Workspaces Completos y Dashboards en Página Completa
+       - Adaptable Mobile-First, Pantallas Grandes y iPhone Duo / Dual-Screen Foldables
+       ========================================================================= */
+
+    /* Por defecto mostramos todas las Hojas de Trabajo claramente delimitadas con su espacio de seguridad */
+    .platform-layer-section {
+      display: block !important;
+      scroll-margin-top: 145px;
+    }
+
+    /* Modo foco opcional si el usuario prefiere ver una sola hoja a la vez */
+    .layered-platform-shell.single-sheet-focus .platform-layer-section {
+      display: none !important;
+    }
+    .layered-platform-shell.single-sheet-focus .platform-layer-section.active-layer {
+      display: block !important;
+    }
+
+    /* 1. MAPA COMPACTO DE ACCESO RÁPIDO EN PÁGINA PRINCIPAL (EVITA SCROLL INNECESARIO) */
+    .quick-layers-launchpad {
+      background: linear-gradient(165deg, rgba(16, 22, 35, 0.96) 0%, rgba(9, 13, 22, 0.98) 100%);
+      border: 1px solid rgba(0, 229, 255, 0.32);
+      border-radius: 20px;
+      padding: clamp(14px, 2.5vw, 24px);
+      margin-bottom: 40px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), 0 0 28px rgba(0, 229, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quick-layers-launchpad::before {
+      content: "HOJA ÍNDICE // ACCESO INSTANTÁNEO SIN SCROLL";
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: rgba(0, 229, 255, 0.55);
+      letter-spacing: 0.08em;
+      pointer-events: none;
+    }
+
+    .launchpad-layers-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 640px) {
+      .launchpad-layers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1180px) {
+      .launchpad-layers-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .launchpad-layer-box {
+      background: rgba(11, 15, 25, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .launchpad-layer-box:hover {
+      border-color: rgba(0, 229, 255, 0.45);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 18px rgba(0, 229, 255, 0.14);
+    }
+
+    .launchpad-layer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+
+    /* Botones / Tarjetas Magnéticas Pequeñas Agrupadas por Capas */
+    .mini-mag-cards-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .compact-mag-btn-card {
+      position: relative;
+      min-height: 48px;
+      padding: 8px 10px;
+      border-radius: 11px;
+      background: rgba(18, 25, 38, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #F8FAFC;
+      font-family: var(--font-primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      touch-action: manipulation;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .compact-mag-btn-card:hover {
+      border-color: var(--glow-color, #00E5FF);
+      background: rgba(0, 229, 255, 0.12);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55), 0 0 16px var(--glow-color, rgba(0, 229, 255, 0.35));
+      transform: translateY(-2px);
+    }
+
+    .compact-mag-btn-card:active {
+      transform: scale(0.97);
+    }
+
+    .compact-mag-btn-card .mini-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .compact-mag-btn-card .mini-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      min-width: 0;
+    }
+
+    .compact-mag-btn-card .mini-title {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #FFF;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .compact-mag-btn-card .mini-sub {
+      font-size: 0.62rem;
+      font-family: var(--font-mono);
+      color: #94A3B8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 2. CONTENEDOR DE "HOJA DE TRABAJO" (WORKSHEET SHEET) */
+    .worksheet-sheet {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(16, 22, 34, 0.96) 0%, rgba(10, 14, 22, 0.99) 100%),
+        radial-gradient(circle at top right, rgba(0, 229, 255, 0.08), transparent 55%);
+      border: 2px solid rgba(0, 229, 255, 0.28);
+      border-radius: 24px;
+      padding: clamp(16px, 3vw, 34px);
+      box-shadow:
+        0 26px 65px rgba(0, 0, 0, 0.78),
+        0 0 35px rgba(0, 229, 255, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .worksheet-sheet.sheet-orange {
+      border-color: rgba(255, 107, 0, 0.35);
+      box-shadow: 0 26px 65px rgba(0, 0, 0, 0.78), 0 0 35px rgba(255, 107, 0, 0.08);
+    }
+
+    .worksheet-sheet.sheet-green {
+      border-color: rgba(16, 185, 129, 0.35);
+      box-shadow: 0 26px 65px rgba(0, 0, 0, 0.78), 0 0 35px rgba(16, 185, 129, 0.08);
+    }
+
+    .worksheet-sheet.sheet-purple {
+      border-color: rgba(168, 85, 247, 0.38);
+      box-shadow: 0 26px 65px rgba(0, 0, 0, 0.78), 0 0 35px rgba(168, 85, 247, 0.1);
+    }
+
+    /* Cabezal de Hoja de Trabajo estilo Plano de Ingeniería */
+    .worksheet-sheet-top-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 8px 14px;
+      margin: -6px -6px 18px -6px;
+      background: rgba(6, 9, 15, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: #94A3B8;
+    }
+
+    /* 3. PAQUETES INTERNOS DE DATOS Y FUNCIONES DENTRO DE CADA HOJA */
+    .worksheet-packages-container {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .data-function-package {
+      background: rgba(8, 12, 20, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 18px;
+      padding: clamp(14px, 2.2vw, 22px);
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .data-function-package.pkg-data {
+      border-left: 4px solid #00E5FF;
+    }
+
+    .data-function-package.pkg-functions {
+      border-left: 4px solid #FF6B00;
+    }
+
+    .data-function-package.pkg-docs {
+      border-left: 4px solid #10B981;
+    }
+
+    .package-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .package-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Grilla de Tarjetas Magnéticas Pequeñas para Documentos, Archivos y Funciones */
+    .compact-cards-package-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .compact-cards-package-grid {
+        grid-template-columns: 1fr;
+      }
+      .mini-mag-cards-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 4. SEPARADOR VISUAL Y ESPACIO DE SEGURIDAD ENTRE HOJAS DE TRABAJO */
+    .worksheet-safety-separator {
+      position: relative;
+      margin: clamp(44px, 6vw, 76px) 0;
+      padding: 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .worksheet-safety-separator::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(0, 229, 255, 0.45) 25%, rgba(255, 107, 0, 0.55) 50%, rgba(0, 229, 255, 0.45) 75%, transparent 100%);
+      transform: translateY(-50%);
+    }
+
+    .worksheet-separator-pill {
+      position: relative;
+      z-index: 2;
+      background: #0A0D14;
+      border: 1px solid rgba(0, 229, 255, 0.38);
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: #94A3B8;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 229, 255, 0.15);
+    }
+
+    /* 5. VISTA DE PÁGINA COMPLETA EXCLUSIVA PARA WORKSPACES COMPLETOS Y DASHBOARDS */
+    body.fullpage-dashboard-active {
+      overflow: hidden;
+    }
+
+    .fullpage-workspace-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9990;
+      background: #070A10;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .fullpage-workspace-overlay.active {
+      display: flex;
+    }
+
+    .fullpage-top-bar {
+      min-height: 60px;
+      padding: 10px 20px;
+      background: rgba(12, 17, 28, 0.96);
+      border-bottom: 1px solid rgba(0, 229, 255, 0.35);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .fullpage-body-viewport {
+      flex: 1;
+      overflow-y: auto;
+      padding: clamp(14px, 2.5vw, 28px);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* 6. ADAPTABILIDAD PARA IPHONE DUO / SURFACE DUO / GALAXY Z FOLD (DUAL-SCREEN & FOLDABLES) */
+    /* Soporta modo manual Dual-Screen (.iphone-duo-mode) y media queries de pantallas plegables/dobles */
+    @media (min-width: 720px) and (max-width: 1024px), (horizontal-viewport-segments: 2) {
+      .duo-adaptive-split {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 24px !important; /* Bisagra central segura (Hinge Safe Gap) */
+        align-items: start;
+      }
+    }
+
+    body.iphone-duo-mode .worksheet-packages-container {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 28px !important;
+      align-items: start;
+    }
+
+    body.iphone-duo-mode .worksheet-sheet {
+      border-width: 2px;
+      background-image:
+        linear-gradient(90deg, transparent calc(50% - 1px), rgba(0, 229, 255, 0.28) 50%, transparent calc(50% + 1px)),
+        linear-gradient(180deg, rgba(16, 22, 34, 0.96) 0%, rgba(10, 14, 22, 0.99) 100%);
+    }
+
+    @media (max-width: 680px) {
+      body.iphone-duo-mode .worksheet-packages-container {
+        grid-template-columns: 1fr !important;
+      }
+    }
   </style>
 </head>
 <body>
