@@ -3,6 +3,7 @@ import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { Pool } from 'pg';
 import path from 'path';
+import fs from 'fs';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createApiRouter } from './routes/api.routes';
@@ -70,7 +71,20 @@ app.use(
 );
 
 // Servir archivos estáticos del directorio public (activos, logos, SVG)
-app.use(express.static(path.join(__dirname, '../public')));
+const publicDir = fs.existsSync(path.join(process.cwd(), 'public'))
+  ? path.join(process.cwd(), 'public')
+  : path.join(__dirname, '../public');
+app.use(express.static(publicDir));
+
+// Ruta raíz explícita para garantizar servicio inmediato del index.html
+app.get('/', (_req: Request, res: Response) => {
+  const indexPath = path.join(publicDir, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(200).send('<h1>NORA // Nexus Orquestador</h1>');
+  }
+});
 
 // Enrutador de API v1 con inyección de Pool, SocketIO y DagCacheService
 const apiRouter = createApiRouter(pool, io, dagCache);

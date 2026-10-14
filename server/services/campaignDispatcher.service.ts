@@ -35,10 +35,14 @@ export class CampaignDispatcherService {
     const connectionUrl = redisUrl || process.env.REDIS_URL || 'redis://127.0.0.1:6379';
     this.dagCacheService = dagCacheService || new DagCacheService(connectionUrl);
 
-    // Cola BullMQ optimizada para despacho por lotes
+    // Cola BullMQ optimizada para despacho por lotes con desconexión resiliente
     this.batchQueue = new Queue<EmailBatchJobData>('email-marketing-batch-queue', {
       connection: {
-        url: connectionUrl
+        url: connectionUrl,
+        lazyConnect: true,
+        maxRetriesPerRequest: 1,
+        connectTimeout: 2000,
+        enableOfflineQueue: false
       },
       defaultJobOptions: {
         attempts: 3, // 3 reintentos obligatorios
