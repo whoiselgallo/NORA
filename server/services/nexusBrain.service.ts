@@ -3,6 +3,17 @@ import { Server as SocketIOServer } from 'socket.io';
 import { withWorkspaceClient, DEFAULT_WORKSPACE_ID } from '../middleware/workspace.middleware';
 import { EmbeddingService } from './embedding.service';
 
+export interface ActionCard {
+  id: string;
+  title: string;
+  label: string;
+  description: string;
+  actionType: 'NAVIGATE_DAG' | 'FILTER_KANBAN' | 'OPEN_ISHIKAWA' | 'OPEN_DMAIC' | 'OPEN_DOCUMENT' | 'EXECUTE_CLOSURE';
+  target: string;
+  targetId?: string;
+  badge: string;
+}
+
 export interface NexusQueryResult {
   answer: string;
   citedProjects: string[];
@@ -16,6 +27,7 @@ export interface NexusQueryResult {
     rawContent: string;
     metadata: Record<string, any>;
   }>;
+  actionCards?: ActionCard[];
   similarityThresholdSatisfied: boolean;
   benchmarkSimilarity: number;
   queryLatencyMs: number;
@@ -155,19 +167,27 @@ ${contextBlocks}`;
 
       let generatedAnswer = '';
 
-      // Intento con Gemini Pool o Neon AI Gateway con timeout resiliente de 7s
+      // Intento con Gemini Pool o Neon AI Gateway con ventana estricta de 4 a 5 segundos
       const geminiKeys = [
         process.env.GEMINI_API_KEY_1 || process.env.GEMINI_API_KEY,
         process.env.GEMINI_API_KEY_2,
         process.env.GEMINI_API_KEY_3
       ].filter((k): k is string => Boolean(k && k.trim().length > 0));
 
+      const synthesisDeadline = startTime + 4500; // SLO Estricto: Ventana máxima de 4.5s
+
       if (geminiKeys.length > 0 && process.env.ENABLE_REMOTE_AI !== 'false') {
-        const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+        const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
         for (const key of geminiKeys) {
+          const remainingTime = synthesisDeadline - Date.now();
+          if (remainingTime <= 800) {
+            // Ventana crítica consumida -> Fallback determinístico inmediato sin bloquear al operador
+            break;
+          }
+
           try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 7000);
+            const timeoutId = setTimeout(() => controller.abort(), Math.min(3000, remainingTime));
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
             const resp = await fetch(url, {
               method: 'POST',
@@ -190,7 +210,7 @@ ${contextBlocks}`;
               }
             }
           } catch (err) {
-            // Siguiente clave o fallback determinístico
+            // Siguiente clave o fallback determinístico inmediato
           }
         }
       }
@@ -215,15 +235,132 @@ La aplicación de estos procedimientos consolidados permite salvaguardar la conf
         `.trim();
       }
 
+      const actionCards = this.generateActionCards(cleanQuery, sources);
+
       return {
         answer: generatedAnswer,
         citedProjects,
         sources,
+        actionCards,
         similarityThresholdSatisfied: topSimilarity >= minSimilarity,
         benchmarkSimilarity: topSimilarity,
         queryLatencyMs: Date.now() - startTime
       };
     });
+  }
+
+  /**
+   * Genera tarjetas de acción inmediata (Action-Driven UI) según la intención del usuario y fuentes.
+   */
+  private generateActionCards(query: string, sources: any[]): ActionCard[] {
+    const cards: ActionCard[] = [];
+    const q = query.toLowerCase();
+
+    const addCard = (card: { id: string; title: string; description: string; actionType: any; target: string; badge: string }) => {
+      cards.push({
+        ...card,
+        label: card.title,
+        targetId: card.target
+      });
+    };
+
+    // 1. Detección de Nodo DAG
+    if (q.includes('backend') || q.includes('api') || q.includes('servidor') || q.includes('express')) {
+      addCard({
+        id: 'act-dag-backend',
+        title: 'Ver Nodo DAG: Backend',
+        description: 'Inspeccionar dependencias y tareas del servicio backend.',
+        actionType: 'NAVIGATE_DAG',
+        target: 'node-backend',
+        badge: 'DAG ⚡'
+      });
+    } else if (q.includes('base de datos') || q.includes('postgres') || q.includes('sql') || q.includes('neon') || q.includes('vector')) {
+      addCard({
+        id: 'act-dag-db',
+        title: 'Ver Nodo DAG: Database',
+        description: 'Supervisar topología y conexión agrupada en Neon PostgreSQL.',
+        actionType: 'NAVIGATE_DAG',
+        target: 'node-db',
+        badge: 'NEON 🗄️'
+      });
+    } else if (q.includes('ui') || q.includes('frontend') || q.includes('pantalla') || q.includes('duo') || q.includes('mobile')) {
+      addCard({
+        id: 'act-dag-ui',
+        title: 'Ver Nodo DAG: UI/UX',
+        description: 'Revisar lienzo interactivo Mobile-First & iPhone Duo.',
+        actionType: 'NAVIGATE_DAG',
+        target: 'node-ui',
+        badge: 'UX 📱'
+      });
+    } else {
+      addCard({
+        id: 'act-dag-core',
+        title: 'Explorar Orquestador DAG',
+        description: 'Verificar el flujo de dependencias reactivo y límites WIP.',
+        actionType: 'NAVIGATE_DAG',
+        target: 'dag-container',
+        badge: 'DAG 🔗'
+      });
+    }
+
+    // 2. Detección de Falla / Ishikawa / Causa Raíz
+    if (q.includes('falla') || q.includes('error') || q.includes('cuello') || q.includes('problema') || q.includes('latencia') || q.includes('ishikawa')) {
+      addCard({
+        id: 'act-ishikawa-preventive',
+        title: 'Abrir Análisis Ishikawa (6M)',
+        description: 'Diagnosticar causas raíz y aplicar contramedidas operativas.',
+        actionType: 'OPEN_ISHIKAWA',
+        target: 'ishikawa',
+        badge: 'LEAN 6σ 🐟'
+      });
+    }
+
+    // 3. Detección de Tareas Kanban
+    if (q.includes('tarea') || q.includes('kanban') || q.includes('wip') || q.includes('pendiente') || q.includes('progreso')) {
+      addCard({
+        id: 'act-kanban-wip',
+        title: 'Tablero Kanban (Límites WIP)',
+        description: 'Revisar tareas en curso y balancear la carga operativa.',
+        actionType: 'FILTER_KANBAN',
+        target: 'IN_PROGRESS',
+        badge: 'KANBAN 📋'
+      });
+    }
+
+    // 4. Detección de Auditoría DMAIC o Cierre
+    if (q.includes('cierre') || q.includes('archiv') || q.includes('inmutable') || q.includes('snapshot')) {
+      addCard({
+        id: 'act-closure',
+        title: 'Protocolo de Cierre Inmutable',
+        description: 'Auditar peajes de entrega y sellar proyecto con SHA-256.',
+        actionType: 'EXECUTE_CLOSURE',
+        target: 'closure-modal',
+        badge: 'CIERRE 🔒'
+      });
+    } else if (q.includes('peaje') || q.includes('dmaic') || q.includes('sigma') || q.includes('calidad')) {
+      addCard({
+        id: 'act-dmaic',
+        title: 'Auditoría de Peajes DMAIC',
+        description: 'Verificar avance en Definir, Medir, Analizar, Mejorar y Controlar.',
+        actionType: 'OPEN_DMAIC',
+        target: 'dmaic',
+        badge: 'DMAIC 📊'
+      });
+    }
+
+    // Si hay fuentes documentales citadas, añadir tarjeta para abrir documento
+    if (sources.length > 0 && sources[0].filename) {
+      addCard({
+        id: 'act-doc-source',
+        title: `Ver: ${sources[0].filename}`,
+        description: `Inspeccionar fragmento original (Sección ${sources[0].chunkIndex || 1}).`,
+        actionType: 'OPEN_DOCUMENT',
+        target: sources[0].documentId || sources[0].filename,
+        badge: 'DOC 📄'
+      });
+    }
+
+    return cards.slice(0, 3);
   }
 
   /**

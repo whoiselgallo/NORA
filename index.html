@@ -272,24 +272,304 @@
     }
 
     /* =========================================================================
+       TS-LOOP-01: THE NEXUS LOOP: HUD PULSE STRIP (< 200MS FMP)
+       ========================================================================= */
+    .nexus-pulse-strip {
+      width: 100%;
+      background: rgba(10, 15, 26, 0.92);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border-bottom: 1px solid rgba(0, 242, 254, 0.22);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+      position: sticky;
+      top: 60px;
+      z-index: 100;
+      padding: 6px 16px;
+      transition: all 0.25s ease;
+    }
+    .pulse-strip-container {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pulse-left-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pulse-brand-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(255, 107, 0, 0.15));
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      border-radius: 6px;
+    }
+    .pulse-logo-icon {
+      font-size: 0.78rem;
+    }
+    .pulse-brand-title {
+      font-family: var(--font-primary);
+      font-weight: 900;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      color: #FFF;
+    }
+    .pulse-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .pulse-indicator-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    .dot-online {
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+    .dot-warning {
+      background: var(--accent-amber);
+      box-shadow: 0 0 8px var(--accent-amber);
+    }
+    .pulse-pill.dlq-alert-pill {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #FCA5A5;
+      font-weight: bold;
+    }
+    .pulse-right-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pulse-sigma-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 12px;
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(0, 242, 254, 0.15));
+      border: 1px solid rgba(255, 107, 0, 0.5);
+      border-radius: 6px;
+      box-shadow: 0 0 12px rgba(255, 107, 0, 0.2);
+    }
+    .sigma-symbol {
+      color: #FF6B00;
+      font-weight: 900;
+      font-size: 0.85rem;
+      font-family: var(--font-primary);
+    }
+    .sigma-label {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+    .nexus-sigma-val {
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: #FFF;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    .nexus-sigma-val.pulse-glow {
+      transform: scale(1.3);
+      color: var(--accent-cyan);
+      text-shadow: 0 0 10px var(--accent-cyan);
+    }
+    .pulse-quick-action-btn {
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      color: var(--accent-cyan);
+      font-family: var(--font-primary);
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+    .pulse-quick-action-btn:hover {
+      background: rgba(0, 242, 254, 0.25);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================================
+       BOTÓN FLOTANTE MAGNÉTICO (THUMB-ZONE FAB MOBILE-FIRST)
+       ========================================================================= */
+    .nexus-fab-thumb {
+      position: fixed;
+      bottom: calc(24px + var(--safe-bottom));
+      right: calc(20px + var(--safe-right));
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0A101D 0%, #162238 100%);
+      border: 2px solid var(--accent-cyan);
+      box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.7),
+        0 0 25px rgba(0, 242, 254, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 995;
+      padding: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
+    }
+    .nexus-fab-thumb:hover {
+      transform: scale(1.08) translateY(-3px);
+      box-shadow:
+        0 16px 35px rgba(0, 0, 0, 0.8),
+        0 0 35px rgba(0, 242, 254, 0.65);
+      border-color: #FFF;
+    }
+    .nexus-fab-thumb:active {
+      transform: scale(0.94);
+    }
+    .nexus-fab-aura {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      animation: fabPulseAura 2.4s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
+      pointer-events: none;
+    }
+    @keyframes fabPulseAura {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.22); opacity: 0; }
+      100% { transform: scale(1.22); opacity: 0; }
+    }
+    .nexus-fab-icon {
+      font-size: 1.45rem;
+      user-select: none;
+    }
+    .nexus-fab-badge {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      background: linear-gradient(135deg, #FF6B00, #FF007F);
+      color: #FFF;
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      font-weight: 900;
+      padding: 1px 5px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 8px rgba(255, 107, 0, 0.5);
+    }
+
+    /* CANVAS DE PARTICULAS Y RECOMPENSA 60 FPS */
+    .nexus-reward-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10000;
+      width: 100%;
+      height: 100%;
+    }
+    .nexus-reward-toast {
+      position: fixed;
+      bottom: calc(90px + var(--safe-bottom));
+      right: calc(20px + var(--safe-right));
+      z-index: 10001;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 360px;
+    }
+    .nexus-reward-toast.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .reward-toast-inner {
+      background: rgba(10, 16, 29, 0.85);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 242, 254, 0.25);
+    }
+    .reward-toast-inner.closure-style {
+      border-color: #FF6B00;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 107, 0, 0.4);
+    }
+    .reward-toast-icon {
+      font-size: 1.5rem;
+    }
+    .reward-toast-content {
+      flex: 1;
+    }
+    .reward-toast-title {
+      font-family: var(--font-primary);
+      font-weight: 900;
+      font-size: 0.78rem;
+      color: #FFF;
+      letter-spacing: 0.04em;
+    }
+    .reward-toast-desc {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .reward-toast-badge {
+      background: rgba(0, 242, 254, 0.15);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-weight: 900;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* =========================================================================
        IPHONE DUO & DUAL-SCREEN RESPONSIVE ARCHITECTURE
        ========================================================================= */
     @media (spanning: single-fold-vertical) {
       .main-wrap {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        gap: 28px !important;
+        gap: 32px !important;
         padding-left: calc(var(--safe-left) + 20px) !important;
         padding-right: calc(var(--safe-right) + 20px) !important;
       }
       .hero-box {
         grid-column: span 2 !important;
       }
-      .flowchart-lifecycle-board {
-        grid-column: span 2 !important;
+      .nexus-pulse-strip {
+        padding-left: calc(var(--safe-left) + 16px);
+        padding-right: calc(var(--safe-right) + 16px);
       }
-      .apps-grid {
-        grid-template-columns: 1fr !important;
+      .flowchart-lifecycle-board {
+        grid-column: 1 !important;
+      }
+      .layered-platform-shell {
+        grid-column: span 2 !important;
       }
     }
 
@@ -3394,6 +3674,47 @@
       </button>
     </div>
   </nav>
+
+  <!-- ========================================================================= -->
+  <!-- TS-LOOP-01: THE NEXUS LOOP: FAST BOOTSTRAP HUD PULSE STRIP (< 200MS FMP)   -->
+  <!-- ========================================================================= -->
+  <aside class="nexus-pulse-strip" id="nexusPulseStrip" aria-label="Estado Operativo en Tiempo Real Nexus">
+    <div class="pulse-strip-container">
+      <div class="pulse-left-group">
+        <div class="pulse-brand-badge">
+          <span class="pulse-logo-icon">⚡</span>
+          <span class="pulse-brand-title">NEXUS PULSE</span>
+        </div>
+        <div class="pulse-pill" id="pulse-health-badge">
+          <span class="pulse-indicator-dot dot-online"></span>
+          <span>SALUD: <strong style="color:var(--accent-green);">ONLINE</strong></span>
+        </div>
+        <div class="pulse-pill" id="pulse-latency-badge">
+          ⚡ <strong>&lt; 20ms</strong> (L1 Caché)
+        </div>
+        <div class="pulse-pill" id="pulse-dag-badge">
+          🕸️ DAG: <strong>Orquestado</strong>
+        </div>
+        <div class="pulse-pill" id="pulse-wip-badge">
+          📋 WIP: <strong>0/5</strong> (Normal)
+        </div>
+        <div class="pulse-pill dlq-alert-pill" id="pulse-dlq-badge" style="display:none;">
+          🛡️ DLQ: <strong>0</strong>
+        </div>
+      </div>
+
+      <div class="pulse-right-group">
+        <div class="pulse-sigma-pill" title="Nivel Sigma Operativo Calculado">
+          <span class="sigma-symbol">Σ</span>
+          <span class="sigma-label">SIGMA:</span>
+          <span class="nexus-sigma-val" id="hud-sigma-val">4.80σ</span>
+        </div>
+        <button class="pulse-quick-action-btn" onclick="openNexusChatModal()" title="Abrir Cerebro Nexus (Atajo Rápido)">
+          <span>🧠 Cerebro</span>
+        </button>
+      </div>
+    </div>
+  </aside>
 
   <!-- TELÓN TRASLÚCIDO & DRAWER OFF-CANVAS GLASSMORPHISM -->
   <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeBurgerNav()"></div>
@@ -9238,6 +9559,31 @@ Process completed with exit code 1.</textarea>
 
         const latencyDisplay = typeof data.queryLatencyMs === 'number' ? data.queryLatencyMs : (Date.now() - startTime);
 
+        let actionCardsHtml = '';
+        if (data.actionCards && data.actionCards.length > 0) {
+          actionCardsHtml = `
+            <div style="margin-top:16px; padding-top:12px; border-top:1px solid rgba(0, 229, 255, 0.25);">
+              <div style="font-family:'JetBrains Mono', monospace; font-size:0.68rem; color:#00E5FF; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                <span>⚡ ACCIONES SUGERIDAS (1-TOQUE // ZERO FRICTION):</span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px;">
+                ${data.actionCards.map(c => `
+                  <button onclick="handleNexusAction('${escapeHtml(c.actionType)}', '${escapeHtml(c.targetId || '')}')"
+                          style="background:rgba(0, 229, 255, 0.08); border:1px solid rgba(0, 229, 255, 0.4); border-radius:8px; padding:10px 12px; cursor:pointer; text-align:left; display:flex; flex-direction:column; gap:4px; transition:all 0.2s cubic-bezier(0.16,1,0.3,1); box-shadow:0 2px 8px rgba(0,0,0,0.3);"
+                          onmouseover="this.style.background='rgba(0,229,255,0.18)'; this.style.borderColor='#00F2FE'; this.style.transform='translateY(-1px)';"
+                          onmouseout="this.style.background='rgba(0,229,255,0.08)'; this.style.borderColor='rgba(0,229,255,0.4)'; this.style.transform='none';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <span style="font-weight:bold; font-size:0.78rem; color:#F8FAFC; font-family:'Chivo', sans-serif;">${escapeHtml(c.label)}</span>
+                      ${c.badge ? `<span style="font-size:0.6rem; padding:2px 5px; border-radius:4px; background:rgba(255,107,0,0.2); border:1px solid rgba(255,107,0,0.5); color:#FF6B00; font-family:'JetBrains Mono', monospace; font-weight:700;">${escapeHtml(c.badge)}</span>` : ''}
+                    </div>
+                    <span style="font-size:0.7rem; color:#94A3B8; line-height:1.3;">${escapeHtml(c.description || '')}</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
         nexusBubble.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
             <span style="font-family:'JetBrains Mono', monospace; font-size:0.68rem; color:#00E5FF;">NEXUS BRAIN</span>
@@ -9248,6 +9594,7 @@ Process completed with exit code 1.</textarea>
           </div>
           <div style="background:#121722; border:1px solid rgba(0,229,255,0.35); border-radius:10px; padding:16px 20px; color:#F8FAFC; font-size:0.88rem; line-height:1.6; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
             <div style="white-space:pre-wrap;">${formatMarkdown(data.answer || 'Sin respuesta generada')}</div>
+            ${actionCardsHtml}
             ${citedHtml}
             ${sourcesHtml}
           </div>
@@ -9505,9 +9852,13 @@ Process completed with exit code 1.</textarea>
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Fallo al cerrar proyecto');
 
-        alert(`✓ Proyecto cerrado y archivado exitosamente.\nSnapshot inmutable generado y trabajo de asimilación encolado en Nexus.`);
         closeProjectClosureModal();
+        NexusRewardEngine.triggerReward('PROJECT_CLOSED', {
+          title: 'Proyecto Sellado & Lecciones Asimiladas en pgvector',
+          sigmaIncrement: 0.35
+        });
         syncWithNeonDB();
+        bootstrapNexusPulse();
       } catch (err) {
         alert(`Error al archivar proyecto: ${err.message}`);
       } finally {
@@ -10915,14 +11266,272 @@ Process completed with exit code 1.</textarea>
       });
     }
 
+    // =========================================================================
+    // TS-LOOP-02: ACCIÓN INMEDIATA Y EVENT DELEGATION (ACTION-DRIVEN UI)
+    // =========================================================================
+    function handleNexusAction(actionType, targetId) {
+      closeNexusChatModal();
+      switch (actionType) {
+        case 'NAVIGATE_DAG':
+          if (typeof selectWorksheetLayer === 'function') {
+            selectWorksheetLayer('layer-4');
+          }
+          const dagEl = document.getElementById('project-flow-dag-container') || document.querySelector('.flowchart-lifecycle-board');
+          dagEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          NexusRewardEngine.triggerFeedback('Topología DAG enfocada');
+          break;
+        case 'FILTER_KANBAN':
+          if (typeof selectWorksheetLayer === 'function') {
+            selectWorksheetLayer('layer-2');
+          }
+          const kanbanEl = document.getElementById('kanban-board-container') || document.querySelector('.apps-grid');
+          kanbanEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          NexusRewardEngine.triggerFeedback('Consola Kanban activada');
+          break;
+        case 'OPEN_ISHIKAWA':
+          if (typeof openIshikawaModal === 'function') {
+            openIshikawaModal();
+          } else {
+            openManualModal();
+          }
+          break;
+        case 'OPEN_DMAIC':
+          if (typeof openNexusLearning === 'function') {
+            openNexusLearning('dmaic');
+          }
+          break;
+        case 'OPEN_DOCUMENT':
+          openArchivedLibraryModal();
+          break;
+        case 'EXECUTE_CLOSURE':
+          openProjectClosureModal();
+          break;
+        default:
+          console.log('[NEXUS ACTION]', actionType, targetId);
+          NexusRewardEngine.triggerFeedback('Acción procesada');
+      }
+    }
+
+    window.addEventListener('nexus:action', (e) => {
+      if (e.detail) {
+        handleNexusAction(e.detail.actionType, e.detail.targetId);
+      }
+    });
+
+    // =========================================================================
+    // TS-LOOP-03: THE NEXUS REWARD ENGINE (RECOMPENSA SIGMA A 60 FPS)
+    // =========================================================================
+    const NexusRewardEngine = {
+      currentSigma: 4.80,
+      canvas: null,
+      ctx: null,
+
+      init() {
+        this.canvas = document.getElementById('nexus-reward-canvas');
+        if (this.canvas) {
+          this.ctx = this.canvas.getContext('2d');
+          this.resize();
+          window.addEventListener('resize', () => this.resize());
+        }
+      },
+
+      resize() {
+        if (!this.canvas) return;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      },
+
+      triggerReward(type = 'TASK_COMPLETED', data = {}) {
+        if ('vibrate' in navigator) {
+          try { navigator.vibrate([15, 30, 20]); } catch(e) {}
+        }
+
+        const increment = data.sigmaIncrement || (type === 'PROJECT_CLOSED' ? 0.25 : 0.05);
+        this.currentSigma = Number((this.currentSigma + increment).toFixed(2));
+
+        const sigmaEls = document.querySelectorAll('.nexus-sigma-val, #hud-sigma-val');
+        sigmaEls.forEach(el => {
+          el.innerText = `${this.currentSigma.toFixed(2)}σ`;
+          el.classList.add('pulse-glow');
+          setTimeout(() => el.classList.remove('pulse-glow'), 1200);
+        });
+
+        this.showToast(type, increment, data.title || 'Control Operativo');
+        this.burstParticles();
+      },
+
+      showToast(type, increment, label) {
+        let toast = document.getElementById('nexus-reward-toast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'nexus-reward-toast';
+          toast.className = 'nexus-reward-toast';
+          document.body.appendChild(toast);
+        }
+
+        const isClosure = type === 'PROJECT_CLOSED';
+        toast.innerHTML = `
+          <div class="reward-toast-inner ${isClosure ? 'closure-style' : ''}">
+            <div class="reward-toast-icon">${isClosure ? '🏆' : '⚡'}</div>
+            <div class="reward-toast-content">
+              <div class="reward-toast-title">${isClosure ? 'PROYECTO SELLADO INMUTABLEMENTE' : 'CICLO COMPLETADO'}</div>
+              <div class="reward-toast-desc">${escapeHtml(label)} • <strong>+${increment.toFixed(2)}σ Nivel Sigma</strong></div>
+            </div>
+            <div class="reward-toast-badge">${this.currentSigma.toFixed(2)}σ</div>
+          </div>
+        `;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3800);
+      },
+
+      burstParticles() {
+        if (!this.canvas || !this.ctx) return;
+        const particles = [];
+        const colors = ['#00F2FE', '#FF6B00', '#10B981', '#FFFFFF', '#A855F7'];
+        const startX = window.innerWidth / 2;
+        const startY = window.innerHeight * 0.4;
+
+        for (let i = 0; i < 45; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 2 + Math.random() * 6;
+          particles.push({
+            x: startX,
+            y: startY,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 1,
+            size: 2 + Math.random() * 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1,
+            decay: 0.015 + Math.random() * 0.02
+          });
+        }
+
+        let running = true;
+        const render = () => {
+          if (!running) return;
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          let alive = 0;
+          for (let p of particles) {
+            if (p.alpha > 0) {
+              p.x += p.vx;
+              p.y += p.vy;
+              p.vy += 0.12;
+              p.alpha -= p.decay;
+              this.ctx.save();
+              this.ctx.globalAlpha = Math.max(0, p.alpha);
+              this.ctx.fillStyle = p.color;
+              this.ctx.shadowColor = p.color;
+              this.ctx.shadowBlur = 6;
+              this.ctx.fillRect(p.x, p.y, p.size, p.size);
+              this.ctx.restore();
+              alive++;
+            }
+          }
+          if (alive > 0) {
+            requestAnimationFrame(render);
+          } else {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            running = false;
+          }
+        };
+        requestAnimationFrame(render);
+      },
+
+      triggerFeedback(message) {
+        this.showToast('FEEDBACK', 0, message);
+      }
+    };
+
+    // =========================================================================
+    // TS-LOOP-01: THE NEXUS LOOP: BOOTSTRAP HUD PULSE STRIP (< 200MS FMP)
+    // =========================================================================
+    async function bootstrapNexusPulse() {
+      const pulseEl = document.getElementById('nexusPulseStrip');
+      if (!pulseEl) return;
+
+      const cached = localStorage.getItem('nexus_pulse_cached');
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          renderPulseUI(parsed, true);
+        } catch(e) {}
+      }
+
+      try {
+        const token = localStorage.getItem('nexus_auth_token') || sessionStorage.getItem('nexus_auth_token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const resp = await fetch('/api/v1/nexus/pulse-bootstrap', { headers });
+        if (resp.ok) {
+          const data = await resp.json();
+          localStorage.setItem('nexus_pulse_cached', JSON.stringify(data));
+          renderPulseUI(data, false);
+          if (data.health?.sigmaLevel) {
+            NexusRewardEngine.currentSigma = Number(data.health.sigmaLevel);
+          }
+        }
+      } catch (err) {
+        console.warn('[NEXUS PULSE] Degradación a caché local:', err);
+      }
+    }
+
+    function renderPulseUI(data, isCached) {
+      const health = data.health || {};
+      const kanban = data.kanbanSummary || {};
+      const workflow = data.workflow || {};
+      const nodeCount = workflow.nodes?.length || 0;
+      const sigma = health.sigmaLevel ? health.sigmaLevel.toFixed(2) : '4.80';
+      const latency = data.bootstrapLatencyMs || 14;
+
+      const healthBadge = document.getElementById('pulse-health-badge');
+      if (healthBadge) {
+        healthBadge.innerHTML = `
+          <span class="pulse-indicator-dot ${health.sloStatus === 'HEALTHY' ? 'dot-online' : 'dot-warning'}"></span>
+          <span>SALUD: <strong style="color:${health.sloStatus === 'HEALTHY' ? 'var(--accent-green)' : 'var(--accent-amber)'};">${health.sloStatus || 'OPTIMAL'}</strong></span>
+        `;
+      }
+
+      const latencyBadge = document.getElementById('pulse-latency-badge');
+      if (latencyBadge) {
+        latencyBadge.innerHTML = `⚡ <strong>${latency}ms</strong> ${isCached ? '(L1 In-Memory)' : '(L2 Cache)'}`;
+      }
+
+      const dagBadge = document.getElementById('pulse-dag-badge');
+      if (dagBadge) {
+        dagBadge.innerHTML = `🕸️ DAG: <strong>${nodeCount} Nodos</strong>`;
+      }
+
+      const wipBadge = document.getElementById('pulse-wip-badge');
+      if (wipBadge) {
+        wipBadge.innerHTML = `📋 WIP: <strong>${kanban.inProgress || 0}/${kanban.wipLimit || 5}</strong> (${kanban.done || 0} listos)`;
+      }
+
+      const sigmaBadge = document.getElementById('hud-sigma-val');
+      if (sigmaBadge) {
+        sigmaBadge.innerText = `${sigma}σ`;
+      }
+
+      const dlqBadge = document.getElementById('pulse-dlq-badge');
+      if (dlqBadge) {
+        const dlqCount = health.dlqCount || 0;
+        dlqBadge.innerHTML = `🛡️ DLQ: <strong>${dlqCount}</strong>`;
+        dlqBadge.style.display = dlqCount > 0 ? 'inline-flex' : 'none';
+      }
+    }
+
     // INICIALIZACIÓN AUTOMÁTICA
     window.addEventListener('DOMContentLoaded', () => {
       initLayeredWorkspaceBuilder();
       initAuthSession();
       syncWithNeonDB();
       initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
       // Polling ligero de sincronización cada 12 segundos
       setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
     });
 
     // ATAJOS DE TECLADO
@@ -10934,10 +11543,28 @@ Process completed with exit code 1.</textarea>
         closeFullCharterPreviewModal();
         closeDocumentFileModal();
         closeFullPageWorkspaceView();
+        closeNexusChatModal();
       }
       if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
     });
   </script>
+
+  <!-- ========================================================================= -->
+  <!-- TS-LOOP-02: BOTÓN FLOTANTE MAGNÉTICO (THUMB-ZONE FAB MOBILE-FIRST)         -->
+  <!-- ========================================================================= -->
+  <button class="nexus-fab-thumb" id="nexusFabThumb" onclick="openNexusChatModal()" aria-label="Abrir Cerebro Nexus" title="Cerebro Nexus (Atajo de Pulgar / Alt+N)">
+    <div class="nexus-fab-aura"></div>
+    <span class="nexus-fab-icon">🧠</span>
+    <span class="nexus-fab-badge">IA</span>
+  </button>
+
+  <!-- CANVAS PARTICULAS / RECOMPENSA 60 FPS -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
 
 </body>
 </html>

@@ -30,6 +30,107 @@ export function createDocumentIngestionQueue(redisUrl?: string): Queue<DocumentI
   return queue;
 }
 
+export async function processDocumentDirectly(
+  pool: Pool,
+  data: DocumentIngestionJobData,
+  io?: SocketIOServer
+): Promise<{ documentId: string; totalChunks: number; status: string }> {
+  const { documentId, workspaceId, projectId, filename, mimeType, storagePath } = data;
+  const client: PoolClient = await pool.connect();
+
+  try {
+    await client.query(
+      `UPDATE workspace_documents
+       SET parsing_status = 'PARSING', updated_at = CURRENT_TIMESTAMP
+       WHERE id = $1`,
+      [documentId]
+    );
+
+    // 1. Extraer texto del documento según formato
+    const rawContent = await extractDocumentText(storagePath, mimeType);
+    if (!rawContent || rawContent.trim().length === 0) {
+      throw new Error('No se pudo extraer contenido textual del archivo.');
+    }
+
+    // 2. Chunking semántico orientado a contexto (~512 tokens con 10% overlap)
+    // ~512 tokens ≈ 2048 caracteres, overlap 10% ≈ 204 caracteres
+    const chunkSize = 2048;
+    const overlap = 204;
+    const chunks = splitIntoSemanticChunks(rawContent, chunkSize, overlap);
+
+    // 3. Vectorización Batch de alta concurrencia
+    const embeddings = await EmbeddingService.getBatchEmbeddings(chunks, 4);
+
+    // 4. Inserción masiva en PostgreSQL (pgvector HNSW)
+    for (let i = 0; i < chunks.length; i++) {
+      const chunkText = chunks[i];
+      const embedding = embeddings[i];
+      const pgVectorStr = EmbeddingService.toPgVectorString(embedding);
+
+      const metadata = {
+        filename,
+        mimeType,
+        chunkIndex: i + 1,
+        totalChunks: chunks.length,
+        indexedAt: new Date().toISOString()
+      };
+
+      await client.query(
+        `INSERT INTO nexus_knowledge_vectors (
+           workspace_id, project_id, document_id, knowledge_domain,
+           title, raw_content, metadata, embedding, chunk_index
+         ) VALUES ($1, $2, $3, 'DOCUMENT_INGESTION', $4, $5, $6, $7::vector, $8)`,
+        [
+          workspaceId,
+          projectId || null,
+          documentId,
+          `Doc: ${filename} (Parte ${i + 1}/${chunks.length})`,
+          chunkText,
+          JSON.stringify(metadata),
+          pgVectorStr,
+          i + 1
+        ]
+      );
+    }
+
+    // 5. Actualizar estado a INDEXED
+    await client.query(
+      `UPDATE workspace_documents
+       SET parsing_status = 'INDEXED',
+           total_chunks = $1,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $2`,
+      [chunks.length, documentId]
+    );
+
+    // 6. Emitir notificación WebSocket a la sala de workspace
+    if (io) {
+      io.to(`workspace_${workspaceId}`).emit('DOCUMENT_INDEXED', {
+        documentId,
+        filename,
+        totalChunks: chunks.length,
+        status: 'INDEXED',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    return { documentId, totalChunks: chunks.length, status: 'INDEXED' };
+  } catch (err: unknown) {
+    const errorMsg = (err as Error).message;
+    await client.query(
+      `UPDATE workspace_documents
+       SET parsing_status = 'FAILED',
+           error_message = $1,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $2`,
+      [errorMsg, documentId]
+    );
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
 export function createDocumentIngestionWorker(
   pool: Pool,
   io?: SocketIOServer,
@@ -40,97 +141,7 @@ export function createDocumentIngestionWorker(
   return new Worker<DocumentIngestionJobData>(
     'nexus-doc-ingestion-queue',
     async (job: Job<DocumentIngestionJobData>) => {
-      const { documentId, workspaceId, projectId, filename, mimeType, storagePath } = job.data;
-      const client: PoolClient = await pool.connect();
-
-      try {
-        await client.query(
-          `UPDATE workspace_documents
-           SET parsing_status = 'PARSING', updated_at = CURRENT_TIMESTAMP
-           WHERE id = $1`,
-          [documentId]
-        );
-
-        // 1. Extraer texto del documento según formato
-        const rawContent = await extractDocumentText(storagePath, mimeType);
-        if (!rawContent || rawContent.trim().length === 0) {
-          throw new Error('No se pudo extraer contenido textual del archivo.');
-        }
-
-        // 2. Chunking semántico (~1000 tokens con 200 tokens de solapamiento)
-        // 1 token ≈ 4 caracteres en inglés/español
-        const chunkSize = 3600;
-        const overlap = 700;
-        const chunks = splitIntoSemanticChunks(rawContent, chunkSize, overlap);
-
-        // 3. Vectorización de cada bloque a 1536 dimensiones e inserción en PostgreSQL
-        for (let i = 0; i < chunks.length; i++) {
-          const chunkText = chunks[i];
-          const embedding = await EmbeddingService.getEmbedding(chunkText);
-          const pgVectorStr = EmbeddingService.toPgVectorString(embedding);
-
-          const metadata = {
-            filename,
-            mimeType,
-            chunkIndex: i + 1,
-            totalChunks: chunks.length,
-            indexedAt: new Date().toISOString()
-          };
-
-          await client.query(
-            `INSERT INTO nexus_knowledge_vectors (
-               workspace_id, project_id, document_id, knowledge_domain,
-               title, raw_content, metadata, embedding, chunk_index
-             ) VALUES ($1, $2, $3, 'DOCUMENT_INGESTION', $4, $5, $6, $7::vector, $8)`,
-            [
-              workspaceId,
-              projectId || null,
-              documentId,
-              `Doc: ${filename} (Parte ${i + 1}/${chunks.length})`,
-              chunkText,
-              JSON.stringify(metadata),
-              pgVectorStr,
-              i + 1
-            ]
-          );
-        }
-
-        // 4. Actualizar estado a INDEXED
-        await client.query(
-          `UPDATE workspace_documents
-           SET parsing_status = 'INDEXED',
-               total_chunks = $1,
-               updated_at = CURRENT_TIMESTAMP
-           WHERE id = $2`,
-          [chunks.length, documentId]
-        );
-
-        // 5. Emitir notificación WebSocket a la sala de workspace
-        if (io) {
-          io.to(`workspace_${workspaceId}`).emit('DOCUMENT_INDEXED', {
-            documentId,
-            filename,
-            totalChunks: chunks.length,
-            status: 'INDEXED',
-            timestamp: new Date().toISOString()
-          });
-        }
-
-        return { documentId, totalChunks: chunks.length, status: 'INDEXED' };
-      } catch (err: unknown) {
-        const errorMsg = (err as Error).message;
-        await client.query(
-          `UPDATE workspace_documents
-           SET parsing_status = 'FAILED',
-               error_message = $1,
-               updated_at = CURRENT_TIMESTAMP
-           WHERE id = $2`,
-          [errorMsg, documentId]
-        );
-        throw err;
-      } finally {
-        client.release();
-      }
+      return await processDocumentDirectly(pool, job.data, io);
     },
     {
       connection: { url: connectionUrl },
@@ -202,21 +213,43 @@ export async function extractDocumentText(filePath: string, mimeType: string): P
 }
 
 /**
- * División semántica por párrafos y secciones con solapamiento
+ * División semántica orientada a contexto: respeta encabezados Markdown (#, ##, ###)
+ * y límites de párrafos lógicos (~512 tokens con 10% overlap).
  */
-export function splitIntoSemanticChunks(text: string, chunkSize: number, overlap: number): string[] {
-  const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+export function splitIntoSemanticChunks(
+  text: string,
+  chunkSize: number = 2048,
+  overlap: number = 204
+): string[] {
+  // 1. Normalizar saltos de línea
+  const normalized = text.replace(/\r\n/g, '\n').trim();
+  if (!normalized) return [];
+
+  // 2. Fragmentar por bloques estructurales (encabezados Markdown o párrafos dobles)
+  const rawSections = normalized.split(/(?=\n#{1,4}\s+)|(?:\n\s*\n)/g).map(s => s.trim()).filter(Boolean);
+
   const chunks: string[] = [];
   let currentChunk = '';
+  let activeHeading = '';
 
-  for (const para of paragraphs) {
-    if ((currentChunk + '\n\n' + para).length > chunkSize && currentChunk.length > 0) {
+  for (const section of rawSections) {
+    // Rastrear el último encabezado para dar contexto continuo
+    const headingMatch = section.match(/^(#{1,4}\s+[^\n]+)/);
+    if (headingMatch) {
+      activeHeading = headingMatch[1];
+    }
+
+    const candidate = currentChunk.length > 0 ? `${currentChunk}\n\n${section}` : section;
+
+    if (candidate.length > chunkSize && currentChunk.length > 0) {
       chunks.push(currentChunk.trim());
-      // Mantener solapamiento de los últimos caracteres
+      // Mantener solapamiento semántico (10%) prefijado por el encabezado activo si existe
       const sliceStart = Math.max(0, currentChunk.length - overlap);
-      currentChunk = currentChunk.substring(sliceStart) + '\n\n' + para;
+      const overlapText = currentChunk.substring(sliceStart).trim();
+      const prefix = activeHeading && !overlapText.includes(activeHeading) ? `${activeHeading}\n` : '';
+      currentChunk = `${prefix}${overlapText}\n\n${section}`.trim();
     } else {
-      currentChunk = currentChunk.length > 0 ? `${currentChunk}\n\n${para}` : para;
+      currentChunk = candidate;
     }
   }
 

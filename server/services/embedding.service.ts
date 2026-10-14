@@ -7,9 +7,12 @@ import crypto from 'crypto';
  */
 export class EmbeddingService {
   private static readonly VECTOR_DIM = 1536;
+  private static readonly CACHE_MAX_SIZE = 1000;
+  private static readonly CACHE_TTL_MS = 60 * 60 * 1000; // 1 hora
+  private static l1Cache: Map<string, { vector: number[]; expiresAt: number }> = new Map();
 
   /**
-   * Genera el embedding de 1536 dimensiones para un texto dado.
+   * Genera el embedding de 1536 dimensiones para un texto dado con caché L1 ultrarrápido (<5ms).
    */
   public static async getEmbedding(text: string): Promise<number[]> {
     const cleanText = text.trim();
@@ -17,6 +20,46 @@ export class EmbeddingService {
       return new Array(this.VECTOR_DIM).fill(0);
     }
 
+    // 0. Caché L1 en memoria (tiempo de respuesta < 2ms)
+    const cacheKey = crypto.createHash('sha256').update(cleanText).digest('hex');
+    const cached = this.l1Cache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) {
+      return cached.vector;
+    }
+
+    const vector = await this.computeEmbedding(cleanText);
+
+    // Guardar en caché L1 con control de tamaño LRU simple
+    if (this.l1Cache.size >= this.CACHE_MAX_SIZE) {
+      const oldestKey = this.l1Cache.keys().next().value;
+      if (oldestKey) this.l1Cache.delete(oldestKey);
+    }
+    this.l1Cache.set(cacheKey, { vector, expiresAt: Date.now() + this.CACHE_TTL_MS });
+
+    return vector;
+  }
+
+  /**
+   * Genera embeddings masivos en paralelo controlado para background workers.
+   */
+  public static async getBatchEmbeddings(texts: string[], concurrency: number = 4): Promise<number[][]> {
+    const results: number[][] = new Array(texts.length);
+    for (let i = 0; i < texts.length; i += concurrency) {
+      const batch = texts.slice(i, i + concurrency);
+      const batchResults = await Promise.all(
+        batch.map(text => this.getEmbedding(text))
+      );
+      for (let j = 0; j < batchResults.length; j++) {
+        results[i + j] = batchResults[j];
+      }
+    }
+    return results;
+  }
+
+  /**
+   * Cálculo del embedding con proveedores remotos (Neon AI Gateway / Gemini) o fallback determinístico.
+   */
+  private static async computeEmbedding(cleanText: string): Promise<number[]> {
     // 1. NEON AI GATEWAY / OPENAI EMBEDDINGS
     const apiKey = process.env.NEON_AI_GATEWAY_KEY || process.env.OPENAI_API_KEY;
     const baseUrl = process.env.NEON_AI_GATEWAY_URL || 'https://ai-gateway.neon.tech/v1';

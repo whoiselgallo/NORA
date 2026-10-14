@@ -1,6 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TS_TOKENS } from '../../styles/theme.tokens';
 
+export interface ActionCard {
+  id: string;
+  label: string;
+  description: string;
+  actionType: 'NAVIGATE_DAG' | 'FILTER_KANBAN' | 'OPEN_ISHIKAWA' | 'OPEN_DMAIC' | 'OPEN_DOCUMENT' | 'EXECUTE_CLOSURE';
+  targetId?: string;
+  badge?: string;
+  payload?: any;
+}
+
 export interface NexusMessage {
   id: string;
   sender: 'user' | 'nexus';
@@ -15,6 +25,7 @@ export interface NexusMessage {
     similarity: number;
     rawContent: string;
   }>;
+  actionCards?: ActionCard[];
   similarity?: number;
   latencyMs?: number;
 }
@@ -24,13 +35,15 @@ interface NexusChatModalProps {
   onClose: () => void;
   workspaceId?: string;
   onSelectProjectRef?: (projectId: string) => void;
+  onExecuteAction?: (action: ActionCard) => void;
 }
 
 export const NexusChatModal: React.FC<NexusChatModalProps> = ({
   isOpen,
   onClose,
   workspaceId = '00000000-0000-0000-0000-000000000001',
-  onSelectProjectRef
+  onSelectProjectRef,
+  onExecuteAction
 }) => {
   const [query, setQuery] = useState('');
   const [domainFilter, setDomainFilter] = useState<string>('');
@@ -95,6 +108,7 @@ export const NexusChatModal: React.FC<NexusChatModalProps> = ({
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         citedProjects: data.citedProjects,
         sources: data.sources,
+        actionCards: data.actionCards,
         similarity: data.benchmarkSimilarity,
         latencyMs: data.queryLatencyMs
       };
@@ -405,6 +419,89 @@ export const NexusChatModal: React.FC<NexusChatModalProps> = ({
                       ))}
                     </div>
                   </details>
+                )}
+
+                {/* ACCIONES ACCIONABLES (ACTION-DRIVEN UI 1-TOQUE) */}
+                {msg.actionCards && msg.actionCards.length > 0 && (
+                  <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid rgba(0, 229, 255, 0.25)' }}>
+                    <div
+                      style={{
+                        fontFamily: TS_TOKENS.typography.fontMono,
+                        fontSize: '0.68rem',
+                        color: TS_TOKENS.colors.aquaTurquesa,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        marginBottom: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <span>⚡ ACCIONES SUGERIDAS (1-TOQUE // ZERO FRICTION):</span>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
+                      {msg.actionCards.map(card => (
+                        <button
+                          key={card.id}
+                          onClick={() => {
+                            if (onExecuteAction) {
+                              onExecuteAction(card);
+                            } else if (typeof window !== 'undefined') {
+                              window.dispatchEvent(new CustomEvent('nexus:action', { detail: card }));
+                            }
+                          }}
+                          style={{
+                            background: 'rgba(0, 229, 255, 0.08)',
+                            border: `1px solid ${TS_TOKENS.colors.aquaTurquesa}`,
+                            borderRadius: '8px',
+                            padding: '10px 14px',
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '4px',
+                            transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'rgba(0, 229, 255, 0.18)';
+                            e.currentTarget.style.borderColor = '#00F2FE';
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'rgba(0, 229, 255, 0.08)';
+                            e.currentTarget.style.borderColor = TS_TOKENS.colors.aquaTurquesa;
+                            e.currentTarget.style.transform = 'none';
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                            <span style={{ fontWeight: 'bold', fontSize: '0.8rem', color: TS_TOKENS.colors.blancoPuro, fontFamily: TS_TOKENS.typography.fontHeading }}>
+                              {card.label}
+                            </span>
+                            {card.badge && (
+                              <span
+                                style={{
+                                  fontSize: '0.62rem',
+                                  padding: '2px 6px',
+                                  borderRadius: '4px',
+                                  background: 'rgba(255, 107, 0, 0.2)',
+                                  border: '1px solid rgba(255, 107, 0, 0.5)',
+                                  color: '#FF6B00',
+                                  fontFamily: TS_TOKENS.typography.fontMono,
+                                  fontWeight: 700
+                                }}
+                              >
+                                {card.badge}
+                              </span>
+                            )}
+                          </div>
+                          <span style={{ fontSize: '0.72rem', color: TS_TOKENS.colors.humoSlate, lineHeight: 1.4 }}>
+                            {card.description}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
             </div>

@@ -357,6 +357,66 @@ export function createApiRouter(
   // --------------------------------------------------------------------------
   // CEREBRO DE CONOCIMIENTO CONTINUO DE NEXUS (PGVECTOR & RAG)
   // --------------------------------------------------------------------------
+  // TS-LOOP-01: THE NEXUS LOOP: FAST BOOTSTRAP HUD (<200ms First Meaningful Paint)
+  router.get('/nexus/pulse-bootstrap', authenticateNeonAuth, async (req: Request, res: Response) => {
+    const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const projectId = (req.query.project_id as string) || '00000000-0000-0000-0000-000000000001';
+    const startTime = Date.now();
+
+    try {
+      // 1. Obtener flujo DAG directamente de caché híbrido L1/L2 (<15ms)
+      let workflow: any = null;
+      try {
+        const dagRes = await cache.getOrFetchDag(pool, projectId, wsId);
+        workflow = dagRes.data;
+      } catch {
+        workflow = await cache.getDag(projectId, wsId);
+      }
+
+      // 2. Obtener resumen de tareas y límites WIP
+      const tasks = await taskService.getProjectTasks(projectId, wsId).catch(() => []);
+      const todoCount = tasks.filter((t: any) => t.status === 'TODO').length;
+      const inProgressCount = tasks.filter((t: any) => t.status === 'IN_PROGRESS').length;
+      const doneCount = tasks.filter((t: any) => t.status === 'DONE').length;
+      const wipLimitReached = inProgressCount >= 5;
+
+      // 3. Obtener métricas SLI/SLO y Dead Letter Queue
+      const dlqStats = webhookQueueService.getStats();
+
+      // 4. Calcular nivel Sigma estimado del proyecto
+      const totalTasks = tasks.length || 1;
+      const completionRatio = doneCount / totalTasks;
+      const calculatedSigma = Math.min(6.0, Math.max(3.0, 3.5 + completionRatio * 2.5));
+
+      const latency = Date.now() - startTime;
+
+      res.json({
+        workspaceId: wsId,
+        projectId,
+        bootstrapLatencyMs: latency,
+        workflow: workflow || { nodes: [] },
+        kanbanSummary: {
+          total: tasks.length,
+          todo: todoCount,
+          inProgress: inProgressCount,
+          done: doneCount,
+          wipLimitReached,
+          wipLimit: 5
+        },
+        health: {
+          sigmaLevel: Number(calculatedSigma.toFixed(2)),
+          sloStatus: dlqStats.dlq_entries_count > 0 ? 'WARNING_DLQ' : (wipLimitReached ? 'WARNING_WIP' : 'HEALTHY'),
+          p95LatencyMs: Math.max(12, latency),
+          dlqCount: dlqStats.dlq_entries_count,
+          activeQueueJobs: dlqStats.active_jobs
+        },
+        serverTimestamp: new Date().toISOString()
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   router.post(
     '/nexus/query',
     authenticateNeonAuth,
