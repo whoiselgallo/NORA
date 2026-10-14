@@ -2733,6 +2733,388 @@
       color: #FF8533;
     }
 
+    /* =========================================================================
+       NORA MASTER WORKSPACE EXPERIENCE (CREAR • IMPLEMENTAR • CERRAR)
+       Diseño ultra limpio, amigable y transparente para cualquier usuario
+       ========================================================================= */
+    .nora-master-experience {
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .nora-welcome-banner {
+      background: linear-gradient(135deg, rgba(18, 24, 38, 0.95) 0%, rgba(10, 13, 20, 0.98) 100%);
+      border: 1.5px solid rgba(255, 107, 0, 0.35);
+      border-radius: 18px;
+      padding: clamp(16px, 2.5vw, 24px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 28px rgba(255, 107, 0, 0.12);
+    }
+    .nora-welcome-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex: 1;
+      min-width: 280px;
+    }
+    .nora-hero-avatar-wrap {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .nora-hero-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid #FF6B00;
+      box-shadow: 0 0 16px rgba(255, 107, 0, 0.5);
+    }
+    .nora-hero-status-pulse {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 13px;
+      height: 13px;
+      background: #10B981;
+      border: 2px solid #0A0D14;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10B981;
+    }
+    .nora-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #10B981;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .nora-hero-title {
+      font-family: var(--font-primary);
+      font-size: clamp(1.2rem, 2.4vw, 1.65rem);
+      font-weight: 900;
+      color: #FFF;
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+    .nora-gradient-sub {
+      color: #FF8533;
+      font-size: 0.85em;
+      font-weight: 700;
+      display: block;
+    }
+    .nora-hero-subtitle {
+      font-size: 0.83rem;
+      color: #94A3B8;
+      margin: 0;
+      line-height: 1.45;
+      max-width: 640px;
+    }
+    .nora-welcome-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .nora-cta-btn {
+      background: linear-gradient(135deg, #FF6B00 0%, #FF8533 100%);
+      color: #FFF;
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 20px;
+      font-weight: 800;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 0 20px rgba(255, 107, 0, 0.45);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nora-cta-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 28px rgba(255, 107, 0, 0.65);
+    }
+    .nora-btn-avatar-mini img {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Master Stepper Navigation */
+    .nora-master-nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      background: rgba(13, 17, 26, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 8px;
+    }
+    .nora-tab-pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      transition: all 0.22s ease;
+      color: #94A3B8;
+    }
+    .nora-tab-pill:hover {
+      background: rgba(255, 107, 0, 0.08);
+      border-color: rgba(255, 107, 0, 0.3);
+      color: #FFF;
+      transform: translateY(-1px);
+    }
+    .nora-tab-pill.active {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.18) 0%, rgba(18, 23, 34, 0.95) 100%);
+      border: 1.5px solid #FF6B00;
+      color: #FFF;
+      box-shadow: 0 4px 20px rgba(255, 107, 0, 0.28);
+    }
+    .tab-pill-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+    }
+    .nora-tab-pill.active .tab-pill-number {
+      background: #FF6B00;
+      color: #FFF;
+      box-shadow: 0 0 10px rgba(255, 107, 0, 0.6);
+    }
+    .tab-pill-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .tab-pill-main {
+      font-weight: 800;
+      font-size: 0.82rem;
+      font-family: var(--font-primary);
+      letter-spacing: 0.02em;
+    }
+    .tab-pill-sub {
+      font-size: 0.68rem;
+      color: #64748B;
+    }
+    .nora-tab-pill.active .tab-pill-sub {
+      color: #FF8533;
+    }
+    .nora-tab-pill-pro.active {
+      border-color: #00E5FF;
+      box-shadow: 0 4px 20px rgba(0, 229, 255, 0.28);
+    }
+    .nora-tab-pill-pro.active .tab-pill-number {
+      background: #00E5FF;
+      color: #0A0D14;
+    }
+    .nora-tab-pill-pro.active .tab-pill-sub {
+      color: #00E5FF;
+    }
+
+    /* Phase Cards & Content */
+    .nora-phase-card {
+      background: linear-gradient(170deg, rgba(16, 21, 33, 0.95) 0%, rgba(9, 13, 20, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: clamp(18px, 2.8vw, 30px);
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .nora-phase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nora-phase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255, 107, 0, 0.14);
+      color: #FF8533;
+      border: 1px solid rgba(255, 107, 0, 0.3);
+      margin-bottom: 6px;
+    }
+    .nora-phase-title {
+      font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+      font-weight: 900;
+      color: #FFF;
+      margin: 0 0 4px 0;
+    }
+    .nora-phase-desc {
+      font-size: 0.82rem;
+      color: #94A3B8;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Interactive Archetype Grid */
+    .nora-archetype-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .nora-archetype-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid rgba(255, 255, 255, 0.09);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nora-archetype-card:hover {
+      background: rgba(255, 107, 0, 0.08);
+      border-color: #FF6B00;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 107, 0, 0.25);
+    }
+    .nora-archetype-card.selected {
+      background: rgba(255, 107, 0, 0.14);
+      border-color: #FF6B00;
+      box-shadow: 0 8px 25px rgba(255, 107, 0, 0.35);
+    }
+    .nora-arch-icon {
+      font-size: 1.8rem;
+    }
+    .nora-arch-name {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #FFF;
+    }
+    .nora-arch-desc {
+      font-size: 0.74rem;
+      color: #94A3B8;
+      line-height: 1.4;
+      flex: 1;
+    }
+    .nora-arch-meta {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: #FF8533;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    }
+
+    /* Implementation Tracker */
+    .nora-tracker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .nora-tracker-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nora-status-pill {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      width: fit-content;
+    }
+    .status-done {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10B981;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .status-wip {
+      background: rgba(0, 229, 255, 0.15);
+      color: #00E5FF;
+      border: 1px solid rgba(0, 229, 255, 0.35);
+    }
+    .status-pending {
+      background: rgba(255, 255, 255, 0.06);
+      color: #94A3B8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* Closure Checklist */
+    .nora-checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+    .nora-checklist-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .nora-check-box {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      background: #10B981;
+      color: #0A0D14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    .nora-check-title {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: #FFF;
+    }
+    .nora-check-desc {
+      font-size: 0.72rem;
+      color: #94A3B8;
+    }
+
     @keyframes noraBreathingGlow {
       0%, 100% {
         transform: scale(1);
@@ -4034,6 +4416,376 @@
 
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="main-wrap">
+
+    <!-- =========================================================================
+         NORA MASTER WORKSPACE EXPERIENCE: CREAR • IMPLEMENTAR • CERRAR
+         Diseño amigable, transparente e intuitivo para cualquier usuario
+         ========================================================================= -->
+    <section class="nora-master-experience" id="nora-master-experience">
+      <!-- HERO BIENVENIDA CON AVATAR COMPACTO DE NORA -->
+      <div class="nora-welcome-banner">
+        <div class="nora-welcome-left">
+          <div class="nora-hero-avatar-wrap">
+            <img src="/assets/nora/nora-avatar.jpg" alt="NORA" class="nora-hero-avatar-img" />
+            <span class="nora-hero-status-pulse"></span>
+          </div>
+          <div>
+            <div class="nora-hero-badge">
+              <span>● EN LÍNEA</span>
+              <span>•</span>
+              <span>NORA ASISTENTE VIRTUAL DE PROYECTOS</span>
+            </div>
+            <h1 class="nora-hero-title">
+              NORA <span class="nora-gradient-sub">Nexus Orquestador de Ramas Actualizadas</span>
+            </h1>
+            <p class="nora-hero-subtitle">
+              Crea, implementa y cierra tus proyectos tecnológicos de manera visual, transparente y sin complicaciones técnicas.
+            </p>
+          </div>
+        </div>
+        <div class="nora-welcome-actions">
+          <button type="button" class="nora-cta-btn" onclick="openNexusChatModal()">
+            <span class="nora-btn-avatar-mini"><img src="/assets/nora/nora-avatar.jpg" alt="Nora" /></span>
+            <span>Hablar con NORA</span>
+            <span class="nora-arrow">➔</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MASTER STEPPER TABS: 1. CREAR • 2. IMPLEMENTAR • 3. CERRAR • MODO PRO -->
+      <div class="nora-master-nav-tabs" role="tablist">
+        <button type="button" class="nora-tab-pill active" id="tab-phase-crear" onclick="switchNoraPhase('crear')" role="tab">
+          <div class="tab-pill-number">1</div>
+          <div class="tab-pill-content">
+            <span class="tab-pill-main">🌱 1. CREAR PROYECTO</span>
+            <span class="tab-pill-sub">Idea, Arquetipo y Presupuesto</span>
+          </div>
+        </button>
+
+        <button type="button" class="nora-tab-pill" id="tab-phase-implementar" onclick="switchNoraPhase('implementar')" role="tab">
+          <div class="tab-pill-number">2</div>
+          <div class="tab-pill-content">
+            <span class="tab-pill-main">⚡ 2. IMPLEMENTAR & SUPERVISAR</span>
+            <span class="tab-pill-sub">Avance, Entregables y Salud</span>
+          </div>
+        </button>
+
+        <button type="button" class="nora-tab-pill" id="tab-phase-cerrar" onclick="switchNoraPhase('cerrar')" role="tab">
+          <div class="tab-pill-number">3</div>
+          <div class="tab-pill-content">
+            <span class="tab-pill-main">🏆 3. CERRAR & ENTREGAR</span>
+            <span class="tab-pill-sub">Aprobación, ROI y Acta Final</span>
+          </div>
+        </button>
+
+        <button type="button" class="nora-tab-pill nora-tab-pill-pro" id="tab-phase-tecnico" onclick="switchNoraPhase('tecnico')" role="tab">
+          <div class="tab-pill-number">🛠️</div>
+          <div class="tab-pill-content">
+            <span class="tab-pill-main">MODO TÉCNICO / EXPERTO</span>
+            <span class="tab-pill-sub">DAG, DMAIC y 18 Módulos</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- CONTENEDORES DE CADA FASE -->
+      <div class="nora-phase-content-area">
+
+        <!-- ========================================== -->
+        <!-- FASE 1: CREAR PROYECTO                     -->
+        <!-- ========================================== -->
+        <div class="nora-phase-card" id="phase-panel-crear">
+          <div class="nora-phase-header">
+            <div>
+              <span class="nora-phase-badge">● FASE 01 • INICIO RÁPIDO</span>
+              <h2 class="nora-phase-title">Crea tu Proyecto en 3 Pasos Sencillos</h2>
+              <p class="nora-phase-desc">
+                Sin jerga técnica. Define el objetivo, elige la solución que necesitas y deja que NORA estructure el equipo y la cotización.
+              </p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <button type="button" class="btn-primary" onclick="openNexusChatModal()" style="padding:10px 18px; font-size:0.8rem; background:rgba(255,107,0,0.15); border:1px solid #FF6B00; color:#FF8533;">
+                <span>💬 Asistente Guiado con NORA</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- PASO 1.1: DATOS BÁSICOS -->
+          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:24px; height:24px; border-radius:50%; background:#FF6B00; color:#FFF; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.75rem;">A</span>
+              <h3 style="font-size:0.95rem; font-weight:800; color:#FFF; margin:0;">¿Cómo se llama tu proyecto y quién es el cliente?</h3>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+              <div>
+                <label style="display:block; font-size:0.74rem; color:#94A3B8; font-weight:600; margin-bottom:6px;">NOMBRE DEL PROYECTO *</label>
+                <input type="text" id="nora-input-project-name" placeholder="Ej: Plataforma E-commerce & App Móvil Ayala" value="Plataforma E-commerce & App Móvil" style="width:100%; background:#0D121D; border:1px solid rgba(255,255,255,0.14); border-radius:8px; padding:12px 14px; color:#FFF; font-size:0.85rem; outline:none;" />
+              </div>
+              <div>
+                <label style="display:block; font-size:0.74rem; color:#94A3B8; font-weight:600; margin-bottom:6px;">CLIENTE O EMPRESA *</label>
+                <input type="text" id="nora-input-client-name" placeholder="Ej: Ferretodo Ayala / TSolutions" value="Ayala Ferretodo" style="width:100%; background:#0D121D; border:1px solid rgba(255,255,255,0.14); border-radius:8px; padding:12px 14px; color:#FFF; font-size:0.85rem; outline:none;" />
+              </div>
+            </div>
+            <div>
+              <label style="display:block; font-size:0.74rem; color:#94A3B8; font-weight:600; margin-bottom:6px;">¿CUÁL ES EL OBJETIVO PRINCIPAL? (En tus palabras)</label>
+              <textarea id="nora-input-project-desc" rows="2" placeholder="Ej: Modernizar las ventas en línea, sincronizar inventarios en tiempo real y permitir pedidos automáticos por WhatsApp." style="width:100%; background:#0D121D; border:1px solid rgba(255,255,255,0.14); border-radius:8px; padding:12px 14px; color:#FFF; font-size:0.85rem; outline:none; resize:none;">Digitalizar el catálogo de productos con sincronización en tiempo real y ventas online seguras.</textarea>
+            </div>
+          </div>
+
+          <!-- PASO 1.2: ARQUETIPOS DE SOLUCIÓN -->
+          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:24px; height:24px; border-radius:50%; background:#FF6B00; color:#FFF; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.75rem;">B</span>
+              <h3 style="font-size:0.95rem; font-weight:800; color:#FFF; margin:0;">Elige el tipo de solución que necesitas:</h3>
+            </div>
+            <input type="hidden" id="nora-project-archetype" value="ECOMMERCE_WEB" />
+            <div class="nora-archetype-grid">
+              <div class="nora-archetype-card selected" onclick="selectArchetype('ECOMMERCE_WEB', this)">
+                <span class="nora-arch-icon">🛍️</span>
+                <span class="nora-arch-name">E-commerce &amp; Tienda Digital</span>
+                <p class="nora-arch-desc">Catálogo de productos, carrito de compras, cobro con tarjeta y control de inventario.</p>
+                <span class="nora-arch-meta">Tiempo: ~4 semanas • Entrega Llave en Mano</span>
+              </div>
+              <div class="nora-archetype-card" onclick="selectArchetype('WEB_APP', this)">
+                <span class="nora-arch-icon">💻</span>
+                <span class="nora-arch-name">Plataforma Web o App Móvil</span>
+                <p class="nora-arch-desc">Panel administrativo, cuentas de usuario, métricas en vivo y diseño adaptativo.</p>
+                <span class="nora-arch-meta">Tiempo: ~5 semanas • Multiplataforma</span>
+              </div>
+              <div class="nora-archetype-card" onclick="selectArchetype('AI_AUTOMATION', this)">
+                <span class="nora-arch-icon">🧠</span>
+                <span class="nora-arch-name">Asistente de IA &amp; Chatbot</span>
+                <p class="nora-arch-desc">Atención a clientes 24/7 con NORA, respuestas inteligentes y memoria de negocio.</p>
+                <span class="nora-arch-meta">Tiempo: ~2 semanas • RAG pgvector</span>
+              </div>
+              <div class="nora-archetype-card" onclick="selectArchetype('CLOUD_SYSTEMS', this)">
+                <span class="nora-arch-icon">☁️</span>
+                <span class="nora-arch-name">Infraestructura &amp; Servidores Cloud</span>
+                <p class="nora-arch-desc">Bases de datos PostgreSQL seguras, respaldo automático y velocidad ultra rápida.</p>
+                <span class="nora-arch-meta">Tiempo: ~1 semana • Alta Disponibilidad</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 1.3: PRESUPUESTO & ACCIÓN -->
+          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:20px; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;">
+            <div>
+              <div style="font-size:0.75rem; color:#94A3B8; margin-bottom:4px; font-family:var(--font-mono);">PRESUPUESTO ESTIMADO DE REFERENCIA</div>
+              <div style="font-size:1.4rem; font-weight:900; color:#10B981; font-family:var(--font-mono);">$4,500 - $8,200 USD</div>
+              <div style="font-size:0.75rem; color:#64748B;">Incluye diseño, arquitectura, despliegue y 90 días de garantía.</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <button type="button" class="btn-primary" onclick="saveAndAdvanceToImplement()" style="padding:14px 28px; font-size:0.9rem; font-weight:800; background:linear-gradient(135deg, #FF6B00 0%, #FF8533 100%); border-color:#FF6B00; box-shadow:0 0 25px rgba(255,107,0,0.5); cursor:pointer;">
+                <span>🚀 Guardar Proyecto y Pasar a Implementar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FASE 2: IMPLEMENTAR & SUPERVISAR           -->
+        <!-- ========================================== -->
+        <div class="nora-phase-card" id="phase-panel-implementar" style="display:none;">
+          <div class="nora-phase-header">
+            <div>
+              <span class="nora-phase-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.35);">● FASE 02 • SUPERVISIÓN EN VIVO</span>
+              <h2 class="nora-phase-title">Seguimiento de Implementación: <span class="current-project-name-display" style="color:#FF8533;">Plataforma E-commerce & App Móvil</span></h2>
+              <p class="nora-phase-desc">
+                Cliente: <strong class="current-client-name-display" style="color:#FFF;">Ayala Ferretodo</strong> • Monitorea el avance de las tareas, la salud operativa y los entregables en tiempo real.
+              </p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <button type="button" class="nora-cta-btn" onclick="openNexusChatModal()" style="padding:8px 16px; font-size:0.78rem;">
+                <span class="nora-btn-avatar-mini"><img src="/assets/nora/nora-avatar.jpg" alt="Nora" /></span>
+                <span>¿Cómo va mi proyecto? Preguntar a NORA</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- BARRA DE SALUD & AVANCE -->
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10B981; box-shadow:0 0 8px #10B981;"></span>
+                <span style="font-weight:800; font-size:0.92rem; color:#FFF;">ESTADO: EN TIEMPO Y FORMA</span>
+                <span style="color:#64748B;">•</span>
+                <span style="font-size:0.78rem; color:#94A3B8;">0 Bloqueos • Sincronización Neon OK</span>
+              </div>
+              <div style="font-family:var(--font-mono); font-weight:800; font-size:1.2rem; color:#FF8533;">
+                68% COMPLETADO
+              </div>
+            </div>
+            <!-- PROGRESS BAR -->
+            <div style="width:100%; height:10px; background:rgba(255,255,255,0.08); border-radius:9999px; overflow:hidden;">
+              <div style="width:68%; height:100%; background:linear-gradient(90deg, #FF6B00 0%, #10B981 100%); border-radius:9999px; box-shadow:0 0 12px rgba(255,107,0,0.6);"></div>
+            </div>
+          </div>
+
+          <!-- HITOS DE ENTREGA -->
+          <div class="nora-tracker-grid">
+            <div class="nora-tracker-card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="nora-status-pill status-done">✓ COMPLETADO</span>
+                <span style="font-size:1.2rem;">📐</span>
+              </div>
+              <h4 style="font-size:0.9rem; font-weight:800; color:#FFF; margin:0;">1. Arquitectura &amp; Definición</h4>
+              <p style="font-size:0.75rem; color:#94A3B8; margin:0;">Levantamiento de requerimientos, diseño de esquema y acta firmada.</p>
+              <div style="font-size:0.7rem; color:#10B981; font-family:var(--font-mono);">Aprobado 100%</div>
+            </div>
+
+            <div class="nora-tracker-card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="nora-status-pill status-done">✓ CONECTADO</span>
+                <span style="font-size:1.2rem;">🗄️</span>
+              </div>
+              <h4 style="font-size:0.9rem; font-weight:800; color:#FFF; margin:0;">2. Base de Datos &amp; Seguridad</h4>
+              <p style="font-size:0.75rem; color:#94A3B8; margin:0;">PostgreSQL Neon configurado, tablas creadas y cifrado activado.</p>
+              <div style="font-size:0.7rem; color:#10B981; font-family:var(--font-mono);">Latencia &lt; 20ms</div>
+            </div>
+
+            <div class="nora-tracker-card" style="border-color:rgba(255,107,0,0.4); background:rgba(255,107,0,0.04);">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="nora-status-pill status-wip">⚡ EN CURSO (75%)</span>
+                <span style="font-size:1.2rem;">💻</span>
+              </div>
+              <h4 style="font-size:0.9rem; font-weight:800; color:#FFF; margin:0;">3. Desarrollo de Pantallas &amp; Lógica</h4>
+              <p style="font-size:0.75rem; color:#94A3B8; margin:0;">Construcción del catálogo de productos y pasarela de cobro en línea.</p>
+              <div style="font-size:0.7rem; color:#FF8533; font-family:var(--font-mono);">En revisión con el cliente</div>
+            </div>
+
+            <div class="nora-tracker-card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="nora-status-pill status-pending">⏳ PENDIENTE</span>
+                <span style="font-size:1.2rem;">🔒</span>
+              </div>
+              <h4 style="font-size:0.9rem; font-weight:800; color:#FFF; margin:0;">4. Pruebas &amp; Entrega Formal</h4>
+              <p style="font-size:0.75rem; color:#94A3B8; margin:0;">Validación de seguridad, pruebas de carga y entrega de contraseñas.</p>
+              <div style="font-size:0.7rem; color:#64748B; font-family:var(--font-mono);">Programado Fase 3</div>
+            </div>
+          </div>
+
+          <!-- BOTONES DE ACCIÓN FASE 2 -->
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; padding-top:8px;">
+            <button type="button" class="btn-persuasive-secondary" onclick="switchNoraPhase('crear')" style="padding:10px 18px; font-size:0.8rem;">
+              <span>← Modificar Datos del Proyecto</span>
+            </button>
+            <div style="display:flex; gap:10px;">
+              <button type="button" class="btn-secondary" onclick="switchNoraPhase('tecnico')" style="padding:10px 16px; font-size:0.8rem; border-color:#00E5FF; color:#00E5FF;">
+                <span>🛠️ Ver Nodos del Grafo DAG (Modo Técnico)</span>
+              </button>
+              <button type="button" class="btn-primary" onclick="switchNoraPhase('cerrar')" style="padding:10px 22px; font-size:0.82rem; background:#10B981; border-color:#10B981; box-shadow:0 0 18px rgba(16,185,129,0.4);">
+                <span>Pasar a Fase de Cierre &amp; Entrega →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FASE 3: CERRAR & ENTREGAR                  -->
+        <!-- ========================================== -->
+        <div class="nora-phase-card" id="phase-panel-cerrar" style="display:none;">
+          <div class="nora-phase-header">
+            <div>
+              <span class="nora-phase-badge" style="background:rgba(16,185,129,0.15); color:#10B981; border-color:rgba(16,185,129,0.35);">● FASE 03 • ENTREGA &amp; GARANTÍA</span>
+              <h2 class="nora-phase-title">Cierre Formal del Proyecto: <span class="current-project-name-display" style="color:#FF8533;">Plataforma E-commerce & App Móvil</span></h2>
+              <p class="nora-phase-desc">
+                Valida la lista de entregables, revisa el retorno de inversión obtenido y formaliza el acta de entrega con sello de garantía.
+              </p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <button type="button" class="btn-primary" onclick="openProjectClosureModal()" style="padding:10px 18px; font-size:0.8rem; background:#10B981; border-color:#10B981; box-shadow:0 0 20px rgba(16,185,129,0.45); cursor:pointer;">
+                <span>✍️ Abrir Acta de Cierre Inmutable</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CHECKLIST DE ENTREGA TRANSPARENTE -->
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <h3 style="font-size:0.95rem; font-weight:800; color:#FFF; margin:0 0 4px 0;">Lista de Verificación de Entrega:</h3>
+            <div class="nora-checklist-item">
+              <span class="nora-check-box">✓</span>
+              <div>
+                <span class="nora-check-title">Funcionalidades acordadas al 100%</span>
+                <span class="nora-check-desc"> • El catálogo, carrito y pagos fueron probados y aprobados sin fallas.</span>
+              </div>
+            </div>
+            <div class="nora-checklist-item">
+              <span class="nora-check-box">✓</span>
+              <div>
+                <span class="nora-check-title">Entrega de accesos administrativos y contraseñas</span>
+                <span class="nora-check-desc"> • Las credenciales de la base de datos y hosting han sido transferidas al cliente.</span>
+              </div>
+            </div>
+            <div class="nora-checklist-item">
+              <span class="nora-check-box">✓</span>
+              <div>
+                <span class="nora-check-title">Capacitación y Guía de Uso Entregada</span>
+                <span class="nora-check-desc"> • El personal del cliente fue instruido en la operación y manejo del sistema.</span>
+              </div>
+            </div>
+            <div class="nora-checklist-item">
+              <span class="nora-check-box">✓</span>
+              <div>
+                <span class="nora-check-title">Garantía Operativa de 90 Días Activa</span>
+                <span class="nora-check-desc"> • Soporte técnico incluido para cualquier ajuste o duda operativa.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RESUMEN DE RETORNO DE INVERSIÓN (ROI) -->
+          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:22px; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+            <div>
+              <div style="font-size:0.72rem; color:#94A3B8; font-family:var(--font-mono);">AHORRO OPERATIVO ESTIMADO</div>
+              <div style="font-size:1.5rem; font-weight:900; color:#10B981; font-family:var(--font-mono);">$14,200 USD</div>
+              <div style="font-size:0.72rem; color:#64748B;">Ahorro en licencias y desarrollo</div>
+            </div>
+            <div>
+              <div style="font-size:0.72rem; color:#94A3B8; font-family:var(--font-mono);">TIEMPO DE EJECUCIÓN TOTAL</div>
+              <div style="font-size:1.5rem; font-weight:900; color:#00E5FF; font-family:var(--font-mono);">28 DÍAS</div>
+              <div style="font-size:0.72rem; color:#64748B;">35% más rápido que el promedio</div>
+            </div>
+            <div>
+              <div style="font-size:0.72rem; color:#94A3B8; font-family:var(--font-mono);">NIVEL DE CALIDAD FINAL</div>
+              <div style="font-size:1.5rem; font-weight:900; color:#FF8533; font-family:var(--font-mono);">99.8% OK</div>
+              <div style="font-size:0.72rem; color:#64748B;">0 Defectos críticos reportados</div>
+            </div>
+          </div>
+
+          <!-- ACCIONES DE CIERRE -->
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+            <button type="button" class="btn-persuasive-secondary" onclick="switchNoraPhase('implementar')" style="padding:10px 18px; font-size:0.8rem;">
+              <span>← Volver a Implementar</span>
+            </button>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <button type="button" class="btn-secondary" onclick="openArchivedLibraryModal()" style="padding:10px 18px; font-size:0.8rem; border-color:#FF6B00; color:#FF6B00;">
+                <span>🏛️ Ver Biblioteca de Archivados</span>
+              </button>
+              <button type="button" class="btn-primary" onclick="openProjectClosureModal()" style="padding:12px 24px; font-size:0.85rem; font-weight:800; background:#10B981; border-color:#10B981; box-shadow:0 0 25px rgba(16,185,129,0.5); cursor:pointer;">
+                <span>✍️ Emitir y Firmar Acta de Cierre</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FASE 4: MODO TÉCNICO / EXPERTO             -->
+        <!-- ========================================== -->
+        <div class="nora-phase-card" id="phase-panel-tecnico" style="display:none; background:rgba(18,24,38,0.98); border-color:#00E5FF;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+            <div>
+              <span class="nora-phase-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.4);">🛠️ MODO EXPERTO ACTIVO</span>
+              <h3 style="font-size:1.15rem; font-weight:800; color:#FFF; margin:4px 0;">Consola Técnica &amp; Arquitectura Avanzada Nexus</h3>
+              <p style="font-size:0.8rem; color:#94A3B8; margin:0;">
+                Mostrando las 4 Hojas de Trabajo PMI, el Grafo DAG de Tareas, Control Six Sigma DMAIC y los 18 Módulos de Operación.
+              </p>
+            </div>
+            <button type="button" class="nora-cta-btn" onclick="switchNoraPhase('crear')" style="background:linear-gradient(135deg, #00E5FF 0%, #00F2FE 100%); color:#0A0D14;">
+              <span>↩️ Volver a Modo Simple (Crear • Implementar • Cerrar)</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <!-- =========================================================================
          ARQUITECTURA EN CAPAS PROGRESIVAS (MOBILE-FIRST WORKSPACE BUILDER)
@@ -6742,92 +7494,77 @@
   <!-- ========================================================================= -->
   <!-- MODAL 1: CEREBRO CONTINUO NEXUS (PGVECTOR CHAT & REASONING)               -->
   <!-- ========================================================================= -->
-  <div class="modal-backdrop" id="nexus-chat-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.88); backdrop-filter:blur(8px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
-    <div style="width:100%; maxWidth:920px; height:85vh; background:#0A0D14; border:2px solid #00E5FF; box-shadow:0 0 30px rgba(0,229,255,0.4); border-radius:16px; display:flex; flex-direction:column; overflow:hidden;">
-      <!-- HEADER CON AVATAR VIRTUAL DE NORA -->
-      <div style="padding:16px 24px; background:#121722; border-bottom:1px solid rgba(255,107,0,0.3); display:flex; justify-content:space-between; align-items:center;">
-        <div style="display:flex; align-items:center; gap:14px;">
-          <div class="nora-avatar-wrap" onclick="openNexusChatModal()" title="NORA • Asistente Virtual Inteligente">
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: CEREBRO CONTINUO NEXUS (CHAT CON NORA - ULTRA LIMPIO Y VISIBLE)   -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="nexus-chat-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.88); backdrop-filter:blur(8px); z-index:9999; justify-content:center; align-items:center; padding:16px;">
+    <div style="width:100%; maxWidth:900px; height:86vh; background:#0A0D14; border:2px solid #FF6B00; box-shadow:0 0 35px rgba(255,107,0,0.35); border-radius:16px; display:flex; flex-direction:column; overflow:hidden;">
+      <!-- HEADER CON AVATAR COMPACTO DE NORA (NO OBSTRUYE LA PANTALLA) -->
+      <div style="padding:12px 20px; background:#121722; border-bottom:1px solid rgba(255,107,0,0.3); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="nora-avatar-wrap" style="width:40px; height:40px;" title="NORA • Asistente Virtual">
             <img src="/assets/nora/nora-avatar.jpg" alt="NORA Asistente de IA" class="nora-avatar-img" />
             <span class="nora-online-pulse" title="En línea y lista para colaborar"></span>
           </div>
           <div>
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <h2 style="font-family:'Space Grotesk', sans-serif; font-size:1.18rem; font-weight:800; color:#FFF; margin:0; display:flex; align-items:center; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <h2 style="font-family:'Space Grotesk', sans-serif; font-size:1.1rem; font-weight:800; color:#FFF; margin:0; display:flex; align-items:center; gap:6px;">
                 <span>NORA</span>
-                <span style="font-size:0.75rem; color:#FF8533; font-weight:600; font-family:var(--font-mono);">(Nexus Orquestador de Ramas Actualizadas)</span>
+                <span style="font-size:0.72rem; color:#FF8533; font-weight:600; font-family:var(--font-mono);">(Copiloto Inteligente de Proyectos)</span>
               </h2>
-              <span style="padding:2px 8px; font-size:0.65rem; font-family:'JetBrains Mono', monospace; background:rgba(255,107,0,0.15); color:#FF8533; border-radius:4px; border:1px solid rgba(255,107,0,0.4);">
-                ASISTENTE HUMANOIDE IA • PGVECTOR 1536-D
+              <span style="padding:2px 8px; font-size:0.65rem; font-family:'JetBrains Mono', monospace; background:rgba(16,185,129,0.15); color:#10B981; border-radius:4px; border:1px solid rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:4px;">
+                <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#10B981;"></span> EN LÍNEA
               </span>
             </div>
-            <p style="font-family:'Space Grotesk', sans-serif; font-size:0.78rem; color:#94A3B8; margin:2px 0 0 0;">
-              Tu copiloto técnica y operativa en TSolutions IPIDD • En línea con voz y respuesta en tiempo real
+            <p style="font-family:'Space Grotesk', sans-serif; font-size:0.75rem; color:#94A3B8; margin:2px 0 0 0;">
+              Te guío paso a paso para Crear, Implementar y Cerrar proyectos tecnológicos
             </p>
           </div>
         </div>
-        <button onclick="closeNexusChatModal()" style="background:transparent; border:none; color:#94A3B8; font-size:1.4rem; cursor:pointer; padding:6px; transition:color 0.2s;" onmouseover="this.style.color='#FF6B00'" onmouseout="this.style.color='#94A3B8'">✕</button>
+        <button onclick="closeNexusChatModal()" style="background:transparent; border:none; color:#94A3B8; font-size:1.3rem; cursor:pointer; padding:6px; transition:color 0.2s;" onmouseover="this.style.color='#FF6B00'" onmouseout="this.style.color='#94A3B8'" aria-label="Cerrar Chat">✕</button>
       </div>
 
-      <!-- ESCENARIO VIRTUAL HOLOGRÁFICO DE NORA -->
-      <div class="nora-virtual-stage">
-        <img src="/assets/nora/nora-avatar.jpg" alt="NORA en vivo" class="nora-stage-photo" />
-        <div style="flex:1;">
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:3px;">
-            <span style="font-size:0.7rem; font-weight:800; font-family:var(--font-mono); color:#10B981; display:flex; align-items:center; gap:4px;">
-              <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10B981;"></span> EN LÍNEA DIRECTA
-            </span>
-            <span style="color:#64748B; font-size:0.7rem;">•</span>
-            <span style="font-size:0.7rem; color:#94A3B8; font-family:var(--font-mono);">Sincronizada con Neon DB & DAG</span>
-          </div>
-          <div style="font-size:0.82rem; color:#F8FAFC; line-height:1.4;">
-            <em>"Hola, estoy lista para ayudarte a orquestar tus ramas, simular presupuestos o resolver incidentes de arquitectura. ¿En qué trabajamos hoy?"</em>
-          </div>
-        </div>
-      </div>
-
-      <!-- CHAT STREAM -->
-      <div id="nexus-chat-messages" style="flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:16px;">
-        <div style="align-self:flex-start; max-width:90%;">
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-            <img src="/assets/nora/nora-avatar.jpg" alt="NORA" style="width:24px; height:24px; border-radius:50%; object-fit:cover; border:1px solid #FF6B00;" />
+      <!-- CHAT STREAM (100% VISIBLE, ESPACIOSO Y LIBRE DE OBSTRUCCIONES) -->
+      <div id="nexus-chat-messages" style="flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:14px; min-height:0;">
+        <div style="align-self:flex-start; max-width:88%;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+            <img src="/assets/nora/nora-avatar.jpg" alt="NORA" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1.5px solid #FF6B00; box-shadow:0 0 8px rgba(255,107,0,0.4);" />
             <span style="font-family:'Space Grotesk', sans-serif; font-weight:800; font-size:0.75rem; color:#FF8533;">NORA</span>
-            <span style="font-size:0.65rem; color:#64748B;">ASISTENTE VIRTUAL</span>
+            <span style="font-size:0.65rem; color:#64748B;">COPILOTO VIRTUAL</span>
           </div>
-          <div style="background:#121722; border:1px solid rgba(255,107,0,0.35); border-radius:12px; padding:16px 20px; color:#F8FAFC; font-size:0.88rem; line-height:1.6; box-shadow:0 6px 22px rgba(0,0,0,0.5);">
-            ¡Hola! Soy <strong>NORA</strong>, tu asistente virtual inteligente de <strong>TSolutions IPIDD</strong>.<br><br>
-            Tengo conexión directa con la memoria semántica en Neon PostgreSQL con <strong>pgvector</strong> y las 46 tablas operativas del sistema. Puedo guiarte paso a paso en tus cotizaciones, revisar el grafo DAG, inspeccionar lecciones aprendidas o redactar propuestas ejecutivas. ¿Por dónde comenzamos?
+          <div style="background:#121722; border:1px solid rgba(255,107,0,0.35); border-radius:12px; padding:14px 18px; color:#F8FAFC; font-size:0.86rem; line-height:1.6; box-shadow:0 6px 20px rgba(0,0,0,0.5);">
+            ¡Hola! Soy <strong>NORA</strong>, tu copiloto virtual en <strong>TSolutions IPIDD</strong>.<br><br>
+            Estoy aquí para ayudarte a que tu proyecto sea un éxito en 3 pasos sencillos:<br>
+            • <strong>1. Crear:</strong> Definir tu idea, alcance y presupuesto sin complicaciones.<br>
+            • <strong>2. Implementar:</strong> Dar seguimiento visual al avance y entregables en tiempo real.<br>
+            • <strong>3. Cerrar:</strong> Aprobar resultados, medir el ahorro (ROI) y formalizar la entrega.<br><br>
+            ¿En qué podemos trabajar hoy?
           </div>
         </div>
       </div>
 
-      <!-- SUGGESTIONS BAR -->
-      <div style="padding:8px 24px; background:#121722; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:8px; overflow-x:auto;">
-        <span style="font-size:0.72rem; color:#94A3B8; align-self:center; white-space:nowrap;">Sugerencias:</span>
-        <button onclick="sendNexusQuery('¿Qué fallas de CI/CD tuvimos en Node/Docker y cómo se mitigaron?')" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); color:#F8FAFC; font-size:0.72rem; padding:4px 10px; border-radius:9999px; cursor:pointer; white-space:nowrap;">
-          Fallos CI/CD Node/Docker
+      <!-- SUGGESTIONS BAR (ACCIONES RÁPIDAS Y AMIGABLES) -->
+      <div style="padding:8px 20px; background:#121722; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:8px; overflow-x:auto; flex-shrink:0;">
+        <span style="font-size:0.7rem; color:#94A3B8; align-self:center; white-space:nowrap;">Preguntas rápidas:</span>
+        <button onclick="sendNexusQuery('¿Cómo creo un nuevo proyecto tecnológico paso a paso?')" style="background:rgba(255,107,0,0.08); border:1px solid rgba(255,107,0,0.3); color:#FF8533; font-size:0.72rem; padding:4px 12px; border-radius:9999px; cursor:pointer; white-space:nowrap; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,107,0,0.2)'" onmouseout="this.style.background='rgba(255,107,0,0.08)'">
+          🌱 ¿Cómo crear un proyecto?
         </button>
-        <button onclick="sendNexusQuery('¿Cuáles fueron las causas raíz OPEX de alta latencia?')" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); color:#F8FAFC; font-size:0.72rem; padding:4px 10px; border-radius:9999px; cursor:pointer; white-space:nowrap;">
-          Causas Raíz Ishikawa Latencia
+        <button onclick="sendNexusQuery('¿Cómo calculamos el presupuesto y tiempo de entrega de una solución?')" style="background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.3); color:#00E5FF; font-size:0.72rem; padding:4px 12px; border-radius:9999px; cursor:pointer; white-space:nowrap; transition:all 0.2s;" onmouseover="this.style.background='rgba(0,229,255,0.2)'" onmouseout="this.style.background='rgba(0,229,255,0.08)'">
+          📊 Presupuesto y tiempos
         </button>
-        <button onclick="sendNexusQuery('¿Cuál fue el ROI promedio y tiempo de ciclo en proyectos pasados?')" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); color:#F8FAFC; font-size:0.72rem; padding:4px 10px; border-radius:9999px; cursor:pointer; white-space:nowrap;">
-          ROI y Métricas Six Sigma
+        <button onclick="sendNexusQuery('¿Cómo puedo supervisar el avance de las tareas en vivo?')" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); color:#10B981; font-size:0.72rem; padding:4px 12px; border-radius:9999px; cursor:pointer; white-space:nowrap; transition:all 0.2s;" onmouseover="this.style.background='rgba(16,185,129,0.2)'" onmouseout="this.style.background='rgba(16,185,129,0.08)'">
+          ⚡ Supervisar avance
+        </button>
+        <button onclick="sendNexusQuery('¿Cuáles son los pasos para cerrar y recibir formalmente el proyecto?')" style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.3); color:#C084FC; font-size:0.72rem; padding:4px 12px; border-radius:9999px; cursor:pointer; white-space:nowrap; transition:all 0.2s;" onmouseover="this.style.background='rgba(168,85,247,0.2)'" onmouseout="this.style.background='rgba(168,85,247,0.08)'">
+          🏆 Cierre y entrega
         </button>
       </div>
 
-      <!-- INPUT BAR -->
-      <div style="padding:16px 24px; background:#0A0D14; border-top:1px solid rgba(255,255,255,0.1); display:flex; gap:10px; align-items:center;">
-        <select id="nexus-domain-select" style="background:#121722; color:#FFF; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; font-size:0.75rem; font-family:'JetBrains Mono', monospace; outline:none;">
-          <option value="">Todos los dominios</option>
-          <option value="ARCHITECTURE_STACK">ARCHITECTURE_STACK</option>
-          <option value="OPEX_ROOT_CAUSE">OPEX_ROOT_CAUSE</option>
-          <option value="METRICS_AND_ROI">METRICS_AND_ROI</option>
-          <option value="LESSONS_LEARNED">LESSONS_LEARNED</option>
-          <option value="SOP_PROCEDURES">SOP_PROCEDURES</option>
-        </select>
-        <input type="text" id="nexus-query-input" placeholder="Pregunta a Nexus sobre arquitecturas, incidentes o soluciones previas..." onkeydown="if(event.key==='Enter') sendNexusQuery()" style="flex:1; background:#121722; border:1px solid rgba(255,255,255,0.15); color:#FFF; border-radius:8px; padding:12px 16px; font-size:0.85rem; outline:none;" />
-        <button onclick="sendNexusQuery()" id="btn-nexus-send" style="background:#FF6B00; color:#FFF; border:none; border-radius:8px; padding:12px 20px; font-weight:bold; font-size:0.82rem; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 16px rgba(255,107,0,0.45);">
-          <span>Consultar</span> ➔
+      <!-- INPUT BAR ESPACIOSA Y AMIGABLE -->
+      <div style="padding:14px 20px; background:#0A0D14; border-top:1px solid rgba(255,255,255,0.1); display:flex; gap:10px; align-items:center; flex-shrink:0;">
+        <input type="text" id="nexus-query-input" placeholder="Escribe tu mensaje a NORA (ej: 'Quiero cotizar una app web' o '¿Cómo va mi entrega?')..." onkeydown="if(event.key==='Enter') sendNexusQuery()" style="flex:1; background:#121722; border:1px solid rgba(255,107,0,0.3); color:#FFF; border-radius:10px; padding:12px 18px; font-size:0.86rem; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='#FF6B00'" onblur="this.style.borderColor='rgba(255,107,0,0.3)'" />
+        <button onclick="sendNexusQuery()" id="btn-nexus-send" style="background:linear-gradient(135deg, #FF6B00 0%, #FF8533 100%); color:#FFF; border:none; border-radius:10px; padding:12px 22px; font-weight:800; font-size:0.84rem; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 16px rgba(255,107,0,0.45); white-space:nowrap;">
+          <span>Enviar</span> ➔
         </button>
       </div>
     </div>
@@ -11939,8 +12676,83 @@ Process completed with exit code 1.</textarea>
       }
     }
 
+    // =========================================================================
+    // NORA MASTER WORKFLOW ENGINE: CREAR • IMPLEMENTAR • CERRAR
+    // =========================================================================
+    function switchNoraPhase(phase) {
+      const phases = ['crear', 'implementar', 'cerrar', 'tecnico'];
+      phases.forEach(p => {
+        const tab = document.getElementById(`tab-phase-${p}`);
+        const panel = document.getElementById(`phase-panel-${p}`);
+        if (tab) tab.classList.toggle('active', p === phase);
+        if (panel) panel.style.display = (p === phase) ? 'flex' : 'none';
+      });
+
+      // Secciones técnicas profundas
+      const techShell = document.getElementById('layered-platform-shell');
+      const techFlow = document.getElementById('flowchart-lifecycle-board');
+      const techNeeds = document.getElementById('user-needs-hub');
+      const techModules = document.getElementById('module-windows-hub');
+      const techShowcase = document.getElementById('interactive-demo');
+
+      const isTech = (phase === 'tecnico');
+      if (techShell) techShell.style.display = isTech ? 'block' : 'none';
+      if (techFlow) techFlow.style.display = isTech ? 'block' : 'none';
+      if (techNeeds) techNeeds.style.display = isTech ? 'block' : 'none';
+      if (techModules) techModules.style.display = isTech ? 'block' : 'none';
+      if (techShowcase) techShowcase.style.display = isTech ? 'block' : 'none';
+
+      try {
+        localStorage.setItem('nora_active_phase', phase);
+      } catch (e) {}
+    }
+
+    function selectArchetype(name, cardElem) {
+      document.querySelectorAll('.nora-archetype-card').forEach(c => c.classList.remove('selected'));
+      if (cardElem) cardElem.classList.add('selected');
+      const input = document.getElementById('nora-project-archetype');
+      if (input) input.value = name;
+    }
+
+    function saveAndAdvanceToImplement() {
+      const nameInput = document.getElementById('nora-input-project-name');
+      const clientInput = document.getElementById('nora-input-client-name');
+      const name = (nameInput && nameInput.value.trim()) || 'Plataforma E-commerce & App Móvil';
+      const client = (clientInput && clientInput.value.trim()) || 'Ayala Ferretodo';
+
+      try {
+        localStorage.setItem('nora_saved_project', JSON.stringify({ name, client, date: new Date().toISOString() }));
+      } catch (e) {}
+
+      document.querySelectorAll('.current-project-name-display').forEach(el => el.innerText = name);
+      document.querySelectorAll('.current-client-name-display').forEach(el => el.innerText = client);
+
+      switchNoraPhase('implementar');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function initNoraWorkflow() {
+      const savedPhase = localStorage.getItem('nora_active_phase') || 'crear';
+      switchNoraPhase(savedPhase);
+
+      try {
+        const saved = JSON.parse(localStorage.getItem('nora_saved_project') || '{}');
+        if (saved.name) {
+          document.querySelectorAll('.current-project-name-display').forEach(el => el.innerText = saved.name);
+          const nameInput = document.getElementById('nora-input-project-name');
+          if (nameInput) nameInput.value = saved.name;
+        }
+        if (saved.client) {
+          document.querySelectorAll('.current-client-name-display').forEach(el => el.innerText = saved.client);
+          const clientInput = document.getElementById('nora-input-client-name');
+          if (clientInput) clientInput.value = saved.client;
+        }
+      } catch (e) {}
+    }
+
     // INICIALIZACIÓN AUTOMÁTICA
     window.addEventListener('DOMContentLoaded', () => {
+      initNoraWorkflow();
       initLayeredWorkspaceBuilder();
       initAuthSession();
       syncWithNeonDB();
