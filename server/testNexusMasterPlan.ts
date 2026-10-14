@@ -73,7 +73,10 @@ La causa raíz principal correspondió a la falta de parámetros ef_construction
   console.log('--- TEST 3: Cerebro Nexus con Action Cards y SLO < 7s ---');
   const brainQueryStart = Date.now();
   
-  const dbUrl = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_OMSJrQ3mf1WY@ep-quiet-forest-b503dzg6-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require';
+  const dbUrl = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
+  if (!dbUrl) {
+    throw new Error('DATABASE_URL o DATABASE_URL_UNPOOLED no está definida en las variables de entorno.');
+  }
   const realPool = new Pool({
     connectionString: dbUrl,
     ssl: { rejectUnauthorized: false }

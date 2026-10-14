@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Propuesta Fiscal, Comercial y ROI - MPS AYALA</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Inter:wght=400;600&family=Poppins:wght=600&display=swap');
+
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #3D3D3D;
+            margin: 0;
+            padding: 0;
+            font-size: 12.5pt;
+            line-height: 1.5;
+            background-color: #ffffff;
+        }
+
+        /* Contenedor con marco negro profundo y margen interno incrementado a 2.5rem */
+        .document-wrapper {
+            border: 2px solid #0D0D0D;
+            padding: 2.5rem;
+            margin: 0;
+            min-height: 100%;
+            box-sizing: border-box;
+        }
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+
+        .logo-cell {
+            width: 75px;
+            vertical-align: top;
+        }
+
+        .title-cell {
+            padding-left: 15px;
+            vertical-align: middle;
+        }
+
+        .brand-title {
+            font-family: 'Bruno Ace', sans-serif;
+            font-size: 25pt;
+            font-weight: 700;
+            color: #0D0D0D;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .brand-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 10.6pt;
+            color: #F97316;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 6px 0 0 0;
+        }
+
+        h1.document-title {
+            font-family: 'Bruno Ace', sans-serif;
+            font-size: 16.25pt;
+            color: #0D0D0D;
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2.section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 13.75pt;
+            font-weight: 600;
+            color: #0D0D0D;
+            border-left: 5px solid #F97316;
+            padding-left: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .benefit-box {
+            background-color: #F3F4F6;
+            border-left: 4px solid #374151;
+            padding: 10px 15px;
+            margin: 8px 0 15px 0;
+            font-size: 11.8pt;
+        }
+
+        .methodology-box {
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            padding: 15px;
+            margin: 12px 0;
+            font-size: 11.8pt;
+        }
+
+        .activity-list {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+
+        .activity-list li {
+            margin-bottom: 10px;
+        }
+
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+
+        .cost-table th, .cost-table td {
+            border: 1px solid #E5E7EB;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .cost-table th {
+            background-color: #F9FAFB;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11.25pt;
+            color: #0D0D0D;
+        }
+
+        .gantt-box {
+            font-family: monospace;
+            white-space: pre;
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            padding: 15px;
+            font-size: 11.25pt;
+            line-height: 1.6;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .blockquote-grace {
+            background-color: #FFF7ED;
+            border-left: 5px solid #F97316;
+            padding: 18px;
+            margin: 20px 0;
+            font-style: italic;
+            text-align: justify;
+        }
+        
+        .hook-highlight {
+            background-color: #EFF6FF;
+            border: 1px dashed #3B82F6;
+            padding: 18px;
+            border-radius: 4px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .roi-note {
+            font-size: 10.6pt;
+            color: #6B7280;
+            font-style: italic;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .page-break {
+            page-break-before: always;
+            border-top: 2px solid #0D0D0D;
+            margin-top: 15mm;
+            padding-top: 15mm;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="document-wrapper">
+
+        <!-- ENCABEZADO -->
+        <table class="header-table">
+            <tr>
+                <td class="logo-cell">
+                    <svg width="60" height="60" viewBox="0 0 100 100">
+                        <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="#F97316" stroke-width="6" stroke-linejoin="round"/>
+                        <polygon points="50,25 80,70 20,70" fill="#F97316" stroke="#F97316" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                </td>
+                <td class="title-cell">
+                    <h1 class="brand-title">TSolutions IPIDD</h1>
+                    <div class="brand-subtitle">Infraestructura Digital & Operaciones de Alta Disponibilidad</div>
+                </td>
+            </tr>
+        </table>
+
+        <h1 class="document-title">Propuesta Técnica, Comercial y Retorno de Inversión (ROI)</h1>
+        
+        <p><strong>Cliente:</strong> Gabriel Ayala / MPS Ayala<br>
+        <strong>Ubicación:</strong> Colonia Mariano Abasolo, Av. Ignacio Allende #85, Mexicali, Baja California<br>
+        <strong>Fecha de Emisión:</strong> 03 de julio de 2026<br>
+        <strong>Vigencia de la Oferta:</strong> 15 días naturales</p>
+
+        <!-- SECCIÓN 1 -->
+        <h2 class="section-title">1. Métrica de Esfuerzo: Horas Físicas vs. Horas Aplicadas</h2>
+        <p>Con el objetivo de transparentar el proceso de ejecución tecnológica, se establece la distinción entre <strong>Horas Físicas (HF)</strong>, referidas al tiempo real invertido de diseño, consultoría en sitio y codificación directa, y las <strong>Horas Aplicadas (HA)</strong>, correspondientes al rendimiento total apalancado mediante aceleradores lógicos y automatizaciones de IA.</p>
+
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th>Célula / Especialidad Operativa</th>
+                    <th style="text-align: center;">Horas Físicas (HF)</th>
+                    <th style="text-align: center;">Horas Aplicadas (HA)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Diseño e Identidad Visual (Branding):</strong> Diseño conceptual, vectorización, tipografías y conformación del Manual de Identidad de Imagen.</td>
+                    <td style="text-align: center;">20 hrs</td>
+                    <td style="text-align: center;">45 hrs</td>
+                </tr>
+                <tr>
+                    <td><strong>Ingeniería de Procesos (Metodología IPIDD):</strong> Levantamiento arquitectónico de flujos, diagnóstico de almacén, mitigación de fallas y estructuración modular de mostrador.</td>
+                    <td style="text-align: center;">25 hrs</td>
+                    <td style="text-align: center;">40 hrs</td>
+                </tr>
+                <tr>
+                    <td><strong>Codificación e Infraestructura de IA:</strong> Modelado de inventarios, desarrollo del sitio web optimizado para SEO e integración del motor conversacional en Dify.ai.</td>
+                    <td style="text-align: center;">40 hrs</td>
+                    <td style="text-align: center;">95 hrs</td>
+                </tr>
+                <tr style="background-color: #F9FAFB; font-weight: bold;">
+                    <td>MÉTRICA TOTAL DE ESFUERZO CONSOLIDADO:</td>
+                    <td style="text-align: center;">85 hrs</td>
+                    <td style="text-align: center;">180 hrs</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- RESEÑA IPIDD -->
+        <p>Todo el proyecto es regido bajo la <strong>Metodología IPIDD</strong>, un proceso estructurado que elimina la improvisación, organiza el flujo de trabajo y garantiza que cada entrega sea consistente, escalable y alineada con los objetivos del negocio mediante los siguientes componentes:</p>
+        
+        <div class="methodology-box">
+            <strong>• Identificación precisa del problema:</strong> Se define con exactitud qué se va a construir y por qué, evitando ambigüedades desde el inicio.<br>
+            <strong>• Planificación estructurada:</strong> Se ordenan minuciosamente las tareas, dependencias y recursos para asegurar un avance fluido.<br>
+            <strong>• Diseño funcional y técnico claro:</strong> Cada módulo, interacción y flujo de datos queda plenamente documentado antes de programarse.<br>
+            <strong>• Desarrollo incremental sin retrabajo:</strong> Se construye por etapas funcionales, validando cada avance para evitar costosas correcciones posteriores.<br>
+            <strong>• Evidencia y documentación continua:</strong> Todo el código y arquitectura queda registrado para facilitar el mantenimiento y escalabilidad futura.<br>
+            <strong>• Entrega y evaluación final:</strong> Se valida rigurosamente que el producto cumpla con los objetivos comerciales y se documenta para su correcto uso diario.
+        </div>
+
+        <!-- SECCIÓN 2 -->
+        <h2 class="section-title">2. Cronograma General de Ejecución (Gantt)</h2>
+        <p>La distribución del ciclo de vida del proyecto contempla un desarrollo secuencial e interactivo estructurado en un horizonte de 12 semanas operativas (90 días):</p>
+
+        <div class="gantt-box">Fase / Actividad                  S1-S2  S3-S4  S5-S6  S7-S8  S9-S10 S11-S12
+-----------------------------------------------------------------------------
+Fase 1: Identidad de Imagen       [====]
+Fase 2: Diagnóstico IPIDD                [====]
+Fase 3: Desarrollo Inventario/Ventas            [======]
+Fase 4: Sitio Web & FerreBot IA                         [======]
+Fase 5: Dashboard KPIs & TWI                                   [======]
+Fase 6: Cierre y Periodo de Gracia                                    [====]</div>
+
+        <div class="page-break"></div>
+
+        <!-- SECCIÓN 3 -->
+        <h2 class="section-title">3. Estructura de Entregables y Beneficios por Checkpoint</h2>
+        
+        <p><strong>Checkpoint 1: Día 30 (Fase Gráfica y Diagnóstico de Procesos)</strong></p>
+        <ul class="activity-list">
+            <li><strong>Entregable 1.1:</strong> Suministro completo del Manual de Identidad de Imagen Corporativa (logotipos vectoriales finales en SVG, variantes en PNG con fondo transparente, paleta cromática técnica y tipografías ferreteras seleccionadas).</li>
+            <li><strong>Entregable 1.2:</strong> Reporte Técnico de Línea Base IPIDD, integrando la identificación precisa de flujos y cuellos de botella del esquema actual de ventas y almacén.</li>
+        </ul>
+        <div class="benefit-box">
+            <strong>Beneficio Esperado:</strong> Establece un posicionamiento comercial sólido y profesional frente a competidores y proveedores de mayoreo. El análisis IPIDD permite identificar fugas de capital y estructurar el diseño funcional antes de realizar cualquier cambio físico o de código.
+        </div>
+
+        <p><strong>Checkpoint 2: Día 60 (Fase de Código y Control de Almacenes)</strong></p>
+        <ul class="activity-list">
+            <li><strong>Entregable 2.1:</strong> Núcleo operativo del Sistema de Almacenes e Inventarios Digitalizados con cargas iniciales masivas y alertas dinámicas de stock crítico.</li>
+            <li><strong>Entregable 2.2:</strong> Módulo de Ventas de Mostrador ágil con cotizador integrado acoplado a la estructura requerida para facturación electrónica.</li>
+        </ul>
+        <div class="benefit-box">
+            <strong>Beneficio Esperado:</strong> Reducción inmediata de las ventas perdidas por falta de stock visible. Automatiza los tiempos de atención en mostrador hasta en un 40%, permitiendo búsquedas exactas por equivalencias técnicas y protegiendo el margen neto de ganancia mediante precios estandarizados.
+        </div>
+
+        <p><strong>Checkpoint 3: Día 90 (Fase de Cierre, Inteligencia Artificial e Integración)</strong></p>
+        <ul class="activity-list">
+            <li><strong>Entregable 3.1:</strong> Sitio Web Profesional corporativo desplegado en entorno de producción con optimización SEO orgánico y diseño <em>mobile-first</em>.</li>
+            <li><strong>Entregable 3.2:</strong> Configuración del Asistente Virtual Inteligente <strong>FerreBot IA</strong> en la plataforma Dify.ai, enlazado directamente para consultas de stock y atención 24/7.</li>
+            <li><strong>Entregable 3.3:</strong> Dashboard interactivo de control gerencial de KPIs y ejecución de transferencia de conocimiento técnica bajo la metodología de capacitación TWI.</li>
+        </ul>
+        <div class="benefit-box">
+            <strong>Beneficio Esperado:</strong> Captación activa de clientes industriales en Mexicali las 24 horas del día. FerreBot IA absorbe la carga del primer contacto comercial y las cotizaciones repetitivas de forma autónoma. La metodología TWI asegura que el personal adopte el nuevo sistema sin fricciones operativas ni resistencia al cambio.
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- SECCIÓN 4 -->
+        <h2 class="section-title">4. Presupuesto Económico Estructurado (Alianza Comercial)</h2>
+        <p>Con motivo de consolidar una alianza comercial a largo plazo, se aplica un esquema de subsidio de infraestructura unificado del 60% para todos los módulos operativos:</p>
+
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th>Módulo Contratado</th>
+                    <th style="text-align: right;">Costo Real de Mercado</th>
+                    <th style="text-align: center;">Subsidio Alianza</th>
+                    <th style="text-align: right;">Inversión Neta Final (40%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Paquete #1: Identidad de Imagen</strong></td>
+                    <td style="text-align: right;">$14,000.00 MXN</td>
+                    <td style="text-align: center; color: #F97316; font-weight: bold;">60% Descuento</td>
+                    <td style="text-align: right;">$5,600.00 MXN</td>
+                </tr>
+                <tr>
+                    <td><strong>Módulo Operativo (Paquete 1)</strong></td>
+                    <td style="text-align: right;">$55,000.00 MXN</td>
+                    <td style="text-align: center; color: #F97316; font-weight: bold;">60% Descuento</td>
+                    <td style="text-align: right;">$22,000.00 MXN</td>
+                </tr>
+                <tr>
+                    <td><strong>Ecosistema Digital e IA (Paquete 2)</strong></td>
+                    <td style="text-align: right;">$55,000.00 MXN</td>
+                    <td style="text-align: center; color: #F97316; font-weight: bold;">60% Descuento</td>
+                    <td style="text-align: right;">$22,000.00 MXN</td>
+                </tr>
+                <tr style="background-color: #F9FAFB; font-weight: bold; font-size: 13.5pt;">
+                    <td>SUMATORIAS CONSOLIDADAS:</td>
+                    <td style="text-align: right; color: #DC2626;">$124,000.00 MXN</td>
+                    <td style="text-align: center; color: #16A34A;">Ahorro de 60%</td>
+                    <td style="text-align: right; color: #16A34A;">$49,600.00 MXN</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ESQUEMA REESTRUCTURADO 40/30/30 -->
+        <p><strong>Esquema de Flujo Operativo Estructurado (40 / 30 / 30):</strong> A solicitud del proyecto, los flujos de capital se dividen de manera asimétrica para robustecer la fase de ingeniería inicial, distribuidos de la siguiente forma:</p>
+
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th>Momento de Cobro / Hito Vinculado</th>
+                    <th style="text-align: center;">Porcentaje</th>
+                    <th style="text-align: right;">Monto Base (Subtotal)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Pago Inicial / Anticipo de Arranque:</strong> Liberación y firma de inicio para Fase de Identidad de Imagen y diagnóstico base IPIDD.</td>
+                    <td style="text-align: center;">40.00%</td>
+                    <td style="text-align: right; font-weight: bold;">$19,840.00 MXN</td>
+                </tr>
+                <tr>
+                    <td><strong>Pago Intermedio / Checkpoint 2 (Día 60):</strong> Posterior a la entrega funcional del Núcleo de Almacenes, Inventarios y Módulo de Mostrador.</td>
+                    <td style="text-align: center;">30.00%</td>
+                    <td style="text-align: right; font-weight: bold;">$14,880.00 MXN</td>
+                </tr>
+                <tr>
+                    <td><strong>Pago Final / Checkpoint 3 (Día 90):</strong> Posterior al despliegue integral del Sitio Web, FerreBot IA, Dashboard gerencial y capacitación TWI.</td>
+                    <td style="text-align: center;">30.00%</td>
+                    <td style="text-align: right; font-weight: bold;">$14,880.00 MXN</td>
+                </tr>
+                <tr style="background-color: #F9FAFB; font-weight: bold;">
+                    <td>TOTAL DE INVERSIÓN FINANCIADA:</td>
+                    <td style="text-align: center;">100.00%</td>
+                    <td style="text-align: right;">$49,600.00 MXN</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- SECCIÓN 5: ANÁLISIS DE ROI -->
+        <h2 class="section-title">5. Proyección y Análisis de Retorno de Inversión (ROI)</h2>
+        <p>El retorno económico de la inversión se calcula proyectando la recuperación de fugas operativas (mermas), el incremento de transacciones efectivas en mostrador y el canal de prospección automatizada de la Inteligencia Artificial.</p>
+        
+        <p class="roi-note">Nota aclaratoria: Los valores descritos a continuación corresponden a un modelo de simulación paramétrica basado en los estándares financieros promedio para comercios minoristas y ferreteros de similar escala. No constituyen valores auditados del negocio del cliente.</p>
+
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th>Concepto de Retorno de Capital / Optimización</th>
+                    <th style="text-align: right;">Beneficio Mensual Estimado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Mitigación de Mermas por Control de Almacén:</strong> Reducción de pérdidas por inventarios obsoletos o desorganizados mediante controles de la metodología IPIDD.</td>
+                    <td style="text-align: right; color: #16A34A;">+$4,500.00 MXN</td>
+                </tr>
+                <tr>
+                    <td><strong>Optimización de Tiempos en Mostrador:</strong> Reducción del 40% en tiempos de atención, permitiendo absorber más clientes concurrentes en picos operativos.</td>
+                    <td style="text-align: right; color: #16A34A;">+$3,800.00 MXN</td>
+                </tr>
+                <tr>
+                    <td><strong>Captación Activa y Filtro Comercial (FerreBot IA):</strong> Absorción de tareas repetitivas de cotización y atención de prospectos industriales en Mexicali las 24/7.</td>
+                    <td style="text-align: right; color: #16A34A;">+$6,200.00 MXN</td>
+                </tr>
+                <tr style="background-color: #F9FAFB; font-weight: bold;">
+                    <td>BENEFICIO ECONÓMICO MENSUAL PROYECTADO:</td>
+                    <td style="text-align: right; color: #16A34A;">+$14,500.00 MXN</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="hook-highlight" style="background-color: #F0FDF4; border: 1px dashed #16A34A;">
+            <span style="font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13.5pt; color: #14532D;">
+                📈 TIEMPO ESTIMADO DE RECUPERACIÓN (PAYBACK)
+            </span><br>
+            <p style="margin: 8px 0 0 0; text-align: center; font-size: 12.5pt; color: #14532D;">
+                Contrastando la inversión inicial neta de <strong>$49,600.00 MXN</strong> contra el beneficio consolidado mensual de <strong>$14,500.00 MXN</strong>, el punto de equilibrio económico y la recuperación total de capital del proyecto se sitúa en un aproximado de <strong>3.4 meses</strong> posteriores al despliegue final en producción.
+            </p>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- SECCIÓN 6 -->
+        <h2 class="section-title">6. Anexo Fiscal: Corrida de Impuestos por Hito de Pago (40 / 30 / 30)</h2>
+        <p>De acuerdo con la legislación fiscal mexicana vigente para el ejercicio 2026, al tratarse del desarrollo de software, plataformas inteligentes y activos lógicos, el proyecto califica como la entrega de un <strong>producto intangible</strong>. Por consiguiente, se grava a la tasa general del <strong>16% de IVA</strong> y se aplican las retenciones correspondientes al esquema de Persona Física con Actividad Profesional.</p>
+        
+        <p>A continuación se anexan las dos corridas correspondientes: la factura del 40% (Arranque) y la estructura unitaria para los dos hitos del 30% restantes (Fases 2 y 3).</p>
+
+        <!-- COMPUTO FISCAL 40% -->
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th colspan="2" style="background-color: #0D0D0D; color: white; font-family: 'Poppins', sans-serif; text-align: center; font-size: 12.5pt;">
+                        A. COMPROBANTE DE ANTICIPO DE ARRANQUE (40% DE INVERSIÓN)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Monto Base (Subtotal Anticipo de Arranque):</strong></td>
+                    <td style="text-align: right; font-weight: bold;">$19,840.00 MXN</td>
+                </tr>
+                <tr>
+                    <td>(+) IVA Trasladado (Tasa General del 16% por Producto Intangible):</td>
+                    <td style="text-align: right; color: #7C3AED;">$3,174.40 MXN</td>
+                </tr>
+                <tr style="background-color: #F9FAFB; font-weight: bold;">
+                    <td>(=) Total Parcial con IVA Incluido:</td>
+                    <td style="text-align: right; color: #16A34A;">$23,014.40 MXN</td>
+                </tr>
+                <tr>
+                    <td>(-) Retención de Impuesto Sobre la Renta (ISR - Tasa del 10%):</td>
+                    <td style="text-align: right; color: #DC2626;">-$1,984.00 MXN</td>
+                </tr>
+                <tr>
+                    <td>(-) Retención de IVA (Tasa del 10.6667% - 2/3 partes):</td>
+                    <td style="text-align: right; color: #DC2626;">-$2,116.27 MXN</td>
+                </tr>
+                <tr style="background-color: #EFF6FF; font-weight: bold; font-size: 13pt;">
+                    <td>(=) MONTO NETO A RECIBIR (EFECTIVO EN CUENTA ANTICIPO):</td>
+                    <td style="text-align: right; color: #1E40AF;">$18,914.13 MXN</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- COMPUTO FISCAL 30% -->
+        <table class="cost-table" style="margin-top: 30px;">
+            <thead>
+                <tr>
+                    <th colspan="2" style="background-color: #374151; color: white; font-family: 'Poppins', sans-serif; text-align: center; font-size: 12.5pt;">
+                        B. COMPROBANTE POR CHECKPOINT INDIVIDUAL (30% DE INVERSIÓN - EMISIÓN DOBLE)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Monto Base (Subtotal por Hito del 30%):</strong></td>
+                    <td style="text-align: right; font-weight: bold;">$14,880.00 MXN</td>
+                </tr>
+                <tr>
+                    <td>(+) IVA Trasladado (Tasa General del 16% por Producto Intangible):</td>
+                    <td style="text-align: right; color: #7C3AED;">$2,380.80 MXN</td>
+                </tr>
+                <tr style="background-color: #F9FAFB; font-weight: bold;">
+                    <td>(=) Total Parcial con IVA Incluido:</td>
+                    <td style="text-align: right; color: #16A34A;">$17,260.80 MXN</td>
+                </tr>
+                <tr>
+                    <td>(-) Retención de Impuesto Sobre la Renta (ISR - Tasa del 10%):</td>
+                    <td style="text-align: right; color: #DC2626;">-$1,488.00 MXN</td>
+                </tr>
+                <tr>
+                    <td>(-) Retención de IVA (Tasa del 10.6667% - 2/3 partes):</td>
+                    <td style="text-align: right; color: #DC2626;">-$1,587.21 MXN</td>
+                </tr>
+                <tr style="background-color: #EFF6FF; font-weight: bold; font-size: 13pt;">
+                    <td>(=) MONTO NETO A RECIBIR POR CADA CFDI DEL 30%:</td>
+                    <td style="text-align: right; color: #1E40AF;">$14,185.59 MXN</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- SECCIÓN 7 -->
+        <h2 class="section-title">7. Datos de Identificación Fiscal (Emisor)</h2>
+        <p>Para la generación de los Comprobantes Fiscales Digitales por Internet (CFDI 4.0) correspondientes, se adjuntan las credenciales operativas validadas ante el Servicio de Administración Tributaria (SAT):</p>
+
+        <table class="cost-table">
+            <tbody>
+                <tr>
+                    <td style="width: 35%; background-color: #F9FAFB; font-weight: 600;">RFC:</td>
+                    <td><strong>GAAJ8703126A0</strong></td>
+                </tr>
+                <tr>
+                    <td style="background-color: #F9FAFB; font-weight: 600;">Nombre Completo:</td>
+                    <td>JAVIER EDUARDO GALLARDO ARREDONDO</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #F9FAFB; font-weight: 600;">Régimen Fiscal:</td>
+                    <td>Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas / Actividad Profesional</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #F9FAFB; font-weight: 600;">Domicilio Fiscal:</td>
+                    <td>Calle Ignacio Aldama #185, Colonia Mariano Abasolo, C.P. 21600, Mexicali, Baja California, México</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- SECCIÓN 8 -->
+        <h2 class="section-title">8. Cláusula de Salvaguarda: Periodo de Gracia Operativo</h2>
+        <div class="blockquote-grace">
+            <strong>PERIODO DE GRACIA EXTENDIDO:</strong> Concluida la entrega de la totalidad del ecosistema en el Día 90 y tras la firma de conformidad del cliente, se habilitará un periodo de estabilización técnica de <strong>10 días hábiles obligatorios, completamente sin costo para el cliente</strong>. Durante este intervalo, todos los sistemas e integraciones de IA funcionarán en producción real bajo monitoreo técnico activo. Cualquier error crítico de base de datos, desajuste en el módulo de ventas o inconsistencia en las respuestas automatizadas de FerreBot IA será subsanada de manera inmediata y prioritaria por el prestador, sin devengar honorarios ni cargos extraordinarios.
+        </div>
+
+    </div> <!-- Cierre de .document-wrapper -->
+
+</body>
+</html>

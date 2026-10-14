@@ -25,9 +25,10 @@ const io = new SocketIOServer(server, {
   }
 });
 
-const DEFAULT_NEON_DATABASE_URL =
-  'postgresql://neondb_owner:npg_OMSJrQ3mf1WY@ep-quiet-forest-b503dzg6-pooler.c-7.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require';
-const connectionString = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL || DEFAULT_NEON_DATABASE_URL;
+const connectionString = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error('DATABASE_URL o DATABASE_URL_UNPOOLED debe estar configurado en el entorno (.env.local)');
+}
 
 const pool = new Pool({
   connectionString,

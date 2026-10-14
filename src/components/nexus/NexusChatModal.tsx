@@ -170,47 +170,60 @@ export const NexusChatModal: React.FC<NexusChatModalProps> = ({
             alignItems: 'center'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #00E5FF, #FF6B00)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '1.2rem',
-                fontWeight: 'bold',
-                color: '#0A0D14'
-              }}
-            >
-              🧠
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ position: 'relative', width: '42px', height: '42px', borderRadius: '50%', flexShrink: 0 }}>
+              <img
+                src="/assets/nora/nora-avatar.jpg"
+                alt="NORA"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  objectPosition: 'center top',
+                  border: '2px solid #FF6B00',
+                  boxShadow: '0 0 14px rgba(255,107,0,0.55)'
+                }}
+              />
+              <span
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  right: 0,
+                  width: '10px',
+                  height: '10px',
+                  backgroundColor: '#10B981',
+                  border: '2px solid #0A0D14',
+                  borderRadius: '50%',
+                  boxShadow: '0 0 6px #10B981'
+                }}
+              />
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <h2
                   style={{
-                    fontFamily: TS_TOKENS.typography.fontBruno,
-                    fontSize: '1.15rem',
+                    fontFamily: TS_TOKENS.typography.fontHeading,
+                    fontSize: '1.18rem',
+                    fontWeight: 800,
                     color: TS_TOKENS.colors.blancoPuro,
                     margin: 0
                   }}
                 >
-                  NEXUS // MEMORIA CONTINUA
+                  NORA
                 </h2>
                 <span
                   style={{
                     padding: '2px 8px',
                     fontSize: '0.65rem',
                     fontFamily: TS_TOKENS.typography.fontMono,
-                    backgroundColor: 'rgba(0, 229, 255, 0.15)',
-                    color: TS_TOKENS.colors.aquaTurquesa,
+                    backgroundColor: 'rgba(255, 107, 0, 0.15)',
+                    color: TS_TOKENS.colors.naranjaEnergy,
                     borderRadius: '4px',
-                    border: '1px solid rgba(0, 229, 255, 0.4)'
+                    border: '1px solid rgba(255, 107, 0, 0.4)'
                   }}
                 >
-                  PGVECTOR (1536-D) • HNSW
+                  ASISTENTE IA VIRTUAL • PGVECTOR
                 </span>
               </div>
               <p
@@ -298,14 +311,21 @@ export const NexusChatModal: React.FC<NexusChatModalProps> = ({
                   justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start'
                 }}
               >
+                {msg.sender === 'bot' && (
+                  <img
+                    src="/assets/nora/nora-avatar.jpg"
+                    alt="NORA"
+                    style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #FF6B00' }}
+                  />
+                )}
                 <span
                   style={{
                     fontFamily: TS_TOKENS.typography.fontMono,
                     fontSize: '0.68rem',
-                    color: msg.sender === 'user' ? TS_TOKENS.colors.naranjaEnergy : TS_TOKENS.colors.aquaTurquesa
+                    color: msg.sender === 'user' ? TS_TOKENS.colors.naranjaEnergy : '#FF8533'
                   }}
                 >
-                  {msg.sender === 'user' ? 'TÚ (OPERACIONES)' : 'NEXUS BRAIN'}
+                  {msg.sender === 'user' ? 'TÚ (OPERACIONES)' : 'NORA (ASISTENTE IA)'}
                 </span>
                 <span style={{ fontSize: '0.65rem', color: TS_TOKENS.colors.humoSlate }}>
                   {msg.timestamp}
