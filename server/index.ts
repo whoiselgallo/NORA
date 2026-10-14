@@ -146,10 +146,11 @@ if (!process.env.VERCEL) {
   }
 }
 
+// Puerto de escucha dinámico: si Vercel inyecta PORT o estamos en runtime, escuchar siempre
 const PORT = process.env.PORT || 4000;
-if (!process.env.VERCEL) {
+if (process.env.NODE_ENV !== 'test') {
   server.listen(PORT, () => {
-    console.log(`Server listening on http://localhost:${PORT}`);
+    console.log(`Server listening on port ${PORT}`);
   });
 }
 
