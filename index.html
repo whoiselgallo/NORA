@@ -2735,123 +2735,57 @@
 
     /* =========================================================================
        NORA MASTER WORKSPACE EXPERIENCE (CREAR • IMPLEMENTAR • CERRAR)
-       Diseño ultra limpio, amigable y transparente para cualquier usuario
+       Diseño ultra limpio, espacioso y sin desbordes de imágenes
        ========================================================================= */
     .nora-master-experience {
-      margin-bottom: 32px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 32px auto;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      box-sizing: border-box;
     }
 
-    .nora-welcome-banner {
-      background: linear-gradient(135deg, rgba(18, 24, 38, 0.95) 0%, rgba(10, 13, 20, 0.98) 100%);
-      border: 1.5px solid rgba(255, 107, 0, 0.35);
-      border-radius: 18px;
-      padding: clamp(16px, 2.5vw, 24px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 28px rgba(255, 107, 0, 0.12);
-    }
-    .nora-welcome-left {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex: 1;
-      min-width: 280px;
-    }
-    .nora-hero-avatar-wrap {
-      position: relative;
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .nora-hero-avatar-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: center top;
-      border: 2px solid #FF6B00;
-      box-shadow: 0 0 16px rgba(255, 107, 0, 0.5);
-    }
-    .nora-hero-status-pulse {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 13px;
-      height: 13px;
-      background: #10B981;
-      border: 2px solid #0A0D14;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #10B981;
-    }
-    .nora-hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      font-weight: 800;
-      color: #10B981;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-    .nora-hero-title {
-      font-family: var(--font-primary);
-      font-size: clamp(1.2rem, 2.4vw, 1.65rem);
-      font-weight: 900;
-      color: #FFF;
-      margin: 0 0 4px 0;
-      line-height: 1.2;
-    }
-    .nora-gradient-sub {
-      color: #FF8533;
-      font-size: 0.85em;
-      font-weight: 700;
-      display: block;
-    }
-    .nora-hero-subtitle {
-      font-size: 0.83rem;
-      color: #94A3B8;
-      margin: 0;
-      line-height: 1.45;
-      max-width: 640px;
-    }
-    .nora-welcome-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .nora-cta-btn {
-      background: linear-gradient(135deg, #FF6B00 0%, #FF8533 100%);
-      color: #FFF;
-      border: none;
-      border-radius: 9999px;
-      padding: 10px 20px;
-      font-weight: 800;
-      font-size: 0.84rem;
+    .nora-stepper-btn {
+      background: rgba(18, 24, 38, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 14px 18px;
       cursor: pointer;
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 0 20px rgba(255, 107, 0, 0.45);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      gap: 14px;
+      transition: all 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
     }
-    .nora-cta-btn:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 0 28px rgba(255, 107, 0, 0.65);
+    .nora-stepper-btn:hover {
+      border-color: #FF6B00;
+      background: rgba(255, 107, 0, 0.08);
     }
-    .nora-btn-avatar-mini img {
-      width: 22px;
-      height: 22px;
+    .nora-stepper-btn.active {
+      border-color: #FF6B00;
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.18) 0%, rgba(18, 24, 38, 0.95) 100%);
+      box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
+    }
+    .stepper-step-num {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      object-fit: cover;
-      display: block;
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFF;
+      font-weight: 900;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+    }
+    .nora-stepper-btn.active .stepper-step-num {
+      background: #FF6B00;
+      box-shadow: 0 0 10px rgba(255, 107, 0, 0.6);
     }
 
     /* Master Stepper Navigation */
@@ -4422,160 +4356,130 @@
          Diseño amigable, transparente e intuitivo para cualquier usuario
          ========================================================================= -->
     <section class="nora-master-experience" id="nora-master-experience">
-      <!-- HERO BIENVENIDA CON AVATAR COMPACTO DE NORA -->
-      <div class="nora-welcome-banner">
-        <div class="nora-welcome-left">
-          <div class="nora-hero-avatar-wrap">
-            <img src="/assets/nora/nora-avatar.jpg" alt="NORA" class="nora-hero-avatar-img" />
-            <span class="nora-hero-status-pulse"></span>
+      <!-- ENCABEZADO EJECUTIVO ULTRA LIMPIO -->
+      <div style="background: linear-gradient(135deg, rgba(20, 27, 44, 0.95) 0%, rgba(10, 14, 22, 0.98) 100%); border: 1.5px solid rgba(255, 107, 0, 0.35); border-radius: 16px; padding: 24px 30px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);">
+        <div>
+          <div style="display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.75rem; color: #10B981; font-weight: 800; text-transform: uppercase; margin-bottom: 6px;">
+            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 8px #10B981;"></span>
+            <span>NORA • ASISTENTE VIRTUAL EN LÍNEA</span>
           </div>
-          <div>
-            <div class="nora-hero-badge">
-              <span>● EN LÍNEA</span>
-              <span>•</span>
-              <span>NORA ASISTENTE VIRTUAL DE PROYECTOS</span>
-            </div>
-            <h1 class="nora-hero-title">
-              NORA <span class="nora-gradient-sub">Nexus Orquestador de Ramas Actualizadas</span>
-            </h1>
-            <p class="nora-hero-subtitle">
-              Crea, implementa y cierra tus proyectos tecnológicos de manera visual, transparente y sin complicaciones técnicas.
-            </p>
-          </div>
+          <h1 style="font-size: clamp(1.4rem, 2.8vw, 1.9rem); font-weight: 900; color: #FFF; margin: 0 0 6px 0; font-family: var(--font-primary);">
+            NORA <span style="color: #FF8533; font-weight: 700; font-size: 0.85em;">— Orquestador de Proyectos</span>
+          </h1>
+          <p style="font-size: 0.92rem; color: #94A3B8; margin: 0; max-width: 650px; line-height: 1.5;">
+            Plataforma intuitiva para dar vida a tus proyectos tecnológicos en <strong>3 pasos sencillos</strong>: Crear, Implementar y Cerrar.
+          </p>
         </div>
-        <div class="nora-welcome-actions">
-          <button type="button" class="nora-cta-btn" onclick="openNexusChatModal()">
-            <span class="nora-btn-avatar-mini"><img src="/assets/nora/nora-avatar.jpg" alt="Nora" /></span>
-            <span>Hablar con NORA</span>
-            <span class="nora-arrow">➔</span>
+        <div>
+          <button type="button" onclick="openNexusChatModal()" style="background: linear-gradient(135deg, #FF6B00 0%, #FF8533 100%); color: #FFF; border: none; border-radius: 10px; padding: 12px 22px; font-weight: 800; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 0 20px rgba(255,107,0,0.4); transition: transform 0.2s;">
+            <span>💬 Chatear con NORA</span>
+            <span>➔</span>
           </button>
         </div>
       </div>
 
-      <!-- MASTER STEPPER TABS: 1. CREAR • 2. IMPLEMENTAR • 3. CERRAR • MODO PRO -->
-      <div class="nora-master-nav-tabs" role="tablist">
-        <button type="button" class="nora-tab-pill active" id="tab-phase-crear" onclick="switchNoraPhase('crear')" role="tab">
-          <div class="tab-pill-number">1</div>
-          <div class="tab-pill-content">
-            <span class="tab-pill-main">🌱 1. CREAR PROYECTO</span>
-            <span class="tab-pill-sub">Idea, Arquetipo y Presupuesto</span>
+      <!-- MASTER STEPPER: 1. CREAR -> 2. IMPLEMENTAR -> 3. CERRAR -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 8px;">
+        <button type="button" id="tab-phase-crear" onclick="switchNoraPhase('crear')" class="nora-stepper-btn active">
+          <div class="stepper-step-num">1</div>
+          <div style="text-align: left;">
+            <div style="font-size: 0.95rem; font-weight: 900; color: #FFF;">PASO 1: CREAR</div>
+            <div style="font-size: 0.75rem; color: #FF8533;">Define tu proyecto y presupuesto</div>
           </div>
         </button>
 
-        <button type="button" class="nora-tab-pill" id="tab-phase-implementar" onclick="switchNoraPhase('implementar')" role="tab">
-          <div class="tab-pill-number">2</div>
-          <div class="tab-pill-content">
-            <span class="tab-pill-main">⚡ 2. IMPLEMENTAR & SUPERVISAR</span>
-            <span class="tab-pill-sub">Avance, Entregables y Salud</span>
+        <button type="button" id="tab-phase-implementar" onclick="switchNoraPhase('implementar')" class="nora-stepper-btn">
+          <div class="stepper-step-num">2</div>
+          <div style="text-align: left;">
+            <div style="font-size: 0.95rem; font-weight: 900; color: #FFF;">PASO 2: IMPLEMENTAR</div>
+            <div style="font-size: 0.75rem; color: #94A3B8;">Supervisa el avance y tareas</div>
           </div>
         </button>
 
-        <button type="button" class="nora-tab-pill" id="tab-phase-cerrar" onclick="switchNoraPhase('cerrar')" role="tab">
-          <div class="tab-pill-number">3</div>
-          <div class="tab-pill-content">
-            <span class="tab-pill-main">🏆 3. CERRAR & ENTREGAR</span>
-            <span class="tab-pill-sub">Aprobación, ROI y Acta Final</span>
-          </div>
-        </button>
-
-        <button type="button" class="nora-tab-pill nora-tab-pill-pro" id="tab-phase-tecnico" onclick="switchNoraPhase('tecnico')" role="tab">
-          <div class="tab-pill-number">🛠️</div>
-          <div class="tab-pill-content">
-            <span class="tab-pill-main">MODO TÉCNICO / EXPERTO</span>
-            <span class="tab-pill-sub">DAG, DMAIC y 18 Módulos</span>
+        <button type="button" id="tab-phase-cerrar" onclick="switchNoraPhase('cerrar')" class="nora-stepper-btn">
+          <div class="stepper-step-num">3</div>
+          <div style="text-align: left;">
+            <div style="font-size: 0.95rem; font-weight: 900; color: #FFF;">PASO 3: CERRAR</div>
+            <div style="font-size: 0.75rem; color: #94A3B8;">Entrega final y medición de ROI</div>
           </div>
         </button>
       </div>
 
       <!-- CONTENEDORES DE CADA FASE -->
-      <div class="nora-phase-content-area">
+      <div class="nora-phase-content-area" style="display: flex; flex-direction: column; gap: 20px; margin-top: 10px;">
 
         <!-- ========================================== -->
         <!-- FASE 1: CREAR PROYECTO                     -->
         <!-- ========================================== -->
-        <div class="nora-phase-card" id="phase-panel-crear">
-          <div class="nora-phase-header">
+        <div class="nora-phase-card" id="phase-panel-crear" style="background: rgba(16, 22, 34, 0.96); border: 1.5px solid rgba(255, 107, 0, 0.35); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 22px;">
+          <div style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;">
+            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #FF8533; font-weight: 800; background: rgba(255,107,0,0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(255,107,0,0.3);">
+              ● PASO 1 DE 3 • INICIO RÁPIDO
+            </span>
+            <h2 style="font-size: 1.45rem; font-weight: 900; color: #FFF; margin: 8px 0 4px 0;">¿Qué proyecto deseas construir?</h2>
+            <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">
+              Completa estos datos básicos para estructurar el plan de trabajo y el presupuesto en segundos:
+            </p>
+          </div>
+
+          <!-- DATOS DEL PROYECTO -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
             <div>
-              <span class="nora-phase-badge">● FASE 01 • INICIO RÁPIDO</span>
-              <h2 class="nora-phase-title">Crea tu Proyecto en 3 Pasos Sencillos</h2>
-              <p class="nora-phase-desc">
-                Sin jerga técnica. Define el objetivo, elige la solución que necesitas y deja que NORA estructure el equipo y la cotización.
-              </p>
+              <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #FFF; margin-bottom: 8px;">1. NOMBRE DEL PROYECTO *</label>
+              <input type="text" id="nora-input-project-name" placeholder="Ej: Tienda en Línea & App Ferretodo" value="Tienda en Línea & App Ferretodo" style="width: 100%; box-sizing: border-box; background: #0D1322; border: 1px solid rgba(255,255,255,0.16); border-radius: 8px; padding: 14px 16px; color: #FFF; font-size: 0.95rem; outline: none;" />
             </div>
-            <div style="display:flex; gap:10px; align-items:center;">
-              <button type="button" class="btn-primary" onclick="openNexusChatModal()" style="padding:10px 18px; font-size:0.8rem; background:rgba(255,107,0,0.15); border:1px solid #FF6B00; color:#FF8533;">
-                <span>💬 Asistente Guiado con NORA</span>
-              </button>
+            <div>
+              <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #FFF; margin-bottom: 8px;">2. CLIENTE O EMPRESA RESPONSABLE *</label>
+              <input type="text" id="nora-input-client-name" placeholder="Ej: Ayala Ferretodo / Tu Negocio" value="Ayala Ferretodo" style="width: 100%; box-sizing: border-box; background: #0D1322; border: 1px solid rgba(255,255,255,0.16); border-radius: 8px; padding: 14px 16px; color: #FFF; font-size: 0.95rem; outline: none;" />
             </div>
           </div>
 
-          <!-- PASO 1.1: DATOS BÁSICOS -->
-          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:16px;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="width:24px; height:24px; border-radius:50%; background:#FF6B00; color:#FFF; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.75rem;">A</span>
-              <h3 style="font-size:0.95rem; font-weight:800; color:#FFF; margin:0;">¿Cómo se llama tu proyecto y quién es el cliente?</h3>
-            </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
-              <div>
-                <label style="display:block; font-size:0.74rem; color:#94A3B8; font-weight:600; margin-bottom:6px;">NOMBRE DEL PROYECTO *</label>
-                <input type="text" id="nora-input-project-name" placeholder="Ej: Plataforma E-commerce & App Móvil Ayala" value="Plataforma E-commerce & App Móvil" style="width:100%; background:#0D121D; border:1px solid rgba(255,255,255,0.14); border-radius:8px; padding:12px 14px; color:#FFF; font-size:0.85rem; outline:none;" />
-              </div>
-              <div>
-                <label style="display:block; font-size:0.74rem; color:#94A3B8; font-weight:600; margin-bottom:6px;">CLIENTE O EMPRESA *</label>
-                <input type="text" id="nora-input-client-name" placeholder="Ej: Ferretodo Ayala / TSolutions" value="Ayala Ferretodo" style="width:100%; background:#0D121D; border:1px solid rgba(255,255,255,0.14); border-radius:8px; padding:12px 14px; color:#FFF; font-size:0.85rem; outline:none;" />
-              </div>
-            </div>
-            <div>
-              <label style="display:block; font-size:0.74rem; color:#94A3B8; font-weight:600; margin-bottom:6px;">¿CUÁL ES EL OBJETIVO PRINCIPAL? (En tus palabras)</label>
-              <textarea id="nora-input-project-desc" rows="2" placeholder="Ej: Modernizar las ventas en línea, sincronizar inventarios en tiempo real y permitir pedidos automáticos por WhatsApp." style="width:100%; background:#0D121D; border:1px solid rgba(255,255,255,0.14); border-radius:8px; padding:12px 14px; color:#FFF; font-size:0.85rem; outline:none; resize:none;">Digitalizar el catálogo de productos con sincronización en tiempo real y ventas online seguras.</textarea>
-            </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #FFF; margin-bottom: 8px;">3. ¿QUÉ NECESITAS O QUÉ PROBLEMA RESUELVE?</label>
+            <textarea id="nora-input-project-desc" rows="2" style="width: 100%; box-sizing: border-box; background: #0D1322; border: 1px solid rgba(255,255,255,0.16); border-radius: 8px; padding: 12px 16px; color: #FFF; font-size: 0.9rem; outline: none; resize: none;">Digitalizar el catálogo de ventas, permitir pedidos en línea y sincronizar inventarios automáticamente.</textarea>
           </div>
 
-          <!-- PASO 1.2: ARQUETIPOS DE SOLUCIÓN -->
-          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:16px;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="width:24px; height:24px; border-radius:50%; background:#FF6B00; color:#FFF; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.75rem;">B</span>
-              <h3 style="font-size:0.95rem; font-weight:800; color:#FFF; margin:0;">Elige el tipo de solución que necesitas:</h3>
-            </div>
+          <!-- TIPO DE SOLUCIÓN (4 TARJETAS GRANDES Y CLARAS) -->
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #FFF; margin-bottom: 10px;">4. SELECCIONA EL TIPO DE SOLUCIÓN:</label>
             <input type="hidden" id="nora-project-archetype" value="ECOMMERCE_WEB" />
-            <div class="nora-archetype-grid">
-              <div class="nora-archetype-card selected" onclick="selectArchetype('ECOMMERCE_WEB', this)">
-                <span class="nora-arch-icon">🛍️</span>
-                <span class="nora-arch-name">E-commerce &amp; Tienda Digital</span>
-                <p class="nora-arch-desc">Catálogo de productos, carrito de compras, cobro con tarjeta y control de inventario.</p>
-                <span class="nora-arch-meta">Tiempo: ~4 semanas • Entrega Llave en Mano</span>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
+              <div class="nora-archetype-card selected" onclick="selectArchetype('ECOMMERCE_WEB', this)" style="border-radius: 12px; padding: 18px; border: 1.5px solid #FF6B00; background: rgba(255,107,0,0.12); cursor: pointer;">
+                <div style="font-size: 2rem; margin-bottom: 6px;">🛍️</div>
+                <div style="font-size: 1rem; font-weight: 800; color: #FFF;">Tienda Online / E-commerce</div>
+                <div style="font-size: 0.78rem; color: #94A3B8; margin-top: 4px; line-height: 1.4;">Venta de productos, carrito de compras, cobro con tarjeta e inventarios.</div>
               </div>
-              <div class="nora-archetype-card" onclick="selectArchetype('WEB_APP', this)">
-                <span class="nora-arch-icon">💻</span>
-                <span class="nora-arch-name">Plataforma Web o App Móvil</span>
-                <p class="nora-arch-desc">Panel administrativo, cuentas de usuario, métricas en vivo y diseño adaptativo.</p>
-                <span class="nora-arch-meta">Tiempo: ~5 semanas • Multiplataforma</span>
+
+              <div class="nora-archetype-card" onclick="selectArchetype('WEB_APP', this)" style="border-radius: 12px; padding: 18px; border: 1.5px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); cursor: pointer;">
+                <div style="font-size: 2rem; margin-bottom: 6px;">💻</div>
+                <div style="font-size: 1rem; font-weight: 800; color: #FFF;">Plataforma Web o App Móvil</div>
+                <div style="font-size: 0.78rem; color: #94A3B8; margin-top: 4px; line-height: 1.4;">Panel administrativo, cuentas de usuario, catálogo digital y reportes.</div>
               </div>
-              <div class="nora-archetype-card" onclick="selectArchetype('AI_AUTOMATION', this)">
-                <span class="nora-arch-icon">🧠</span>
-                <span class="nora-arch-name">Asistente de IA &amp; Chatbot</span>
-                <p class="nora-arch-desc">Atención a clientes 24/7 con NORA, respuestas inteligentes y memoria de negocio.</p>
-                <span class="nora-arch-meta">Tiempo: ~2 semanas • RAG pgvector</span>
+
+              <div class="nora-archetype-card" onclick="selectArchetype('AI_AUTOMATION', this)" style="border-radius: 12px; padding: 18px; border: 1.5px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); cursor: pointer;">
+                <div style="font-size: 2rem; margin-bottom: 6px;">🤖</div>
+                <div style="font-size: 1rem; font-weight: 800; color: #FFF;">Asistente Virtual / IA</div>
+                <div style="font-size: 0.78rem; color: #94A3B8; margin-top: 4px; line-height: 1.4;">Atención automatizada 24/7 con NORA para responder clientes y cotizar.</div>
               </div>
-              <div class="nora-archetype-card" onclick="selectArchetype('CLOUD_SYSTEMS', this)">
-                <span class="nora-arch-icon">☁️</span>
-                <span class="nora-arch-name">Infraestructura &amp; Servidores Cloud</span>
-                <p class="nora-arch-desc">Bases de datos PostgreSQL seguras, respaldo automático y velocidad ultra rápida.</p>
-                <span class="nora-arch-meta">Tiempo: ~1 semana • Alta Disponibilidad</span>
+
+              <div class="nora-archetype-card" onclick="selectArchetype('CLOUD_SYSTEMS', this)" style="border-radius: 12px; padding: 18px; border: 1.5px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); cursor: pointer;">
+                <div style="font-size: 2rem; margin-bottom: 6px;">⚡</div>
+                <div style="font-size: 1rem; font-weight: 800; color: #FFF;">Automatización &amp; BD</div>
+                <div style="font-size: 0.78rem; color: #94A3B8; margin-top: 4px; line-height: 1.4;">Conexión entre sistemas, bases de datos PostgreSQL y notificaciones.</div>
               </div>
             </div>
           </div>
 
-          <!-- PASO 1.3: PRESUPUESTO & ACCIÓN -->
-          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:20px; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;">
+          <!-- PRESUPUESTO & BOTÓN CONTINUAR -->
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 6px;">
             <div>
-              <div style="font-size:0.75rem; color:#94A3B8; margin-bottom:4px; font-family:var(--font-mono);">PRESUPUESTO ESTIMADO DE REFERENCIA</div>
-              <div style="font-size:1.4rem; font-weight:900; color:#10B981; font-family:var(--font-mono);">$4,500 - $8,200 USD</div>
-              <div style="font-size:0.75rem; color:#64748B;">Incluye diseño, arquitectura, despliegue y 90 días de garantía.</div>
+              <div style="font-size: 0.75rem; color: #94A3B8; font-family: var(--font-mono);">PRESUPUESTO ESTIMADO DE REFERENCIA</div>
+              <div style="font-size: 1.5rem; font-weight: 900; color: #10B981; font-family: var(--font-mono);">$4,500 - $8,200 USD</div>
+              <div style="font-size: 0.75rem; color: #64748B;">Plazo estimado: 4 semanas • Garantía de 90 días</div>
             </div>
-            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-              <button type="button" class="btn-primary" onclick="saveAndAdvanceToImplement()" style="padding:14px 28px; font-size:0.9rem; font-weight:800; background:linear-gradient(135deg, #FF6B00 0%, #FF8533 100%); border-color:#FF6B00; box-shadow:0 0 25px rgba(255,107,0,0.5); cursor:pointer;">
-                <span>🚀 Guardar Proyecto y Pasar a Implementar</span>
+            <div>
+              <button type="button" onclick="saveAndAdvanceToImplement()" style="background: linear-gradient(135deg, #FF6B00 0%, #FF8533 100%); color: #FFF; border: none; border-radius: 12px; padding: 16px 32px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 0 25px rgba(255,107,0,0.5); display: inline-flex; align-items: center; gap: 10px;">
+                <span>➔ CONTINUAR AL PASO 2: IMPLEMENTAR</span>
               </button>
             </div>
           </div>
@@ -4584,206 +4488,189 @@
         <!-- ========================================== -->
         <!-- FASE 2: IMPLEMENTAR & SUPERVISAR           -->
         <!-- ========================================== -->
-        <div class="nora-phase-card" id="phase-panel-implementar" style="display:none;">
-          <div class="nora-phase-header">
+        <div class="nora-phase-card" id="phase-panel-implementar" style="display:none; background: rgba(16, 22, 34, 0.96); border: 1.5px solid rgba(0, 229, 255, 0.35); border-radius: 16px; padding: 28px; flex-direction: column; gap: 22px;">
+          <div style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
             <div>
-              <span class="nora-phase-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.35);">● FASE 02 • SUPERVISIÓN EN VIVO</span>
-              <h2 class="nora-phase-title">Seguimiento de Implementación: <span class="current-project-name-display" style="color:#FF8533;">Plataforma E-commerce & App Móvil</span></h2>
-              <p class="nora-phase-desc">
-                Cliente: <strong class="current-client-name-display" style="color:#FFF;">Ayala Ferretodo</strong> • Monitorea el avance de las tareas, la salud operativa y los entregables en tiempo real.
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #00E5FF; font-weight: 800; background: rgba(0,229,255,0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(0,229,255,0.3);">
+                ● PASO 2 DE 3 • SUPERVISIÓN EN VIVO
+              </span>
+              <h2 style="font-size: 1.45rem; font-weight: 900; color: #FFF; margin: 8px 0 4px 0;">
+                Avance de: <span class="current-project-name-display" style="color: #FF8533;">Tienda en Línea & App Ferretodo</span>
+              </h2>
+              <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">
+                Cliente: <strong class="current-client-name-display" style="color: #FFF;">Ayala Ferretodo</strong> • Supervisa las fases de construcción en tiempo real:
               </p>
             </div>
-            <div style="display:flex; gap:10px; align-items:center;">
-              <button type="button" class="nora-cta-btn" onclick="openNexusChatModal()" style="padding:8px 16px; font-size:0.78rem;">
-                <span class="nora-btn-avatar-mini"><img src="/assets/nora/nora-avatar.jpg" alt="Nora" /></span>
-                <span>¿Cómo va mi proyecto? Preguntar a NORA</span>
+            <div>
+              <button type="button" onclick="openNexusChatModal()" style="background: rgba(255,107,0,0.14); border: 1px solid #FF6B00; color: #FF8533; border-radius: 10px; padding: 10px 18px; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                <span>💬 ¿Cómo va mi proyecto? Preguntar a NORA</span>
               </button>
             </div>
           </div>
 
           <!-- BARRA DE SALUD & AVANCE -->
-          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:14px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-              <div style="display:flex; align-items:center; gap:10px;">
-                <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10B981; box-shadow:0 0 8px #10B981;"></span>
-                <span style="font-weight:800; font-size:0.92rem; color:#FFF;">ESTADO: EN TIEMPO Y FORMA</span>
-                <span style="color:#64748B;">•</span>
-                <span style="font-size:0.78rem; color:#94A3B8;">0 Bloqueos • Sincronización Neon OK</span>
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #10B981; box-shadow: 0 0 8px #10B981;"></span>
+                <span style="font-weight: 800; font-size: 0.95rem; color: #FFF;">ESTADO: EN TIEMPO Y FORMA</span>
+                <span style="color: #64748B;">•</span>
+                <span style="font-size: 0.82rem; color: #94A3B8;">0 Bloqueos • Base de Datos Conectada</span>
               </div>
-              <div style="font-family:var(--font-mono); font-weight:800; font-size:1.2rem; color:#FF8533;">
+              <div style="font-family: var(--font-mono); font-weight: 800; font-size: 1.3rem; color: #FF8533;">
                 68% COMPLETADO
               </div>
             </div>
-            <!-- PROGRESS BAR -->
-            <div style="width:100%; height:10px; background:rgba(255,255,255,0.08); border-radius:9999px; overflow:hidden;">
-              <div style="width:68%; height:100%; background:linear-gradient(90deg, #FF6B00 0%, #10B981 100%); border-radius:9999px; box-shadow:0 0 12px rgba(255,107,0,0.6);"></div>
+            <div style="width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden;">
+              <div style="width: 68%; height: 100%; background: linear-gradient(90deg, #FF6B00 0%, #10B981 100%); border-radius: 9999px; box-shadow: 0 0 12px rgba(255,107,0,0.5);"></div>
             </div>
           </div>
 
           <!-- HITOS DE ENTREGA -->
-          <div class="nora-tracker-grid">
-            <div class="nora-tracker-card">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="nora-status-pill status-done">✓ COMPLETADO</span>
-                <span style="font-size:1.2rem;">📐</span>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 800; background: rgba(16,185,129,0.15); color: #10B981; padding: 2px 8px; border-radius: 4px;">✓ TERMINADO</span>
+                <span style="font-size: 1.2rem;">📐</span>
               </div>
-              <h4 style="font-size:0.9rem; font-weight:800; color:#FFF; margin:0;">1. Arquitectura &amp; Definición</h4>
-              <p style="font-size:0.75rem; color:#94A3B8; margin:0;">Levantamiento de requerimientos, diseño de esquema y acta firmada.</p>
-              <div style="font-size:0.7rem; color:#10B981; font-family:var(--font-mono);">Aprobado 100%</div>
+              <div style="font-size: 0.95rem; font-weight: 800; color: #FFF;">1. Planificación &amp; Alcance</div>
+              <p style="font-size: 0.78rem; color: #94A3B8; margin: 4px 0 0 0;">Requerimientos aprobados y arquitectura sellada.</p>
             </div>
 
-            <div class="nora-tracker-card">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="nora-status-pill status-done">✓ CONECTADO</span>
-                <span style="font-size:1.2rem;">🗄️</span>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 800; background: rgba(16,185,129,0.15); color: #10B981; padding: 2px 8px; border-radius: 4px;">✓ CONECTADO</span>
+                <span style="font-size: 1.2rem;">🗄️</span>
               </div>
-              <h4 style="font-size:0.9rem; font-weight:800; color:#FFF; margin:0;">2. Base de Datos &amp; Seguridad</h4>
-              <p style="font-size:0.75rem; color:#94A3B8; margin:0;">PostgreSQL Neon configurado, tablas creadas y cifrado activado.</p>
-              <div style="font-size:0.7rem; color:#10B981; font-family:var(--font-mono);">Latencia &lt; 20ms</div>
+              <div style="font-size: 0.95rem; font-weight: 800; color: #FFF;">2. Base de Datos &amp; Seguridad</div>
+              <p style="font-size: 0.78rem; color: #94A3B8; margin: 4px 0 0 0;">PostgreSQL Neon activo y tablas creadas.</p>
             </div>
 
-            <div class="nora-tracker-card" style="border-color:rgba(255,107,0,0.4); background:rgba(255,107,0,0.04);">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="nora-status-pill status-wip">⚡ EN CURSO (75%)</span>
-                <span style="font-size:1.2rem;">💻</span>
+            <div style="background: rgba(255,107,0,0.05); border: 1px solid rgba(255,107,0,0.4); border-radius: 12px; padding: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 800; background: rgba(255,107,0,0.18); color: #FF8533; padding: 2px 8px; border-radius: 4px;">⚡ EN CURSO (75%)</span>
+                <span style="font-size: 1.2rem;">💻</span>
               </div>
-              <h4 style="font-size:0.9rem; font-weight:800; color:#FFF; margin:0;">3. Desarrollo de Pantallas &amp; Lógica</h4>
-              <p style="font-size:0.75rem; color:#94A3B8; margin:0;">Construcción del catálogo de productos y pasarela de cobro en línea.</p>
-              <div style="font-size:0.7rem; color:#FF8533; font-family:var(--font-mono);">En revisión con el cliente</div>
+              <div style="font-size: 0.95rem; font-weight: 800; color: #FFF;">3. Construcción de Pantallas</div>
+              <p style="font-size: 0.78rem; color: #94A3B8; margin: 4px 0 0 0;">Catálogo de productos y cobro con tarjeta.</p>
             </div>
 
-            <div class="nora-tracker-card">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="nora-status-pill status-pending">⏳ PENDIENTE</span>
-                <span style="font-size:1.2rem;">🔒</span>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 800; background: rgba(255,255,255,0.08); color: #94A3B8; padding: 2px 8px; border-radius: 4px;">⏳ SIGUIENTE PASO</span>
+                <span style="font-size: 1.2rem;">🔒</span>
               </div>
-              <h4 style="font-size:0.9rem; font-weight:800; color:#FFF; margin:0;">4. Pruebas &amp; Entrega Formal</h4>
-              <p style="font-size:0.75rem; color:#94A3B8; margin:0;">Validación de seguridad, pruebas de carga y entrega de contraseñas.</p>
-              <div style="font-size:0.7rem; color:#64748B; font-family:var(--font-mono);">Programado Fase 3</div>
+              <div style="font-size: 0.95rem; font-weight: 800; color: #FFF;">4. Pruebas &amp; Entrega de Claves</div>
+              <p style="font-size: 0.78rem; color: #94A3B8; margin: 4px 0 0 0;">Revisión final de seguridad y puesta en marcha.</p>
             </div>
           </div>
 
-          <!-- BOTONES DE ACCIÓN FASE 2 -->
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; padding-top:8px;">
-            <button type="button" class="btn-persuasive-secondary" onclick="switchNoraPhase('crear')" style="padding:10px 18px; font-size:0.8rem;">
-              <span>← Modificar Datos del Proyecto</span>
+          <!-- BOTONES DE NAVEGACIÓN PASO 2 -->
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 10px;">
+            <button type="button" onclick="switchNoraPhase('crear')" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #94A3B8; border-radius: 10px; padding: 12px 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+              <span>← Volver a Editar Datos</span>
             </button>
-            <div style="display:flex; gap:10px;">
-              <button type="button" class="btn-secondary" onclick="switchNoraPhase('tecnico')" style="padding:10px 16px; font-size:0.8rem; border-color:#00E5FF; color:#00E5FF;">
-                <span>🛠️ Ver Nodos del Grafo DAG (Modo Técnico)</span>
-              </button>
-              <button type="button" class="btn-primary" onclick="switchNoraPhase('cerrar')" style="padding:10px 22px; font-size:0.82rem; background:#10B981; border-color:#10B981; box-shadow:0 0 18px rgba(16,185,129,0.4);">
-                <span>Pasar a Fase de Cierre &amp; Entrega →</span>
-              </button>
-            </div>
+            <button type="button" onclick="switchNoraPhase('cerrar')" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFF; border: none; border-radius: 12px; padding: 14px 28px; font-weight: 900; font-size: 0.95rem; cursor: pointer; box-shadow: 0 0 20px rgba(16,185,129,0.4);">
+              <span>➔ CONTINUAR AL PASO 3: CERRAR Y RECIBIR PROYECTO</span>
+            </button>
           </div>
         </div>
 
         <!-- ========================================== -->
         <!-- FASE 3: CERRAR & ENTREGAR                  -->
         <!-- ========================================== -->
-        <div class="nora-phase-card" id="phase-panel-cerrar" style="display:none;">
-          <div class="nora-phase-header">
+        <div class="nora-phase-card" id="phase-panel-cerrar" style="display:none; background: rgba(16, 22, 34, 0.96); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 16px; padding: 28px; flex-direction: column; gap: 22px;">
+          <div style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
             <div>
-              <span class="nora-phase-badge" style="background:rgba(16,185,129,0.15); color:#10B981; border-color:rgba(16,185,129,0.35);">● FASE 03 • ENTREGA &amp; GARANTÍA</span>
-              <h2 class="nora-phase-title">Cierre Formal del Proyecto: <span class="current-project-name-display" style="color:#FF8533;">Plataforma E-commerce & App Móvil</span></h2>
-              <p class="nora-phase-desc">
-                Valida la lista de entregables, revisa el retorno de inversión obtenido y formaliza el acta de entrega con sello de garantía.
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #10B981; font-weight: 800; background: rgba(16,185,129,0.12); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(16,185,129,0.3);">
+                ● PASO 3 DE 3 • ENTREGA FINAL &amp; GARANTÍA
+              </span>
+              <h2 style="font-size: 1.45rem; font-weight: 900; color: #FFF; margin: 8px 0 4px 0;">
+                Cierre y Entrega de: <span class="current-project-name-display" style="color: #FF8533;">Tienda en Línea & App Ferretodo</span>
+              </h2>
+              <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">
+                Cliente: <strong class="current-client-name-display" style="color: #FFF;">Ayala Ferretodo</strong> • Verifica los 4 puntos de entrega formal:
               </p>
             </div>
-            <div style="display:flex; gap:10px; align-items:center;">
-              <button type="button" class="btn-primary" onclick="openProjectClosureModal()" style="padding:10px 18px; font-size:0.8rem; background:#10B981; border-color:#10B981; box-shadow:0 0 20px rgba(16,185,129,0.45); cursor:pointer;">
-                <span>✍️ Abrir Acta de Cierre Inmutable</span>
+            <div>
+              <button type="button" onclick="openProjectClosureModal()" style="background: #10B981; color: #0A0D14; border: none; border-radius: 10px; padding: 12px 22px; font-weight: 900; font-size: 0.88rem; cursor: pointer; box-shadow: 0 0 20px rgba(16,185,129,0.5);">
+                <span>✍️ Abrir Acta de Cierre Oficial</span>
               </button>
             </div>
           </div>
 
-          <!-- CHECKLIST DE ENTREGA TRANSPARENTE -->
-          <div style="display:flex; flex-direction:column; gap:12px;">
-            <h3 style="font-size:0.95rem; font-weight:800; color:#FFF; margin:0 0 4px 0;">Lista de Verificación de Entrega:</h3>
-            <div class="nora-checklist-item">
-              <span class="nora-check-box">✓</span>
+          <!-- CHECKLIST DE ENTREGA -->
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px;">
+              <span style="width: 24px; height: 24px; border-radius: 6px; background: #10B981; color: #0A0D14; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.85rem;">✓</span>
               <div>
-                <span class="nora-check-title">Funcionalidades acordadas al 100%</span>
-                <span class="nora-check-desc"> • El catálogo, carrito y pagos fueron probados y aprobados sin fallas.</span>
+                <strong style="color: #FFF; font-size: 0.9rem;">Todas las funcionalidades acordadas fueron probadas y aprobadas.</strong>
+                <span style="display: block; font-size: 0.78rem; color: #94A3B8;">El catálogo, cobro con tarjeta y sincronización funcionan sin errores.</span>
               </div>
             </div>
-            <div class="nora-checklist-item">
-              <span class="nora-check-box">✓</span>
+
+            <div style="display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px;">
+              <span style="width: 24px; height: 24px; border-radius: 6px; background: #10B981; color: #0A0D14; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.85rem;">✓</span>
               <div>
-                <span class="nora-check-title">Entrega de accesos administrativos y contraseñas</span>
-                <span class="nora-check-desc"> • Las credenciales de la base de datos y hosting han sido transferidas al cliente.</span>
+                <strong style="color: #FFF; font-size: 0.9rem;">Entrega de contraseñas y accesos administrativos al cliente.</strong>
+                <span style="display: block; font-size: 0.78rem; color: #94A3B8;">El cliente tiene el control total de sus cuentas y base de datos.</span>
               </div>
             </div>
-            <div class="nora-checklist-item">
-              <span class="nora-check-box">✓</span>
+
+            <div style="display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px;">
+              <span style="width: 24px; height: 24px; border-radius: 6px; background: #10B981; color: #0A0D14; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.85rem;">✓</span>
               <div>
-                <span class="nora-check-title">Capacitación y Guía de Uso Entregada</span>
-                <span class="nora-check-desc"> • El personal del cliente fue instruido en la operación y manejo del sistema.</span>
+                <strong style="color: #FFF; font-size: 0.9rem;">Capacitación al equipo de trabajo realizada.</strong>
+                <span style="display: block; font-size: 0.78rem; color: #94A3B8;">El personal sabe cómo subir productos, modificar precios y ver pedidos.</span>
               </div>
             </div>
-            <div class="nora-checklist-item">
-              <span class="nora-check-box">✓</span>
+
+            <div style="display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px;">
+              <span style="width: 24px; height: 24px; border-radius: 6px; background: #10B981; color: #0A0D14; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.85rem;">✓</span>
               <div>
-                <span class="nora-check-title">Garantía Operativa de 90 Días Activa</span>
-                <span class="nora-check-desc"> • Soporte técnico incluido para cualquier ajuste o duda operativa.</span>
+                <strong style="color: #FFF; font-size: 0.9rem;">Garantía de soporte técnico de 90 días activada.</strong>
+                <span style="display: block; font-size: 0.78rem; color: #94A3B8;">Cualquier ajuste técnico o duda se atiende sin costo adicional.</span>
               </div>
             </div>
           </div>
 
-          <!-- RESUMEN DE RETORNO DE INVERSIÓN (ROI) -->
-          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:22px; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+          <!-- MÉTRICAS DE ROI -->
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
             <div>
-              <div style="font-size:0.72rem; color:#94A3B8; font-family:var(--font-mono);">AHORRO OPERATIVO ESTIMADO</div>
-              <div style="font-size:1.5rem; font-weight:900; color:#10B981; font-family:var(--font-mono);">$14,200 USD</div>
-              <div style="font-size:0.72rem; color:#64748B;">Ahorro en licencias y desarrollo</div>
+              <div style="font-size: 0.72rem; color: #94A3B8; font-family: var(--font-mono);">AHORRO GENERADO</div>
+              <div style="font-size: 1.5rem; font-weight: 900; color: #10B981; font-family: var(--font-mono);">$14,200 USD</div>
+              <div style="font-size: 0.72rem; color: #64748B;">Ahorro en desarrollo y licencias</div>
             </div>
             <div>
-              <div style="font-size:0.72rem; color:#94A3B8; font-family:var(--font-mono);">TIEMPO DE EJECUCIÓN TOTAL</div>
-              <div style="font-size:1.5rem; font-weight:900; color:#00E5FF; font-family:var(--font-mono);">28 DÍAS</div>
-              <div style="font-size:0.72rem; color:#64748B;">35% más rápido que el promedio</div>
+              <div style="font-size: 0.72rem; color: #94A3B8; font-family: var(--font-mono);">TIEMPO DE ENTREGA</div>
+              <div style="font-size: 1.5rem; font-weight: 900; color: #00E5FF; font-family: var(--font-mono);">28 DÍAS</div>
+              <div style="font-size: 0.72rem; color: #64748B;">A tiempo y dentro del plazo</div>
             </div>
             <div>
-              <div style="font-size:0.72rem; color:#94A3B8; font-family:var(--font-mono);">NIVEL DE CALIDAD FINAL</div>
-              <div style="font-size:1.5rem; font-weight:900; color:#FF8533; font-family:var(--font-mono);">99.8% OK</div>
-              <div style="font-size:0.72rem; color:#64748B;">0 Defectos críticos reportados</div>
+              <div style="font-size: 0.72rem; color: #94A3B8; font-family: var(--font-mono);">CALIDAD CERTIFICADA</div>
+              <div style="font-size: 1.5rem; font-weight: 900; color: #FF8533; font-family: var(--font-mono);">100% OK</div>
+              <div style="font-size: 0.72rem; color: #64748B;">Cero errores reportados</div>
             </div>
           </div>
 
-          <!-- ACCIONES DE CIERRE -->
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
-            <button type="button" class="btn-persuasive-secondary" onclick="switchNoraPhase('implementar')" style="padding:10px 18px; font-size:0.8rem;">
+          <!-- BOTÓN FINAL -->
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 10px;">
+            <button type="button" onclick="switchNoraPhase('implementar')" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #94A3B8; border-radius: 10px; padding: 12px 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
               <span>← Volver a Implementar</span>
             </button>
-            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-              <button type="button" class="btn-secondary" onclick="openArchivedLibraryModal()" style="padding:10px 18px; font-size:0.8rem; border-color:#FF6B00; color:#FF6B00;">
-                <span>🏛️ Ver Biblioteca de Archivados</span>
-              </button>
-              <button type="button" class="btn-primary" onclick="openProjectClosureModal()" style="padding:12px 24px; font-size:0.85rem; font-weight:800; background:#10B981; border-color:#10B981; box-shadow:0 0 25px rgba(16,185,129,0.5); cursor:pointer;">
-                <span>✍️ Emitir y Firmar Acta de Cierre</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- FASE 4: MODO TÉCNICO / EXPERTO             -->
-        <!-- ========================================== -->
-        <div class="nora-phase-card" id="phase-panel-tecnico" style="display:none; background:rgba(18,24,38,0.98); border-color:#00E5FF;">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
-            <div>
-              <span class="nora-phase-badge" style="background:rgba(0,229,255,0.15); color:#00E5FF; border-color:rgba(0,229,255,0.4);">🛠️ MODO EXPERTO ACTIVO</span>
-              <h3 style="font-size:1.15rem; font-weight:800; color:#FFF; margin:4px 0;">Consola Técnica &amp; Arquitectura Avanzada Nexus</h3>
-              <p style="font-size:0.8rem; color:#94A3B8; margin:0;">
-                Mostrando las 4 Hojas de Trabajo PMI, el Grafo DAG de Tareas, Control Six Sigma DMAIC y los 18 Módulos de Operación.
-              </p>
-            </div>
-            <button type="button" class="nora-cta-btn" onclick="switchNoraPhase('crear')" style="background:linear-gradient(135deg, #00E5FF 0%, #00F2FE 100%); color:#0A0D14;">
-              <span>↩️ Volver a Modo Simple (Crear • Implementar • Cerrar)</span>
+            <button type="button" onclick="openProjectClosureModal()" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFF; border: none; border-radius: 12px; padding: 16px 36px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 0 25px rgba(16,185,129,0.5);">
+              <span>🏆 FIRMAR ACTA DE ENTREGA Y CERRAR PROYECTO</span>
             </button>
           </div>
         </div>
 
+      </div>
+
+      <!-- ENLACE DISCRETO A HERRAMIENTAS TÉCNICAS (PARA DESARROLLADORES) -->
+      <div style="text-align: center; margin-top: 16px; padding: 12px; border-top: 1px dashed rgba(255,255,255,0.08);">
+        <button type="button" onclick="toggleTechMode()" id="btn-toggle-tech-mode" style="background: transparent; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #64748B; font-size: 0.75rem; font-family: var(--font-mono); padding: 6px 14px; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#FF6B00'" onmouseout="this.style.color='#64748B'">
+          <span>🛠️ ¿Eres desarrollador o ingeniero? Mostrar consola técnica avanzada (DAG, Six Sigma y Tablas)</span>
+        </button>
       </div>
     </section>
 
@@ -12707,9 +12594,42 @@ Process completed with exit code 1.</textarea>
       } catch (e) {}
     }
 
+    let techModeVisible = false;
+    function toggleTechMode() {
+      techModeVisible = !techModeVisible;
+      const techShell = document.getElementById('layered-platform-shell');
+      const techFlow = document.getElementById('flowchart-lifecycle-board');
+      const techNeeds = document.getElementById('user-needs-hub');
+      const techModules = document.getElementById('module-windows-hub');
+      const techShowcase = document.getElementById('interactive-demo');
+      const btn = document.getElementById('btn-toggle-tech-mode');
+
+      [techShell, techFlow, techNeeds, techModules, techShowcase].forEach(el => {
+        if (el) el.style.display = techModeVisible ? 'block' : 'none';
+      });
+
+      if (btn) {
+        btn.innerHTML = techModeVisible 
+          ? '<span>✕ Ocultar consola técnica avanzada y volver a la vista simple</span>' 
+          : '<span>🛠️ ¿Eres desarrollador o ingeniero? Mostrar consola técnica avanzada (DAG, Six Sigma y Tablas)</span>';
+      }
+
+      if (techModeVisible && techShell) {
+        techShell.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
     function selectArchetype(name, cardElem) {
-      document.querySelectorAll('.nora-archetype-card').forEach(c => c.classList.remove('selected'));
-      if (cardElem) cardElem.classList.add('selected');
+      document.querySelectorAll('.nora-archetype-card').forEach(c => {
+        c.classList.remove('selected');
+        c.style.borderColor = 'rgba(255,255,255,0.1)';
+        c.style.background = 'rgba(255,255,255,0.03)';
+      });
+      if (cardElem) {
+        cardElem.classList.add('selected');
+        cardElem.style.borderColor = '#FF6B00';
+        cardElem.style.background = 'rgba(255,107,0,0.12)';
+      }
       const input = document.getElementById('nora-project-archetype');
       if (input) input.value = name;
     }
