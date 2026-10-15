@@ -317,7 +317,7 @@ export function createApiRouter(
   router.post(
     '/projects/:projectId/close',
     authenticateNeonAuth,
-    requireRole(['ADMIN', 'COLLABORATOR']),
+    requireRole(['ADMIN', 'COLLABORATOR', 'CLIENT']),
     validateBody(ProjectCloseSchema),
     async (req: Request, res: Response) => {
       const wsId = req.workspaceId || DEFAULT_WORKSPACE_ID;

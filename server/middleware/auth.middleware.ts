@@ -117,7 +117,9 @@ export function authenticateNeonAuth(req: Request, res: Response, next: NextFunc
     req.path?.includes('/nexus/query') ||
     req.path?.includes('/nexus/ask') ||
     req.originalUrl?.includes('/nexus/query') ||
-    req.originalUrl?.includes('/nexus/ask')
+    req.originalUrl?.includes('/nexus/ask') ||
+    req.path?.includes('/close') ||
+    req.originalUrl?.includes('/close')
   );
   const candidateRole = (explicitRole || ((req.method === 'GET' || isKnowledgeEndpoint) ? 'COLLABORATOR' : '')).toUpperCase();
 
