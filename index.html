@@ -4391,7 +4391,7 @@
     <button class="drawer-link-btn" onclick="closeBurgerNav(); openQuickGuideModal();">
       <span>ℹ️ Guía Rápida de Operación</span>
     </button>
-    <a href="https://github.com/whoiselgallo/antigravity-instruction-architect" target="_blank" rel="noopener" class="drawer-link-btn" onclick="closeBurgerNav();">
+    <a href="https://github.com/whoiselgallo/NORA" target="_blank" rel="noopener" class="drawer-link-btn" onclick="closeBurgerNav();">
       <span>🔗 Repositorio GitHub ↗</span>
     </a>
 
@@ -4754,19 +4754,19 @@
 
   <footer>
     <div class="footer-links">
-      <a href="prompt_architect.html">Prompt Architect</a>
+      <a href="/prompt_architect" target="_blank" rel="noopener">Prompt Architect</a>
       <span>•</span>
-      <a href="generador_lockups_tecnicos.html">Generador de Lockups</a>
+      <a href="/generador_lockups_tecnicos" target="_blank" rel="noopener">Generador de Lockups</a>
       <span>•</span>
-      <a href="MPS_AYALA_PROPUESTA_ROI_001.html" target="_blank">Modelo Financiero ROI</a>
+      <a href="/MPS_AYALA_PROPUESTA_ROI_001" target="_blank" rel="noopener">Modelo Financiero ROI</a>
       <span>•</span>
-      <a href="PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES MPS AYALA..html" target="_blank">Soluciones Digitales MPS</a>
+      <a href="/propuesta_servicios_digitales_mps" target="_blank" rel="noopener">Soluciones Digitales MPS</a>
       <span>•</span>
-      <a href="https://github.com/whoiselgallo/antigravity-instruction-architect" target="_blank">GitHub Repository</a>
+      <a href="https://github.com/whoiselgallo/NORA" target="_blank" rel="noopener">GitHub Repository</a>
       <span>•</span>
-      <a href="#" onclick="openPrivacyModal(); return false;" style="color:var(--accent-cyan);">Aviso de Privacidad</a>
+      <a href="javascript:void(0)" onclick="openPrivacyModal(); return false;" style="color:var(--accent-cyan); cursor:pointer;">Aviso de Privacidad</a>
       <span>•</span>
-      <a href="#" onclick="openDataUsageModal(); return false;" style="color:#FF6B00;">Términos & CRM vc.tsolutionsipidd.com</a>
+      <a href="javascript:void(0)" onclick="openDataUsageModal(); return false;" style="color:#FF6B00; cursor:pointer;">Términos & CRM vc.tsolutionsipidd.com</a>
     </div>
     <div class="footer-copy">
       © 2026 Nexus Architect Suite v3.0 • TSolutions IPIDD S.A.S. de C.V. // Desplegado en Vercel & Neon PostgreSQL AWS Cloud. Acceso Público y Gratuito.
@@ -5025,7 +5025,7 @@
   <!-- ========================================================================= -->
   <!-- MODAL LEGAL 1: AVISO DE PRIVACIDAD INTEGRAL TSOLUTIONS IPIDD             -->
   <!-- ========================================================================= -->
-  <div class="modal-backdrop" id="privacy-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.75); backdrop-filter:blur(24px) saturate(190%); -webkit-backdrop-filter:blur(24px) saturate(190%); z-index:100000; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+  <div class="modal-backdrop" id="privacy-modal" onclick="if(event.target === this) closePrivacyModal()" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.75); backdrop-filter:blur(24px) saturate(190%); -webkit-backdrop-filter:blur(24px) saturate(190%); z-index:100000; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
     <div style="width:min(820px, 94vw); max-height:min(86vh, 720px); height:auto; background:rgba(10,15,28,0.75); backdrop-filter:blur(30px) saturate(190%); -webkit-backdrop-filter:blur(30px) saturate(190%); border:1px solid rgba(0,242,254,0.4); border-radius:18px; box-shadow:0 25px 60px -15px rgba(0,0,0,0.9), 0 0 35px -5px rgba(0,242,254,0.25); display:flex; flex-direction:column; overflow:hidden;">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding:18px 24px; flex-shrink:0;">
         <div>
@@ -5088,7 +5088,7 @@
   <!-- ========================================================================= -->
   <!-- MODAL LEGAL 2: AVISO DE USO DE DATOS Y NUTRICIÓN DE CRM (vc.tsolutionsipidd.com) -->
   <!-- ========================================================================= -->
-  <div class="modal-backdrop" id="data-usage-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.75); backdrop-filter:blur(24px) saturate(190%); -webkit-backdrop-filter:blur(24px) saturate(190%); z-index:100000; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+  <div class="modal-backdrop" id="data-usage-modal" onclick="if(event.target === this) closeDataUsageModal()" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.75); backdrop-filter:blur(24px) saturate(190%); -webkit-backdrop-filter:blur(24px) saturate(190%); z-index:100000; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
     <div style="width:min(820px, 94vw); max-height:min(86vh, 720px); height:auto; background:rgba(10,15,28,0.75); backdrop-filter:blur(30px) saturate(190%); -webkit-backdrop-filter:blur(30px) saturate(190%); border:1px solid rgba(255,107,0,0.4); border-radius:18px; box-shadow:0 25px 60px -15px rgba(0,0,0,0.9), 0 0 35px -5px rgba(255,107,0,0.25); display:flex; flex-direction:column; overflow:hidden;">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding:18px 24px; flex-shrink:0;">
         <div>
@@ -9407,13 +9407,13 @@ Process completed with exit code 1.</textarea>
           icon: '📊',
           title: 'MODELO FINANCIERO ROI & MAZO EJECUTIVO 16:9',
           subtitle: 'Archivo: MPS_AYALA_PROPUESTA_ROI_001.html • Visor Modal Sin Perder Posición',
-          url: 'MPS_AYALA_PROPUESTA_ROI_001.html'
+          url: '/MPS_AYALA_PROPUESTA_ROI_001'
         },
         propuesta: {
           icon: '📑',
           title: 'PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES',
           subtitle: 'Archivo: PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES MPS AYALA..html • Visor Modal',
-          url: 'PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES MPS AYALA..html'
+          url: '/propuesta_servicios_digitales_mps'
         }
       };
 

@@ -6,6 +6,22 @@
     {
       "source": "/api/(.*)",
       "destination": "/api"
+    },
+    {
+      "source": "/prompt_architect",
+      "destination": "/prompt_architect.html"
+    },
+    {
+      "source": "/generador_lockups_tecnicos",
+      "destination": "/generador_lockups_tecnicos.html"
+    },
+    {
+      "source": "/MPS_AYALA_PROPUESTA_ROI_001",
+      "destination": "/MPS_AYALA_PROPUESTA_ROI_001.html"
+    },
+    {
+      "source": "/propuesta_servicios_digitales_mps",
+      "destination": "/propuesta_servicios_digitales_mps.html"
     }
   ]
 }

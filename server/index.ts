@@ -74,7 +74,7 @@ app.use(
 const publicDir = fs.existsSync(path.join(process.cwd(), 'public'))
   ? path.join(process.cwd(), 'public')
   : path.join(__dirname, '../public');
-app.use(express.static(publicDir));
+app.use(express.static(publicDir, { extensions: ['html', 'htm'] }));
 
 // Ruta raíz explícita para garantizar servicio inmediato del index.html
 app.get('/', (_req: Request, res: Response) => {
@@ -84,6 +84,33 @@ app.get('/', (_req: Request, res: Response) => {
   } else {
     res.status(200).send('<h1>NORA // Nexus Orquestador</h1>');
   }
+});
+
+// Rutas dedicadas de alta disponibilidad para herramientas y modelos del footer
+app.get(['/prompt_architect', '/prompt_architect.html'], (_req: Request, res: Response) => {
+  const f = path.join(publicDir, 'prompt_architect.html');
+  if (fs.existsSync(f)) return res.sendFile(f);
+  res.redirect('/');
+});
+
+app.get(['/generador_lockups_tecnicos', '/generador_lockups_tecnicos.html'], (_req: Request, res: Response) => {
+  const f = path.join(publicDir, 'generador_lockups_tecnicos.html');
+  if (fs.existsSync(f)) return res.sendFile(f);
+  res.redirect('/');
+});
+
+app.get(['/MPS_AYALA_PROPUESTA_ROI_001', '/MPS_AYALA_PROPUESTA_ROI_001.html', '/modelo_financiero_roi', '/roi'], (_req: Request, res: Response) => {
+  const f = path.join(publicDir, 'MPS_AYALA_PROPUESTA_ROI_001.html');
+  if (fs.existsSync(f)) return res.sendFile(f);
+  res.redirect('/');
+});
+
+app.get(['/propuesta_servicios_digitales_mps', '/propuesta_servicios_digitales_mps.html', '/soluciones_digitales_mps', '/PROPUESTA%20DE%20SERVICIOS%20Y%20SOLUCIONES%20DIGITALES%20MPS%20AYALA.', '/PROPUESTA%20DE%20SERVICIOS%20Y%20SOLUCIONES%20DIGITALES%20MPS%20AYALA..html'], (_req: Request, res: Response) => {
+  const p1 = path.join(publicDir, 'propuesta_servicios_digitales_mps.html');
+  const p2 = path.join(publicDir, 'PROPUESTA DE SERVICIOS Y SOLUCIONES DIGITALES MPS AYALA..html');
+  if (fs.existsSync(p1)) return res.sendFile(p1);
+  if (fs.existsSync(p2)) return res.sendFile(p2);
+  res.redirect('/');
 });
 
 // Enrutador de API v1 con inyección de Pool, SocketIO y DagCacheService
