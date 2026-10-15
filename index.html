@@ -1469,6 +1469,7 @@
       .hero-title { font-size: 2.1rem; }
       .top-nav { flex-direction: column; gap: 12px; align-items: flex-start; }
       .nav-actions { width: 100%; justify-content: space-between; }
+    }
     /* =========================================================================
        SECCIÓN DE ACCESO POR NECESIDADES DE USUARIO & NEON AUTH WIDGETS
        ========================================================================= */
@@ -1680,33 +1681,57 @@
     .oauth-btn-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin: 16px 0;
+      gap: 12px;
+      margin: 18px 0;
     }
     .btn-oauth {
       width: 100%;
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      padding: 10px 16px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      padding: 13px 18px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      font-family: var(--font-primary), -apple-system, sans-serif;
       cursor: pointer;
-      transition: all 0.2s ease;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: #121722;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      background: #0B111E;
       color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+      position: relative;
+      user-select: none;
     }
     .btn-oauth:hover {
-      border-color: #00E5FF;
-      background: #18233A;
-      box-shadow: 0 0 14px rgba(0, 229, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
     }
-    .btn-oauth.google:hover { border-color: #4285F4; box-shadow: 0 0 14px rgba(66, 133, 244, 0.3); }
-    .btn-oauth.github:hover { border-color: #FFFFFF; box-shadow: 0 0 14px rgba(255, 255, 255, 0.3); }
-    .btn-oauth.neon:hover { border-color: #00E5FF; box-shadow: 0 0 14px rgba(0, 229, 255, 0.4); }
+    .btn-oauth:active {
+      transform: translateY(0);
+    }
+    .btn-oauth.google:hover {
+      border-color: #4285F4;
+      background: #111A2E;
+      box-shadow: 0 0 20px rgba(66, 133, 244, 0.35);
+    }
+    .btn-oauth.github:hover {
+      border-color: #E2E8F0;
+      background: #161D2B;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+    }
+    .btn-oauth.neon:hover {
+      border-color: #00E5FF;
+      background: #0D1E2D;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.35);
+    }
+    .btn-oauth:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
 
     .auth-divider {
       display: flex;
@@ -4241,10 +4266,19 @@
   <!-- TOP NAVIGATION BAR (MOBILE-FIRST CON BOTÓN HAMBURGUESA) -->
   <nav class="top-nav">
     <a href="#" class="brand-wrap">
-      <div class="brand-logo">Δ</div>
+      <div class="brand-logo" title="TSolutions IPIDD Official Logo" style="background:rgba(255,107,0,0.08); border:1.5px solid rgba(255,107,0,0.45); border-radius:10px; width:42px; height:42px; min-width:42px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 16px rgba(255,107,0,0.3);">
+        <svg viewBox="0 0 100 100" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 6px rgba(255,107,0,0.6));">
+          <polygon points="50,6 90,29 90,71 50,94 10,71 10,29" stroke="#FF6B00" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="rgba(255,107,0,0.06)" />
+          <polygon points="50,23 79,73 21,73" stroke="#FF6B00" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="rgba(255,107,0,0.12)" />
+        </svg>
+      </div>
       <div class="brand-text">
-        <h1>TSolutions IPIDD • Nexus Architect Studio <span class="badge-tag">v3.0 Enterprise</span></h1>
-        <p>Tecnología instalada. Conocimiento transferido. Negocios escalados.</p>
+        <div style="display:flex; align-items:baseline; gap:8px;">
+          <span style="font-family:'Space Grotesk', sans-serif; font-weight:900; font-size:1.15rem; color:#FFFFFF; letter-spacing:-0.01em;">TSolutions</span>
+          <span style="font-family:var(--font-mono); font-weight:800; font-size:0.82rem; color:#FF6B00; letter-spacing:0.12em;">IPIDD</span>
+          <span class="badge-tag" style="margin-left:4px;">v3.0 Enterprise</span>
+        </div>
+        <p style="margin:0; font-size:0.73rem; color:var(--text-muted); font-style:italic;">Tecnología instalada. Conocimiento transferido. Negocios escalados.</p>
       </div>
     </a>
 
@@ -4317,7 +4351,12 @@
   <aside class="nav-drawer" id="navDrawer" aria-label="Menú Principal">
     <div class="drawer-header">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <div class="brand-logo" style="width: 32px; height: 32px; font-size: 0.95rem;">Δ</div>
+        <div class="brand-logo" style="width:34px; height:34px; min-width:34px; background:rgba(255,107,0,0.08); border:1.5px solid rgba(255,107,0,0.45); border-radius:8px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 12px rgba(255,107,0,0.3);">
+          <svg viewBox="0 0 100 100" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 5px rgba(255,107,0,0.6));">
+            <polygon points="50,6 90,29 90,71 50,94 10,71 10,29" stroke="#FF6B00" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="rgba(255,107,0,0.06)" />
+            <polygon points="50,23 79,73 21,73" stroke="#FF6B00" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="rgba(255,107,0,0.12)" />
+          </svg>
+        </div>
         <span style="font-weight: 800; font-size: 0.95rem; color: #FFF; font-family: var(--font-primary);">NEXUS MENU</span>
       </div>
       <button onclick="closeBurgerNav()" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; padding: 4px;">✕</button>
@@ -4865,40 +4904,50 @@
       <!-- BOTÓN CERRAR -->
       <button onclick="closeNeonAuthModal()" style="position:absolute; top:16px; right:16px; background:transparent; border:none; color:var(--text-dim); font-size:1.2rem; cursor:pointer; padding:4px 8px; border-radius:6px;">✕</button>
 
-      <!-- BRAND HEADER -->
+      <!-- BRAND HEADER CON LOGO OFICIAL TSOLUTIONS IPIDD -->
       <div style="text-align:center; margin-bottom:20px;">
-        <div style="display:inline-flex; width:48px; height:48px; border:2px solid #FF6B00; box-shadow:0 0 15px rgba(255,107,0,0.5); clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background:rgba(255,107,0,0.15); align-items:center; justify-content:center; font-family:'Bruno Ace', sans-serif; font-size:1.4rem; color:#FFF; margin-bottom:10px;">
-          TS
+        <div style="display:inline-flex; align-items:center; justify-content:center; margin-bottom:10px;">
+          <svg viewBox="0 0 100 100" width="58" height="58" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 16px rgba(255,107,0,0.65));">
+            <polygon points="50,6 90,29 90,71 50,94 10,71 10,29" stroke="#FF6B00" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="rgba(255,107,0,0.08)" />
+            <polygon points="50,23 79,73 21,73" stroke="#FF6B00" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="rgba(255,107,0,0.15)" />
+          </svg>
         </div>
-        <div style="font-size:0.68rem; font-family:var(--font-mono); color:#00E5FF; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">
-          TSOLUTIONS IPIDD • ACCESO INSTITUCIONAL
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:4px;">
+          <span style="font-family:'Space Grotesk', sans-serif; font-weight:900; font-size:1.45rem; color:#FFFFFF; letter-spacing:-0.02em;">TSolutions</span>
+          <span style="font-family:var(--font-mono); font-weight:800; font-size:1.05rem; color:#FF6B00; letter-spacing:0.14em;">IPIDD</span>
         </div>
-        <h2 id="auth-modal-title" style="font-family:'Space Grotesk', sans-serif; font-size:1.4rem; color:#FFF; margin-bottom:4px;">
+        <div style="font-size:0.68rem; font-family:var(--font-mono); color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">
+          ACCESO INSTITUCIONAL SEGURO
+        </div>
+        <h2 id="auth-modal-title" style="font-family:'Space Grotesk', sans-serif; font-size:1.35rem; color:#FFF; margin-bottom:4px; font-weight:700;">
           Acceso Gratuito a Nexus Suite
         </h2>
-        <p style="font-size:0.78rem; color:#94A3B8; font-style:italic;">
+        <p style="font-size:0.78rem; color:#94A3B8; font-style:italic; margin-bottom:8px;">
           "Tecnología instalada. Conocimiento transferido. Negocios escalados."
         </p>
-        <div style="display:inline-block; margin-top:8px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#10B981; font-size:0.68rem; font-family:var(--font-mono); font-weight:700; padding:3px 10px; border-radius:12px;">
-          ✓ ACCESO 100% LIBRE • ACEPTA CUALQUIER DOMINIO DE CORREO
+        <div style="display:inline-block; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); color:#10B981; font-size:0.68rem; font-family:var(--font-mono); font-weight:700; padding:3px 12px; border-radius:12px;">
+          ✓ ACCESO 100% LIBRE • CUALQUIER DOMINIO DE CORREO
         </div>
       </div>
 
+      <!-- STATUS INLINE VISIBLE PARA OAUTH (RESPUESTA INMEDIATA AL CLIC) -->
+      <div id="oauth-inline-feedback" style="display:none; padding:10px 14px; border-radius:10px; font-size:0.8rem; font-family:var(--font-mono); margin-bottom:12px; text-align:center;"></div>
+
       <!-- BOTONES DE AUTENTICACIÓN SOCIAL OAUTH -->
       <div class="oauth-btn-group">
-        <button class="btn-oauth google" onclick="triggerOAuthFlow('google')">
+        <button id="btn-oauth-google" class="btn-oauth google" type="button" onclick="triggerOAuthFlow('google')">
           <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.2C.6 9.2 0 11.5 0 14s.6 4.8 1.6 6.8l3.7-3.1z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5.1L1.6 16.3C3.5 20.1 7.4 23 12 23z"/></svg>
-          <span>Continuar con Google Workspace</span>
+          <span id="label-oauth-google">Continuar con Google Workspace</span>
         </button>
 
-        <button class="btn-oauth github" onclick="triggerOAuthFlow('github')">
+        <button id="btn-oauth-github" class="btn-oauth github" type="button" onclick="triggerOAuthFlow('github')">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-          <span>Continuar con GitHub Developer</span>
+          <span id="label-oauth-github">Continuar con GitHub Developer</span>
         </button>
 
-        <button class="btn-oauth neon" onclick="triggerOAuthFlow('neon')">
-          <span style="color:#00E5FF; font-weight:800; font-family:var(--font-mono);">⚡</span>
-          <span>Continuar con Neon Auth Identity</span>
+        <button id="btn-oauth-neon" class="btn-oauth neon" type="button" onclick="triggerOAuthFlow('neon')">
+          <span style="color:#00E5FF; font-size:1.15rem; line-height:1;">⚡</span>
+          <span id="label-oauth-neon">Continuar con Neon Auth Identity</span>
         </button>
       </div>
 
@@ -8698,26 +8747,49 @@ Process completed with exit code 1.</textarea>
     }
 
     async function triggerOAuthFlow(provider) {
-      const feedback = document.getElementById('auth-feedback-box');
+      const btn = document.getElementById('btn-oauth-' + provider);
+      const inlineFeedback = document.getElementById('oauth-inline-feedback');
+      const bottomFeedback = document.getElementById('auth-feedback-box');
+      const allOAuthBtns = document.querySelectorAll('.btn-oauth');
+
+      const originalHTML = btn ? btn.innerHTML : '';
+      const providerLabel = provider === 'google' ? 'Google Workspace' : provider === 'github' ? 'GitHub' : 'Neon Auth';
+
+      // 1. Feedback visual instantáneo directo en el botón presionado
+      if (btn) {
+        btn.innerHTML = '<span class="ai-spinner"></span> <span>Conectando con ' + providerLabel + '...</span>';
+        btn.style.borderColor = '#00E5FF';
+        btn.style.boxShadow = '0 0 20px rgba(0, 229, 255, 0.45)';
+      }
+      allOAuthBtns.forEach(b => { b.disabled = true; });
+
+      // 2. Feedback visual en el banner superior visible del modal
+      if (inlineFeedback) {
+        inlineFeedback.style.display = 'block';
+        inlineFeedback.style.background = 'rgba(0, 229, 255, 0.12)';
+        inlineFeedback.style.border = '1px solid #00E5FF';
+        inlineFeedback.style.color = '#00E5FF';
+        inlineFeedback.innerHTML = '<span class="ai-spinner"></span> Conectando con <strong>' + providerLabel + '</strong> (1-Click) y sincronizando CRM...';
+      }
+      if (bottomFeedback) {
+        bottomFeedback.style.display = 'block';
+        bottomFeedback.style.background = 'rgba(0, 229, 255, 0.12)';
+        bottomFeedback.style.border = '1px solid #00E5FF';
+        bottomFeedback.style.color = '#00E5FF';
+        bottomFeedback.innerHTML = '<span class="ai-spinner"></span> Autenticando vía ' + provider.toUpperCase() + '...';
+      }
+
       const inputEmail = document.getElementById('auth-input-email')?.value?.trim();
       const inputName = document.getElementById('auth-input-name')?.value?.trim();
       const inputCompany = document.getElementById('auth-input-company')?.value?.trim();
 
-      const email = inputEmail || `dev.${provider}.${Date.now().toString(36).slice(-4)}@${provider === 'google' ? 'gmail.com' : provider === 'github' ? 'github.com' : 'neon.tech'}`;
-      const name = inputName || (inputEmail ? inputEmail.split('@')[0] : `${provider.toUpperCase()} Developer`);
+      const email = inputEmail || ('dev.' + provider + '.' + Date.now().toString(36).slice(-4) + '@' + (provider === 'google' ? 'gmail.com' : provider === 'github' ? 'github.com' : 'neon.tech'));
+      const name = inputName || (inputEmail ? inputEmail.split('@')[0] : (provider.charAt(0).toUpperCase() + provider.slice(1) + ' Developer'));
 
       const privacyCheck = document.getElementById('auth-check-privacy');
       const crmCheck = document.getElementById('auth-check-crm');
       if (privacyCheck) privacyCheck.checked = true;
       if (crmCheck) crmCheck.checked = true;
-
-      if (feedback) {
-        feedback.style.display = 'block';
-        feedback.style.background = 'rgba(0, 229, 255, 0.15)';
-        feedback.style.border = '1px solid #00E5FF';
-        feedback.style.color = '#00E5FF';
-        feedback.innerHTML = `<span class="ai-spinner"></span> Accediendo vía ${provider.toUpperCase()} (1-Click) y sincronizando CRM...`;
-      }
 
       try {
         const resp = await fetch('/api/v1/auth/neon-oauth', {
@@ -8749,28 +8821,60 @@ Process completed with exit code 1.</textarea>
         localStorage.setItem('nexus_user', JSON.stringify(data.user));
 
         renderAuthenticatedNav(data.user);
-        addLog(`[OAUTH ${provider.toUpperCase()}] Autenticación 1-clic completada para ${data.user.email}. CRM sincronizado.`, 'pulse');
-        
-        if (feedback) {
-          feedback.style.background = 'rgba(16, 185, 129, 0.15)';
-          feedback.style.border = '1px solid #10B981';
-          feedback.style.color = '#10B981';
-          feedback.innerHTML = `✓ ¡Bienvenido vía ${provider.toUpperCase()}! Acceso gratuito activado y perfil registrado en <strong>vc.tsolutionsipidd.com</strong>.`;
+        addLog('[OAUTH ' + provider.toUpperCase() + '] Autenticación 1-clic completada para ' + data.user.email + '. CRM sincronizado.', 'pulse');
+
+        // Estado de éxito visual
+        if (btn) {
+          btn.innerHTML = '<span>✓ ¡Autenticado con ' + providerLabel + '!</span>';
+          btn.style.borderColor = '#10B981';
+          btn.style.background = 'rgba(16, 185, 129, 0.2)';
+          btn.style.color = '#10B981';
+          btn.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+        }
+
+        const successMsg = '✓ ¡Bienvenido, ' + escapeHtml(data.user.name) + '! Acceso gratuito activo y lead vinculado en <strong>vc.tsolutionsipidd.com</strong>.';
+        if (inlineFeedback) {
+          inlineFeedback.style.background = 'rgba(16, 185, 129, 0.15)';
+          inlineFeedback.style.border = '1px solid #10B981';
+          inlineFeedback.style.color = '#10B981';
+          inlineFeedback.innerHTML = successMsg;
+        }
+        if (bottomFeedback) {
+          bottomFeedback.style.background = 'rgba(16, 185, 129, 0.15)';
+          bottomFeedback.style.border = '1px solid #10B981';
+          bottomFeedback.style.color = '#10B981';
+          bottomFeedback.innerHTML = successMsg;
         }
 
         setTimeout(() => {
           closeNeonAuthModal();
           syncWithNeonDB();
         }, 1200);
+
       } catch (err) {
-        if (feedback) {
-          feedback.style.display = 'block';
-          feedback.style.background = 'rgba(239, 68, 68, 0.15)';
-          feedback.style.border = '1px solid #EF4444';
-          feedback.style.color = '#EF4444';
-          feedback.innerText = `Error: ${err.message}`;
-        } else {
-          alert(`Error en OAuth: ${err.message}`);
+        if (btn) {
+          btn.innerHTML = originalHTML;
+          btn.style.borderColor = 'rgba(255, 255, 255, 0.16)';
+          btn.style.boxShadow = 'none';
+          btn.style.background = '#0B111E';
+          btn.style.color = '#FFFFFF';
+        }
+        allOAuthBtns.forEach(b => { b.disabled = false; });
+
+        const errorMsg = '⚠️ Error en acceso: ' + err.message;
+        if (inlineFeedback) {
+          inlineFeedback.style.display = 'block';
+          inlineFeedback.style.background = 'rgba(239, 68, 68, 0.15)';
+          inlineFeedback.style.border = '1px solid #EF4444';
+          inlineFeedback.style.color = '#EF4444';
+          inlineFeedback.innerText = errorMsg;
+        }
+        if (bottomFeedback) {
+          bottomFeedback.style.display = 'block';
+          bottomFeedback.style.background = 'rgba(239, 68, 68, 0.15)';
+          bottomFeedback.style.border = '1px solid #EF4444';
+          bottomFeedback.style.color = '#EF4444';
+          bottomFeedback.innerText = errorMsg;
         }
       }
     }
