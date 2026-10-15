@@ -4260,6 +4260,274 @@
       }
     }
   
+    
+    /* =========================================================================
+       BOTÓN NAV MENÚ DIGITAL & COTIZADOR
+       ========================================================================= */
+    .btn-nav-catalog-pricing {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.18) 0%, rgba(255, 179, 0, 0.28) 100%);
+      border: 1.5px solid #FF6B00;
+      color: #FFFFFF;
+      border-radius: 9999px;
+      padding: 6px 16px;
+      font-weight: 800;
+      font-size: 0.77rem;
+      font-family: var(--font-primary), 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      letter-spacing: 0.03em;
+      box-shadow: 0 0 16px rgba(255, 107, 0, 0.35);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      white-space: nowrap;
+    }
+    .btn-nav-catalog-pricing:hover {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.32) 0%, rgba(255, 179, 0, 0.45) 100%);
+      box-shadow: 0 0 25px rgba(255, 107, 0, 0.6);
+      transform: translateY(-1px);
+    }
+    .btn-nav-catalog-pricing .catalog-icon {
+      color: #FF6B00;
+      font-size: 0.88rem;
+      filter: drop-shadow(0 0 6px rgba(255, 107, 0, 0.7));
+    }
+    @media (max-width: 1040px) {
+      .btn-nav-catalog-pricing .catalog-btn-text {
+        display: none;
+      }
+      .btn-nav-catalog-pricing {
+        padding: 6px 11px;
+      }
+      .btn-nav-catalog-pricing::after {
+        content: "⚡ MENÚ";
+        font-size: 0.75rem;
+        font-weight: 800;
+      }
+    }
+
+    /* =========================================================================
+       MODAL DEL MENÚ DIGITAL & COTIZADOR
+       ========================================================================= */
+    .services-catalog-container {
+      max-width: 1380px;
+      width: 100%;
+      background: rgba(8, 12, 20, 0.98);
+      border: 1.5px solid rgba(255, 107, 0, 0.5);
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.85), 0 0 40px rgba(255, 107, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      max-height: 92vh;
+      overflow: hidden;
+      animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .services-catalog-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(255, 107, 0, 0.08) 0%, rgba(14, 20, 32, 0.9) 100%);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .services-catalog-body {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      overflow: hidden;
+      flex: 1;
+    }
+    @media (max-width: 980px) {
+      .services-catalog-body {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+    }
+    .services-items-panel {
+      padding: 24px 28px;
+      overflow-y: auto;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .services-summary-panel {
+      padding: 24px;
+      background: rgba(5, 8, 15, 0.96);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    /* FILTROS Y BÚSQUEDA DEL MENÚ */
+    .catalog-filters-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      scrollbar-width: thin;
+    }
+    .catalog-filter-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-muted);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .catalog-filter-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+    }
+    .catalog-filter-btn.active {
+      background: rgba(255, 107, 0, 0.22);
+      border-color: #FF6B00;
+      color: #FF6B00;
+      box-shadow: 0 0 12px rgba(255, 107, 0, 0.4);
+    }
+
+    /* TARJETA DE SERVICIO */
+    .service-card-item {
+      background: rgba(14, 20, 32, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      cursor: pointer;
+      position: relative;
+    }
+    .service-card-item:hover {
+      border-color: rgba(255, 107, 0, 0.45);
+      background: rgba(20, 28, 44, 0.85);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .service-card-item.selected {
+      border-color: #FF6B00;
+      background: rgba(255, 107, 0, 0.08);
+      box-shadow: 0 0 20px rgba(255, 107, 0, 0.22);
+    }
+    .service-card-item.included-free {
+      border-color: #00F2FE;
+      background: rgba(0, 242, 254, 0.05);
+    }
+    .service-checkbox-wrap {
+      margin-top: 4px;
+    }
+    .service-checkbox {
+      width: 20px;
+      height: 20px;
+      accent-color: #FF6B00;
+      cursor: pointer;
+    }
+    .service-info-wrap {
+      flex: 1;
+    }
+    .service-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .service-name {
+      font-family: var(--font-primary);
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .service-price-badge {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: #FFD700;
+      white-space: nowrap;
+      background: rgba(255, 215, 0, 0.12);
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      padding: 3px 9px;
+      border-radius: 8px;
+    }
+    .service-price-badge.included {
+      color: #00F2FE;
+      background: rgba(0, 242, 254, 0.12);
+      border-color: rgba(0, 242, 254, 0.35);
+    }
+    .service-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    .service-tools-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .tool-tag-pill {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: #00F2FE;
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* TARJETA DE RESUMEN DE COTIZADOR */
+    .quote-box {
+      background: rgba(14, 20, 32, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .quote-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 0.82rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .quote-row:last-child {
+      border-bottom: none;
+    }
+    .quote-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 14px 0 6px 0;
+      border-top: 1.5px solid rgba(255, 215, 0, 0.4);
+      margin-top: 8px;
+    }
+    .platform-fee-callout {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 107, 0, 0.08) 100%);
+      border: 1.5px dashed rgba(255, 215, 0, 0.5);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 0.74rem;
+      color: #E2E8F0;
+      line-height: 1.45;
+    }
+    .platform-fee-tag {
+      color: #FFD700;
+      font-weight: 800;
+      font-family: var(--font-mono);
+    }
+
     /* =========================================================================
        BOTÓN DORADO MAESTRO // LA PUNTA DE LA FLECHA // TSOLUTIONS IPIDD
        ========================================================================= */
@@ -4444,7 +4712,14 @@
 
     <!-- BOTÓN DE APRENDIZAJE & BADGE DE ESTADO -->
     <div style="display: flex; align-items: center; gap: 10px;">
-            <!-- BOTÓN DORADO MAESTRO // LA PUNTA DE LA FLECHA // SUITE MAESTRA -->
+            
+      <!-- BOTÓN MENÚ DIGITAL & COTIZADOR -->
+      <button type="button" class="btn-nav-catalog-pricing" onclick="openServicesMenuModal()" title="Menú Digital de Servicios, Cotizador y Generador de Entorno">
+        <span class="catalog-icon">⚡</span>
+        <span class="catalog-btn-text">MENÚ &amp; COTIZADOR</span>
+      </button>
+
+      <!-- BOTÓN DORADO MAESTRO // LA PUNTA DE LA FLECHA // SUITE MAESTRA -->
       <button type="button" class="btn-nav-gold-master" onclick="openMasterToolsModal()" title="Central Maestra: Ecosistema Completo de Herramientas y Gestión de Workspaces">
         <span class="gold-icon">✦</span>
         <span class="gold-btn-text">CENTRAL MAESTRA // SUITE</span>
@@ -8427,7 +8702,206 @@ Process completed with exit code 1.</textarea>
             <button onclick="window.print()" style="background:#FF6B00; color:#0A0D14; border:none; padding:8px 18px; border-radius:20px; font-weight:800; cursor:pointer;">🖨️ Imprimir / Guardar como PDF</button>
           </div>
           ${slidesHTML}
-        </body>
+        
+  <!-- =========================================================================
+       MODAL 1: MENÚ DIGITAL DE SERVICIOS & COTIZADOR EN TIEMPO REAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="services-menu-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.88); backdrop-filter:blur(24px) saturate(190%); -webkit-backdrop-filter:blur(24px) saturate(190%); z-index:99998; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+    <div class="services-catalog-container">
+      
+      <!-- HEADER -->
+      <div class="services-catalog-header">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="background:rgba(255,107,0,0.15); border:1.5px solid #FF6B00; border-radius:12px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+            ⚡
+          </div>
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <h2 style="margin:0; font-family:var(--font-primary); font-size:1.15rem; font-weight:900; color:#FFFFFF; letter-spacing:-0.01em;">
+                MENÚ DIGITAL DE SERVICIOS &amp; PRESUPUESTADOR
+              </h2>
+              <span style="font-family:var(--font-mono); font-size:0.7rem; background:rgba(255,107,0,0.15); border:1px solid #FF6B00; color:#FF6B00; padding:2px 8px; border-radius:9999px; font-weight:800;">
+                TSolutions IPIDD
+              </span>
+            </div>
+            <p style="margin:2px 0 0 0; font-size:0.76rem; color:var(--text-muted);">
+              Selecciona los servicios que requiere tu proyecto: se cotiza en tiempo real, se previenen duplicidades y se aprovisiona tu entorno de trabajo.
+            </p>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-cancel" onclick="closeServicesMenuModal()" style="padding:7px 18px; border-radius:9999px; font-size:0.78rem; font-weight:700;">
+            ✕ Cerrar
+          </button>
+        </div>
+      </div>
+
+      <!-- BODY GRID -->
+      <div class="services-catalog-body">
+        
+        <!-- PANEL IZQUIERDO: LISTADO DE SERVICIOS -->
+        <div class="services-items-panel">
+          
+          <!-- FILTROS -->
+          <div class="catalog-filters-bar">
+            <button type="button" class="catalog-filter-btn active" onclick="filterServicesMenu('todos', this)">🌟 Todos (22)</button>
+            <button type="button" class="catalog-filter-btn" onclick="filterServicesMenu('paquetes', this)">🔥 Paquetes Principales</button>
+            <button type="button" class="catalog-filter-btn" onclick="filterServicesMenu('consultoria', this)">🏛️ Consultoría &amp; SOPs</button>
+            <button type="button" class="catalog-filter-btn" onclick="filterServicesMenu('ia', this)">🤖 Inteligencia Artificial</button>
+            <button type="button" class="catalog-filter-btn" onclick="filterServicesMenu('branding', this)">🎨 Branding &amp; Legal</button>
+            <button type="button" class="catalog-filter-btn" onclick="filterServicesMenu('complementos', this)">📦 Complementos &amp; Logística</button>
+          </div>
+
+          <!-- CONTENEDOR DE SERVICIOS -->
+          <div id="services-cards-grid">
+            <!-- Renderizado dinámico vía renderServicesCards() -->
+          </div>
+
+        </div>
+
+        <!-- PANEL DERECHO: COTIZADOR & GENERADOR DE WORKSPACE -->
+        <div class="services-summary-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h3 style="margin:0; font-family:var(--font-primary); font-size:0.95rem; font-weight:900; color:#FFFFFF;">
+              📊 Resumen del Presupuesto
+            </h3>
+            <span id="badge-selected-count" style="font-family:var(--font-mono); font-size:0.72rem; color:#00F2FE; background:rgba(0,242,254,0.12); padding:2px 8px; border-radius:9999px;">
+              0 servicios
+            </span>
+          </div>
+
+          <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:12px;">
+            Proyecto Activo: <strong id="quote-workspace-name" style="color:#FFFFFF;">-</strong>
+          </div>
+
+          <!-- LISTA DE CONCEPTOS SELECCIONADOS -->
+          <div id="quote-selected-items-list" style="max-height:180px; overflow-y:auto; margin-bottom:14px; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:8px 12px; background:rgba(0,0,0,0.3);">
+            <div style="font-size:0.75rem; color:var(--text-muted); text-align:center; padding:12px;">No has seleccionado servicios aún. Elige los que tu proyecto necesite.</div>
+          </div>
+
+          <!-- DESGLOSE DE TOTALES -->
+          <div class="quote-box">
+            <div class="quote-row">
+              <span style="color:var(--text-muted);">Subtotal de Servicios:</span>
+              <strong id="quote-subtotal" style="color:#FFFFFF; font-family:var(--font-mono);">$0 MXN</strong>
+            </div>
+            <div class="quote-row" id="row-quote-discount" style="display:none;">
+              <span style="color:#00F2FE;">Bonificación de Paquete:</span>
+              <strong id="quote-discount" style="color:#00F2FE; font-family:var(--font-mono);">-$0 MXN</strong>
+            </div>
+            <div class="quote-row">
+              <span style="color:var(--text-muted);">Inversión Neta del Proyecto:</span>
+              <strong id="quote-net-investment" style="color:#FFFFFF; font-family:var(--font-mono); font-weight:800;">$0 MXN</strong>
+            </div>
+            
+            <!-- CUOTA DEL 5% DE LA PLATAFORMA -->
+            <div class="quote-row" style="background:rgba(255,215,0,0.06); margin:4px -8px; padding:8px; border-radius:8px;">
+              <span style="color:#FFD700; font-weight:700;">
+                ✦ Cuota de Plataforma (5%):
+              </span>
+              <strong id="quote-platform-fee" style="color:#FFD700; font-family:var(--font-mono); font-weight:900;">$0 MXN</strong>
+            </div>
+
+            <!-- TOTAL CONSOLIDADO -->
+            <div class="quote-total-row">
+              <div>
+                <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Total con Plataforma:</div>
+                <div style="font-size:0.68rem; color:#A0AEC0;">(Esquema 40% / 30% / 30%)</div>
+              </div>
+              <strong id="quote-final-total" style="font-family:var(--font-mono); font-size:1.25rem; color:#FFD700; font-weight:900;">$0 MXN</strong>
+            </div>
+          </div>
+
+          <!-- NOTA EXPLICATIVA DE LA CUOTA DEL 5% -->
+          <div class="platform-fee-callout">
+            <strong class="platform-fee-tag">⚖️ Regla de Plataforma Colaborativa:</strong><br>
+            El diseño, cotización y arquitectura en esta plataforma es <strong>100% gratuito</strong>. Al momento de formalizar y cerrar el contrato, se aplicará un <strong>pago único equivalente al 5% del valor total del proyecto</strong> por el tiempo estimado de ejecución, destinado exclusivamente al mantenimiento y desarrollo de espacios colaborativos más robustos.
+          </div>
+
+          <!-- ACCIONES OPERATIVAS -->
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:auto;">
+            <button type="button" class="btn-primary" onclick="applyServicesToWorkspace()" style="padding:10px; font-size:0.8rem; font-weight:800; display:flex; justify-content:center; align-items:center; gap:8px;">
+              <span>🛠️</span> Aprovisionar Workspace con Herramientas
+            </button>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <button type="button" class="btn-secondary" onclick="openFormalContractModal()" style="padding:8px; font-size:0.74rem; font-weight:700; text-align:center;">
+                📑 Contrato Formal (5%)
+              </button>
+              <button type="button" class="btn-secondary" onclick="openExecutiveDossierModal()" style="padding:8px; font-size:0.74rem; font-weight:700; text-align:center;">
+                📊 Dossier Ejecutivo
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: CONTRATO DE SERVICIOS PROFESIONALES CON CLÁUSULA DEL 5%
+       ========================================================================= -->
+  <div class="modal-backdrop" id="formal-contract-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.92); backdrop-filter:blur(24px); z-index:99999; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+    <div style="max-width:960px; width:100%; background:#FFFFFF; color:#1A202C; border-radius:14px; box-shadow:0 25px 80px rgba(0,0,0,0.9); max-height:92vh; display:flex; flex-direction:column; overflow:hidden;">
+      
+      <!-- TOP ACTION BAR -->
+      <div style="padding:14px 24px; background:#0F172A; color:#FFFFFF; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-family:'Space Grotesk', sans-serif; font-weight:900; color:#FF6B00; font-size:1.1rem;">TSolutions IPIDD</span>
+          <span style="font-size:0.75rem; background:rgba(255,255,255,0.15); padding:2px 8px; border-radius:6px; font-family:monospace;">EXPEDIENTE CONTRACTUAL FORMAL</span>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button type="button" onclick="printFormalContract()" style="background:#FF6B00; color:#FFFFFF; border:none; padding:6px 14px; border-radius:6px; font-weight:800; font-size:0.78rem; cursor:pointer;">
+            🖨️ Imprimir / Guardar PDF
+          </button>
+          <button type="button" onclick="closeFormalContractModal()" style="background:rgba(255,255,255,0.1); color:#FFFFFF; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.78rem; cursor:pointer;">
+            ✕ Cerrar
+          </button>
+        </div>
+      </div>
+
+      <!-- CONTRACT DOCUMENT BODY -->
+      <div id="printable-contract-content" style="padding:36px 44px; overflow-y:auto; font-family:'Inter', sans-serif; font-size:10pt; line-height:1.6; color:#2D3748;">
+        <!-- Inyección dinámica vía renderContractDocument() -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: DOSSIER EJECUTIVO DE PROYECTO (PROPUESTA ROI & GANTT)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="executive-dossier-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.92); backdrop-filter:blur(24px); z-index:99999; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+    <div style="max-width:980px; width:100%; background:#FFFFFF; color:#1A202C; border-radius:14px; box-shadow:0 25px 80px rgba(0,0,0,0.9); max-height:92vh; display:flex; flex-direction:column; overflow:hidden;">
+      
+      <!-- TOP ACTION BAR -->
+      <div style="padding:14px 24px; background:#0A0D14; color:#FFFFFF; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-family:'Space Grotesk', sans-serif; font-weight:900; color:#FFD700; font-size:1.1rem;">TSolutions IPIDD</span>
+          <span style="font-size:0.75rem; background:rgba(255,215,0,0.15); color:#FFD700; padding:2px 8px; border-radius:6px; font-family:monospace;">DOSSIER TÉCNICO &amp; FINANCIERO ROI</span>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button type="button" onclick="printExecutiveDossier()" style="background:#FF6B00; color:#FFFFFF; border:none; padding:6px 14px; border-radius:6px; font-weight:800; font-size:0.78rem; cursor:pointer;">
+            🖨️ Imprimir / Guardar PDF
+          </button>
+          <button type="button" onclick="closeExecutiveDossierModal()" style="background:rgba(255,255,255,0.1); color:#FFFFFF; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.78rem; cursor:pointer;">
+            ✕ Cerrar
+          </button>
+        </div>
+      </div>
+
+      <!-- DOSSIER DOCUMENT BODY -->
+      <div id="printable-dossier-content" style="padding:36px 44px; overflow-y:auto; font-family:'Inter', sans-serif; font-size:10pt; line-height:1.6; color:#2D3748;">
+        <!-- Inyección dinámica vía renderDossierDocument() -->
+      </div>
+
+    </div>
+  </div>
+
+</body>
         </html>
       `);
       printWin.document.close();
@@ -10818,6 +11292,1523 @@ Process completed with exit code 1.</textarea>
     }
 
     // INICIALIZACIÓN AUTOMÁTICA
+    
+    // =========================================================================
+    // 1. CATÁLOGO COMPLETO DE HERRAMIENTAS TSOLUTIONS IPIDD (18 HERRAMIENTAS)
+    // =========================================================================
+    window.masterToolsCatalog = [
+      // CATEGORÍA: INTELIGENCIA AUMENTADA & MOTORES RAG
+      {
+        id: 'prompt_architect',
+        category: 'ai_rag',
+        categoryName: 'Inteligencia Aumentada & RAG',
+        name: 'Nexus Prompt Architect',
+        subtitle: 'Diseñador Reactivo de Instrucciones de Sistema',
+        description: 'Constructor visual de directivas avanzadas, metaprompts estructurados y calibración de roles para modelos LLM de alto razonamiento.',
+        icon: '🧠',
+        url: 'prompt_architect.html',
+        isInternal: true,
+        department: 'Dirección de Inteligencia Artificial',
+        defaultActive: true
+      },
+      {
+        id: 'gemini_gateway',
+        category: 'ai_rag',
+        categoryName: 'Inteligencia Aumentada & RAG',
+        name: 'Gemini AI Multi-Provider Gateway',
+        subtitle: 'Enrutador Unificado de LLMs de Última Generación',
+        description: 'Proxy multi-proveedor con tolerancia a fallos para interactuar con Gemini 2.5 Flash, Claude 3.5 y GPT-4o con telemetría en vivo.',
+        icon: '⚡',
+        url: '#',
+        onclick: 'invokeAIGatewayInteractive()',
+        isInternal: true,
+        department: 'Infraestructura & Servidores',
+        defaultActive: true
+      },
+      {
+        id: 'presentador_rag',
+        category: 'ai_rag',
+        categoryName: 'Inteligencia Aumentada & RAG',
+        name: 'Presentador RAG Ejecutivo & Diapositivas',
+        subtitle: 'Generación Dinámica de Slidedecks Corporativos',
+        description: 'Motor de síntesis documental que transforma requerimientos de clientes en presentaciones ejecutivas con diseño responsive.',
+        icon: '📊',
+        url: '#',
+        onclick: 'generatePresentationAI()',
+        isInternal: true,
+        department: 'Estrategia Tecnológica',
+        defaultActive: true
+      },
+
+      // CATEGORÍA: ORQUESTACIÓN DAG & CI/CD PIPELINES
+      {
+        id: 'dag_orchestrator',
+        category: 'dag_cicd',
+        categoryName: 'Orquestación DAG & CI/CD',
+        name: 'Orquestador Reactivo DAG Studio',
+        subtitle: 'Modelador Gráfico de Flujos Dirigidos Asíncronos',
+        description: 'Diseño visual de dependencias de tareas complejas, validación topológica y ejecución concurrente basada en grafos acíclicos dirigidos.',
+        icon: '🕸️',
+        url: '#',
+        onclick: 'openDAGVisualizerModal()',
+        isInternal: true,
+        department: 'Arquitectura de Datos',
+        defaultActive: true
+      },
+      {
+        id: 'migracion_neon',
+        category: 'dag_cicd',
+        categoryName: 'Orquestación DAG & CI/CD',
+        name: 'Motor de Migración & Branching Neon Postgres',
+        subtitle: 'Lakebase Postgres con Ramas Efímeras y Replicación',
+        description: 'Gestor de migraciones SQL sin tiempo de inactividad, derivación instantánea de bases de datos para staging y consultas analíticas.',
+        icon: '🐘',
+        url: '#',
+        onclick: 'inspectNeonDatabaseLive()',
+        isInternal: true,
+        department: 'Bases de Datos & Cloud',
+        defaultActive: true
+      },
+      {
+        id: 'pipeline_auditor',
+        category: 'dag_cicd',
+        categoryName: 'Orquestación DAG & CI/CD',
+        name: 'Pipeline Auditor CI/CD Vercel & Edge Deploy',
+        subtitle: 'Monitoreo de Despliegue & Telemetría en el Borde',
+        description: 'Validación automatizada de builds, análisis de rendimiento de Core Web Vitals (LCP/CLS) y despliegues atómicos sin fricción.',
+        icon: '🚀',
+        url: '#',
+        onclick: 'auditVercelDeploymentLive()',
+        isInternal: true,
+        department: 'DevOps & Confiabilidad',
+        defaultActive: true
+      },
+      {
+        id: 'concurrencia_redis',
+        category: 'dag_cicd',
+        categoryName: 'Orquestación DAG & CI/CD',
+        name: 'Gestor de Concurrencia Redis / BullMQ',
+        subtitle: 'Colas de Alta Velocidad & Event-Driven Architecture',
+        description: 'Panel de monitoreo de trabajos en segundo plano, control de latencia en webhooks y prevención de cuellos de botella.',
+        icon: '⏱️',
+        url: '#',
+        onclick: 'inspectRedisQueuesLive()',
+        isInternal: true,
+        department: 'Backend & Eventos',
+        defaultActive: false
+      },
+
+      // CATEGORÍA: OPTIMIZACIÓN DE PROCESOS & SIX-SIGMA
+      {
+        id: 'diagnostico_5s',
+        category: 'opex_sigma',
+        categoryName: 'Optimización OPEX & Six-Sigma',
+        name: 'Diagnóstico OPEX 5S & Desperdicios Lean',
+        subtitle: 'Eliminación Sistemática de Mermas y Tiempos Muertos',
+        description: 'Matriz digital para auditar desorden operativo, cuellos de botella en mostrador y exceso de inventario en almacenes ferreteros.',
+        icon: '📐',
+        url: '#',
+        onclick: 'runLeanAuditStudio()',
+        isInternal: true,
+        department: 'Ingeniería de Procesos',
+        defaultActive: true
+      },
+      {
+        id: 'matriz_ishikawa',
+        category: 'opex_sigma',
+        categoryName: 'Optimización OPEX & Six-Sigma',
+        name: 'Matriz de Causa-Efecto Ishikawa Digital',
+        subtitle: 'Diagrama de Espina de Pescado Operativo & 5 Porqués',
+        description: 'Herramienta de análisis causal para erradicar fallas recurrentes en el despacho de pedidos, devoluciones y desabasto de productos clave.',
+        icon: '🐟',
+        url: '#',
+        onclick: 'openIshikawaDiagramStudio()',
+        isInternal: true,
+        department: 'Calidad & Operaciones',
+        defaultActive: false
+      },
+      {
+        id: 'simulador_cpk',
+        category: 'opex_sigma',
+        categoryName: 'Optimización OPEX & Six-Sigma',
+        name: 'Simulador de Capacidad de Procesos (Cp / Cpk)',
+        subtitle: 'Control Estadístico de Procesos Ferreteros e Industriales',
+        description: 'Cálculo dinámico de límites de tolerancia, dispersión sigma y nivel de conformidad operativa para estandarizar entregas.',
+        icon: '📈',
+        url: '#',
+        onclick: 'openProcessCapabilityModal()',
+        isInternal: true,
+        department: 'Control Estadístico',
+        defaultActive: false
+      },
+
+      // CATEGORÍA: LEGAL, GOBERNANZA & PROYECCIONES ROI
+      {
+        id: 'calculadora_roi',
+        category: 'legal_roi',
+        categoryName: 'Legal, ROI & Gobernanza',
+        name: 'Calculadora de ROI & Viabilidad Financiera',
+        subtitle: 'Proyección de Payback & Ahorros Mensuales Consolidados',
+        description: 'Modelo paramétrico que cuantifica el retorno de inversión por control de almacén, mostrador ágil y ventas automatizadas.',
+        icon: '💵',
+        url: 'MPS_AYALA_PROPUESTA_ROI_001.html',
+        isInternal: true,
+        department: 'Finanzas & Dirección',
+        defaultActive: true
+      },
+      {
+        id: 'acuerdos_nda',
+        category: 'legal_roi',
+        categoryName: 'Legal, ROI & Gobernanza',
+        name: 'Generador de Acuerdos & NDA Automatizado',
+        subtitle: 'Blindaje Legal de Propiedad Intelectual & Confidencialidad',
+        description: 'Creación instantánea de convenios de confidencialidad y cláusulas de cesión total de derechos de código al cliente.',
+        icon: '📜',
+        url: '#',
+        onclick: 'generateLegalNDAModal()',
+        isInternal: true,
+        department: 'Jurídico & Cumplimiento',
+        defaultActive: false
+      },
+      {
+        id: 'riesgos_cumplimiento',
+        category: 'legal_roi',
+        categoryName: 'Legal, ROI & Gobernanza',
+        name: 'Matriz de Riesgos & Cumplimiento Normativo',
+        subtitle: 'Evaluación de Vulnerabilidades Fiscales y Operativas',
+        description: 'Mapeo preventivo de contingencias operativas, retenciones fiscales por software intangible y acuerdos de nivel de servicio (SLA).',
+        icon: '🛡️',
+        url: '#',
+        onclick: 'openComplianceRiskMatrix()',
+        isInternal: true,
+        department: 'Gobernanza Corporativa',
+        defaultActive: false
+      },
+      {
+        id: 'propuesta_servicios_mps',
+        category: 'legal_roi',
+        categoryName: 'Legal, ROI & Gobernanza',
+        name: 'Propuesta Integral de Transformación Digital',
+        subtitle: 'Alcance Maestro de Ingeniería, Fases & Checkpoints',
+        description: 'Documento rector de arquitectura para ferreterías y empresas de distribución con cronograma Gantt de 90 días y capacitación TWI.',
+        icon: '📑',
+        url: 'propuesta_servicios_digitales_mps.html',
+        isInternal: true,
+        department: 'Consultoría Estratégica',
+        defaultActive: true
+      },
+
+      // CATEGORÍA: OPERACIONES DE CAMPO & MARKETING TÉCNICO
+      {
+        id: 'branding_lockup',
+        category: 'ops_mkt',
+        categoryName: 'Operaciones & Marketing Técnico',
+        name: 'Generador de Lockups & Branding Vectorial',
+        subtitle: 'Diseño Técnico de Marcas, Isotipos y Rótulos',
+        description: 'Constructor de identidades visuales con precisión milimétrica, exportación de SVG puros y aplicaciones para señalética de mostrador.',
+        icon: '🎨',
+        url: 'generador_lockups_tecnicos.html',
+        isInternal: true,
+        department: 'Diseño e Identidad',
+        defaultActive: true
+      },
+      {
+        id: 'metricas_terreno',
+        category: 'ops_mkt',
+        categoryName: 'Operaciones & Marketing Técnico',
+        name: 'Panel de Métricas en Terreno & KPI Móviles',
+        subtitle: 'Supervisión de Mostrador, Rutas y Entregas Locales',
+        description: 'Consola táctil para registrar flujos de caja diarios, velocidad de surtido de tickets y tiempos de respuesta al cliente.',
+        icon: '📱',
+        url: '#',
+        onclick: 'openFieldMetricsDashboard()',
+        isInternal: true,
+        department: 'Ventas & Mostrador',
+        defaultActive: false
+      },
+      {
+        id: 'prospeccion_b2b',
+        category: 'ops_mkt',
+        categoryName: 'Operaciones & Marketing Técnico',
+        name: 'Pipeline de Prospección B2B Automatizada',
+        subtitle: 'Captación de Cuentas Clave & Talleres Mecánicos/Herrerías',
+        description: 'Secuencias automatizadas por WhatsApp Business API y correo corporativo para captar clientes industriales recurrentes.',
+        icon: '🎯',
+        url: '#',
+        onclick: 'openB2BPipelineModal()',
+        isInternal: true,
+        department: 'Desarrollo Comercial',
+        defaultActive: false
+      },
+      {
+        id: 'flotas_logistica',
+        category: 'ops_mkt',
+        categoryName: 'Operaciones & Marketing Técnico',
+        name: 'Dashboard de Eficiencia de Flotas & Logística',
+        subtitle: 'Rastreo de Unidades, Rutas Óptimas y Despacho Local',
+        description: 'Gestor de logística urbana para optimizar entregas de materiales pesados, combustible y coordinación de choferes en Mexicali.',
+        icon: '🚚',
+        url: '#',
+        onclick: 'openFleetLogisticsModal()',
+        isInternal: true,
+        department: 'Logística & Despachos',
+        defaultActive: false
+      }
+    ];
+
+    // =========================================================================
+    // 2. AISLAMIENTO MULTI-TENANT POR WORKSPACE (ANTI-CRUCE EN LA MISMA PC)
+    // =========================================================================
+    let activeWorkspaceId = localStorage.getItem('nexus_active_workspace_id') || 'mps-ayala-core';
+    let currentWorkspaceRole = localStorage.getItem('nexus_ws_role_' + activeWorkspaceId) || 'TECH_LEAD';
+
+    function getKnownWorkspaces() {
+      try {
+        let wsList = JSON.parse(localStorage.getItem('nexus_known_workspaces') || '[]');
+        if (!Array.isArray(wsList) || wsList.length === 0) {
+          wsList = [
+            {
+              id: 'mps-ayala-core',
+              name: 'MPS Ayala Ferretodo (Mexicali)',
+              slug: 'mps-ayala',
+              client_name: 'Gabriel Ayala',
+              tech_lead: 'Ing. Javier Soto',
+              pm: 'Laura Mendoza',
+              domain: 'm.tsolutionsipidd.com',
+              created_at: '2026-07-03T10:00:00Z'
+            }
+          ];
+          localStorage.setItem('nexus_known_workspaces', JSON.stringify(wsList));
+        }
+        return wsList;
+      } catch (e) {
+        return [{ id: 'mps-ayala-core', name: 'MPS Ayala Ferretodo' }];
+      }
+    }
+
+    function registerKnownWorkspace(wsData) {
+      if (!wsData || !wsData.id) return;
+      let list = getKnownWorkspaces();
+      let idx = list.findIndex(w => w.id === wsData.id);
+      if (idx >= 0) {
+        list[idx] = Object.assign(list[idx], wsData);
+      } else {
+        list.push(wsData);
+      }
+      localStorage.setItem('nexus_known_workspaces', JSON.stringify(list));
+      updateWorkspaceSwitcherSelect();
+    }
+
+    function switchWorkspaceFromSelect(wsId) {
+      if (!wsId) return;
+      activeWorkspaceId = wsId;
+      localStorage.setItem('nexus_active_workspace_id', wsId);
+      currentWorkspaceRole = localStorage.getItem('nexus_ws_role_' + wsId) || 'TECH_LEAD';
+      
+      const roleSelect = document.getElementById('select-contextual-role');
+      if (roleSelect) roleSelect.value = currentWorkspaceRole;
+      updateRoleBadgeUI(currentWorkspaceRole);
+
+      renderActiveWorkspaceTools();
+      renderMasterToolsList();
+      recalculateQuote();
+
+      const wsList = getKnownWorkspaces();
+      const currentWs = wsList.find(w => w.id === wsId);
+      if (currentWs) {
+        const titleEl = document.getElementById('active-ws-title');
+        if (titleEl) titleEl.textContent = currentWs.name;
+        const domainEl = document.getElementById('active-ws-domain');
+        if (domainEl) domainEl.textContent = currentWs.domain || 'm.tsolutionsipidd.com';
+      }
+      addLog('[WORKSPACE] Entorno conmutado a: ' + wsId + ' (Aislamiento de datos activo)', 'info');
+    }
+
+    function updateWorkspaceSwitcherSelect() {
+      const select = document.getElementById('select-active-workspace');
+      if (!select) return;
+      const list = getKnownWorkspaces();
+      select.innerHTML = list.map(w => {
+        const isSel = w.id === activeWorkspaceId ? 'selected' : '';
+        return '<option value="' + w.id + '" ' + isSel + '>' + (w.name || w.id) + '</option>';
+      }).join('');
+
+      const currentWs = list.find(w => w.id === activeWorkspaceId);
+      if (currentWs) {
+        const titleEl = document.getElementById('active-ws-title');
+        if (titleEl) titleEl.textContent = currentWs.name;
+      }
+    }
+
+    function getActiveWorkspaceTools(wsId) {
+      const targetId = wsId || activeWorkspaceId;
+      try {
+        const stored = localStorage.getItem('nexus_ws_' + targetId + '_tools');
+        if (stored) return new Set(JSON.parse(stored));
+      } catch (e) {}
+
+      const defaultTools = new Set();
+      (window.masterToolsCatalog || []).forEach(t => {
+        if (t.defaultActive) defaultTools.add(t.id);
+      });
+      return defaultTools;
+    }
+
+    function saveActiveWorkspaceTools(wsId, toolsSet) {
+      const targetId = wsId || activeWorkspaceId;
+      const arr = Array.from(toolsSet);
+      localStorage.setItem('nexus_ws_' + targetId + '_tools', JSON.stringify(arr));
+    }
+
+    function toggleToolInWorkspace(toolId) {
+      const currentSet = getActiveWorkspaceTools(activeWorkspaceId);
+      if (currentSet.has(toolId)) {
+        currentSet.delete(toolId);
+        addLog('[WORKSPACE] Herramienta removida: ' + toolId, 'warn');
+      } else {
+        currentSet.add(toolId);
+        addLog('[WORKSPACE] Herramienta incorporada: ' + toolId, 'pulse');
+      }
+      saveActiveWorkspaceTools(activeWorkspaceId, currentSet);
+      renderActiveWorkspaceTools();
+      renderMasterToolsList();
+    }
+
+    function renderActiveWorkspaceTools() {
+      const container = document.getElementById('active-ws-tools-grid');
+      const countBadge = document.getElementById('active-ws-tools-count');
+      if (!container) return;
+
+      const activeToolsSet = getActiveWorkspaceTools(activeWorkspaceId);
+      const activeList = (window.masterToolsCatalog || []).filter(t => activeToolsSet.has(t.id));
+
+      if (countBadge) {
+        countBadge.textContent = activeList.length + ' Activas / ' + (window.masterToolsCatalog || []).length + ' Disponibles';
+      }
+
+      if (activeList.length === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1; padding:30px; text-align:center; color:var(--text-muted); background:rgba(0,0,0,0.25); border-radius:12px; border:1px dashed rgba(255,255,255,0.1);"><p style="margin:0 0 10px 0; font-size:0.9rem;">No hay herramientas activadas en este Workspace.</p><button type="button" class="btn-primary" onclick="openMasterToolsModal()" style="font-size:0.75rem; padding:6px 14px;">Abrir Catálogo de Herramientas</button></div>';
+        return;
+      }
+
+      container.innerHTML = activeList.map(t => {
+        let launchBtn = '';
+        if (t.url && t.url !== '#') {
+          launchBtn = '<a href="' + t.url + '" class="btn-ws-tool" style="font-size:0.75rem; padding:5px 12px; text-decoration:none;">Lanzar ➔</a>';
+        } else if (t.onclick) {
+          launchBtn = '<button type="button" class="btn-ws-tool" onclick="' + t.onclick + '" style="font-size:0.75rem; padding:5px 12px;">Ejecutar ➔</button>';
+        }
+
+        return `
+          <div class="active-ws-tool-card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+              <span class="tool-icon-box">${t.icon}</span>
+              <span class="tool-dept-tag">${t.categoryName}</span>
+            </div>
+            <h4 style="margin:0 0 4px 0; font-family:var(--font-primary); font-size:0.88rem; font-weight:800; color:#FFFFFF;">${t.name}</h4>
+            <p style="margin:0 0 12px 0; font-size:0.74rem; color:var(--text-muted); line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${t.description}</p>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto; pt:8px; border-top:1px solid rgba(255,255,255,0.06);">
+              ${launchBtn}
+              <button type="button" onclick="toggleToolInWorkspace('${t.id}')" title="Desactivar de este workspace" style="background:transparent; border:none; color:var(--text-muted); font-size:0.7rem; cursor:pointer; padding:4px;" onmouseover="this.style.color='#FF6B00'" onmouseout="this.style.color='var(--text-muted)'">✕ Quitar</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // GESTIÓN DE ROLES CONTEXTUALES
+    function updateContextualRole(newRole) {
+      currentWorkspaceRole = newRole;
+      localStorage.setItem('nexus_ws_role_' + activeWorkspaceId, newRole);
+      updateRoleBadgeUI(newRole);
+      addLog('[ROLES] Rol conmutado a: ' + newRole + ' en el workspace activo.', 'info');
+    }
+
+    function updateRoleBadgeUI(role) {
+      const badge = document.getElementById('badge-contextual-role');
+      if (!badge) return;
+      const roleLabels = {
+        'TECH_LEAD': 'Ingeniería & Tech Lead',
+        'PM': 'Project Management',
+        'CLIENT_SPONSOR': 'Cliente Co-Creador [Edición Activa]',
+        'DESIGN_LEAD': 'Diseño & Marca',
+        'OPERATIONS_LEAD': 'Operaciones de Campo'
+      };
+      badge.textContent = roleLabels[role] || role;
+    }
+
+    // MODAL MAESTRO DE HERRAMIENTAS
+    function openMasterToolsModal() {
+      const modal = document.getElementById('master-tools-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+        renderMasterToolsList();
+      }
+    }
+
+    function closeMasterToolsModal() {
+      const modal = document.getElementById('master-tools-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function filterMasterTools(cat, btn) {
+      document.querySelectorAll('#master-tools-modal .filter-pill').forEach(p => p.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderMasterToolsList(cat);
+    }
+
+    function renderMasterToolsList(categoryFilter = 'all') {
+      const grid = document.getElementById('master-tools-catalog-grid');
+      if (!grid) return;
+
+      const activeSet = getActiveWorkspaceTools(activeWorkspaceId);
+      const filtered = (window.masterToolsCatalog || []).filter(t => {
+        if (categoryFilter === 'all') return true;
+        return t.category === categoryFilter;
+      });
+
+      grid.innerHTML = filtered.map(t => {
+        const isEnabled = activeSet.has(t.id);
+        let launchAction = '';
+        if (t.url && t.url !== '#') {
+          launchAction = '<a href="' + t.url + '" class="btn-ws-tool" style="font-size:0.75rem; padding:4px 12px; text-decoration:none;">Lanzar ➔</a>';
+        } else if (t.onclick) {
+          launchAction = '<button type="button" class="btn-ws-tool" onclick="' + t.onclick + '" style="font-size:0.75rem; padding:4px 12px;">Lanzar ➔</button>';
+        }
+
+        return `
+          <div class="active-ws-tool-card" style="background:rgba(20,28,44,0.7); border:1px solid ${isEnabled ? 'rgba(255,215,0,0.4)' : 'rgba(255,255,255,0.08)'};">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span class="tool-icon-box" style="font-size:1.15rem;">${t.icon}</span>
+              <span class="tool-dept-tag">${t.department}</span>
+            </div>
+            <h4 style="margin:0 0 2px 0; font-family:var(--font-primary); font-size:0.86rem; font-weight:800; color:#FFFFFF;">${t.name}</h4>
+            <div style="font-size:0.7rem; color:#A0AEC0; margin-bottom:6px;">${t.subtitle}</div>
+            <p style="margin:0 0 12px 0; font-size:0.73rem; color:var(--text-muted); line-height:1.4;">${t.description}</p>
+            <div style="display:flex; justify-content:space-between; align-items:center; pt:8px; border-top:1px solid rgba(255,255,255,0.06); margin-top:auto;">
+              ${launchAction}
+              <label style="display:flex; align-items:center; gap:6px; font-size:0.72rem; cursor:pointer; color:${isEnabled ? '#FFD700' : 'var(--text-muted)'}; font-weight:700;">
+                <input type="checkbox" ${isEnabled ? 'checked' : ''} onchange="toggleToolInWorkspace('${t.id}')" style="accent-color:#FFD700;" />
+                ${isEnabled ? 'Activa en Workspace' : 'Inactiva'}
+              </label>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // GENERACIÓN DE ENLACES DE INVITACIÓN
+    function getWorkspaceMembers(wsId) {
+      try {
+        const mem = localStorage.getItem('nexus_ws_' + wsId + '_members');
+        if (mem) return JSON.parse(mem);
+      } catch (e) {}
+      return [
+        { id: '1', name: 'Ing. Javier Soto', email: 'techlead@tsolutionsipidd.com', role: 'TECH_LEAD', department: 'Arquitectura' },
+        { id: '2', name: 'Laura Mendoza', email: 'pm@tsolutionsipidd.com', role: 'PM', department: 'Gestión' },
+        { id: '3', name: 'Gabriel Ayala', email: 'gabriel@ferreayala.mx', role: 'CLIENT_SPONSOR', department: 'Dirección Cliente' }
+      ];
+    }
+
+    function saveWorkspaceMembers(wsId, membersList) {
+      localStorage.setItem('nexus_ws_' + wsId + '_members', JSON.stringify(membersList));
+    }
+
+    function handleSendInvitation(e) {
+      if (e) e.preventDefault();
+      const emailInput = document.getElementById('inv-email');
+      const nameInput = document.getElementById('inv-name');
+      const roleSelect = document.getElementById('inv-role');
+      const linkBox = document.getElementById('generated-invitation-link-box');
+      const linkInput = document.getElementById('invitation-url-display');
+
+      if (!emailInput || !emailInput.value.trim()) {
+        alert('Por favor ingresa un correo electrónico válido para la invitación.');
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      const name = nameInput ? nameInput.value.trim() : 'Colaborador';
+      const role = roleSelect ? roleSelect.value : 'COLLABORATOR';
+
+      const currentOrigin = window.location.origin + window.location.pathname;
+      const inviteUrl = currentOrigin + '?workspace=' + encodeURIComponent(activeWorkspaceId) + '&role=' + encodeURIComponent(role) + '&name=' + encodeURIComponent(name);
+
+      let members = getWorkspaceMembers(activeWorkspaceId);
+      members.push({
+        id: Date.now().toString(),
+        name: name,
+        email: email,
+        department: 'Invitado Externo',
+        role: role
+      });
+      saveWorkspaceMembers(activeWorkspaceId, members);
+
+      if (linkBox && linkInput) {
+        linkInput.value = inviteUrl;
+        linkBox.style.display = 'block';
+      }
+
+      try {
+        navigator.clipboard.writeText(inviteUrl);
+        alert('✓ Enlace de invitación generado y copiado al portapapeles. Compártelo con ' + name + '.');
+      } catch (err) {
+        alert('✓ Enlace generado: ' + inviteUrl);
+      }
+
+      emailInput.value = '';
+      if (nameInput) nameInput.value = '';
+    }
+
+    function copyGeneratedInvitationLink() {
+      const input = document.getElementById('invitation-url-display');
+      if (!input) return;
+      input.select();
+      document.execCommand('copy');
+      alert('✓ Enlace copiado al portapapeles.');
+    }
+
+    function checkInvitationUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const wsParam = params.get('workspace');
+      const roleParam = params.get('role');
+      const nameParam = params.get('name');
+
+      if (wsParam) {
+        activeWorkspaceId = wsParam;
+        localStorage.setItem('nexus_active_workspace_id', wsParam);
+        if (roleParam) updateContextualRole(roleParam);
+
+        let members = getWorkspaceMembers(wsParam);
+        if (nameParam && !members.some(m => m.name === nameParam)) {
+          members.push({
+            id: Date.now().toString(),
+            name: nameParam,
+            email: 'invitado@workspace.com',
+            department: 'Invitado por Enlace',
+            role: roleParam || 'COLLABORATOR'
+          });
+          saveWorkspaceMembers(wsParam, members);
+        }
+
+        renderActiveWorkspaceTools();
+        updateWorkspaceSwitcherSelect();
+      }
+    }
+
+
+    // =========================================================================
+    // CATÁLOGO MAESTRO UNIFICADO DE SERVICIOS TSOLUTIONS IPIDD
+    // =========================================================================
+    window.unifiedServicesCatalog = [
+      // 1. PAQUETES PRINCIPALES DE INFRAESTRUCTURA & E-COMMERCE
+      {
+        id: 'paq_escala_rapida',
+        category: 'paquetes',
+        name: 'Paquete Híbrido Escala Rápida (N1 + N2)',
+        subtitle: 'Smart Web Móvil + Google Maps Local + SEO',
+        price: 3700,
+        priceFormatted: '$3,700 MXN',
+        paymentModel: 'Anticipo 50% y 50% a la entrega',
+        badge: '🔥 Más Recomendado',
+        description: 'Fusión integral de Smart Web vertical mobile-first y Landing de conversión local. Detiene fugas en Google Maps, unifica horarios y automatiza la toma de pedidos por WhatsApp.',
+        ticketJustification: 'Resuelve el caos operativo integral para captar tráfico local de inmediato y acelerar pedidos sin duplicar herramientas.',
+        includedIn: [],
+        includesServices: ['paq_tarjeta_smart', 'paq_negocio_google'],
+        workspaceTools: ['prompt_architect', 'branding_lockup', 'metricas_terreno'],
+        selected: true
+      },
+      {
+        id: 'paq_tarjeta_smart',
+        category: 'paquetes',
+        name: 'Tarjeta Smart Mobile-First (Nivel 1)',
+        subtitle: 'El Gancho — Bio Link Móvil en Zona de Pulgar',
+        price: 950,
+        priceFormatted: '$950 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Entrada Rápida',
+        description: 'Bio link inteligente optimizado para la zona de pulgar con botones de contacto rápido, catálogo ligero y llamada a la acción directa por WhatsApp.',
+        ticketJustification: 'Evita la pérdida de clientes por no contar con un canal digital ágil.',
+        includedIn: ['paq_escala_rapida', 'paq_ecosistema_total'],
+        includesServices: [],
+        workspaceTools: ['branding_lockup', 'prospeccion_b2b'],
+        selected: false
+      },
+      {
+        id: 'paq_negocio_google',
+        category: 'paquetes',
+        name: 'Tu Negocio en Google (Nivel 2)',
+        subtitle: 'Rescate Geográfico & SEO Local en Maps',
+        price: 2750,
+        priceFormatted: '$2,750 MXN',
+        paymentModel: 'Anticipo 50% y 50% a la entrega',
+        badge: 'Rescate Local',
+        description: 'Alta y optimización de ficha en Google Maps, verificación de dirección, unificación de horarios comerciales y sincronización con WhatsApp Business.',
+        ticketJustification: 'Elimina las fugas económicas de clientes que acuden a direcciones erróneas o ven horarios desactualizados.',
+        includedIn: ['paq_escala_rapida'],
+        includesServices: [],
+        workspaceTools: ['metricas_terreno', 'branding_lockup'],
+        selected: false
+      },
+      {
+        id: 'paq_ecosistema_total',
+        category: 'paquetes',
+        name: 'Ecosistema Total Corporativo (Nivel 3)',
+        subtitle: 'Sitio Web Completo + Middleware IA Embebido',
+        price: 5450,
+        priceFormatted: '$5,450 MXN',
+        paymentModel: 'Anticipo 40% + Medio 30% + Entrega 30%',
+        badge: 'Cerebro con IA',
+        description: 'Sitio web corporativo Full-Stack (hasta 5 páginas), cuentas de correo empresarial, plantillas editables para redes y Middleware de IA embebido en backend para optimizar desempeño.',
+        ticketJustification: 'Centraliza la presencia digital corporativa con inteligencia reactiva y diseño a la medida.',
+        includedIn: [],
+        includesServices: ['paq_tarjeta_smart'],
+        workspaceTools: ['prompt_architect', 'gemini_gateway', 'presentador_rag', 'branding_lockup'],
+        selected: false
+      },
+      {
+        id: 'paq_ecommerce_logistica',
+        category: 'paquetes',
+        name: 'E-commerce Total con Logística Integrada',
+        subtitle: 'Tienda Transaccional + APIs Uber Direct & DHL',
+        price: 9850,
+        priceFormatted: '$9,850 MXN',
+        paymentModel: 'Anticipo 40% + Medio 30% + Entrega 30%',
+        badge: 'Logística Nativa',
+        description: 'Catálogo transaccional completo, carrito con recuperación, pasarelas de pago blindadas (Stripe/Mercado Pago), terminal Point Mini y conexión automática con Uber Direct y paqueterías.',
+        ticketJustification: 'Libera al dueño de triangular envíos manualmente y transparenta los costos de flete.',
+        includedIn: [],
+        includesServices: ['srv_pasarela_pagos', 'srv_logistica_uber'],
+        workspaceTools: ['prompt_architect', 'gemini_gateway', 'flotas_logistica', 'concurrencia_redis', 'migracion_neon'],
+        selected: false
+      },
+
+      // 2. CONSULTORÍA ESTRUCTURAL, PROCESOS & METODOLOGÍA IPIDD
+      {
+        id: 'srv_consultoria_sops',
+        category: 'consultoria',
+        name: 'Consultoría Estructural (SOPs & Workflows)',
+        subtitle: 'Mapeo & Estandarización de Procesos',
+        price: 4800,
+        priceFormatted: '$4,800 MXN',
+        paymentModel: 'Anticipo 40% + Medio 30% + Entrega 30%',
+        badge: 'Operaciones',
+        description: 'Levantamiento de procedimientos operativos estándar (SOPs), manuales de flujo y recetas operativas para delegar la operación y preparar al negocio para abrir sucursales.',
+        ticketJustification: 'Documenta el conocimiento clave de la empresa evitando el colapso operativo al crecer.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['diagnostico_5s', 'matriz_ishikawa'],
+        selected: false
+      },
+      {
+        id: 'srv_diagnostico_ipidd',
+        category: 'consultoria',
+        name: 'Auditoría IPIDD & Cronograma Gantt de 90 Días',
+        subtitle: 'Línea Base Operativa & Mitigación de Fricciones',
+        price: 5600,
+        priceFormatted: '$5,600 MXN',
+        paymentModel: 'Anticipo 50% y 50% a la entrega',
+        badge: 'Metodología IPIDD',
+        description: 'Diagnóstico exhaustivo de 6 fases, reporte de línea base de ventas/almacén, cálculo de horas físicas vs aplicadas (HF/HA) y cronograma secuencial de 12 semanas.',
+        ticketJustification: 'Erradica la improvisación y define con exactitud qué se construirá y su justificación económica.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['diagnostico_5s', 'matriz_ishikawa', 'simulador_cpk', 'calculadora_roi'],
+        selected: true
+      },
+      {
+        id: 'srv_control_almacenes',
+        category: 'consultoria',
+        name: 'Sistema Modular de Inventarios & Almacenes',
+        subtitle: 'Existencias en Tiempo Real & Punto de Venta',
+        price: 22000,
+        priceFormatted: '$22,000 MXN',
+        paymentModel: 'Anticipo 40% + Medio 30% + Entrega 30%',
+        badge: 'Enterprise Core',
+        description: 'Arquitectura de control de existencias, equivalencias técnicas para mostrador, alertas dinámicas de reorden, catálogo masivo y módulo ágil de ventas facturable.',
+        ticketJustification: 'Reduce en un 40% los tiempos de mostrador y detiene fugas de capital por mermas o inventario obsoleto.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['migracion_neon', 'dag_orchestrator', 'diagnostico_5s'],
+        selected: false
+      },
+      {
+        id: 'srv_consultoria_1on1',
+        category: 'consultoria',
+        name: 'Consultoría Estratégica 1-on-1 (Sesión Privada)',
+        subtitle: 'Auditoría de Arquitectura & Escalabilidad (60 min)',
+        price: 1980,
+        priceFormatted: '$1,980 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Sesión Directa',
+        description: 'Sesión virtual privada de 1 hora con nuestro equipo experto para auditar tu modelo de negocio, tecnología actual, cuellos de botella e IA aplicable.',
+        ticketJustification: 'Alinea la visión de los directores con las herramientas técnicas de mayor retorno inmediato.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['prompt_architect', 'calculadora_roi'],
+        selected: false
+      },
+
+      // 3. INTELIGENCIA ARTIFICIAL, AGENTES & RAG
+      {
+        id: 'srv_bot_ferrebot',
+        category: 'ia',
+        name: 'Agente Inteligente 24/7 (FerreBot / RUA)',
+        subtitle: 'Motor Conversacional RAG Conectado a Catálogo',
+        price: 6500,
+        priceFormatted: '$6,500 MXN',
+        paymentModel: 'Anticipo 50% y 50% a la entrega',
+        badge: 'Atención 24/7',
+        description: 'Asistente virtual autónomo basado en Gemini / Dify.ai entrenado con el inventario y políticas del negocio. Responde consultas técnicas, cotiza y atiende por WhatsApp.',
+        ticketJustification: 'Absorbe el 80% de las preguntas y cotizaciones repetitivas de clientes día y noche.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['prompt_architect', 'gemini_gateway', 'presentador_rag'],
+        selected: false
+      },
+      {
+        id: 'srv_ia_estandar',
+        category: 'ia',
+        name: 'IA Personalizada (Licencia Estándar)',
+        subtitle: 'Widget Web Flotante & FAQ Inteligente',
+        price: 2980,
+        priceFormatted: '$2,980 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Agente Web',
+        description: 'Asistente embebido en el sitio web para resolver dudas frecuentes, guiar a los prospectos al checkout y transferir a WhatsApp.',
+        ticketJustification: 'Eleva la tasa de permanencia y conversión de visitantes en la web.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['gemini_gateway', 'prompt_architect'],
+        selected: false
+      },
+      {
+        id: 'srv_ia_backend_modular',
+        category: 'ia',
+        name: 'Módulo de Inteligencia Artificial (Backend/Agentes)',
+        subtitle: 'Conexión Profunda de Datos & Embeddings RAG',
+        price: 4500,
+        priceFormatted: '$4,500 MXN',
+        paymentModel: 'Anticipo 50% y 50% a la entrega',
+        badge: 'RAG Avanzado',
+        description: 'Canalizaciones backend que vectorizan documentos corporativos para permitir búsquedas semánticas precisas y extracción de datos en milisegundos.',
+        ticketJustification: 'Permite automatizar consultas complejas sobre manuales y catálogos de miles de artículos.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['gemini_gateway', 'presentador_rag', 'dag_orchestrator'],
+        selected: false
+      },
+
+      // 4. BRANDING, IDENTIDAD VECTORIAL & BLINDAJE LEGAL
+      {
+        id: 'srv_taller_branding',
+        category: 'branding',
+        name: 'Taller Express Identity Branding & Logotipos',
+        subtitle: 'Diseño Vectorial, Manual de Marca & Brand Story',
+        price: 1850,
+        priceFormatted: '$1,850 MXN',
+        paymentModel: 'Anticipo 50% y 50% a la entrega',
+        badge: 'Identidad Visual',
+        description: 'Sesión formativa de creación de marca, entrega de logotipo en curvas (SVG/PNG), paleta de colores técnica, fuentes corporativas y narrativa comercial.',
+        ticketJustification: 'Permite al cliente apropiarse de su marca y transmitir autoridad frente a clientes y proveedores.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['branding_lockup'],
+        selected: true
+      },
+      {
+        id: 'srv_manifiesto_legal',
+        category: 'branding',
+        name: 'Manifiesto de Marca & Auditoría Legal IMPI',
+        subtitle: 'Viabilidad de Registro & Blindaje de Nombre',
+        price: 1550,
+        priceFormatted: '$1,550 MXN',
+        paymentModel: 'Anticipo 50% y 50% a la entrega',
+        badge: 'Blindaje Legal',
+        description: 'Reporte de viabilidad fonética y disponibilidad ante el IMPI para evitar demandas o multas por marcas registradas por terceros, más manifiesto formal.',
+        ticketJustification: 'Protege la inversión publicitaria antes de imprimir rótulos, uniformes o papelería.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['acuerdos_nda', 'riesgos_cumplimiento'],
+        selected: false
+      },
+      {
+        id: 'srv_brand_pack_completo',
+        category: 'branding',
+        name: 'Brand Pack Completo (Acceso Total & Canvas)',
+        subtitle: 'Los 4 Pilares de Marca & Editor Interactivo',
+        price: 6380,
+        priceFormatted: '$6,380 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Acceso Total',
+        description: 'Acceso ilimitado y permanente a los 4 talleres de creación de marca, descarga infinita de PDFs vectoriales y uso del Editor Canvas de TSolutions.',
+        ticketJustification: 'Autonomía perpetua para crear material publicitario sin depender de agencias externas.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['branding_lockup'],
+        selected: false
+      },
+      {
+        id: 'srv_elevator_pitch',
+        category: 'branding',
+        name: 'Elevator Pitch Estratégico & Copywriting',
+        subtitle: 'Guion Comercial de 30-60 Segundos',
+        price: 850,
+        priceFormatted: '$850 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Ventas Rápidas',
+        description: 'Redacción persuasiva estructurada para bios de redes, encabezados web y respuestas rápidas de WhatsApp que explican el valor del negocio al instante.',
+        ticketJustification: 'Estandariza el discurso comercial para elevar conversiones desde el primer contacto.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['prompt_architect'],
+        selected: false
+      },
+
+      // 5. COMPLEMENTOS, LOGÍSTICA & MARKETING
+      {
+        id: 'srv_logistica_uber',
+        category: 'complementos',
+        name: 'Integración de Envíos Nativos (API Uber Direct)',
+        subtitle: 'Despachos Locales Automatizados en Minutos',
+        price: 3500,
+        priceFormatted: '$3,500 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Fletes en Tiempo Real',
+        description: 'Conexión directa con la API de Uber Direct para cotizar fletes en vivo y despachar pedidos a domicilio sin triangular con repartidores por mensaje.',
+        ticketJustification: 'Convierte el mostrador en una central logística automatizada de bajo costo.',
+        includedIn: ['paq_ecommerce_logistica'],
+        includesServices: [],
+        workspaceTools: ['flotas_logistica'],
+        selected: false
+      },
+      {
+        id: 'srv_pasarela_pagos',
+        category: 'complementos',
+        name: 'Configuración de Pasarela de Pagos (Stripe/MP)',
+        subtitle: 'Cobros Blindados con Tarjeta y Terminal',
+        price: 1200,
+        priceFormatted: '$1,200 MXN',
+        paymentModel: 'Pago por evento',
+        badge: 'Fintech',
+        description: 'Integración técnica de Stripe o Mercado Pago con webhooks seguros, meses sin intereses y vinculación a terminal física Point Mini.',
+        ticketJustification: 'Asegura depósitos bancarios inmediatos y protege contra contracargos fraudulentos.',
+        includedIn: ['paq_ecommerce_logistica'],
+        includesServices: [],
+        workspaceTools: ['calculadora_roi'],
+        selected: false
+      },
+      {
+        id: 'srv_bot_whatsapp',
+        category: 'complementos',
+        name: 'Chatbot WhatsApp Business (Árbol y Pedidos)',
+        subtitle: 'Automatización de Conversaciones y Menús',
+        price: 3200,
+        priceFormatted: '$3,200 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'WhatsApp API',
+        description: 'Flujo estructurado con menús de botones interactivos, toma de datos de facturación y enrutamiento hacia asesores especializados.',
+        ticketJustification: 'Evita perder prospectos en horas no laborales o fines de semana.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['gemini_gateway'],
+        selected: false
+      },
+      {
+        id: 'srv_nfc_vcard',
+        category: 'complementos',
+        name: 'Tarjeta Inteligente NFC vCard + Display Acrílico',
+        subtitle: 'Hardware de Contacto Físico para Mostrador',
+        price: 900,
+        priceFormatted: '$900 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Hardware NFC',
+        description: 'Tarjeta plástica grabada con chip NFC para compartir catálogo con un toque al celular, más soporte acrílico para mostrador con QR dinámico.',
+        ticketJustification: 'Transfiere la experiencia digital al punto de venta físico de forma impactante.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['branding_lockup'],
+        selected: false
+      },
+      {
+        id: 'srv_produccion_video',
+        category: 'complementos',
+        name: 'Producción de Comercial Audiovisual (4K)',
+        subtitle: 'Video Promocional en Locación & Edición Pro',
+        price: 5500,
+        priceFormatted: '$5,500 MXN',
+        paymentModel: 'Anticipo 50% y 50% a la entrega',
+        badge: 'Audiovisual',
+        description: 'Grabación profesional en sitio, edición cinematográfica, corrección de color y musicalización licenciada lista para pauta publicitaria en redes.',
+        ticketJustification: 'Genera credibilidad inmediata y aumenta la confianza de compra en clientes nuevos.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['carrusel_marketing'],
+        selected: false
+      },
+      {
+        id: 'srv_setup_ads',
+        category: 'complementos',
+        name: 'Setup de Campaña Publicitaria Ads (Meta/Google)',
+        subtitle: 'Estructuración de Píxeles & Públicos Clave',
+        price: 2500,
+        priceFormatted: '$2,500 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Tráfico Pago',
+        description: 'Configuración técnica de Meta Business Manager, instalación de la API de conversiones, delimitación geográfica y segmentación de clientes ideales.',
+        ticketJustification: 'Garantiza que el presupuesto publicitario no se desperdicie en clics sin intención de compra.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['prospeccion_b2b'],
+        selected: false
+      },
+      {
+        id: 'srv_coherencia_redes',
+        category: 'complementos',
+        name: 'Coherencia Visual para Redes (Meta/TikTok)',
+        subtitle: 'Auditoría & Estandarización de Feeds',
+        price: 1800,
+        priceFormatted: '$1,800 MXN',
+        paymentModel: 'Pago único en 1 exhibición',
+        badge: 'Diseño Social',
+        description: 'Homologación de fotos de perfil, portadas, historias destacadas y entrega de 5 plantillas editables para publicaciones consistentes.',
+        ticketJustification: 'Mantiene una imagen pulcra y profesional en todos los puntos de contacto del cliente.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['branding_lockup'],
+        selected: false
+      },
+      {
+        id: 'srv_membresia_pro',
+        category: 'complementos',
+        name: 'Membresía Mensual Pro TSolutions (SLA Preventivo)',
+        subtitle: 'Soporte Prioritario & Mantenimiento Continuo',
+        price: 780,
+        priceFormatted: '$780 MXN / mes',
+        paymentModel: 'Mensual recurrente opcional',
+        badge: 'SLA Continuo',
+        description: 'Monitoreo de disponibilidad 24/7, respaldo semanal de base de datos, 1 hora de soporte directo de código al mes y 15% de descuento en ampliaciones.',
+        ticketJustification: 'Póliza de tranquilidad para negocios que no pueden detener sus operaciones digitales ni un solo día.',
+        includedIn: [],
+        includesServices: [],
+        workspaceTools: ['pipeline_auditor', 'migracion_neon'],
+        selected: false
+      }
+    ];
+
+    let currentServicesFilter = 'todos';
+
+    // ABRIR Y CERRAR MODALES DEL CATÁLOGO
+    function openServicesMenuModal() {
+      const modal = document.getElementById('services-menu-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+        renderServicesCards();
+        recalculateQuote();
+      }
+    }
+
+    function closeServicesMenuModal() {
+      const modal = document.getElementById('services-menu-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function filterServicesMenu(category, btnElement) {
+      currentServicesFilter = category;
+      document.querySelectorAll('.catalog-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+      renderServicesCards();
+    }
+
+    // ALTERNAR SELECCIÓN DE SERVICIO CON DETECCIÓN DE NO-DUPLICIDAD
+    function toggleServiceSelection(serviceId) {
+      const item = window.unifiedServicesCatalog.find(s => s.id === serviceId);
+      if (!item) return;
+
+      item.selected = !item.selected;
+
+      // Si seleccionó un paquete mayor, auto-seleccionar sus servicios incluidos sin doble cobro
+      if (item.selected && item.includesServices && item.includesServices.length > 0) {
+        item.includesServices.forEach(incId => {
+          const child = window.unifiedServicesCatalog.find(s => s.id === incId);
+          if (child) child.selected = true;
+        });
+      }
+
+      renderServicesCards();
+      recalculateQuote();
+    }
+
+    // RENDERIZAR LAS TARJETAS DEL MENÚ DIGITAL
+    function renderServicesCards() {
+      const container = document.getElementById('services-cards-grid');
+      if (!container) return;
+
+      // Verificar qué servicios están incluidos en algún paquete seleccionado actualmente
+      const activeParentPackages = window.unifiedServicesCatalog.filter(s => s.selected && s.includesServices && s.includesServices.length > 0);
+      const allIncludedServiceIds = new Set();
+      activeParentPackages.forEach(p => p.includesServices.forEach(id => allIncludedServiceIds.add(id)));
+
+      const filtered = window.unifiedServicesCatalog.filter(s => {
+        if (currentServicesFilter === 'todos') return true;
+        return s.category === currentServicesFilter;
+      });
+
+      container.innerHTML = filtered.map(item => {
+        const isIncludedInParent = allIncludedServiceIds.has(item.id);
+        const isSelected = item.selected;
+
+        let priceDisplay = item.priceFormatted;
+        let badgeExtra = '';
+        if (isIncludedInParent) {
+          priceDisplay = 'GRATIS [INCLUIDO EN PAQUETE]';
+          badgeExtra = '<span style="font-size:0.65rem; background:rgba(0,242,254,0.15); color:#00F2FE; border:1px solid rgba(0,242,254,0.3); padding:2px 6px; border-radius:4px; font-weight:800;">INCLUIDO $0</span>';
+        }
+
+        const toolsList = (item.workspaceTools || []).map(t => {
+          return '<span class="tool-tag-pill">🛠️ ' + t + '</span>';
+        }).join('');
+
+        return \`
+          <div class="service-card-item \${isSelected ? 'selected' : ''} \${isIncludedInParent ? 'included-free' : ''}" onclick="toggleServiceSelection('\${item.id}')">
+            <div class="service-checkbox-wrap" onclick="event.stopPropagation()">
+              <input type="checkbox" class="service-checkbox" \${isSelected ? 'checked' : ''} onchange="toggleServiceSelection('\${item.id}')" />
+            </div>
+            <div class="service-info-wrap">
+              <div class="service-title-row">
+                <div>
+                  <div class="service-name">
+                    \${item.name}
+                    \${item.badge ? '<span style="font-size:0.68rem; background:rgba(255,107,0,0.15); color:#FF6B00; border:1px solid rgba(255,107,0,0.3); padding:1px 6px; border-radius:4px;">' + item.badge + '</span>' : ''}
+                    \${badgeExtra}
+                  </div>
+                  <div style="font-size:0.73rem; color:#A0AEC0; margin-top:2px;">\${item.subtitle}</div>
+                </div>
+                <div class="service-price-badge \${isIncludedInParent ? 'included' : ''}">
+                  \${priceDisplay}
+                </div>
+              </div>
+              <p class="service-desc">\${item.description}</p>
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <div class="service-tools-tags">
+                  \${toolsList}
+                </div>
+                <div style="font-size:0.7rem; color:#718096; font-family:var(--font-mono);">
+                  Modalidad: \${item.paymentModel}
+                </div>
+              </div>
+            </div>
+          </div>
+        \`;
+      }).join('');
+    }
+
+    // CALCULAR EL PRESUPUESTO EN TIEMPO REAL CON LA CLÁUSULA DEL 5%
+    function recalculateQuote() {
+      const activeWs = getKnownWorkspaces().find(w => w.id === activeWorkspaceId) || { name: 'Espacio Principal MPS' };
+      const wsNameEl = document.getElementById('quote-workspace-name');
+      if (wsNameEl) wsNameEl.textContent = activeWs.name || 'Workspace Activo';
+
+      // Detectar paquetes padres activos para evitar doble cobro
+      const activeParentPackages = window.unifiedServicesCatalog.filter(s => s.selected && s.includesServices && s.includesServices.length > 0);
+      const allIncludedServiceIds = new Set();
+      activeParentPackages.forEach(p => p.includesServices.forEach(id => allIncludedServiceIds.add(id)));
+
+      const selectedItems = window.unifiedServicesCatalog.filter(s => s.selected);
+      const countEl = document.getElementById('badge-selected-count');
+      if (countEl) countEl.textContent = selectedItems.length + ' servicios';
+
+      const itemsListEl = document.getElementById('quote-selected-items-list');
+      if (itemsListEl) {
+        if (selectedItems.length === 0) {
+          itemsListEl.innerHTML = '<div style="font-size:0.75rem; color:var(--text-muted); text-align:center; padding:12px;">No has seleccionado servicios aún. Elige los que tu proyecto necesite.</div>';
+        } else {
+          itemsListEl.innerHTML = selectedItems.map(item => {
+            const isFree = allIncludedServiceIds.has(item.id);
+            const costText = isFree ? '<span style="color:#00F2FE;">[Incluido $0]</span>' : item.priceFormatted;
+            return \`
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.76rem; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.04);">
+                <span style="color:#E2E8F0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:210px;">\${item.name}</span>
+                <span style="font-family:var(--font-mono); font-weight:700;">\${costText}</span>
+              </div>
+            \`;
+          }).join('');
+        }
+      }
+
+      // Sumar Subtotal (excluyendo los que ya están incluidos en un paquete padre)
+      let subtotal = 0;
+      selectedItems.forEach(item => {
+        if (!allIncludedServiceIds.has(item.id)) {
+          subtotal += item.price;
+        }
+      });
+
+      // Cálculo de la Inversión Neta
+      const netInvestment = subtotal;
+
+      // CÁLCULO DE LA CUOTA DEL 5% DE LA PLATAFORMA (PAGO ÚNICO AL CIERRE)
+      const platformFee = Math.round(netInvestment * 0.05);
+      const finalTotalWithPlatform = netInvestment + platformFee;
+
+      // Actualizar valores en UI
+      const subtotalEl = document.getElementById('quote-subtotal');
+      if (subtotalEl) subtotalEl.textContent = '$' + subtotal.toLocaleString('es-MX') + ' MXN';
+
+      const netEl = document.getElementById('quote-net-investment');
+      if (netEl) netEl.textContent = '$' + netInvestment.toLocaleString('es-MX') + ' MXN';
+
+      const feeEl = document.getElementById('quote-platform-fee');
+      if (feeEl) feeEl.textContent = '$' + platformFee.toLocaleString('es-MX') + ' MXN';
+
+      const totalEl = document.getElementById('quote-final-total');
+      if (totalEl) totalEl.textContent = '$' + finalTotalWithPlatform.toLocaleString('es-MX') + ' MXN';
+    }
+
+    // APROVISIONAR EL WORKSPACE CON LAS HERRAMIENTAS NECESARIAS
+    function applyServicesToWorkspace() {
+      const selectedServices = window.unifiedServicesCatalog.filter(s => s.selected);
+      if (selectedServices.length === 0) {
+        alert('Por favor selecciona al menos un servicio del menú para aprovisionar tu entorno.');
+        return;
+      }
+
+      const toolsToActivate = new Set();
+      selectedServices.forEach(s => {
+        (s.workspaceTools || []).forEach(t => toolsToActivate.add(t));
+      });
+
+      // Guardar herramientas en el workspace activo
+      saveActiveWorkspaceTools(activeWorkspaceId, toolsToActivate);
+      renderActiveWorkspaceTools();
+
+      // Notificación al usuario
+      alert('✓ ¡Entorno de Proyecto Aprovisionado! Se han integrado ' + toolsToActivate.size + ' herramientas técnicas en tu Workspace (' + (activeWorkspaceId || 'Principal') + ').');
+      closeServicesMenuModal();
+    }
+
+    // MODAL DEL CONTRATO FORMAL (CON CLÁUSULA 5%)
+    function openFormalContractModal() {
+      renderContractDocument();
+      const modal = document.getElementById('formal-contract-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeFormalContractModal() {
+      const modal = document.getElementById('formal-contract-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function printFormalContract() {
+      const printContents = document.getElementById('printable-contract-content').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(\`
+        <html>
+          <head>
+            <title>Contrato Formal de Servicios - TSolutions IPIDD</title>
+            <style>
+              body { font-family: 'Inter', sans-serif; font-size: 11pt; line-height: 1.6; color: #1A202C; padding: 25mm 20mm; }
+              h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: #000; }
+              table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+              th, td { border: 1px solid #CBD5E0; padding: 8px 12px; font-size: 10pt; }
+              th { background: #EDF2F7; }
+              .clause-title { font-weight: 800; font-size: 11pt; margin-top: 18px; color: #0F172A; text-transform: uppercase; }
+            </style>
+          </head>
+          <body>
+            \${printContents}
+          </body>
+        </html>
+      \`);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); win.close(); }, 600);
+    }
+
+    function renderContractDocument() {
+      const container = document.getElementById('printable-contract-content');
+      if (!container) return;
+
+      const activeWs = getKnownWorkspaces().find(w => w.id === activeWorkspaceId) || {
+        name: 'MPS Ayala Ferretodo',
+        client_name: 'Gabriel Ayala',
+        tech_lead: 'Ing. Javier Soto',
+        pm: 'Laura Mendoza',
+        domain: 'm.tsolutionsipidd.com'
+      };
+
+      const selected = window.unifiedServicesCatalog.filter(s => s.selected);
+      const activeParentPackages = window.unifiedServicesCatalog.filter(s => s.selected && s.includesServices && s.includesServices.length > 0);
+      const allIncludedServiceIds = new Set();
+      activeParentPackages.forEach(p => p.includesServices.forEach(id => allIncludedServiceIds.add(id)));
+
+      let subtotal = 0;
+      selected.forEach(s => {
+        if (!allIncludedServiceIds.has(s.id)) subtotal += s.price;
+      });
+      const netInvestment = subtotal;
+      const platformFee = Math.round(netInvestment * 0.05);
+      const totalContract = netInvestment + platformFee;
+
+      const p40 = Math.round(totalContract * 0.40);
+      const p30a = Math.round(totalContract * 0.30);
+      const p30b = Math.round(totalContract * 0.30);
+
+      const servicesRows = selected.map(s => {
+        const isFree = allIncludedServiceIds.has(s.id);
+        const priceStr = isFree ? '$0.00 MXN (Incluido en Paquete)' : s.priceFormatted;
+        return \`
+          <tr>
+            <td><strong>\${s.name}</strong><br><small style="color:#718096;">\${s.subtitle}</small></td>
+            <td style="text-align:right; font-family:monospace;">\${priceStr}</td>
+            <td style="text-align:center;">\${s.paymentModel}</td>
+          </tr>
+        \`;
+      }).join('');
+
+      container.innerHTML = \`
+        <div style="border-bottom:2px solid #0F172A; padding-bottom:14px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h1 style="margin:0; font-size:18pt; font-weight:900; color:#0F172A; letter-spacing:-0.02em;">TSOLUTIONS IPIDD</h1>
+            <div style="font-size:9pt; color:#FF6B00; font-weight:800; letter-spacing:1px; text-transform:uppercase;">
+              Consultoría, Infraestructura &amp; Ecosistemas Digitales
+            </div>
+          </div>
+          <div style="text-align:right; font-size:9pt; color:#718096;">
+            <strong>FOLIO:</strong> CONTRATO-TS-2026-\${Math.floor(1000 + Math.random() * 9000)}<br>
+            <strong>EMISIÓN:</strong> 15 de Octubre de 2026<br>
+            <strong>ESTADO:</strong> PROYECTO FORMALIZADO
+          </div>
+        </div>
+
+        <h2 style="text-align:center; font-size:13pt; text-transform:uppercase; margin:24px 0 16px 0; color:#0F172A;">
+          CONTRATO MAESTRO DE PRESTACIÓN DE SERVICIOS TECNOLÓGICOS Y DESARROLLO DE SOFTWARE
+        </h2>
+
+        <p style="text-align:justify;">
+          Celebrado por una parte por <strong>TSolutions IPIDD</strong>, representada por su Director de Tecnología e Infraestructura, y por la otra parte el <strong>CLIENTE: \${activeWs.client_name || 'Gabriel Ayala'}</strong>, en representación del proyecto <strong>"\${activeWs.name || 'MPS Ayala Ferretodo'}"</strong>, al tenor de las siguientes declaraciones y cláusulas:
+        </p>
+
+        <div class="clause-title">CLÁUSULA PRIMERA: OBJETO Y ALCANCE DE LOS SERVICIOS</div>
+        <p style="text-align:justify;">
+          TSolutions IPIDD se obliga a diseñar, codificar, estructurar, aprovisionar y transferir la infraestructura tecnológica y consultoría correspondiente a los servicios seleccionados expresamente en el Menú Digital del Workspace:
+        </p>
+
+        <table style="width:100%; border-collapse:collapse; margin:14px 0;">
+          <thead>
+            <tr style="background:#F7FAFC;">
+              <th style="border:1px solid #CBD5E0; padding:8px; text-align:left;">Servicio / Módulo Contratado</th>
+              <th style="border:1px solid #CBD5E0; padding:8px; text-align:right;">Inversión Unitaria</th>
+              <th style="border:1px solid #CBD5E0; padding:8px; text-align:center;">Modalidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            \${servicesRows}
+          </tbody>
+        </table>
+
+        <div class="clause-title">CLÁUSULA SEGUNDA: PROPIEDAD INTELECTUAL &amp; CERO CÓDIGO HUÉRFANO</div>
+        <p style="text-align:justify;">
+          TSolutions IPIDD garantiza la entrega total de accesos maestros, credenciales, bases de datos y manuales operativos al cliente al cubrir el finiquito del proyecto. Se erradica por completo la renta cautiva de software o dependencia forzada: el CLIENTE es dueño al 100% de sus activos digitales.
+        </p>
+
+        <div class="clause-title">CLÁUSULA TERCERA: INVERSIÓN TOTAL Y ESQUEMA DE PAGO ASIMÉTRICO (40 / 30 / 30)</div>
+        <p style="text-align:justify;">
+          El monto consolidado del proyecto se detalla a continuación, distribuyéndose en tres exhibiciones vinculadas al avance real de entregables:
+        </p>
+
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:16px; border-radius:8px; margin:12px 0;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <span>Subtotal de Servicios Seleccionados:</span>
+            <strong style="font-family:monospace;">$\${netInvestment.toLocaleString('es-MX')} MXN</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#D97706;">
+            <span>(+) Cuota Única de Plataforma Colaborativa &amp; Mantenimiento (5%):</span>
+            <strong style="font-family:monospace;">+$\${platformFee.toLocaleString('es-MX')} MXN</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-top:2px solid #CBD5E0; padding-top:8px; font-size:11pt; color:#0F172A;">
+            <strong>MONTO TOTAL DEL CONTRATO:</strong>
+            <strong style="font-family:monospace; color:#16A34A; font-size:12pt;">$\${totalContract.toLocaleString('es-MX')} MXN</strong>
+          </div>
+        </div>
+
+        <ul style="padding-left:20px; margin:10px 0;">
+          <li><strong>Anticipo de Arranque (40%):</strong> $\${p40.toLocaleString('es-MX')} MXN a la firma del presente instrumento.</li>
+          <li><strong>Pago Intermedio (30%):</strong> $\${p30a.toLocaleString('es-MX')} MXN contra entrega funcional en Checkpoint Día 60.</li>
+          <li><strong>Finiquito de Entrega &amp; Capacitación (30%):</strong> $\${p30b.toLocaleString('es-MX')} MXN al despliegue en producción y sesión andragógica.</li>
+        </ul>
+
+        <div class="clause-title" style="color:#B45309; background:#FEF3C7; padding:6px 10px; border-left:4px solid #F59E0B; border-radius:4px;">
+          CLÁUSULA CUARTA: CUOTA ÚNICA DE PLATAFORMA COLABORATIVA &amp; MANTENIMIENTO DE ESPACIOS DEDICADOS (5%)
+        </div>
+        <p style="text-align:justify;">
+          Se hace constar expresamente que el uso, acceso, modelado de directivas y exploración en el <em>Nexus Architect Studio</em> es libre de costo. No obstante, al momento de formalizar el cierre del presente contrato, <strong>se establece un pago único a cargo del CLIENTE equivalente al 5% (cinco por ciento) del valor total de la inversión neta del proyecto</strong> ($\${platformFee.toLocaleString('es-MX')} MXN). Dicho importe ampara el tiempo estimado de duración del proyecto y se destina de forma exclusiva al aprovisionamiento de bases de datos aisladas en la nube, seguridad multi-tenant, servidores de alta disponibilidad y soporte de espacios colaborativos más robustos, sin que existan mensualidades ocultas posteriores.
+        </p>
+
+        <div class="clause-title">CLÁUSULA QUINTA: CAPACITACIÓN ANDRAGÓGICA Y CONSTANCIA DE APRENDIZAJE</div>
+        <p style="text-align:justify;">
+          Al finalizar la implementación técnica, TSolutions IPIDD impartirá capacitación estructurada al personal del CLIENTE en los 3 dominios formativos (Cognitivo, Psicomotor y Afectivo), emitiendo la <em>Constancia de Participación, Aprendizaje y Dominio Tecnológico</em> emitida por TSolutions, garantizando la adopción integral sin resistencia al cambio.
+        </p>
+
+        <div style="margin-top:40px; display:grid; grid-template-columns:1fr 1fr; gap:40px; padding-top:20px;">
+          <div style="border-top:1px solid #718096; text-align:center; padding-top:8px;">
+            <strong>TSOLUTIONS IPIDD</strong><br>
+            <small style="color:#718096;">Dirección de Infraestructura &amp; Sistemas</small>
+          </div>
+          <div style="border-top:1px solid #718096; text-align:center; padding-top:8px;">
+            <strong>\${activeWs.client_name || 'Gabriel Ayala'}</strong><br>
+            <small style="color:#718096;">CLIENTE SPONSOR / REPRESENTANTE</small>
+          </div>
+        </div>
+      \`;
+    }
+
+    // MODAL DEL DOSSIER EJECUTIVO (PROPUESTA ROI & GANTT)
+    function openExecutiveDossierModal() {
+      renderDossierDocument();
+      const modal = document.getElementById('executive-dossier-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeExecutiveDossierModal() {
+      const modal = document.getElementById('executive-dossier-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function printExecutiveDossier() {
+      const printContents = document.getElementById('printable-dossier-content').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(\`
+        <html>
+          <head>
+            <title>Dossier Ejecutivo de Transformación Digital - TSolutions IPIDD</title>
+            <style>
+              body { font-family: 'Inter', sans-serif; font-size: 11pt; line-height: 1.6; color: #1A202C; padding: 25mm 20mm; }
+              h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: #000; }
+              table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+              th, td { border: 1px solid #CBD5E0; padding: 8px 12px; font-size: 10pt; }
+              th { background: #EDF2F7; }
+              .gantt { font-family: monospace; background: #0F172A; color: #38BDF8; padding: 12px; border-radius: 6px; white-space: pre; }
+            </style>
+          </head>
+          <body>
+            \${printContents}
+          </body>
+        </html>
+      \`);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); win.close(); }, 600);
+    }
+
+    function renderDossierDocument() {
+      const container = document.getElementById('printable-dossier-content');
+      if (!container) return;
+
+      const activeWs = getKnownWorkspaces().find(w => w.id === activeWorkspaceId) || {
+        name: 'MPS Ayala Ferretodo',
+        client_name: 'Gabriel Ayala'
+      };
+
+      const selected = window.unifiedServicesCatalog.filter(s => s.selected);
+      const activeParentPackages = window.unifiedServicesCatalog.filter(s => s.selected && s.includesServices && s.includesServices.length > 0);
+      const allIncludedServiceIds = new Set();
+      activeParentPackages.forEach(p => p.includesServices.forEach(id => allIncludedServiceIds.add(id)));
+
+      let subtotal = 0;
+      selected.forEach(s => {
+        if (!allIncludedServiceIds.has(s.id)) subtotal += s.price;
+      });
+      const netInvestment = subtotal;
+      const platformFee = Math.round(netInvestment * 0.05);
+      const finalTotal = netInvestment + platformFee;
+
+      container.innerHTML = \`
+        <div style="border-bottom:2px solid #FF6B00; padding-bottom:14px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h1 style="margin:0; font-size:20pt; font-weight:900; color:#0F172A;">TSOLUTIONS IPIDD</h1>
+            <div style="color:#FF6B00; font-size:9pt; font-weight:800; letter-spacing:1.5px; text-transform:uppercase;">
+              Dossier de Arquitectura, Cronograma &amp; Retorno de Inversión (ROI)
+            </div>
+          </div>
+          <div style="text-align:right; font-size:9pt; color:#718096;">
+            <strong>PROYECTO:</strong> \${activeWs.name || 'MPS Ayala'}<br>
+            <strong>CLIENTE:</strong> \${activeWs.client_name || 'Gabriel Ayala'}<br>
+            <strong>HORIZONTE:</strong> 90 Días Operativos
+          </div>
+        </div>
+
+        <h2 style="font-size:12pt; text-transform:uppercase; color:#0F172A; border-left:4px solid #FF6B00; padding-left:10px; margin-top:20px;">
+          1. Diagnóstico de Transformación &amp; Servicios Seleccionados
+        </h2>
+        <p style="text-align:justify;">
+          El presente dossier condensa los componentes tecnológicos seleccionados en el Menú Digital para conformar una infraestructura unificada, eliminando software huérfano y asegurando la transferencia de conocimiento andragógica:
+        </p>
+
+        <table style="width:100%; border-collapse:collapse; margin:14px 0;">
+          <thead>
+            <tr style="background:#F7FAFC;">
+              <th style="border:1px solid #CBD5E0; padding:8px; text-align:left;">Componente / Servicio</th>
+              <th style="border:1px solid #CBD5E0; padding:8px; text-align:right;">Inversión Neta</th>
+              <th style="border:1px solid #CBD5E0; padding:8px; text-align:center;">Entregable Clave</th>
+            </tr>
+          </thead>
+          <tbody>
+            \${selected.map(s => {
+              const isFree = allIncludedServiceIds.has(s.id);
+              return \`
+                <tr>
+                  <td><strong>\${s.name}</strong></td>
+                  <td style="text-align:right; font-family:monospace;">\${isFree ? '$0 MXN (Incluido)' : s.priceFormatted}</td>
+                  <td style="font-size:9pt; color:#4A5568;">\${s.ticketJustification}</td>
+                </tr>
+              \`;
+            }).join('')}
+          </tbody>
+        </table>
+
+        <h2 style="font-size:12pt; text-transform:uppercase; color:#0F172A; border-left:4px solid #FF6B00; padding-left:10px; margin-top:24px;">
+          2. Cronograma General de Ejecución (Gantt Secuencial 12 Semanas)
+        </h2>
+        <div class="gantt" style="font-family:monospace; background:#0A0D14; color:#38BDF8; padding:16px; border-radius:8px; line-height:1.4; font-size:9pt;">
+Fase / Actividad                  S1-S2  S3-S4  S5-S6  S7-S8  S9-S10 S11-S12
+-----------------------------------------------------------------------------
+Fase 1: Identidad &amp; Branding      [====]
+Fase 2: Diagnóstico IPIDD                [====]
+Fase 3: Desarrollo Core Inventario              [======]
+Fase 4: Sitio Web &amp; Agente IA                           [======]
+Fase 5: Dashboard KPIs &amp; Almacén                               [======]
+Fase 6: Cierre &amp; Sesión Andragógica                                    [====]
+        </div>
+
+        <h2 style="font-size:12pt; text-transform:uppercase; color:#0F172A; border-left:4px solid #FF6B00; padding-left:10px; margin-top:24px;">
+          3. Estructura Financiera &amp; Cuota de Plataforma (5%)
+        </h2>
+        <table style="width:100%; border-collapse:collapse; margin:14px 0;">
+          <tr>
+            <td style="border:1px solid #CBD5E0; padding:10px;">Subtotal Servicios Directos:</td>
+            <td style="border:1px solid #CBD5E0; padding:10px; text-align:right; font-weight:bold; font-family:monospace;">$\${netInvestment.toLocaleString('es-MX')} MXN</td>
+          </tr>
+          <tr style="background:#FEF3C7;">
+            <td style="border:1px solid #CBD5E0; padding:10px; color:#B45309;"><strong>Cuota Única de Plataforma Colaborativa &amp; Mantenimiento (5%):</strong><br><small style="color:#78350F;">Aplica al cerrar el contrato; cubre servidores, base de datos y soporte durante todo el proyecto.</small></td>
+            <td style="border:1px solid #CBD5E0; padding:10px; text-align:right; font-weight:bold; font-family:monospace; color:#B45309;">+$\${platformFee.toLocaleString('es-MX')} MXN</td>
+          </tr>
+          <tr style="background:#F0FDF4; font-size:11pt;">
+            <td style="border:1px solid #CBD5E0; padding:10px;"><strong>INVERSIÓN TOTAL DEL PROYECTO:</strong></td>
+            <td style="border:1px solid #CBD5E0; padding:10px; text-align:right; font-weight:bold; font-family:monospace; color:#16A34A;">$\${finalTotal.toLocaleString('es-MX')} MXN</td>
+          </tr>
+        </table>
+
+        <div style="background:#F0FDF4; border:1px solid #86EFAC; border-radius:8px; padding:14px; margin-top:16px;">
+          <strong style="color:#166534;">📈 PROYECCIÓN DE RETORNO DE INVERSIÓN (PAYBACK ESTIMADO):</strong>
+          <p style="margin:6px 0 0 0; font-size:9.5pt; color:#14532D; text-align:justify;">
+            Mitigando mermas por control de almacén (+$4,500/mes), acelerando la atención en mostrador (+$3,800/mes) y captando pedidos automáticos 24/7 con IA (+$6,200/mes), el beneficio consolidado mensual estimado es de <strong>+$14,500.00 MXN</strong>, situando el punto de equilibrio y retorno total de capital en un promedio de <strong>3.4 meses</strong> posteriores al despliegue.
+          </p>
+        </div>
+      \`;
+    }
+
+
     window.addEventListener('DOMContentLoaded', () => {
       initNoraWorkflow();
       initLayeredWorkspaceBuilder();
