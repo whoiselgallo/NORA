@@ -4261,6 +4261,133 @@
     }
   
     
+    
+    /* =========================================================================
+       BOTÓN BLUEPRINT & FLUJO MAESTRO (6 FASES)
+       ========================================================================= */
+    .btn-nav-blueprint-engine {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.16) 0%, rgba(14, 165, 233, 0.28) 100%);
+      border: 1.5px solid #00F2FE;
+      color: #FFFFFF;
+      border-radius: 9999px;
+      padding: 6px 16px;
+      font-weight: 800;
+      font-size: 0.77rem;
+      font-family: var(--font-primary), 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      letter-spacing: 0.03em;
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.35);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      white-space: nowrap;
+    }
+    .btn-nav-blueprint-engine:hover {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.3) 0%, rgba(14, 165, 233, 0.45) 100%);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+      transform: translateY(-1px);
+    }
+    .btn-nav-blueprint-engine .blueprint-icon {
+      color: #00F2FE;
+      font-size: 0.9rem;
+      filter: drop-shadow(0 0 6px rgba(0, 242, 254, 0.7));
+    }
+    @media (max-width: 1180px) {
+      .btn-nav-blueprint-engine .blueprint-btn-text {
+        display: none;
+      }
+      .btn-nav-blueprint-engine {
+        padding: 6px 11px;
+      }
+      .btn-nav-blueprint-engine::after {
+        content: "📐 6 FASES";
+        font-size: 0.75rem;
+        font-weight: 800;
+      }
+    }
+
+    /* =========================================================================
+       MODAL DE BLUEPRINT DE INGENIERÍA
+       ========================================================================= */
+    .blueprint-modal-container {
+      max-width: 1380px;
+      width: 100%;
+      background: rgba(8, 12, 20, 0.98);
+      border: 1.5px solid rgba(0, 242, 254, 0.5);
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 242, 254, 0.2);
+      display: flex;
+      flex-direction: column;
+      max-height: 92vh;
+      overflow: hidden;
+      animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .blueprint-nav-tabs {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 24px;
+      background: rgba(10, 14, 24, 0.95);
+      overflow-x: auto;
+    }
+    .blueprint-tab-btn {
+      padding: 14px 18px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-family: var(--font-primary);
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .blueprint-tab-btn:hover {
+      color: #FFFFFF;
+    }
+    .blueprint-tab-btn.active {
+      color: #00F2FE;
+      border-bottom-color: #00F2FE;
+      background: rgba(0, 242, 254, 0.05);
+    }
+    .blueprint-panel-content {
+      padding: 24px 28px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ESTILOS DE LA LÍNEA DE TIEMPO DE 6 FASES */
+    .phase-timeline-card {
+      background: rgba(14, 20, 32, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      border-left: 4px solid #00F2FE;
+      transition: all 0.2s;
+    }
+    .phase-timeline-card:hover {
+      border-color: rgba(0, 242, 254, 0.5);
+      background: rgba(20, 28, 44, 0.85);
+      transform: translateX(3px);
+    }
+    .phase-badge-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      color: #00F2FE;
+    }
+
     /* =========================================================================
        BOTÓN NAV MENÚ DIGITAL & COTIZADOR
        ========================================================================= */
@@ -4713,6 +4840,13 @@
     <!-- BOTÓN DE APRENDIZAJE & BADGE DE ESTADO -->
     <div style="display: flex; align-items: center; gap: 10px;">
             
+      
+      <!-- BOTÓN BLUEPRINT & FLUJO MAESTRO (6 FASES) -->
+      <button type="button" class="btn-nav-blueprint-engine" onclick="openBlueprintWorkflowModal()" title="Documento Maestro: Flujo de 6 Fases, Cotizador CapEx/OpEx y Blueprint de Ingeniería">
+        <span class="blueprint-icon">📐</span>
+        <span class="blueprint-btn-text">BLUEPRINT &amp; 6 FASES</span>
+      </button>
+
       <!-- BOTÓN MENÚ DIGITAL & COTIZADOR -->
       <button type="button" class="btn-nav-catalog-pricing" onclick="openServicesMenuModal()" title="Menú Digital de Servicios, Cotizador y Generador de Entorno">
         <span class="catalog-icon">⚡</span>
@@ -8996,6 +9130,422 @@ Process completed with exit code 1.</textarea>
     </div>
   </div>
 
+
+  <!-- =========================================================================
+       MODAL 5: DOCUMENTO MAESTRO, FLUJO DE 6 FASES & BLUEPRINT DE INGENIERÍA
+       ========================================================================= -->
+  <div class="modal-backdrop" id="blueprint-workflow-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.92); backdrop-filter:blur(24px) saturate(190%); z-index:99999; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+    <div class="blueprint-modal-container">
+      
+      <!-- HEADER -->
+      <div style="padding:18px 28px; background:linear-gradient(180deg, rgba(0,242,254,0.1) 0%, rgba(14,20,32,0.95) 100%); border-bottom:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="background:rgba(0,242,254,0.15); border:1.5px solid #00F2FE; border-radius:12px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+            📐
+          </div>
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <h2 style="margin:0; font-family:var(--font-primary); font-size:1.15rem; font-weight:900; color:#FFFFFF;">
+                DOCUMENTO MAESTRO DEFINITIVO &amp; BLUEPRINT DE INGENIERÍA
+              </h2>
+              <span class="phase-badge-tag">6 FASES • 100% INTEGRAL</span>
+            </div>
+            <p style="margin:2px 0 0 0; font-size:0.75rem; color:var(--text-muted);">
+              Estándar Operativo, Arquitectónico y Financiero para Producción de Sitios y Plataformas a Demanda
+            </p>
+          </div>
+        </div>
+
+        <button type="button" class="btn-cancel" onclick="closeBlueprintWorkflowModal()" style="padding:7px 18px; border-radius:9999px; font-size:0.76rem; font-weight:700;">
+          ✕ Cerrar
+        </button>
+      </div>
+
+      <!-- TABS -->
+      <div class="blueprint-nav-tabs">
+        <button type="button" class="blueprint-tab-btn active" onclick="switchBlueprintTab('tab-timeline', this)">
+          📋 1. Flujo Maestro (6 Fases)
+        </button>
+        <button type="button" class="blueprint-tab-btn" onclick="switchBlueprintTab('tab-calculator', this)">
+          💰 2. Cotizador Dinámico CapEx/OpEx
+        </button>
+        <button type="button" class="blueprint-tab-btn" onclick="switchBlueprintTab('tab-blueprint', this)">
+          📐 3. Blueprint Técnico &amp; Stack
+        </button>
+        <button type="button" class="blueprint-tab-btn" onclick="switchBlueprintTab('tab-checklist', this)">
+          ✅ 4. Checklist &amp; Acta de Entrega
+        </button>
+      </div>
+
+      <!-- BODY: PANELES -->
+      <div class="blueprint-panel-content">
+        
+        <!-- PESTAÑA 1: FLUJO MAESTRO DE 6 FASES -->
+        <div id="tab-timeline" class="blueprint-tab-pane" style="display:block;">
+          
+          <div class="phase-timeline-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h3 style="margin:0; font-size:0.98rem; font-weight:900; color:#FFFFFF;">
+                Fase 1: Selección, Clasificación y Arquitectura Base
+              </h3>
+              <span class="phase-badge-tag">Semana 1 • Arquitectura</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5; margin-bottom:10px;">
+              Define el alcance técnico a partir de la elección del cliente y activa el árbol de decisiones para infraestructura, cómputo, identidad, gestión de contenidos y persistencia de datos.
+            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.75rem;">
+              <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px;">
+                <strong style="color:#00F2FE;">🌐 Hosting &amp; Cómputo:</strong> Vercel (Jamstack/Next.js) para máxima velocidad; Render / Google Cloud Run para backends pesados.
+              </div>
+              <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px;">
+                <strong style="color:#00F2FE;">💾 Datos &amp; Respaldos:</strong> Neon PostgreSQL serverless con Snapshots diarios automatizados (7 a 30 días de retención) y Cloudflare R2 / AWS S3 para multimedia.
+              </div>
+            </div>
+          </div>
+
+          <div class="phase-timeline-card" style="border-left-color:#F59E0B;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h3 style="margin:0; font-size:0.98rem; font-weight:900; color:#FFFFFF;">
+                Fase 2: Configuración de Servicios, Identidad, Pagos, IA y Seguridad
+              </h3>
+              <span class="phase-badge-tag" style="color:#F59E0B; border-color:rgba(245,158,11,0.4); background:rgba(245,158,11,0.1);">Semana 2 • Integraciones</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5; margin-bottom:10px;">
+              Establece las integraciones de terceros, autenticación, procesamiento asíncrono, blindaje de APIs y configuración de secretos.
+            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.75rem;">
+              <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px;">
+                <strong style="color:#FBBF24;">🛡️ Protección Financiera de IA:</strong> Rate Limiting con Upstash Redis por IP/Usuario y <strong>Hard Limits mensuales en consola</strong> para neutralizar ataques o picos.
+              </div>
+              <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px;">
+                <strong style="color:#FBBF24;">💳 Stripe &amp; Webhooks:</strong> Firma criptográfica obligatoria (<code style="color:#FFD700;">STRIPE_WEBHOOK_SECRET</code>), lógica de idempotencia y aislamiento de variables en bóvedas.
+              </div>
+            </div>
+          </div>
+
+          <div class="phase-timeline-card" style="border-left-color:#10B981;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h3 style="margin:0; font-size:0.98rem; font-weight:900; color:#FFFFFF;">
+                Fase 3: Motor de Presupuestación Dinámica y Notificación de Costos
+              </h3>
+              <span class="phase-badge-tag" style="color:#10B981; border-color:rgba(16,185,129,0.4); background:rgba(16,185,129,0.1);">Semana 3 • Finanzas</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5; margin-bottom:10px;">
+              Calcula los costos de desarrollo (CapEx) a tarifa base de $35 USD/hr, proyecta los gastos operativos mensuales de terceros (OpEx) y la póliza de mantenimiento (Retainer al 10%).
+            </p>
+            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; font-size:0.75rem;">
+              <strong style="color:#34D399;">✦ Cuota Única de Plataforma Colaborativa (5%):</strong> Pago único al cierre del contrato que sostiene la infraestructura dedicada durante todo el tiempo estimado de ejecución del proyecto.
+            </div>
+          </div>
+
+          <div class="phase-timeline-card" style="border-left-color:#8B5CF6;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h3 style="margin:0; font-size:0.98rem; font-weight:900; color:#FFFFFF;">
+                Fase 4: Generación del Documento de Creación e Ingeniería (Blueprint)
+              </h3>
+              <span class="phase-badge-tag" style="color:#8B5CF6; border-color:rgba(139,92,246,0.4); background:rgba(139,92,246,0.1);">Semana 4 • Blueprint</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;">
+              Expediente técnico con contratos JSON Schema, árbol de carpetas estandarizado, cronograma por hitos (Baja/Media/Alta complejidad) y cumplimiento legal de privacidad y cookies.
+            </p>
+          </div>
+
+          <div class="phase-timeline-card" style="border-left-color:#EC4899;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h3 style="margin:0; font-size:0.98rem; font-weight:900; color:#FFFFFF;">
+                Fase 5: Desarrollo, Seguridad DevSecOps y Despliegue (CI/CD)
+              </h3>
+              <span class="phase-badge-tag" style="color:#EC4899; border-color:rgba(236,72,153,0.4); background:rgba(236,72,153,0.1);">Semanas 5-10 • DevSecOps</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;">
+              Repositorio GitHub Privado, escaneo Snyk, Preview URLs automáticas en staging, pruebas E2E en Stripe Test Mode y auditoría Google Lighthouse > 90 puntos.
+            </p>
+          </div>
+
+          <div class="phase-timeline-card" style="border-left-color:#00F2FE;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h3 style="margin:0; font-size:0.98rem; font-weight:900; color:#FFFFFF;">
+                Fase 6: Cierre del Proyecto, Monitoreo y Entregables Finales
+              </h3>
+              <span class="phase-badge-tag">Semanas 11-12 • Cierre</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;">
+              Activación de Sentry y Uptime Robot, verificación del primer ciclo de backups, traspaso de facturación o activación de iguala mensual, y firma del Acta de Entrega y Aceptación.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- PESTAÑA 2: COTIZADOR DINÁMICO CAPEX / OPEX / RETAINER -->
+        <div id="tab-calculator" class="blueprint-tab-pane" style="display:none;">
+          
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+            <div>
+              <h3 style="margin:0; font-size:1rem; font-weight:900; color:#FFFFFF;">
+                Matriz de Cálculo por Módulo y Complejidad (Fase 3)
+              </h3>
+              <span style="font-size:0.74rem; color:var(--text-muted);">
+                Tarifa base de ingeniería: <strong>$35 USD / hr</strong> (~$700 MXN / hr). Activa o desactiva módulos para simular en tiempo real.
+              </span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.75rem; color:var(--text-muted);">Moneda:</span>
+              <select id="calc-currency-select" onchange="renderBlueprintCalculator()" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); color:#FFFFFF; padding:4px 10px; border-radius:6px; font-size:0.75rem;">
+                <option value="USD" selected>USD ($)</option>
+                <option value="MXN">MXN ($ a $20/USD)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- TABLA DINÁMICA -->
+          <div style="overflow-x:auto; margin-bottom:20px; border:1px solid rgba(255,255,255,0.08); border-radius:10px;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.75rem; text-align:left;">
+              <thead>
+                <tr style="background:rgba(0,242,254,0.08); color:#00F2FE;">
+                  <th style="padding:10px;">Activo</th>
+                  <th style="padding:10px;">Módulo / Servicio</th>
+                  <th style="padding:10px; text-align:center;">Complejidad</th>
+                  <th style="padding:10px; text-align:center;">Horas</th>
+                  <th style="padding:10px; text-align:right;">CapEx (Desarrollo)</th>
+                  <th style="padding:10px; text-align:right;">OpEx (Mensual Terceros)</th>
+                  <th style="padding:10px;">Proveedor / Notas</th>
+                </tr>
+              </thead>
+              <tbody id="blueprint-calc-tbody">
+                <!-- Inyección dinámica vía renderBlueprintCalculator() -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- RESUMEN DE TOTALES CAPEX / OPEX / RETAINER / 5% -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-bottom:20px;">
+            
+            <div style="background:rgba(14,20,32,0.85); border:1px solid rgba(0,242,254,0.3); border-radius:12px; padding:16px;">
+              <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">1. CapEx (Construcción)</div>
+              <div id="disp-calc-capex" style="font-family:var(--font-mono); font-size:1.3rem; font-weight:900; color:#00F2FE; margin:4px 0;">$4,410 USD</div>
+              <div id="disp-calc-hours" style="font-size:0.72rem; color:#A0AEC0;">126 horas (21 días hábiles)</div>
+            </div>
+
+            <div style="background:rgba(14,20,32,0.85); border:1px solid rgba(245,158,11,0.3); border-radius:12px; padding:16px;">
+              <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">2. OpEx (Mensual Terceros)</div>
+              <div id="disp-calc-opex" style="font-family:var(--font-mono); font-size:1.3rem; font-weight:900; color:#FBBF24; margin:4px 0;">$105 USD/mes</div>
+              <div style="font-size:0.72rem; color:#A0AEC0;">Hosting, BD, backups, emails</div>
+            </div>
+
+            <div style="background:rgba(14,20,32,0.85); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:16px;">
+              <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">3. Retainer Mensual (10%)</div>
+              <div id="disp-calc-retainer" style="font-family:var(--font-mono); font-size:1.3rem; font-weight:900; color:#34D399; margin:4px 0;">$441 USD/mes</div>
+              <div style="font-size:0.72rem; color:#A0AEC0;">Soporte 24/7, Sentry, Snyk</div>
+            </div>
+
+            <div style="background:rgba(14,20,32,0.85); border:1.5px dashed rgba(255,215,0,0.5); border-radius:12px; padding:16px;">
+              <div style="font-size:0.7rem; color:#FFD700; text-transform:uppercase; font-weight:800;">✦ Cuota Plataforma (5%)</div>
+              <div id="disp-calc-fee" style="font-family:var(--font-mono); font-size:1.3rem; font-weight:900; color:#FFD700; margin:4px 0;">$220.50 USD</div>
+              <div style="font-size:0.72rem; color:#E2E8F0;">Pago único al cerrar contrato</div>
+            </div>
+
+          </div>
+
+          <!-- CALCULADORA DE CONSUMO VARIABLE: STRIPE & TOKENS IA -->
+          <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px; font-size:0.75rem;">
+            <h4 style="margin:0 0 10px 0; font-size:0.85rem; color:#FFFFFF;">
+              ⚡ Calculadora de Consumo Variable &amp; Blindaje de Tokens de IA
+            </h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+              <div>
+                <label style="display:block; margin-bottom:4px; color:var(--text-muted);">
+                  Volumen Mensual de Ventas Stripe (USD):
+                </label>
+                <input type="number" id="calc-stripe-volume" value="5000" onchange="updateVariableConsumption()" style="background:rgba(14,20,32,0.9); border:1px solid rgba(255,255,255,0.2); color:#FFFFFF; padding:6px 10px; border-radius:6px; width:100%; font-family:var(--font-mono);" />
+                <div style="margin-top:4px; color:#A0AEC0; font-size:0.7rem;">
+                  Comisión estimada Stripe (~3.6% + fijo): <strong id="disp-calc-stripe-fee" style="color:#00F2FE;">$195.00 USD</strong>
+                </div>
+              </div>
+              <div>
+                <label style="display:block; margin-bottom:4px; color:var(--text-muted);">
+                  Peticiones a API de IA por Mes:
+                </label>
+                <select id="calc-ai-requests" onchange="updateVariableConsumption()" style="background:rgba(14,20,32,0.9); border:1px solid rgba(255,255,255,0.2); color:#FFFFFF; padding:6px 10px; border-radius:6px; width:100%; font-family:var(--font-mono);">
+                  <option value="1000">1,000 llamadas (~$0.15 USD)</option>
+                  <option value="5000">5,000 llamadas (~$0.75 USD)</option>
+                  <option value="10000" selected>10,000 llamadas (~$1.50 USD)</option>
+                  <option value="50000">50,000 llamadas (~$7.50 USD)</option>
+                </select>
+                <div style="margin-top:4px; color:#10B981; font-size:0.7rem;">
+                  🛡️ Protegido con <strong>Hard Limit mensual de $25.00 USD</strong> y Rate Limiting Upstash Redis.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PESTAÑA 3: BLUEPRINT TÉCNICO & STACK -->
+        <div id="tab-blueprint" class="blueprint-tab-pane" style="display:none;">
+          
+          <div style="border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h3 style="margin:0; font-size:1rem; font-weight:900; color:#FFFFFF;">
+                Ficha Técnica de Creación e Ingeniería (Fase 4)
+              </h3>
+              <span style="font-size:0.74rem; color:var(--text-muted);">
+                Especificación del Stack Tecnológico, Variables de Entorno y Arquitectura de Directorios
+              </span>
+            </div>
+            <button type="button" onclick="copyEnvExample()" class="btn-ws-tool" style="font-size:0.72rem; padding:5px 12px;">
+              📋 Copiar .env.example
+            </button>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;">
+            
+            <div style="background:rgba(14,20,32,0.8); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px; font-size:0.75rem;">
+              <strong style="color:#00F2FE;">Stack Tecnológico por Capa:</strong>
+              <ul style="padding-left:16px; margin:8px 0 0 0; line-height:1.6; color:#CBD5E1;">
+                <li><strong>Frontend:</strong> TypeScript + Next.js / React + Tailwind CSS (Despliegue Vercel).</li>
+                <li><strong>Backend:</strong> Node.js con Express / NestJS o Python FastAPI (Despliegue Render / GCP).</li>
+                <li><strong>Base de Datos:</strong> Neon Lakebase Postgres con Snapshots diarios.</li>
+                <li><strong>Almacenamiento:</strong> S3-Compatible Cloudflare R2 / AWS S3.</li>
+                <li><strong>Identidad:</strong> Clerk / Supabase Auth con 2FA y roles RBAC.</li>
+                <li><strong>Colas:</strong> BullMQ sobre Upstash Redis.</li>
+              </ul>
+            </div>
+
+            <div style="background:rgba(14,20,32,0.8); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px; font-size:0.75rem;">
+              <strong style="color:#00F2FE;">Estructura de Directorios Estandarizada:</strong>
+              <pre style="margin:8px 0 0 0; font-family:var(--font-mono); font-size:0.68rem; color:#A0AEC0; background:rgba(0,0,0,0.4); padding:8px; border-radius:6px; max-height:120px; overflow-y:auto;">
+├── src/
+│   ├── app/ (páginas y vistas)
+│   ├── components/ (UI y banner cookies)
+│   ├── lib/ (stripe, ai, storage, auth)
+│   ├── jobs/ (colas BullMQ)
+│   └── api/ (endpoints y webhooks)
+├── prisma/ (migraciones y esquemas)
+└── .env.example (diccionario de secretos)</pre>
+            </div>
+
+          </div>
+
+          <!-- DICCIONARIO DE VARIABLES DE ENTORNO -->
+          <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px; font-size:0.72rem;">
+            <strong style="color:#FFD700; font-family:var(--font-mono);">Diccionario de Variables de Entorno (.env.example):</strong>
+            <pre id="code-env-example" style="font-family:var(--font-mono); color:#E2E8F0; margin:8px 0 0 0; white-space:pre-wrap; line-height:1.45;">
+DATABASE_URL=postgresql://user:password@ep-project.us-east-2.aws.neon.tech/neondb?sslmode=require
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_sample51N...
+STRIPE_SECRET_KEY=sk_test_sample51N...
+STRIPE_WEBHOOK_SECRET=whsec_sampleSecretKey...
+AI_PROVIDER_API_KEY=AIzaSySampleKeyForGeminiStudio...
+UPSTASH_REDIS_REST_URL=https://sample-redis.upstash.io
+RESEND_API_KEY=re_sampleApiKeyResend...
+S3_ACCESS_KEY_ID=sampleR2KeyId...
+SENTRY_DSN=https://sampleKey@o123456.ingest.sentry.io/78910</pre>
+          </div>
+
+        </div>
+
+        <!-- PESTAÑA 4: CHECKLIST & ACTA DE ENTREGA FINAL -->
+        <div id="tab-checklist" class="blueprint-tab-pane" style="display:none;">
+          
+          <div style="border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h3 style="margin:0; font-size:1rem; font-weight:900; color:#FFFFFF;">
+                Checklist de Cierre y Acta de Entrega Final (Fase 6)
+              </h3>
+              <span style="font-size:0.74rem; color:var(--text-muted);">
+                Protocolo formal de aseguramiento de calidad pre-lanzamiento y firma de aceptación
+              </span>
+            </div>
+            <button type="button" onclick="printHandoverAct()" class="btn-primary" style="font-size:0.74rem; padding:6px 14px;">
+              🖨️ Imprimir Acta de Entrega
+            </button>
+          </div>
+
+          <div style="background:rgba(14,20,32,0.8); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:18px; margin-bottom:18px; font-size:0.76rem;">
+            
+            <label style="display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:#00F2FE; width:18px; height:18px; margin-top:2px;" />
+              <div>
+                <strong style="color:#FFFFFF;">1. Seguridad de Código &amp; Auditoría de Dependencias:</strong>
+                <p style="margin:2px 0 0 0; color:var(--text-muted);">Repositorio GitHub en modo Privado, .gitignore verificado y escaneo Snyk sin vulnerabilidades críticas.</p>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:#00F2FE; width:18px; height:18px; margin-top:2px;" />
+              <div>
+                <strong style="color:#FFFFFF;">2. Auditoría Google Lighthouse (>90 Puntos):</strong>
+                <p style="margin:2px 0 0 0; color:var(--text-muted);">Puntuaciones superiores a 90 puntos en Rendimiento, Accesibilidad, Mejores Prácticas y SEO verificado.</p>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:#00F2FE; width:18px; height:18px; margin-top:2px;" />
+              <div>
+                <strong style="color:#FFFFFF;">3. Validación Transaccional &amp; Idempotencia:</strong>
+                <p style="margin:2px 0 0 0; color:var(--text-muted);">Pruebas E2E completas en Stripe Test Mode con cambio validado a llaves de producción (pk_live_ / sk_live_).</p>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:#00F2FE; width:18px; height:18px; margin-top:2px;" />
+              <div>
+                <strong style="color:#FFFFFF;">4. Control Financiero de IA &amp; Rate Limiting:</strong>
+                <p style="margin:2px 0 0 0; color:var(--text-muted);">Rate Limiting Upstash Redis activo y Hard Limit mensual de saldo configurado en la consola del proveedor.</p>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:#00F2FE; width:18px; height:18px; margin-top:2px;" />
+              <div>
+                <strong style="color:#FFFFFF;">5. Continuidad Operativa &amp; Backups:</strong>
+                <p style="margin:2px 0 0 0; color:var(--text-muted);">Primer ciclo de respaldos automáticos de base de datos exitoso y telemetría de caídas activa con Sentry/Uptime.</p>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:#00F2FE; width:18px; height:18px; margin-top:2px;" />
+              <div>
+                <strong style="color:#FFFFFF;">6. Traspaso de Cuentas &amp; Entrega Documental:</strong>
+                <p style="margin:2px 0 0 0; color:var(--text-muted);">Transferencia de accesos maestros, diccionario .env.example y manual de operación entregados al cliente.</p>
+              </div>
+            </label>
+
+          </div>
+
+          <!-- ACTA PREVIEW -->
+          <div id="printable-handover-act" style="background:#FFFFFF; color:#1A202C; border-radius:10px; padding:24px; font-family:'Inter', sans-serif; font-size:9.5pt; line-height:1.5;">
+            <div style="border-bottom:2px solid #0F172A; padding-bottom:8px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="font-size:12pt; color:#0F172A;">TSOLUTIONS IPIDD</strong><br>
+                <span style="font-size:8pt; color:#FF6B00; font-weight:bold;">ACTA FORMAL DE ENTREGA Y ACEPTACIÓN DE SOFTWARE</span>
+              </div>
+              <div style="font-size:8pt; text-align:right; color:#718096;">
+                Folio: ACTA-TS-2026-092<br>
+                Fecha: 15 de Octubre de 2026
+              </div>
+            </div>
+            <p style="margin:0 0 10px 0;">
+              Por medio del presente documento, se hace constar la entrega a entera satisfacción del proyecto de desarrollo de software e infraestructura digital correspondiente a las 6 Fases de producción bajo la metodología de TSolutions IPIDD.
+            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:30px; text-align:center;">
+              <div style="border-top:1px solid #718096; padding-top:6px;">
+                <strong>TSOLUTIONS IPIDD</strong><br>
+                <small style="color:#718096;">Dirección de Tecnología &amp; Confiabilidad</small>
+              </div>
+              <div style="border-top:1px solid #718096; padding-top:6px;">
+                <strong id="act-client-name">Cliente / Representante Acreditado</strong><br>
+                <small style="color:#718096;">Firma de Conformidad y Recepción</small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
 </body>
         </html>
       `);
@@ -13021,7 +13571,379 @@ Fase 6: Cierre &amp; Sesión Andragógica                                    [==
     }
 
 
+    
+    // =========================================================================
+    // MATRIZ DE COMPLEJIDAD Y COTIZADOR DINÁMICO DE 6 FASES (FASE 3)
+    // =========================================================================
+    window.blueprintModulesCatalog = [
+      { id: 'm_host_static', cat: '1. INFRAESTRUCTURA', name: 'Hosting Estático / Landing Page', complexity: 'Baja', active: true, hours: 4, opexUsd: 0, notes: 'Vercel Hobby / Cloudflare Pages' },
+      { id: 'm_host_pro', cat: '1. INFRAESTRUCTURA', name: 'Hosting Frontend Pro / SSR', complexity: 'Media', active: false, hours: 6, opexUsd: 20, notes: 'Vercel Pro ($20/mes)' },
+      { id: 'm_backend_srv', cat: '1. INFRAESTRUCTURA', name: 'Servidor Backend PHP / Node / Python', complexity: 'Media', active: true, hours: 10, opexUsd: 25, notes: 'Render Standard ($25/mes) / Cloud Run' },
+      { id: 'm_database_sql', cat: '1. INFRAESTRUCTURA', name: 'Base de Datos SQL/NoSQL + Backups', complexity: 'Media', active: true, hours: 8, opexUsd: 25, notes: 'Neon PostgreSQL / Supabase + Snapshots' },
+      { id: 'm_object_storage', cat: '1. INFRAESTRUCTURA', name: 'Almacenamiento (Object Storage)', complexity: 'Baja', active: true, hours: 5, opexUsd: 5, notes: 'Cloudflare R2 / AWS S3' },
+      { id: 'm_headless_cms', cat: '1. INFRAESTRUCTURA', name: 'Headless CMS (Autogestión)', complexity: 'Media', active: false, hours: 14, opexUsd: 15, notes: 'Payload / Sanity / Strapi' },
+      { id: 'm_auth_rbac', cat: '2. SERVICIOS Y SEG.', name: 'Autenticación y Roles (Auth & RBAC)', complexity: 'Media', active: true, hours: 12, opexUsd: 0, notes: 'Clerk / Supabase Auth (2FA)' },
+      { id: 'm_stripe_webhooks', cat: '2. SERVICIOS Y SEG.', name: 'Pasarela Stripe + Webhooks Idempotentes', complexity: 'Alta', active: true, hours: 20, opexUsd: 0, notes: 'Stripe Checkout/Billing (Firma criptográfica)' },
+      { id: 'm_ai_ratelimit', cat: '2. SERVICIOS Y SEG.', name: 'Integración IA + Rate Limiting Financiero', complexity: 'Alta', active: true, hours: 24, opexUsd: 30, notes: 'Gemini / OpenAI (Hard Limit) + Upstash Redis' },
+      { id: 'm_queues_cron', cat: '2. SERVICIOS Y SEG.', name: 'Colas Asíncronas (Queues / Cron Jobs)', complexity: 'Alta', active: false, hours: 16, opexUsd: 10, notes: 'BullMQ / Inngest / Trigger.dev' },
+      { id: 'm_email_trans', cat: '2. SERVICIOS Y SEG.', name: 'Email Transaccional + DNS', complexity: 'Baja', active: true, hours: 5, opexUsd: 20, notes: 'Resend / SendGrid + SPF, DKIM, DMARC' },
+      { id: 'm_ui_layout', cat: '4. FRONTEND Y LEGAL', name: 'Maquetación UI/UX (Landing / Vistas)', complexity: 'Baja', active: true, hours: 16, opexUsd: 0, notes: 'Next.js / Astro / React + Tailwind CSS' },
+      { id: 'm_seo_schema', cat: '4. FRONTEND Y LEGAL', name: 'SEO Técnico, Schema y Analítica', complexity: 'Baja', active: true, hours: 6, opexUsd: 0, notes: 'Sitemap.xml, robots.txt, GA4 / PostHog' },
+      { id: 'm_legal_compliance', cat: '4. FRONTEND Y LEGAL', name: 'Cumplimiento Legal (Privacidad, T&C)', complexity: 'Baja', active: true, hours: 4, opexUsd: 0, notes: 'Aviso Privacidad, Términos y Cookies' },
+      { id: 'm_cicd_snyk', cat: '5. DEVSECOPS Y QA', name: 'CI/CD, Entornos (.env) y Escaneo Snyk', complexity: 'Media', active: true, hours: 8, opexUsd: 0, notes: 'GitHub Privado + Snyk + Lighthouse >90' },
+      { id: 'm_monitoring_sentry', cat: '6. MONITOREO', name: 'Monitoreo Errores (Sentry) y Uptime', complexity: 'Baja', active: true, hours: 4, opexUsd: 0, notes: 'Sentry + Uptime Robot / BetterStack' }
+    ];
+
+    function openBlueprintWorkflowModal() {
+      const modal = document.getElementById('blueprint-workflow-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+        renderBlueprintCalculator();
+        updateVariableConsumption();
+      }
+    }
+
+    function closeBlueprintWorkflowModal() {
+      const modal = document.getElementById('blueprint-workflow-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function switchBlueprintTab(tabId, btn) {
+      document.querySelectorAll('.blueprint-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.blueprint-tab-pane').forEach(p => p.style.display = 'none');
+      if (btn) btn.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+    }
+
+    function toggleBlueprintModule(id) {
+      const mod = window.blueprintModulesCatalog.find(m => m.id === id);
+      if (mod) {
+        mod.active = !mod.active;
+        renderBlueprintCalculator();
+      }
+    }
+
+    function renderBlueprintCalculator() {
+      const tbody = document.getElementById('blueprint-calc-tbody');
+      if (!tbody) return;
+
+      const currency = document.getElementById('calc-currency-select')?.value || 'USD';
+      const rateMultiplier = currency === 'MXN' ? 20 : 1;
+      const hourlyRate = 35 * rateMultiplier;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      tbody.innerHTML = window.blueprintModulesCatalog.map(item => {
+        if (item.active) {
+          totalHours += item.hours;
+          totalCapex += item.hours * hourlyRate;
+          totalOpex += item.opexUsd * rateMultiplier;
+        }
+
+        const capexItem = item.active ? (item.hours * hourlyRate) : 0;
+        const opexItem = item.active ? (item.opexUsd * rateMultiplier) : 0;
+
+        const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+        return `
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:${item.active ? 'rgba(0,242,254,0.02)' : 'transparent'};">
+            <td style="padding:8px 10px;">
+              <input type="checkbox" ${item.active ? 'checked' : ''} onchange="toggleBlueprintModule('${item.id}')" style="accent-color:#00F2FE;" />
+            </td>
+            <td style="padding:8px 10px; color:#E2E8F0;">
+              ${item.name}
+            </td>
+            <td style="padding:8px 10px; text-align:center;">
+              <span style="font-size:0.68rem; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">${item.complexity}</span>
+            </td>
+            <td style="padding:8px 10px; text-align:center; font-family:var(--font-mono);">
+              ${item.hours}h
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#00F2FE;">
+              ${capexItem.toLocaleString('es-MX')} ${sym}
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#FBBF24;">
+              ${opexItem.toLocaleString('es-MX')} ${sym}/m
+            </td>
+            <td style="padding:8px 10px; font-size:0.7rem; color:var(--text-muted);">
+              ${item.notes}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Cálculos agregados
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150 * rateMultiplier, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+      const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+      const capexEl = document.getElementById('disp-calc-capex');
+      if (capexEl) capexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' ' + sym;
+
+      const hoursEl = document.getElementById('disp-calc-hours');
+      if (hoursEl) hoursEl.textContent = totalHours + ' horas (' + days + ' días hábiles)';
+
+      const opexEl = document.getElementById('disp-calc-opex');
+      if (opexEl) opexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const retEl = document.getElementById('disp-calc-retainer');
+      if (retEl) retEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const feeEl = document.getElementById('disp-calc-fee');
+      if (feeEl) feeEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' ' + sym;
+    }
+
+    function updateVariableConsumption() {
+      const volInput = document.getElementById('calc-stripe-volume');
+      const dispStripe = document.getElementById('disp-calc-stripe-fee');
+      if (volInput && dispStripe) {
+        const vol = parseFloat(volInput.value) || 0;
+        const fee = (vol * 0.036) + (100 * 0.15); // aprox 100 transacciones
+        dispStripe.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + fee.toFixed(2) + ' USD';
+      }
+    }
+
+    function copyEnvExample() {
+      const code = document.getElementById('code-env-example')?.innerText;
+      if (code) {
+        navigator.clipboard.writeText(code);
+        alert('✓ Diccionario .env.example copiado al portapapeles.');
+      }
+    }
+
+    function printHandoverAct() {
+      const activeWs = getKnownWorkspaces().find(w => w.id === activeWorkspaceId) || { client_name: 'Gabriel Ayala' };
+      const clientNameEl = document.getElementById('act-client-name');
+      if (clientNameEl) clientNameEl.textContent = activeWs.client_name || 'Cliente Sponsor';
+
+      const printContents = document.getElementById('printable-handover-act').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html>
+          <head>
+            <title>Acta Formal de Entrega y Aceptación - TSolutions IPIDD</title>
+            <style>
+              body { font-family: 'Inter', sans-serif; font-size: 11pt; line-height: 1.6; color: #1A202C; padding: 30mm 20mm; }
+              strong { color: #0F172A; }
+            </style>
+          </head>
+          <body>
+            ${printContents}
+          </body>
+        </html>
+      `);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); win.close(); }, 600);
+    }
+
+
     window.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
       initNoraWorkflow();
       initLayeredWorkspaceBuilder();
       initAuthSession();
