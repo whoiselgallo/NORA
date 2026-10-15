@@ -9639,6 +9639,9 @@ Process completed with exit code 1.</textarea>
         <button type="button" class="blueprint-tab-btn" onclick="switchBlueprintTab('tab-checklist', this)">
           ✅ 4. Checklist &amp; Acta de Entrega
         </button>
+          <button type="button" class="blueprint-tab-btn" onclick="switchBlueprintTab('tab-onboarding-recalibrator', this)">
+            ⚡ 5. Cuestionario &amp; Recalibración
+          </button>
       </div>
 
       <!-- BODY: PANELES -->
@@ -10004,6 +10007,144 @@ SENTRY_DSN=https://sampleKey@o123456.ingest.sentry.io/78910</pre>
           </div>
 
         </div>
+
+          <!-- PESTAÑA 5: CUESTIONARIO & RECALIBRACIÓN DINÁMICA -->
+          <div id="tab-onboarding-recalibrator" class="blueprint-tab-pane" style="display:none;">
+            <div style="background: rgba(14, 20, 32, 0.7); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 14px; padding: 22px; margin-bottom: 20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom: 18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px;">
+                <div>
+                  <h3 style="margin:0; font-size:1.1rem; font-weight:900; color:#FFFFFF; display:flex; align-items:center; gap:8px;">
+                    <span style="color:#00F2FE;">⚡</span> Recalibrador Dinámico de Arquitectura &amp; Onboarding
+                  </h3>
+                  <span style="font-size:0.75rem; color:var(--text-muted);">
+                    Simula y ajusta las 6 decisiones clave de arquitectura para recalcular en tiempo real el CapEx, OpEx, Póliza Retainer y los 16 módulos del Blueprint.
+                  </span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                  <button type="button" class="btn-primary" onclick="openNexusOnboardingModal(); closeBlueprintWorkflowModal();" style="padding: 7px 15px; font-size: 0.76rem; border-radius: 8px;">
+                    🚀 Abrir Wizard Paso a Paso
+                  </button>
+                  <button type="button" class="btn-cancel" onclick="resetBlueprintRecalibration()" style="padding: 7px 15px; font-size: 0.76rem; border-radius: 8px;">
+                    ↺ Restaurar Defaults
+                  </button>
+                </div>
+              </div>
+
+              <!-- GRID DE PREGUNTAS CONDICIONALES -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                
+                <!-- P1 -->
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:0.72rem; font-weight:800; color:#00F2FE; letter-spacing:0.05em;">PASO 1</span>
+                    <span id="bp-badge-p1" style="font-size:0.68rem; background:rgba(0,242,254,0.15); color:#00F2FE; padding:2px 8px; border-radius:4px;">Full-Stack IA</span>
+                  </div>
+                  <label style="font-size:0.8rem; font-weight:700; color:#FFFFFF; display:block; margin-bottom:8px;">Naturaleza &amp; Tráfico</label>
+                  <select id="bp-recalc-p1" onchange="syncRecalibrationFromTab()" style="width:100%; background:#0B101B; color:#FFFFFF; border:1px solid rgba(255,255,255,0.15); padding:8px 10px; border-radius:6px; font-size:0.8rem;">
+                    <option value="landing">A: Landing Page Estática (&lt;10k visitas)</option>
+                    <option value="dynamic">B: Sitio Web Dinámico / CMS (&gt;10k visitas)</option>
+                    <option value="fullstack_ai" selected>C: Plataforma Serverless + IA (&gt;100k req)</option>
+                  </select>
+                </div>
+
+                <!-- P2 -->
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:0.72rem; font-weight:800; color:#00F2FE; letter-spacing:0.05em;">PASO 2</span>
+                    <span id="bp-badge-p2" style="font-size:0.68rem; background:rgba(0,242,254,0.15); color:#00F2FE; padding:2px 8px; border-radius:4px;">Neon DB + R2</span>
+                  </div>
+                  <label style="font-size:0.8rem; font-weight:700; color:#FFFFFF; display:block; margin-bottom:8px;">Persistencia &amp; Archivos</label>
+                  <select id="bp-recalc-p2" onchange="syncRecalibrationFromTab()" style="width:100%; background:#0B101B; color:#FFFFFF; border:1px solid rgba(255,255,255,0.15); padding:8px 10px; border-radius:6px; font-size:0.8rem;">
+                    <option value="none">Sin base de datos (Estático)</option>
+                    <option value="neon_db">Postgres Serverless (Neon DB)</option>
+                    <option value="neon_r2" selected>Postgres Serverless + Object Storage (R2/S3)</option>
+                  </select>
+                </div>
+
+                <!-- P3 -->
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:0.72rem; font-weight:800; color:#00F2FE; letter-spacing:0.05em;">PASO 3</span>
+                    <span id="bp-badge-p3" style="font-size:0.68rem; background:rgba(0,242,254,0.15); color:#00F2FE; padding:2px 8px; border-radius:4px;">RBAC + 2FA</span>
+                  </div>
+                  <label style="font-size:0.8rem; font-weight:700; color:#FFFFFF; display:block; margin-bottom:8px;">Identidad &amp; Roles</label>
+                  <select id="bp-recalc-p3" onchange="syncRecalibrationFromTab()" style="width:100%; background:#0B101B; color:#FFFFFF; border:1px solid rgba(255,255,255,0.15); padding:8px 10px; border-radius:6px; font-size:0.8rem;">
+                    <option value="public">Público (Sin Login)</option>
+                    <option value="auth_basic">Autenticación Simple (Email/Google)</option>
+                    <option value="auth_rbac_2fa" selected>Multi-rol RBAC + 2FA (Clerk / Supabase)</option>
+                  </select>
+                </div>
+
+                <!-- P4 -->
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:0.72rem; font-weight:800; color:#00F2FE; letter-spacing:0.05em;">PASO 4</span>
+                    <span id="bp-badge-p4" style="font-size:0.68rem; background:rgba(0,242,254,0.15); color:#00F2FE; padding:2px 8px; border-radius:4px;">Stripe Webhooks</span>
+                  </div>
+                  <label style="font-size:0.8rem; font-weight:700; color:#FFFFFF; display:block; margin-bottom:8px;">Pasarela de Pagos</label>
+                  <select id="bp-recalc-p4" onchange="syncRecalibrationFromTab()" style="width:100%; background:#0B101B; color:#FFFFFF; border:1px solid rgba(255,255,255,0.15); padding:8px 10px; border-radius:6px; font-size:0.8rem;">
+                    <option value="no">Sin cobros en línea</option>
+                    <option value="stripe_checkout">Stripe Checkout Simple</option>
+                    <option value="stripe_billing" selected>Stripe Billing + Webhooks Idempotentes</option>
+                  </select>
+                </div>
+
+                <!-- P5 -->
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:0.72rem; font-weight:800; color:#00F2FE; letter-spacing:0.05em;">PASO 5</span>
+                    <span id="bp-badge-p5" style="font-size:0.68rem; background:rgba(0,242,254,0.15); color:#00F2FE; padding:2px 8px; border-radius:4px;">Rate Limit IA</span>
+                  </div>
+                  <label style="font-size:0.8rem; font-weight:700; color:#FFFFFF; display:block; margin-bottom:8px;">Inteligencia Artificial</label>
+                  <select id="bp-recalc-p5" onchange="syncRecalibrationFromTab()" style="width:100%; background:#0B101B; color:#FFFFFF; border:1px solid rgba(255,255,255,0.15); padding:8px 10px; border-radius:6px; font-size:0.8rem;">
+                    <option value="no">Sin componentes de IA</option>
+                    <option value="ai_assist">Asistente Conversacional Básico</option>
+                    <option value="ai_agentic" selected>Arquitectura Agéntica + BullMQ + Redis ($25 Hard Limit)</option>
+                  </select>
+                </div>
+
+                <!-- P6 -->
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:0.72rem; font-weight:800; color:#00F2FE; letter-spacing:0.05em;">PASO 6</span>
+                    <span id="bp-badge-p6" style="font-size:0.68rem; background:rgba(0,242,254,0.15); color:#00F2FE; padding:2px 8px; border-radius:4px;">Póliza Retainer</span>
+                  </div>
+                  <label style="font-size:0.8rem; font-weight:700; color:#FFFFFF; display:block; margin-bottom:8px;">Operación Post-Lanzamiento</label>
+                  <select id="bp-recalc-p6" onchange="syncRecalibrationFromTab()" style="width:100%; background:#0B101B; color:#FFFFFF; border:1px solid rgba(255,255,255,0.15); padding:8px 10px; border-radius:6px; font-size:0.8rem;">
+                    <option value="handover_total">Modalidad A: Entrega Total (0 Retainer)</option>
+                    <option value="retainer_pro" selected>Modalidad B: Póliza Preventiva (10% CapEx mensual)</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <!-- LIVE IMPACT SUMMARY BAR -->
+              <div style="margin-top:18px; padding:16px 20px; border-radius:10px; background:linear-gradient(90deg, rgba(0,242,254,0.08) 0%, rgba(14,20,32,0.95) 100%); border:1px solid rgba(0,242,254,0.3); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+                <div>
+                  <span style="font-size:0.85rem; font-weight:800; color:#FFFFFF; display:flex; align-items:center; gap:8px;">
+                    <span style="color:#22C55E;">✔</span> Recalibración Aplicada al Cotizador y Blueprint
+                  </span>
+                  <div style="font-size:0.74rem; color:var(--text-muted); margin-top:2px;">
+                    CapEx Proyectado: <strong id="bp-recalc-preview-capex" style="color:#00F2FE;">$0 USD</strong> &nbsp;|&nbsp; 
+                    OpEx Mensual: <strong id="bp-recalc-preview-opex" style="color:#F59E0B;">$0 USD</strong> &nbsp;|&nbsp; 
+                    Cuota Plataforma (5%): <strong id="bp-recalc-preview-fee" style="color:#10B981;">$0 USD</strong> &nbsp;|&nbsp; 
+                    Póliza Retainer (10%): <strong id="bp-recalc-preview-retainer" style="color:#A78BFA;">$0 USD</strong>
+                  </div>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                  <button type="button" onclick="switchBlueprintTab('tab-calculator', document.querySelectorAll('.blueprint-tab-btn')[1])" style="background:#00F2FE; color:#04070E; font-weight:800; font-size:0.76rem; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;">
+                    Ver Desglose en Cotizador →
+                  </button>
+                  <button type="button" onclick="switchBlueprintTab('tab-blueprint', document.querySelectorAll('.blueprint-tab-btn')[2])" style="background:rgba(255,255,255,0.08); color:#FFFFFF; font-weight:800; font-size:0.76rem; border:1px solid rgba(255,255,255,0.15); padding:8px 16px; border-radius:8px; cursor:pointer;">
+                    Ver Stack &amp; .env →
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
 
       </div>
 
@@ -14059,6 +14200,7 @@ Fase 6: Cierre &amp; Sesión Andragógica                                    [==
     ];
 
     function openBlueprintWorkflowModal() {
+      setTimeout(syncRecalibrationFromTab, 50);
       const modal = document.getElementById('blueprint-workflow-modal');
       if (modal) {
         modal.style.display = 'flex';
@@ -14072,6 +14214,3605 @@ Fase 6: Cierre &amp; Sesión Andragógica                                    [==
       if (modal) modal.style.display = 'none';
     }
 
+    
+    // Sincronización y Recalibración Dinámica desde la 5ta Pestaña del Blueprint Modal
+    function syncRecalibrationFromTab() {
+      const p1 = document.getElementById('bp-recalc-p1')?.value || 'fullstack_ai';
+      const p2 = document.getElementById('bp-recalc-p2')?.value || 'neon_r2';
+      const p3 = document.getElementById('bp-recalc-p3')?.value || 'auth_rbac_2fa';
+      const p4 = document.getElementById('bp-recalc-p4')?.value || 'stripe_billing';
+      const p5 = document.getElementById('bp-recalc-p5')?.value || 'ai_agentic';
+      const p6 = document.getElementById('bp-recalc-p6')?.value || 'retainer_pro';
+
+      // Actualizar badges visuales
+      const b1 = document.getElementById('bp-badge-p1'); if (b1) b1.textContent = p1 === 'landing' ? 'Landing Estática' : (p1 === 'dynamic' ? 'CMS Dinámico' : 'Full-Stack IA');
+      const b2 = document.getElementById('bp-badge-p2'); if (b2) b2.textContent = p2 === 'none' ? 'Estático' : (p2 === 'neon_db' ? 'Neon DB' : 'Neon DB + R2');
+      const b3 = document.getElementById('bp-badge-p3'); if (b3) b3.textContent = p3 === 'public' ? 'Público' : (p3 === 'auth_basic' ? 'Auth Simple' : 'RBAC + 2FA');
+      const b4 = document.getElementById('bp-badge-p4'); if (b4) b4.textContent = p4 === 'no' ? 'Sin Pagos' : (p4 === 'stripe_checkout' ? 'Stripe Checkout' : 'Stripe Webhooks');
+      const b5 = document.getElementById('bp-badge-p5'); if (b5) b5.textContent = p5 === 'no' ? 'Sin IA' : (p5 === 'ai_assist' ? 'Asistente IA' : 'Rate Limit IA');
+      const b6 = document.getElementById('bp-badge-p6'); if (b6) b6.textContent = p6 === 'handover_total' ? 'Entrega Total' : 'Póliza Retainer';
+
+      // Sincronizar catálogo de módulos de Blueprint
+      if (window.blueprintModulesCatalog) {
+        // Base de Datos & Storage
+        const modDb = window.blueprintModulesCatalog.find(m => m.id === 'm_db_neon');
+        if (modDb) modDb.active = (p2 === 'neon_db' || p2 === 'neon_r2');
+
+        const modStorage = window.blueprintModulesCatalog.find(m => m.id === 'm_storage_r2');
+        if (modStorage) modStorage.active = (p2 === 'neon_r2');
+
+        // Auth
+        const modAuth = window.blueprintModulesCatalog.find(m => m.id === 'm_auth_clerk');
+        if (modAuth) modAuth.active = (p3 !== 'public');
+
+        // Stripe
+        const modStripe = window.blueprintModulesCatalog.find(m => m.id === 'm_stripe_webhooks');
+        if (modStripe) modStripe.active = (p4 !== 'no');
+
+        // IA & Rate Limiting
+        const modAi = window.blueprintModulesCatalog.find(m => m.id === 'm_ai_ratelimit');
+        if (modAi) modAi.active = (p5 !== 'no');
+
+        // Colas asíncronas
+        const modQueues = window.blueprintModulesCatalog.find(m => m.id === 'm_queues_cron');
+        if (modQueues) modQueues.active = (p5 === 'ai_agentic');
+
+        // CMS / Dinámico
+        const modCms = window.blueprintModulesCatalog.find(m => m.id === 'm_cms_payload');
+        if (modCms) modCms.active = (p1 === 'dynamic' || p1 === 'fullstack_ai');
+
+        // Renderizar cotizador
+        if (typeof renderBlueprintCalculator === 'function') {
+          renderBlueprintCalculator();
+        }
+
+        // Calcular totales para la barra de resumen en vivo de la pestaña 5
+        let totalHours = 0;
+        let totalCapex = 0;
+        let totalOpex = 0;
+        window.blueprintModulesCatalog.forEach(m => {
+          if (m.active) {
+            totalHours += m.hours;
+            totalCapex += m.hours * 35;
+            totalOpex += m.opexUsd;
+          }
+        });
+        const platformFee = Math.round(totalCapex * 0.05);
+        const retainer = p6 === 'retainer_pro' ? Math.max(150, Math.round(totalCapex * 0.10)) : 0;
+
+        const cEl = document.getElementById('bp-recalc-preview-capex'); if (cEl) cEl.textContent = '
+      document.querySelectorAll('.blueprint-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.blueprint-tab-pane').forEach(p => p.style.display = 'none');
+      if (btn) btn.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+    }
+
+    function toggleBlueprintModule(id) {
+      const mod = window.blueprintModulesCatalog.find(m => m.id === id);
+      if (mod) {
+        mod.active = !mod.active;
+        renderBlueprintCalculator();
+      }
+    }
+
+    function renderBlueprintCalculator() {
+      const tbody = document.getElementById('blueprint-calc-tbody');
+      if (!tbody) return;
+
+      const currency = document.getElementById('calc-currency-select')?.value || 'USD';
+      const rateMultiplier = currency === 'MXN' ? 20 : 1;
+      const hourlyRate = 35 * rateMultiplier;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      tbody.innerHTML = window.blueprintModulesCatalog.map(item => {
+        if (item.active) {
+          totalHours += item.hours;
+          totalCapex += item.hours * hourlyRate;
+          totalOpex += item.opexUsd * rateMultiplier;
+        }
+
+        const capexItem = item.active ? (item.hours * hourlyRate) : 0;
+        const opexItem = item.active ? (item.opexUsd * rateMultiplier) : 0;
+
+        const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+        return `
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:${item.active ? 'rgba(0,242,254,0.02)' : 'transparent'};">
+            <td style="padding:8px 10px;">
+              <input type="checkbox" ${item.active ? 'checked' : ''} onchange="toggleBlueprintModule('${item.id}')" style="accent-color:#00F2FE;" />
+            </td>
+            <td style="padding:8px 10px; color:#E2E8F0;">
+              ${item.name}
+            </td>
+            <td style="padding:8px 10px; text-align:center;">
+              <span style="font-size:0.68rem; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">${item.complexity}</span>
+            </td>
+            <td style="padding:8px 10px; text-align:center; font-family:var(--font-mono);">
+              ${item.hours}h
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#00F2FE;">
+              ${capexItem.toLocaleString('es-MX')} ${sym}
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#FBBF24;">
+              ${opexItem.toLocaleString('es-MX')} ${sym}/m
+            </td>
+            <td style="padding:8px 10px; font-size:0.7rem; color:var(--text-muted);">
+              ${item.notes}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Cálculos agregados
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150 * rateMultiplier, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+      const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+      const capexEl = document.getElementById('disp-calc-capex');
+      if (capexEl) capexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' ' + sym;
+
+      const hoursEl = document.getElementById('disp-calc-hours');
+      if (hoursEl) hoursEl.textContent = totalHours + ' horas (' + days + ' días hábiles)';
+
+      const opexEl = document.getElementById('disp-calc-opex');
+      if (opexEl) opexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const retEl = document.getElementById('disp-calc-retainer');
+      if (retEl) retEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const feeEl = document.getElementById('disp-calc-fee');
+      if (feeEl) feeEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' ' + sym;
+    }
+
+    function updateVariableConsumption() {
+      const volInput = document.getElementById('calc-stripe-volume');
+      const dispStripe = document.getElementById('disp-calc-stripe-fee');
+      if (volInput && dispStripe) {
+        const vol = parseFloat(volInput.value) || 0;
+        const fee = (vol * 0.036) + (100 * 0.15); // aprox 100 transacciones
+        dispStripe.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + fee.toFixed(2) + ' USD';
+      }
+    }
+
+    function copyEnvExample() {
+      const code = document.getElementById('code-env-example')?.innerText;
+      if (code) {
+        navigator.clipboard.writeText(code);
+        alert('✓ Diccionario .env.example copiado al portapapeles.');
+      }
+    }
+
+    function printHandoverAct() {
+      const activeWs = getKnownWorkspaces().find(w => w.id === activeWorkspaceId) || { client_name: 'Gabriel Ayala' };
+      const clientNameEl = document.getElementById('act-client-name');
+      if (clientNameEl) clientNameEl.textContent = activeWs.client_name || 'Cliente Sponsor';
+
+      const printContents = document.getElementById('printable-handover-act').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html>
+          <head>
+            <title>Acta Formal de Entrega y Aceptación - TSolutions IPIDD</title>
+            <style>
+              body { font-family: 'Inter', sans-serif; font-size: 11pt; line-height: 1.6; color: #1A202C; padding: 30mm 20mm; }
+              strong { color: #0F172A; }
+            </style>
+          </head>
+          <body>
+            ${printContents}
+          </body>
+        </html>
+      `);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); win.close(); }, 600);
+    }
+
+
+    
+    // =========================================================================
+    // CONTROLADOR DEL ONBOARDING WIZARD DE 6 PASOS CON BRANCHING LOGIC
+    // =========================================================================
+    let currentOnboardingStep = 1;
+
+    window.project_onboarding_state = {
+      client_info: {
+        name: 'Gabriel Ayala',
+        company: 'MPS Ayala Ferretodo',
+        email: 'gabriel@ferreayala.mx',
+        domain: 'm.tsolutionsipidd.com'
+      },
+      step_1_architecture: {
+        project_type: 'fullstack_ssr',
+        expected_monthly_traffic: 'under_10k',
+        preferred_backend_language: 'node_ts'
+      },
+      step_2_data_and_content: {
+        needs_database: true,
+        needs_file_storage: true,
+        needs_headless_cms: false
+      },
+      step_3_identity: {
+        needs_authentication: true,
+        roles_required: ['admin', 'subscribed_client', 'guest'],
+        require_2fa: true
+      },
+      step_4_payments_stripe: {
+        enable_stripe: true,
+        payment_model: 'subscriptions_and_one_time',
+        estimated_monthly_volume_usd: 5000,
+        estimated_monthly_transactions: 100
+      },
+      step_5_ai_and_queues: {
+        enable_ai: true,
+        ai_provider: 'gemini',
+        estimated_monthly_ai_requests: 10000,
+        monthly_hard_limit_usd: 30,
+        needs_async_queues: false
+      },
+      step_6_handover_modality: {
+        management_mode: 'modality_b_retainer'
+      },
+      mandatory_standards: {
+        transactional_email_dns: true,
+        ui_ux_design: true,
+        technical_seo_analytics: true,
+        legal_compliance_pages: true,
+        devsecops_snyk_ci_cd: true,
+        sentry_uptime_monitoring: true
+      }
+    };
+
+    function jumpToOnboardingStep(stepNumber) {
+      if (stepNumber < 1 || stepNumber > 6) return;
+      currentOnboardingStep = stepNumber;
+
+      // Ocultar todos los panes
+      for (let i = 1; i <= 6; i++) {
+        const pane = document.getElementById('ob-pane-step-' + i);
+        const navBtn = document.getElementById('ob-nav-step-' + i);
+        if (pane) pane.style.display = (i === currentOnboardingStep) ? 'block' : 'none';
+        if (navBtn) {
+          if (i === currentOnboardingStep) {
+            navBtn.style.background = 'rgba(0,229,255,0.18)';
+            navBtn.style.borderColor = '#00E5FF';
+            navBtn.style.color = '#00E5FF';
+          } else {
+            navBtn.style.background = 'transparent';
+            navBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+            navBtn.style.color = '#94A3B8';
+          }
+        }
+      }
+
+      const counter = document.getElementById('ob-step-counter');
+      if (counter) counter.textContent = 'Paso ' + currentOnboardingStep + ' de 6';
+
+      const prevBtn = document.getElementById('ob-btn-prev');
+      const nextBtn = document.getElementById('ob-btn-next');
+      if (prevBtn) prevBtn.style.display = (currentOnboardingStep > 1) ? 'block' : 'none';
+      if (nextBtn) {
+        if (currentOnboardingStep === 6) {
+          nextBtn.textContent = '✓ Revisar & Confirmar';
+          nextBtn.style.background = '#10B981';
+          nextBtn.style.color = '#FFF';
+        } else {
+          nextBtn.textContent = 'Siguiente →';
+          nextBtn.style.background = '#00E5FF';
+          nextBtn.style.color = '#0A0D14';
+        }
+      }
+    }
+
+    function navigateOnboardingStep(direction) {
+      if (currentOnboardingStep === 6 && direction > 0) {
+        // En el paso 6, el botón siguiente ejecuta submit
+        submitNexusOnboarding();
+        return;
+      }
+      jumpToOnboardingStep(currentOnboardingStep + direction);
+    }
+
+    // MANEJO DE LÓGICA CONDICIONAL (BRANCHING LOGIC)
+    function handleOnboardingBranching() {
+      // 1.1 Objetivo del sitio
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+
+      // Actualizar estado
+      if (p1_1 === 'OPCION_A') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'static_jamstack';
+      } else if (p1_1 === 'OPCION_B') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'backend_php_api';
+      } else {
+        window.project_onboarding_state.step_1_architecture.project_type = 'fullstack_ssr';
+      }
+
+      // Si es Opción B o C, sugerir marcar Sí en base de datos
+      if (p1_1 === 'OPCION_B' || p1_1 === 'OPCION_C') {
+        const p2_1_yes = document.querySelector('input[name="ob_p2_1"][value="YES"]');
+        if (p2_1_yes && !p2_1_yes.checked) {
+          p2_1_yes.checked = true;
+        }
+      }
+
+      // 2. Persistencia y CMS
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+
+      window.project_onboarding_state.step_2_data_and_content.needs_database = (p2_1 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_file_storage = (p2_2 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_headless_cms = (p2_3 === 'YES');
+
+      // 3. Auth
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_3_identity.needs_authentication = (p3_1 === 'YES');
+
+      // 4. Pagos
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const boxP4_2 = document.getElementById('ob-box-p4-2');
+      if (boxP4_2) boxP4_2.style.display = (p4_1 !== 'NO') ? 'block' : 'none';
+      window.project_onboarding_state.step_4_payments_stripe.enable_stripe = (p4_1 !== 'NO');
+
+      // 5. IA y Colas
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const boxP5_sub = document.getElementById('ob-box-p5-sub');
+      if (boxP5_sub) boxP5_sub.style.display = (p5_1 === 'YES') ? 'block' : 'none';
+      window.project_onboarding_state.step_5_ai_and_queues.enable_ai = (p5_1 === 'YES');
+
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues = (p5_2 === 'YES');
+
+      // 6. Modalidad
+      const p6_1 = document.querySelector('input[name="ob_p6_1"]:checked')?.value || 'MODALITY_A';
+      window.project_onboarding_state.step_6_handover_modality.management_mode = p6_1.toLowerCase();
+
+      // SINCRONIZAR AUTOMÁTICAMENTE CON EL COTIZADOR Y BLUEPRINT
+      syncOnboardingToBlueprintModules();
+    }
+
+    // CONEXIÓN AUTOMÁTICA DEL CUESTIONARIO CON LA MATRIZ DE COMPLEJIDAD (FASE 3 Y 4)
+    function syncOnboardingToBlueprintModules() {
+      if (!window.blueprintModulesCatalog) return;
+
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+
+      // 1. Hosting (Fila 2, 3, 4)
+      const modStatic = window.blueprintModulesCatalog.find(m => m.id === 'm_host_static');
+      const modPro = window.blueprintModulesCatalog.find(m => m.id === 'm_host_pro');
+      const modBackend = window.blueprintModulesCatalog.find(m => m.id === 'm_backend_srv');
+
+      if (p1_1 === 'OPCION_A') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = false;
+      } else if (p1_1 === 'OPCION_B') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = true;
+      } else {
+        if (p1_2 === 'OVER_10K') {
+          if (modStatic) modStatic.active = false;
+          if (modPro) modPro.active = true;
+        } else {
+          if (modStatic) modStatic.active = true;
+          if (modPro) modPro.active = false;
+        }
+        if (modBackend) modBackend.active = true;
+      }
+
+      // 2. Base de datos (Fila 5)
+      const modDB = window.blueprintModulesCatalog.find(m => m.id === 'm_database_sql');
+      if (modDB) modDB.active = (p2_1 === 'YES');
+
+      // 3. Object Storage (Fila 6)
+      const modStorage = window.blueprintModulesCatalog.find(m => m.id === 'm_object_storage');
+      if (modStorage) modStorage.active = (p2_2 === 'YES');
+
+      // 4. Headless CMS (Fila 7)
+      const modCMS = window.blueprintModulesCatalog.find(m => m.id === 'm_headless_cms');
+      if (modCMS) modCMS.active = (p2_3 === 'YES');
+
+      // 5. Auth RBAC (Fila 8)
+      const modAuth = window.blueprintModulesCatalog.find(m => m.id === 'm_auth_rbac');
+      if (modAuth) modAuth.active = (p3_1 === 'YES');
+
+      // 6. Stripe (Fila 9)
+      const modStripe = window.blueprintModulesCatalog.find(m => m.id === 'm_stripe_webhooks');
+      if (modStripe) modStripe.active = (p4_1 !== 'NO');
+
+      // 7. IA + Rate Limit (Fila 10)
+      const modAI = window.blueprintModulesCatalog.find(m => m.id === 'm_ai_ratelimit');
+      if (modAI) modAI.active = (p5_1 === 'YES');
+
+      // 8. Colas Asíncronas (Fila 11)
+      const modQueues = window.blueprintModulesCatalog.find(m => m.id === 'm_queues_cron');
+      if (modQueues) modQueues.active = (p5_2 === 'YES');
+
+      // Estándares fijos obligatorios (Filas 12 a 17) siempre activos
+      ['m_email_trans', 'm_ui_layout', 'm_seo_schema', 'm_legal_compliance', 'm_cicd_snyk', 'm_monitoring_sentry'].forEach(fid => {
+        const fmod = window.blueprintModulesCatalog.find(m => m.id === fid);
+        if (fmod) fmod.active = true;
+      });
+
+      // Recalcular y actualizar UI del resumen del Onboarding
+      updateOnboardingArchitectureSummary();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+    }
+
+    function updateOnboardingArchitectureSummary() {
+      if (!window.blueprintModulesCatalog) return;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      window.blueprintModulesCatalog.forEach(m => {
+        if (m.active) {
+          totalHours += m.hours;
+          totalCapex += m.hours * 35; // USD
+          totalOpex += m.opexUsd; // USD
+        }
+      });
+
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+
+      const priceEl = document.getElementById('ob-summary-price');
+      if (priceEl) priceEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' USD';
+
+      const capexMxnEl = document.getElementById('ob-summary-capex-mxn');
+      if (capexMxnEl) capexMxnEl.textContent = '~
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + (totalCapex * 20).toLocaleString('es-MX') + ' MXN (CapEx)';
+
+      const opexEl = document.getElementById('ob-summary-opex');
+      if (opexEl) opexEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' USD/mes';
+
+      const retEl = document.getElementById('ob-summary-retainer');
+      if (retEl) retEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' USD/mes';
+
+      const feeEl = document.getElementById('ob-summary-platform-fee');
+      if (feeEl) feeEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' USD';
+
+      const daysEl = document.getElementById('ob-summary-days');
+      if (daysEl) daysEl.textContent = '~' + days + ' días hábiles (' + totalHours + ' hrs)';
+
+      // Stack sugerido badges
+      const stackContainer = document.getElementById('ob-summary-stack');
+      if (stackContainer) {
+        const stackItems = ['TypeScript', 'Vercel CDN', 'Snyk DevSecOps', 'Resend SPF/DKIM'];
+        if (window.project_onboarding_state.step_1_architecture.project_type !== 'static_jamstack') stackItems.push('Render Backend');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_database) stackItems.push('Neon Postgres Lakebase');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_file_storage) stackItems.push('Cloudflare R2');
+        if (window.project_onboarding_state.step_3_identity.needs_authentication) stackItems.push('Clerk Auth 2FA');
+        if (window.project_onboarding_state.step_4_payments_stripe.enable_stripe) stackItems.push('Stripe Webhooks');
+        if (window.project_onboarding_state.step_5_ai_and_queues.enable_ai) stackItems.push('Gemini AI + Upstash Redis');
+        if (window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues) stackItems.push('BullMQ Queues');
+
+        stackContainer.innerHTML = stackItems.map(s => `
+          <span style="font-family:monospace; font-size:0.68rem; background:rgba(0,229,255,0.12); color:#00E5FF; border:1px solid rgba(0,229,255,0.3); padding:2px 8px; border-radius:4px;">
+            ${s}
+          </span>
+        `).join('');
+      }
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+      handleOnboardingBranching();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString() + ' USD';
+        const oEl = document.getElementById('bp-recalc-preview-opex'); if (oEl) oEl.textContent = '
+      document.querySelectorAll('.blueprint-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.blueprint-tab-pane').forEach(p => p.style.display = 'none');
+      if (btn) btn.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+    }
+
+    function toggleBlueprintModule(id) {
+      const mod = window.blueprintModulesCatalog.find(m => m.id === id);
+      if (mod) {
+        mod.active = !mod.active;
+        renderBlueprintCalculator();
+      }
+    }
+
+    function renderBlueprintCalculator() {
+      const tbody = document.getElementById('blueprint-calc-tbody');
+      if (!tbody) return;
+
+      const currency = document.getElementById('calc-currency-select')?.value || 'USD';
+      const rateMultiplier = currency === 'MXN' ? 20 : 1;
+      const hourlyRate = 35 * rateMultiplier;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      tbody.innerHTML = window.blueprintModulesCatalog.map(item => {
+        if (item.active) {
+          totalHours += item.hours;
+          totalCapex += item.hours * hourlyRate;
+          totalOpex += item.opexUsd * rateMultiplier;
+        }
+
+        const capexItem = item.active ? (item.hours * hourlyRate) : 0;
+        const opexItem = item.active ? (item.opexUsd * rateMultiplier) : 0;
+
+        const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+        return `
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:${item.active ? 'rgba(0,242,254,0.02)' : 'transparent'};">
+            <td style="padding:8px 10px;">
+              <input type="checkbox" ${item.active ? 'checked' : ''} onchange="toggleBlueprintModule('${item.id}')" style="accent-color:#00F2FE;" />
+            </td>
+            <td style="padding:8px 10px; color:#E2E8F0;">
+              ${item.name}
+            </td>
+            <td style="padding:8px 10px; text-align:center;">
+              <span style="font-size:0.68rem; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">${item.complexity}</span>
+            </td>
+            <td style="padding:8px 10px; text-align:center; font-family:var(--font-mono);">
+              ${item.hours}h
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#00F2FE;">
+              ${capexItem.toLocaleString('es-MX')} ${sym}
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#FBBF24;">
+              ${opexItem.toLocaleString('es-MX')} ${sym}/m
+            </td>
+            <td style="padding:8px 10px; font-size:0.7rem; color:var(--text-muted);">
+              ${item.notes}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Cálculos agregados
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150 * rateMultiplier, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+      const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+      const capexEl = document.getElementById('disp-calc-capex');
+      if (capexEl) capexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' ' + sym;
+
+      const hoursEl = document.getElementById('disp-calc-hours');
+      if (hoursEl) hoursEl.textContent = totalHours + ' horas (' + days + ' días hábiles)';
+
+      const opexEl = document.getElementById('disp-calc-opex');
+      if (opexEl) opexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const retEl = document.getElementById('disp-calc-retainer');
+      if (retEl) retEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const feeEl = document.getElementById('disp-calc-fee');
+      if (feeEl) feeEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' ' + sym;
+    }
+
+    function updateVariableConsumption() {
+      const volInput = document.getElementById('calc-stripe-volume');
+      const dispStripe = document.getElementById('disp-calc-stripe-fee');
+      if (volInput && dispStripe) {
+        const vol = parseFloat(volInput.value) || 0;
+        const fee = (vol * 0.036) + (100 * 0.15); // aprox 100 transacciones
+        dispStripe.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + fee.toFixed(2) + ' USD';
+      }
+    }
+
+    function copyEnvExample() {
+      const code = document.getElementById('code-env-example')?.innerText;
+      if (code) {
+        navigator.clipboard.writeText(code);
+        alert('✓ Diccionario .env.example copiado al portapapeles.');
+      }
+    }
+
+    function printHandoverAct() {
+      const activeWs = getKnownWorkspaces().find(w => w.id === activeWorkspaceId) || { client_name: 'Gabriel Ayala' };
+      const clientNameEl = document.getElementById('act-client-name');
+      if (clientNameEl) clientNameEl.textContent = activeWs.client_name || 'Cliente Sponsor';
+
+      const printContents = document.getElementById('printable-handover-act').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html>
+          <head>
+            <title>Acta Formal de Entrega y Aceptación - TSolutions IPIDD</title>
+            <style>
+              body { font-family: 'Inter', sans-serif; font-size: 11pt; line-height: 1.6; color: #1A202C; padding: 30mm 20mm; }
+              strong { color: #0F172A; }
+            </style>
+          </head>
+          <body>
+            ${printContents}
+          </body>
+        </html>
+      `);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); win.close(); }, 600);
+    }
+
+
+    
+    // =========================================================================
+    // CONTROLADOR DEL ONBOARDING WIZARD DE 6 PASOS CON BRANCHING LOGIC
+    // =========================================================================
+    let currentOnboardingStep = 1;
+
+    window.project_onboarding_state = {
+      client_info: {
+        name: 'Gabriel Ayala',
+        company: 'MPS Ayala Ferretodo',
+        email: 'gabriel@ferreayala.mx',
+        domain: 'm.tsolutionsipidd.com'
+      },
+      step_1_architecture: {
+        project_type: 'fullstack_ssr',
+        expected_monthly_traffic: 'under_10k',
+        preferred_backend_language: 'node_ts'
+      },
+      step_2_data_and_content: {
+        needs_database: true,
+        needs_file_storage: true,
+        needs_headless_cms: false
+      },
+      step_3_identity: {
+        needs_authentication: true,
+        roles_required: ['admin', 'subscribed_client', 'guest'],
+        require_2fa: true
+      },
+      step_4_payments_stripe: {
+        enable_stripe: true,
+        payment_model: 'subscriptions_and_one_time',
+        estimated_monthly_volume_usd: 5000,
+        estimated_monthly_transactions: 100
+      },
+      step_5_ai_and_queues: {
+        enable_ai: true,
+        ai_provider: 'gemini',
+        estimated_monthly_ai_requests: 10000,
+        monthly_hard_limit_usd: 30,
+        needs_async_queues: false
+      },
+      step_6_handover_modality: {
+        management_mode: 'modality_b_retainer'
+      },
+      mandatory_standards: {
+        transactional_email_dns: true,
+        ui_ux_design: true,
+        technical_seo_analytics: true,
+        legal_compliance_pages: true,
+        devsecops_snyk_ci_cd: true,
+        sentry_uptime_monitoring: true
+      }
+    };
+
+    function jumpToOnboardingStep(stepNumber) {
+      if (stepNumber < 1 || stepNumber > 6) return;
+      currentOnboardingStep = stepNumber;
+
+      // Ocultar todos los panes
+      for (let i = 1; i <= 6; i++) {
+        const pane = document.getElementById('ob-pane-step-' + i);
+        const navBtn = document.getElementById('ob-nav-step-' + i);
+        if (pane) pane.style.display = (i === currentOnboardingStep) ? 'block' : 'none';
+        if (navBtn) {
+          if (i === currentOnboardingStep) {
+            navBtn.style.background = 'rgba(0,229,255,0.18)';
+            navBtn.style.borderColor = '#00E5FF';
+            navBtn.style.color = '#00E5FF';
+          } else {
+            navBtn.style.background = 'transparent';
+            navBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+            navBtn.style.color = '#94A3B8';
+          }
+        }
+      }
+
+      const counter = document.getElementById('ob-step-counter');
+      if (counter) counter.textContent = 'Paso ' + currentOnboardingStep + ' de 6';
+
+      const prevBtn = document.getElementById('ob-btn-prev');
+      const nextBtn = document.getElementById('ob-btn-next');
+      if (prevBtn) prevBtn.style.display = (currentOnboardingStep > 1) ? 'block' : 'none';
+      if (nextBtn) {
+        if (currentOnboardingStep === 6) {
+          nextBtn.textContent = '✓ Revisar & Confirmar';
+          nextBtn.style.background = '#10B981';
+          nextBtn.style.color = '#FFF';
+        } else {
+          nextBtn.textContent = 'Siguiente →';
+          nextBtn.style.background = '#00E5FF';
+          nextBtn.style.color = '#0A0D14';
+        }
+      }
+    }
+
+    function navigateOnboardingStep(direction) {
+      if (currentOnboardingStep === 6 && direction > 0) {
+        // En el paso 6, el botón siguiente ejecuta submit
+        submitNexusOnboarding();
+        return;
+      }
+      jumpToOnboardingStep(currentOnboardingStep + direction);
+    }
+
+    // MANEJO DE LÓGICA CONDICIONAL (BRANCHING LOGIC)
+    function handleOnboardingBranching() {
+      // 1.1 Objetivo del sitio
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+
+      // Actualizar estado
+      if (p1_1 === 'OPCION_A') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'static_jamstack';
+      } else if (p1_1 === 'OPCION_B') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'backend_php_api';
+      } else {
+        window.project_onboarding_state.step_1_architecture.project_type = 'fullstack_ssr';
+      }
+
+      // Si es Opción B o C, sugerir marcar Sí en base de datos
+      if (p1_1 === 'OPCION_B' || p1_1 === 'OPCION_C') {
+        const p2_1_yes = document.querySelector('input[name="ob_p2_1"][value="YES"]');
+        if (p2_1_yes && !p2_1_yes.checked) {
+          p2_1_yes.checked = true;
+        }
+      }
+
+      // 2. Persistencia y CMS
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+
+      window.project_onboarding_state.step_2_data_and_content.needs_database = (p2_1 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_file_storage = (p2_2 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_headless_cms = (p2_3 === 'YES');
+
+      // 3. Auth
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_3_identity.needs_authentication = (p3_1 === 'YES');
+
+      // 4. Pagos
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const boxP4_2 = document.getElementById('ob-box-p4-2');
+      if (boxP4_2) boxP4_2.style.display = (p4_1 !== 'NO') ? 'block' : 'none';
+      window.project_onboarding_state.step_4_payments_stripe.enable_stripe = (p4_1 !== 'NO');
+
+      // 5. IA y Colas
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const boxP5_sub = document.getElementById('ob-box-p5-sub');
+      if (boxP5_sub) boxP5_sub.style.display = (p5_1 === 'YES') ? 'block' : 'none';
+      window.project_onboarding_state.step_5_ai_and_queues.enable_ai = (p5_1 === 'YES');
+
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues = (p5_2 === 'YES');
+
+      // 6. Modalidad
+      const p6_1 = document.querySelector('input[name="ob_p6_1"]:checked')?.value || 'MODALITY_A';
+      window.project_onboarding_state.step_6_handover_modality.management_mode = p6_1.toLowerCase();
+
+      // SINCRONIZAR AUTOMÁTICAMENTE CON EL COTIZADOR Y BLUEPRINT
+      syncOnboardingToBlueprintModules();
+    }
+
+    // CONEXIÓN AUTOMÁTICA DEL CUESTIONARIO CON LA MATRIZ DE COMPLEJIDAD (FASE 3 Y 4)
+    function syncOnboardingToBlueprintModules() {
+      if (!window.blueprintModulesCatalog) return;
+
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+
+      // 1. Hosting (Fila 2, 3, 4)
+      const modStatic = window.blueprintModulesCatalog.find(m => m.id === 'm_host_static');
+      const modPro = window.blueprintModulesCatalog.find(m => m.id === 'm_host_pro');
+      const modBackend = window.blueprintModulesCatalog.find(m => m.id === 'm_backend_srv');
+
+      if (p1_1 === 'OPCION_A') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = false;
+      } else if (p1_1 === 'OPCION_B') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = true;
+      } else {
+        if (p1_2 === 'OVER_10K') {
+          if (modStatic) modStatic.active = false;
+          if (modPro) modPro.active = true;
+        } else {
+          if (modStatic) modStatic.active = true;
+          if (modPro) modPro.active = false;
+        }
+        if (modBackend) modBackend.active = true;
+      }
+
+      // 2. Base de datos (Fila 5)
+      const modDB = window.blueprintModulesCatalog.find(m => m.id === 'm_database_sql');
+      if (modDB) modDB.active = (p2_1 === 'YES');
+
+      // 3. Object Storage (Fila 6)
+      const modStorage = window.blueprintModulesCatalog.find(m => m.id === 'm_object_storage');
+      if (modStorage) modStorage.active = (p2_2 === 'YES');
+
+      // 4. Headless CMS (Fila 7)
+      const modCMS = window.blueprintModulesCatalog.find(m => m.id === 'm_headless_cms');
+      if (modCMS) modCMS.active = (p2_3 === 'YES');
+
+      // 5. Auth RBAC (Fila 8)
+      const modAuth = window.blueprintModulesCatalog.find(m => m.id === 'm_auth_rbac');
+      if (modAuth) modAuth.active = (p3_1 === 'YES');
+
+      // 6. Stripe (Fila 9)
+      const modStripe = window.blueprintModulesCatalog.find(m => m.id === 'm_stripe_webhooks');
+      if (modStripe) modStripe.active = (p4_1 !== 'NO');
+
+      // 7. IA + Rate Limit (Fila 10)
+      const modAI = window.blueprintModulesCatalog.find(m => m.id === 'm_ai_ratelimit');
+      if (modAI) modAI.active = (p5_1 === 'YES');
+
+      // 8. Colas Asíncronas (Fila 11)
+      const modQueues = window.blueprintModulesCatalog.find(m => m.id === 'm_queues_cron');
+      if (modQueues) modQueues.active = (p5_2 === 'YES');
+
+      // Estándares fijos obligatorios (Filas 12 a 17) siempre activos
+      ['m_email_trans', 'm_ui_layout', 'm_seo_schema', 'm_legal_compliance', 'm_cicd_snyk', 'm_monitoring_sentry'].forEach(fid => {
+        const fmod = window.blueprintModulesCatalog.find(m => m.id === fid);
+        if (fmod) fmod.active = true;
+      });
+
+      // Recalcular y actualizar UI del resumen del Onboarding
+      updateOnboardingArchitectureSummary();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+    }
+
+    function updateOnboardingArchitectureSummary() {
+      if (!window.blueprintModulesCatalog) return;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      window.blueprintModulesCatalog.forEach(m => {
+        if (m.active) {
+          totalHours += m.hours;
+          totalCapex += m.hours * 35; // USD
+          totalOpex += m.opexUsd; // USD
+        }
+      });
+
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+
+      const priceEl = document.getElementById('ob-summary-price');
+      if (priceEl) priceEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' USD';
+
+      const capexMxnEl = document.getElementById('ob-summary-capex-mxn');
+      if (capexMxnEl) capexMxnEl.textContent = '~
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + (totalCapex * 20).toLocaleString('es-MX') + ' MXN (CapEx)';
+
+      const opexEl = document.getElementById('ob-summary-opex');
+      if (opexEl) opexEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' USD/mes';
+
+      const retEl = document.getElementById('ob-summary-retainer');
+      if (retEl) retEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' USD/mes';
+
+      const feeEl = document.getElementById('ob-summary-platform-fee');
+      if (feeEl) feeEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' USD';
+
+      const daysEl = document.getElementById('ob-summary-days');
+      if (daysEl) daysEl.textContent = '~' + days + ' días hábiles (' + totalHours + ' hrs)';
+
+      // Stack sugerido badges
+      const stackContainer = document.getElementById('ob-summary-stack');
+      if (stackContainer) {
+        const stackItems = ['TypeScript', 'Vercel CDN', 'Snyk DevSecOps', 'Resend SPF/DKIM'];
+        if (window.project_onboarding_state.step_1_architecture.project_type !== 'static_jamstack') stackItems.push('Render Backend');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_database) stackItems.push('Neon Postgres Lakebase');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_file_storage) stackItems.push('Cloudflare R2');
+        if (window.project_onboarding_state.step_3_identity.needs_authentication) stackItems.push('Clerk Auth 2FA');
+        if (window.project_onboarding_state.step_4_payments_stripe.enable_stripe) stackItems.push('Stripe Webhooks');
+        if (window.project_onboarding_state.step_5_ai_and_queues.enable_ai) stackItems.push('Gemini AI + Upstash Redis');
+        if (window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues) stackItems.push('BullMQ Queues');
+
+        stackContainer.innerHTML = stackItems.map(s => `
+          <span style="font-family:monospace; font-size:0.68rem; background:rgba(0,229,255,0.12); color:#00E5FF; border:1px solid rgba(0,229,255,0.3); padding:2px 8px; border-radius:4px;">
+            ${s}
+          </span>
+        `).join('');
+      }
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+      handleOnboardingBranching();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString() + ' USD';
+        const fEl = document.getElementById('bp-recalc-preview-fee'); if (fEl) fEl.textContent = '
+      document.querySelectorAll('.blueprint-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.blueprint-tab-pane').forEach(p => p.style.display = 'none');
+      if (btn) btn.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+    }
+
+    function toggleBlueprintModule(id) {
+      const mod = window.blueprintModulesCatalog.find(m => m.id === id);
+      if (mod) {
+        mod.active = !mod.active;
+        renderBlueprintCalculator();
+      }
+    }
+
+    function renderBlueprintCalculator() {
+      const tbody = document.getElementById('blueprint-calc-tbody');
+      if (!tbody) return;
+
+      const currency = document.getElementById('calc-currency-select')?.value || 'USD';
+      const rateMultiplier = currency === 'MXN' ? 20 : 1;
+      const hourlyRate = 35 * rateMultiplier;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      tbody.innerHTML = window.blueprintModulesCatalog.map(item => {
+        if (item.active) {
+          totalHours += item.hours;
+          totalCapex += item.hours * hourlyRate;
+          totalOpex += item.opexUsd * rateMultiplier;
+        }
+
+        const capexItem = item.active ? (item.hours * hourlyRate) : 0;
+        const opexItem = item.active ? (item.opexUsd * rateMultiplier) : 0;
+
+        const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+        return `
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:${item.active ? 'rgba(0,242,254,0.02)' : 'transparent'};">
+            <td style="padding:8px 10px;">
+              <input type="checkbox" ${item.active ? 'checked' : ''} onchange="toggleBlueprintModule('${item.id}')" style="accent-color:#00F2FE;" />
+            </td>
+            <td style="padding:8px 10px; color:#E2E8F0;">
+              ${item.name}
+            </td>
+            <td style="padding:8px 10px; text-align:center;">
+              <span style="font-size:0.68rem; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">${item.complexity}</span>
+            </td>
+            <td style="padding:8px 10px; text-align:center; font-family:var(--font-mono);">
+              ${item.hours}h
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#00F2FE;">
+              ${capexItem.toLocaleString('es-MX')} ${sym}
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#FBBF24;">
+              ${opexItem.toLocaleString('es-MX')} ${sym}/m
+            </td>
+            <td style="padding:8px 10px; font-size:0.7rem; color:var(--text-muted);">
+              ${item.notes}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Cálculos agregados
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150 * rateMultiplier, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+      const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+      const capexEl = document.getElementById('disp-calc-capex');
+      if (capexEl) capexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' ' + sym;
+
+      const hoursEl = document.getElementById('disp-calc-hours');
+      if (hoursEl) hoursEl.textContent = totalHours + ' horas (' + days + ' días hábiles)';
+
+      const opexEl = document.getElementById('disp-calc-opex');
+      if (opexEl) opexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const retEl = document.getElementById('disp-calc-retainer');
+      if (retEl) retEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const feeEl = document.getElementById('disp-calc-fee');
+      if (feeEl) feeEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' ' + sym;
+    }
+
+    function updateVariableConsumption() {
+      const volInput = document.getElementById('calc-stripe-volume');
+      const dispStripe = document.getElementById('disp-calc-stripe-fee');
+      if (volInput && dispStripe) {
+        const vol = parseFloat(volInput.value) || 0;
+        const fee = (vol * 0.036) + (100 * 0.15); // aprox 100 transacciones
+        dispStripe.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + fee.toFixed(2) + ' USD';
+      }
+    }
+
+    function copyEnvExample() {
+      const code = document.getElementById('code-env-example')?.innerText;
+      if (code) {
+        navigator.clipboard.writeText(code);
+        alert('✓ Diccionario .env.example copiado al portapapeles.');
+      }
+    }
+
+    function printHandoverAct() {
+      const activeWs = getKnownWorkspaces().find(w => w.id === activeWorkspaceId) || { client_name: 'Gabriel Ayala' };
+      const clientNameEl = document.getElementById('act-client-name');
+      if (clientNameEl) clientNameEl.textContent = activeWs.client_name || 'Cliente Sponsor';
+
+      const printContents = document.getElementById('printable-handover-act').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html>
+          <head>
+            <title>Acta Formal de Entrega y Aceptación - TSolutions IPIDD</title>
+            <style>
+              body { font-family: 'Inter', sans-serif; font-size: 11pt; line-height: 1.6; color: #1A202C; padding: 30mm 20mm; }
+              strong { color: #0F172A; }
+            </style>
+          </head>
+          <body>
+            ${printContents}
+          </body>
+        </html>
+      `);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); win.close(); }, 600);
+    }
+
+
+    
+    // =========================================================================
+    // CONTROLADOR DEL ONBOARDING WIZARD DE 6 PASOS CON BRANCHING LOGIC
+    // =========================================================================
+    let currentOnboardingStep = 1;
+
+    window.project_onboarding_state = {
+      client_info: {
+        name: 'Gabriel Ayala',
+        company: 'MPS Ayala Ferretodo',
+        email: 'gabriel@ferreayala.mx',
+        domain: 'm.tsolutionsipidd.com'
+      },
+      step_1_architecture: {
+        project_type: 'fullstack_ssr',
+        expected_monthly_traffic: 'under_10k',
+        preferred_backend_language: 'node_ts'
+      },
+      step_2_data_and_content: {
+        needs_database: true,
+        needs_file_storage: true,
+        needs_headless_cms: false
+      },
+      step_3_identity: {
+        needs_authentication: true,
+        roles_required: ['admin', 'subscribed_client', 'guest'],
+        require_2fa: true
+      },
+      step_4_payments_stripe: {
+        enable_stripe: true,
+        payment_model: 'subscriptions_and_one_time',
+        estimated_monthly_volume_usd: 5000,
+        estimated_monthly_transactions: 100
+      },
+      step_5_ai_and_queues: {
+        enable_ai: true,
+        ai_provider: 'gemini',
+        estimated_monthly_ai_requests: 10000,
+        monthly_hard_limit_usd: 30,
+        needs_async_queues: false
+      },
+      step_6_handover_modality: {
+        management_mode: 'modality_b_retainer'
+      },
+      mandatory_standards: {
+        transactional_email_dns: true,
+        ui_ux_design: true,
+        technical_seo_analytics: true,
+        legal_compliance_pages: true,
+        devsecops_snyk_ci_cd: true,
+        sentry_uptime_monitoring: true
+      }
+    };
+
+    function jumpToOnboardingStep(stepNumber) {
+      if (stepNumber < 1 || stepNumber > 6) return;
+      currentOnboardingStep = stepNumber;
+
+      // Ocultar todos los panes
+      for (let i = 1; i <= 6; i++) {
+        const pane = document.getElementById('ob-pane-step-' + i);
+        const navBtn = document.getElementById('ob-nav-step-' + i);
+        if (pane) pane.style.display = (i === currentOnboardingStep) ? 'block' : 'none';
+        if (navBtn) {
+          if (i === currentOnboardingStep) {
+            navBtn.style.background = 'rgba(0,229,255,0.18)';
+            navBtn.style.borderColor = '#00E5FF';
+            navBtn.style.color = '#00E5FF';
+          } else {
+            navBtn.style.background = 'transparent';
+            navBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+            navBtn.style.color = '#94A3B8';
+          }
+        }
+      }
+
+      const counter = document.getElementById('ob-step-counter');
+      if (counter) counter.textContent = 'Paso ' + currentOnboardingStep + ' de 6';
+
+      const prevBtn = document.getElementById('ob-btn-prev');
+      const nextBtn = document.getElementById('ob-btn-next');
+      if (prevBtn) prevBtn.style.display = (currentOnboardingStep > 1) ? 'block' : 'none';
+      if (nextBtn) {
+        if (currentOnboardingStep === 6) {
+          nextBtn.textContent = '✓ Revisar & Confirmar';
+          nextBtn.style.background = '#10B981';
+          nextBtn.style.color = '#FFF';
+        } else {
+          nextBtn.textContent = 'Siguiente →';
+          nextBtn.style.background = '#00E5FF';
+          nextBtn.style.color = '#0A0D14';
+        }
+      }
+    }
+
+    function navigateOnboardingStep(direction) {
+      if (currentOnboardingStep === 6 && direction > 0) {
+        // En el paso 6, el botón siguiente ejecuta submit
+        submitNexusOnboarding();
+        return;
+      }
+      jumpToOnboardingStep(currentOnboardingStep + direction);
+    }
+
+    // MANEJO DE LÓGICA CONDICIONAL (BRANCHING LOGIC)
+    function handleOnboardingBranching() {
+      // 1.1 Objetivo del sitio
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+
+      // Actualizar estado
+      if (p1_1 === 'OPCION_A') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'static_jamstack';
+      } else if (p1_1 === 'OPCION_B') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'backend_php_api';
+      } else {
+        window.project_onboarding_state.step_1_architecture.project_type = 'fullstack_ssr';
+      }
+
+      // Si es Opción B o C, sugerir marcar Sí en base de datos
+      if (p1_1 === 'OPCION_B' || p1_1 === 'OPCION_C') {
+        const p2_1_yes = document.querySelector('input[name="ob_p2_1"][value="YES"]');
+        if (p2_1_yes && !p2_1_yes.checked) {
+          p2_1_yes.checked = true;
+        }
+      }
+
+      // 2. Persistencia y CMS
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+
+      window.project_onboarding_state.step_2_data_and_content.needs_database = (p2_1 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_file_storage = (p2_2 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_headless_cms = (p2_3 === 'YES');
+
+      // 3. Auth
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_3_identity.needs_authentication = (p3_1 === 'YES');
+
+      // 4. Pagos
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const boxP4_2 = document.getElementById('ob-box-p4-2');
+      if (boxP4_2) boxP4_2.style.display = (p4_1 !== 'NO') ? 'block' : 'none';
+      window.project_onboarding_state.step_4_payments_stripe.enable_stripe = (p4_1 !== 'NO');
+
+      // 5. IA y Colas
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const boxP5_sub = document.getElementById('ob-box-p5-sub');
+      if (boxP5_sub) boxP5_sub.style.display = (p5_1 === 'YES') ? 'block' : 'none';
+      window.project_onboarding_state.step_5_ai_and_queues.enable_ai = (p5_1 === 'YES');
+
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues = (p5_2 === 'YES');
+
+      // 6. Modalidad
+      const p6_1 = document.querySelector('input[name="ob_p6_1"]:checked')?.value || 'MODALITY_A';
+      window.project_onboarding_state.step_6_handover_modality.management_mode = p6_1.toLowerCase();
+
+      // SINCRONIZAR AUTOMÁTICAMENTE CON EL COTIZADOR Y BLUEPRINT
+      syncOnboardingToBlueprintModules();
+    }
+
+    // CONEXIÓN AUTOMÁTICA DEL CUESTIONARIO CON LA MATRIZ DE COMPLEJIDAD (FASE 3 Y 4)
+    function syncOnboardingToBlueprintModules() {
+      if (!window.blueprintModulesCatalog) return;
+
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+
+      // 1. Hosting (Fila 2, 3, 4)
+      const modStatic = window.blueprintModulesCatalog.find(m => m.id === 'm_host_static');
+      const modPro = window.blueprintModulesCatalog.find(m => m.id === 'm_host_pro');
+      const modBackend = window.blueprintModulesCatalog.find(m => m.id === 'm_backend_srv');
+
+      if (p1_1 === 'OPCION_A') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = false;
+      } else if (p1_1 === 'OPCION_B') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = true;
+      } else {
+        if (p1_2 === 'OVER_10K') {
+          if (modStatic) modStatic.active = false;
+          if (modPro) modPro.active = true;
+        } else {
+          if (modStatic) modStatic.active = true;
+          if (modPro) modPro.active = false;
+        }
+        if (modBackend) modBackend.active = true;
+      }
+
+      // 2. Base de datos (Fila 5)
+      const modDB = window.blueprintModulesCatalog.find(m => m.id === 'm_database_sql');
+      if (modDB) modDB.active = (p2_1 === 'YES');
+
+      // 3. Object Storage (Fila 6)
+      const modStorage = window.blueprintModulesCatalog.find(m => m.id === 'm_object_storage');
+      if (modStorage) modStorage.active = (p2_2 === 'YES');
+
+      // 4. Headless CMS (Fila 7)
+      const modCMS = window.blueprintModulesCatalog.find(m => m.id === 'm_headless_cms');
+      if (modCMS) modCMS.active = (p2_3 === 'YES');
+
+      // 5. Auth RBAC (Fila 8)
+      const modAuth = window.blueprintModulesCatalog.find(m => m.id === 'm_auth_rbac');
+      if (modAuth) modAuth.active = (p3_1 === 'YES');
+
+      // 6. Stripe (Fila 9)
+      const modStripe = window.blueprintModulesCatalog.find(m => m.id === 'm_stripe_webhooks');
+      if (modStripe) modStripe.active = (p4_1 !== 'NO');
+
+      // 7. IA + Rate Limit (Fila 10)
+      const modAI = window.blueprintModulesCatalog.find(m => m.id === 'm_ai_ratelimit');
+      if (modAI) modAI.active = (p5_1 === 'YES');
+
+      // 8. Colas Asíncronas (Fila 11)
+      const modQueues = window.blueprintModulesCatalog.find(m => m.id === 'm_queues_cron');
+      if (modQueues) modQueues.active = (p5_2 === 'YES');
+
+      // Estándares fijos obligatorios (Filas 12 a 17) siempre activos
+      ['m_email_trans', 'm_ui_layout', 'm_seo_schema', 'm_legal_compliance', 'm_cicd_snyk', 'm_monitoring_sentry'].forEach(fid => {
+        const fmod = window.blueprintModulesCatalog.find(m => m.id === fid);
+        if (fmod) fmod.active = true;
+      });
+
+      // Recalcular y actualizar UI del resumen del Onboarding
+      updateOnboardingArchitectureSummary();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+    }
+
+    function updateOnboardingArchitectureSummary() {
+      if (!window.blueprintModulesCatalog) return;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      window.blueprintModulesCatalog.forEach(m => {
+        if (m.active) {
+          totalHours += m.hours;
+          totalCapex += m.hours * 35; // USD
+          totalOpex += m.opexUsd; // USD
+        }
+      });
+
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+
+      const priceEl = document.getElementById('ob-summary-price');
+      if (priceEl) priceEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' USD';
+
+      const capexMxnEl = document.getElementById('ob-summary-capex-mxn');
+      if (capexMxnEl) capexMxnEl.textContent = '~
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + (totalCapex * 20).toLocaleString('es-MX') + ' MXN (CapEx)';
+
+      const opexEl = document.getElementById('ob-summary-opex');
+      if (opexEl) opexEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' USD/mes';
+
+      const retEl = document.getElementById('ob-summary-retainer');
+      if (retEl) retEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' USD/mes';
+
+      const feeEl = document.getElementById('ob-summary-platform-fee');
+      if (feeEl) feeEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' USD';
+
+      const daysEl = document.getElementById('ob-summary-days');
+      if (daysEl) daysEl.textContent = '~' + days + ' días hábiles (' + totalHours + ' hrs)';
+
+      // Stack sugerido badges
+      const stackContainer = document.getElementById('ob-summary-stack');
+      if (stackContainer) {
+        const stackItems = ['TypeScript', 'Vercel CDN', 'Snyk DevSecOps', 'Resend SPF/DKIM'];
+        if (window.project_onboarding_state.step_1_architecture.project_type !== 'static_jamstack') stackItems.push('Render Backend');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_database) stackItems.push('Neon Postgres Lakebase');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_file_storage) stackItems.push('Cloudflare R2');
+        if (window.project_onboarding_state.step_3_identity.needs_authentication) stackItems.push('Clerk Auth 2FA');
+        if (window.project_onboarding_state.step_4_payments_stripe.enable_stripe) stackItems.push('Stripe Webhooks');
+        if (window.project_onboarding_state.step_5_ai_and_queues.enable_ai) stackItems.push('Gemini AI + Upstash Redis');
+        if (window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues) stackItems.push('BullMQ Queues');
+
+        stackContainer.innerHTML = stackItems.map(s => `
+          <span style="font-family:monospace; font-size:0.68rem; background:rgba(0,229,255,0.12); color:#00E5FF; border:1px solid rgba(0,229,255,0.3); padding:2px 8px; border-radius:4px;">
+            ${s}
+          </span>
+        `).join('');
+      }
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+      handleOnboardingBranching();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString() + ' USD';
+        const rEl = document.getElementById('bp-recalc-preview-retainer'); if (rEl) rEl.textContent = '
+      document.querySelectorAll('.blueprint-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.blueprint-tab-pane').forEach(p => p.style.display = 'none');
+      if (btn) btn.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+    }
+
+    function toggleBlueprintModule(id) {
+      const mod = window.blueprintModulesCatalog.find(m => m.id === id);
+      if (mod) {
+        mod.active = !mod.active;
+        renderBlueprintCalculator();
+      }
+    }
+
+    function renderBlueprintCalculator() {
+      const tbody = document.getElementById('blueprint-calc-tbody');
+      if (!tbody) return;
+
+      const currency = document.getElementById('calc-currency-select')?.value || 'USD';
+      const rateMultiplier = currency === 'MXN' ? 20 : 1;
+      const hourlyRate = 35 * rateMultiplier;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      tbody.innerHTML = window.blueprintModulesCatalog.map(item => {
+        if (item.active) {
+          totalHours += item.hours;
+          totalCapex += item.hours * hourlyRate;
+          totalOpex += item.opexUsd * rateMultiplier;
+        }
+
+        const capexItem = item.active ? (item.hours * hourlyRate) : 0;
+        const opexItem = item.active ? (item.opexUsd * rateMultiplier) : 0;
+
+        const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+        return `
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:${item.active ? 'rgba(0,242,254,0.02)' : 'transparent'};">
+            <td style="padding:8px 10px;">
+              <input type="checkbox" ${item.active ? 'checked' : ''} onchange="toggleBlueprintModule('${item.id}')" style="accent-color:#00F2FE;" />
+            </td>
+            <td style="padding:8px 10px; color:#E2E8F0;">
+              ${item.name}
+            </td>
+            <td style="padding:8px 10px; text-align:center;">
+              <span style="font-size:0.68rem; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">${item.complexity}</span>
+            </td>
+            <td style="padding:8px 10px; text-align:center; font-family:var(--font-mono);">
+              ${item.hours}h
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#00F2FE;">
+              ${capexItem.toLocaleString('es-MX')} ${sym}
+            </td>
+            <td style="padding:8px 10px; text-align:right; font-family:var(--font-mono); color:#FBBF24;">
+              ${opexItem.toLocaleString('es-MX')} ${sym}/m
+            </td>
+            <td style="padding:8px 10px; font-size:0.7rem; color:var(--text-muted);">
+              ${item.notes}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Cálculos agregados
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150 * rateMultiplier, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+      const sym = currency === 'USD' ? 'USD' : 'MXN';
+
+      const capexEl = document.getElementById('disp-calc-capex');
+      if (capexEl) capexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' ' + sym;
+
+      const hoursEl = document.getElementById('disp-calc-hours');
+      if (hoursEl) hoursEl.textContent = totalHours + ' horas (' + days + ' días hábiles)';
+
+      const opexEl = document.getElementById('disp-calc-opex');
+      if (opexEl) opexEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const retEl = document.getElementById('disp-calc-retainer');
+      if (retEl) retEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' ' + sym + '/mes';
+
+      const feeEl = document.getElementById('disp-calc-fee');
+      if (feeEl) feeEl.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' ' + sym;
+    }
+
+    function updateVariableConsumption() {
+      const volInput = document.getElementById('calc-stripe-volume');
+      const dispStripe = document.getElementById('disp-calc-stripe-fee');
+      if (volInput && dispStripe) {
+        const vol = parseFloat(volInput.value) || 0;
+        const fee = (vol * 0.036) + (100 * 0.15); // aprox 100 transacciones
+        dispStripe.textContent = '
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + fee.toFixed(2) + ' USD';
+      }
+    }
+
+    function copyEnvExample() {
+      const code = document.getElementById('code-env-example')?.innerText;
+      if (code) {
+        navigator.clipboard.writeText(code);
+        alert('✓ Diccionario .env.example copiado al portapapeles.');
+      }
+    }
+
+    function printHandoverAct() {
+      const activeWs = getKnownWorkspaces().find(w => w.id === activeWorkspaceId) || { client_name: 'Gabriel Ayala' };
+      const clientNameEl = document.getElementById('act-client-name');
+      if (clientNameEl) clientNameEl.textContent = activeWs.client_name || 'Cliente Sponsor';
+
+      const printContents = document.getElementById('printable-handover-act').innerHTML;
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html>
+          <head>
+            <title>Acta Formal de Entrega y Aceptación - TSolutions IPIDD</title>
+            <style>
+              body { font-family: 'Inter', sans-serif; font-size: 11pt; line-height: 1.6; color: #1A202C; padding: 30mm 20mm; }
+              strong { color: #0F172A; }
+            </style>
+          </head>
+          <body>
+            ${printContents}
+          </body>
+        </html>
+      `);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); win.close(); }, 600);
+    }
+
+
+    
+    // =========================================================================
+    // CONTROLADOR DEL ONBOARDING WIZARD DE 6 PASOS CON BRANCHING LOGIC
+    // =========================================================================
+    let currentOnboardingStep = 1;
+
+    window.project_onboarding_state = {
+      client_info: {
+        name: 'Gabriel Ayala',
+        company: 'MPS Ayala Ferretodo',
+        email: 'gabriel@ferreayala.mx',
+        domain: 'm.tsolutionsipidd.com'
+      },
+      step_1_architecture: {
+        project_type: 'fullstack_ssr',
+        expected_monthly_traffic: 'under_10k',
+        preferred_backend_language: 'node_ts'
+      },
+      step_2_data_and_content: {
+        needs_database: true,
+        needs_file_storage: true,
+        needs_headless_cms: false
+      },
+      step_3_identity: {
+        needs_authentication: true,
+        roles_required: ['admin', 'subscribed_client', 'guest'],
+        require_2fa: true
+      },
+      step_4_payments_stripe: {
+        enable_stripe: true,
+        payment_model: 'subscriptions_and_one_time',
+        estimated_monthly_volume_usd: 5000,
+        estimated_monthly_transactions: 100
+      },
+      step_5_ai_and_queues: {
+        enable_ai: true,
+        ai_provider: 'gemini',
+        estimated_monthly_ai_requests: 10000,
+        monthly_hard_limit_usd: 30,
+        needs_async_queues: false
+      },
+      step_6_handover_modality: {
+        management_mode: 'modality_b_retainer'
+      },
+      mandatory_standards: {
+        transactional_email_dns: true,
+        ui_ux_design: true,
+        technical_seo_analytics: true,
+        legal_compliance_pages: true,
+        devsecops_snyk_ci_cd: true,
+        sentry_uptime_monitoring: true
+      }
+    };
+
+    function jumpToOnboardingStep(stepNumber) {
+      if (stepNumber < 1 || stepNumber > 6) return;
+      currentOnboardingStep = stepNumber;
+
+      // Ocultar todos los panes
+      for (let i = 1; i <= 6; i++) {
+        const pane = document.getElementById('ob-pane-step-' + i);
+        const navBtn = document.getElementById('ob-nav-step-' + i);
+        if (pane) pane.style.display = (i === currentOnboardingStep) ? 'block' : 'none';
+        if (navBtn) {
+          if (i === currentOnboardingStep) {
+            navBtn.style.background = 'rgba(0,229,255,0.18)';
+            navBtn.style.borderColor = '#00E5FF';
+            navBtn.style.color = '#00E5FF';
+          } else {
+            navBtn.style.background = 'transparent';
+            navBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+            navBtn.style.color = '#94A3B8';
+          }
+        }
+      }
+
+      const counter = document.getElementById('ob-step-counter');
+      if (counter) counter.textContent = 'Paso ' + currentOnboardingStep + ' de 6';
+
+      const prevBtn = document.getElementById('ob-btn-prev');
+      const nextBtn = document.getElementById('ob-btn-next');
+      if (prevBtn) prevBtn.style.display = (currentOnboardingStep > 1) ? 'block' : 'none';
+      if (nextBtn) {
+        if (currentOnboardingStep === 6) {
+          nextBtn.textContent = '✓ Revisar & Confirmar';
+          nextBtn.style.background = '#10B981';
+          nextBtn.style.color = '#FFF';
+        } else {
+          nextBtn.textContent = 'Siguiente →';
+          nextBtn.style.background = '#00E5FF';
+          nextBtn.style.color = '#0A0D14';
+        }
+      }
+    }
+
+    function navigateOnboardingStep(direction) {
+      if (currentOnboardingStep === 6 && direction > 0) {
+        // En el paso 6, el botón siguiente ejecuta submit
+        submitNexusOnboarding();
+        return;
+      }
+      jumpToOnboardingStep(currentOnboardingStep + direction);
+    }
+
+    // MANEJO DE LÓGICA CONDICIONAL (BRANCHING LOGIC)
+    function handleOnboardingBranching() {
+      // 1.1 Objetivo del sitio
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+
+      // Actualizar estado
+      if (p1_1 === 'OPCION_A') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'static_jamstack';
+      } else if (p1_1 === 'OPCION_B') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'backend_php_api';
+      } else {
+        window.project_onboarding_state.step_1_architecture.project_type = 'fullstack_ssr';
+      }
+
+      // Si es Opción B o C, sugerir marcar Sí en base de datos
+      if (p1_1 === 'OPCION_B' || p1_1 === 'OPCION_C') {
+        const p2_1_yes = document.querySelector('input[name="ob_p2_1"][value="YES"]');
+        if (p2_1_yes && !p2_1_yes.checked) {
+          p2_1_yes.checked = true;
+        }
+      }
+
+      // 2. Persistencia y CMS
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+
+      window.project_onboarding_state.step_2_data_and_content.needs_database = (p2_1 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_file_storage = (p2_2 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_headless_cms = (p2_3 === 'YES');
+
+      // 3. Auth
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_3_identity.needs_authentication = (p3_1 === 'YES');
+
+      // 4. Pagos
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const boxP4_2 = document.getElementById('ob-box-p4-2');
+      if (boxP4_2) boxP4_2.style.display = (p4_1 !== 'NO') ? 'block' : 'none';
+      window.project_onboarding_state.step_4_payments_stripe.enable_stripe = (p4_1 !== 'NO');
+
+      // 5. IA y Colas
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const boxP5_sub = document.getElementById('ob-box-p5-sub');
+      if (boxP5_sub) boxP5_sub.style.display = (p5_1 === 'YES') ? 'block' : 'none';
+      window.project_onboarding_state.step_5_ai_and_queues.enable_ai = (p5_1 === 'YES');
+
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues = (p5_2 === 'YES');
+
+      // 6. Modalidad
+      const p6_1 = document.querySelector('input[name="ob_p6_1"]:checked')?.value || 'MODALITY_A';
+      window.project_onboarding_state.step_6_handover_modality.management_mode = p6_1.toLowerCase();
+
+      // SINCRONIZAR AUTOMÁTICAMENTE CON EL COTIZADOR Y BLUEPRINT
+      syncOnboardingToBlueprintModules();
+    }
+
+    // CONEXIÓN AUTOMÁTICA DEL CUESTIONARIO CON LA MATRIZ DE COMPLEJIDAD (FASE 3 Y 4)
+    function syncOnboardingToBlueprintModules() {
+      if (!window.blueprintModulesCatalog) return;
+
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+
+      // 1. Hosting (Fila 2, 3, 4)
+      const modStatic = window.blueprintModulesCatalog.find(m => m.id === 'm_host_static');
+      const modPro = window.blueprintModulesCatalog.find(m => m.id === 'm_host_pro');
+      const modBackend = window.blueprintModulesCatalog.find(m => m.id === 'm_backend_srv');
+
+      if (p1_1 === 'OPCION_A') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = false;
+      } else if (p1_1 === 'OPCION_B') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = true;
+      } else {
+        if (p1_2 === 'OVER_10K') {
+          if (modStatic) modStatic.active = false;
+          if (modPro) modPro.active = true;
+        } else {
+          if (modStatic) modStatic.active = true;
+          if (modPro) modPro.active = false;
+        }
+        if (modBackend) modBackend.active = true;
+      }
+
+      // 2. Base de datos (Fila 5)
+      const modDB = window.blueprintModulesCatalog.find(m => m.id === 'm_database_sql');
+      if (modDB) modDB.active = (p2_1 === 'YES');
+
+      // 3. Object Storage (Fila 6)
+      const modStorage = window.blueprintModulesCatalog.find(m => m.id === 'm_object_storage');
+      if (modStorage) modStorage.active = (p2_2 === 'YES');
+
+      // 4. Headless CMS (Fila 7)
+      const modCMS = window.blueprintModulesCatalog.find(m => m.id === 'm_headless_cms');
+      if (modCMS) modCMS.active = (p2_3 === 'YES');
+
+      // 5. Auth RBAC (Fila 8)
+      const modAuth = window.blueprintModulesCatalog.find(m => m.id === 'm_auth_rbac');
+      if (modAuth) modAuth.active = (p3_1 === 'YES');
+
+      // 6. Stripe (Fila 9)
+      const modStripe = window.blueprintModulesCatalog.find(m => m.id === 'm_stripe_webhooks');
+      if (modStripe) modStripe.active = (p4_1 !== 'NO');
+
+      // 7. IA + Rate Limit (Fila 10)
+      const modAI = window.blueprintModulesCatalog.find(m => m.id === 'm_ai_ratelimit');
+      if (modAI) modAI.active = (p5_1 === 'YES');
+
+      // 8. Colas Asíncronas (Fila 11)
+      const modQueues = window.blueprintModulesCatalog.find(m => m.id === 'm_queues_cron');
+      if (modQueues) modQueues.active = (p5_2 === 'YES');
+
+      // Estándares fijos obligatorios (Filas 12 a 17) siempre activos
+      ['m_email_trans', 'm_ui_layout', 'm_seo_schema', 'm_legal_compliance', 'm_cicd_snyk', 'm_monitoring_sentry'].forEach(fid => {
+        const fmod = window.blueprintModulesCatalog.find(m => m.id === fid);
+        if (fmod) fmod.active = true;
+      });
+
+      // Recalcular y actualizar UI del resumen del Onboarding
+      updateOnboardingArchitectureSummary();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+    }
+
+    function updateOnboardingArchitectureSummary() {
+      if (!window.blueprintModulesCatalog) return;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      window.blueprintModulesCatalog.forEach(m => {
+        if (m.active) {
+          totalHours += m.hours;
+          totalCapex += m.hours * 35; // USD
+          totalOpex += m.opexUsd; // USD
+        }
+      });
+
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+
+      const priceEl = document.getElementById('ob-summary-price');
+      if (priceEl) priceEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' USD';
+
+      const capexMxnEl = document.getElementById('ob-summary-capex-mxn');
+      if (capexMxnEl) capexMxnEl.textContent = '~
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + (totalCapex * 20).toLocaleString('es-MX') + ' MXN (CapEx)';
+
+      const opexEl = document.getElementById('ob-summary-opex');
+      if (opexEl) opexEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' USD/mes';
+
+      const retEl = document.getElementById('ob-summary-retainer');
+      if (retEl) retEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' USD/mes';
+
+      const feeEl = document.getElementById('ob-summary-platform-fee');
+      if (feeEl) feeEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' USD';
+
+      const daysEl = document.getElementById('ob-summary-days');
+      if (daysEl) daysEl.textContent = '~' + days + ' días hábiles (' + totalHours + ' hrs)';
+
+      // Stack sugerido badges
+      const stackContainer = document.getElementById('ob-summary-stack');
+      if (stackContainer) {
+        const stackItems = ['TypeScript', 'Vercel CDN', 'Snyk DevSecOps', 'Resend SPF/DKIM'];
+        if (window.project_onboarding_state.step_1_architecture.project_type !== 'static_jamstack') stackItems.push('Render Backend');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_database) stackItems.push('Neon Postgres Lakebase');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_file_storage) stackItems.push('Cloudflare R2');
+        if (window.project_onboarding_state.step_3_identity.needs_authentication) stackItems.push('Clerk Auth 2FA');
+        if (window.project_onboarding_state.step_4_payments_stripe.enable_stripe) stackItems.push('Stripe Webhooks');
+        if (window.project_onboarding_state.step_5_ai_and_queues.enable_ai) stackItems.push('Gemini AI + Upstash Redis');
+        if (window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues) stackItems.push('BullMQ Queues');
+
+        stackContainer.innerHTML = stackItems.map(s => `
+          <span style="font-family:monospace; font-size:0.68rem; background:rgba(0,229,255,0.12); color:#00E5FF; border:1px solid rgba(0,229,255,0.3); padding:2px 8px; border-radius:4px;">
+            ${s}
+          </span>
+        `).join('');
+      }
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+      handleOnboardingBranching();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString() + ' USD';
+      }
+    }
+
+    function resetBlueprintRecalibration() {
+      const p1 = document.getElementById('bp-recalc-p1'); if (p1) p1.value = 'fullstack_ai';
+      const p2 = document.getElementById('bp-recalc-p2'); if (p2) p2.value = 'neon_r2';
+      const p3 = document.getElementById('bp-recalc-p3'); if (p3) p3.value = 'auth_rbac_2fa';
+      const p4 = document.getElementById('bp-recalc-p4'); if (p4) p4.value = 'stripe_billing';
+      const p5 = document.getElementById('bp-recalc-p5'); if (p5) p5.value = 'ai_agentic';
+      const p6 = document.getElementById('bp-recalc-p6'); if (p6) p6.value = 'retainer_pro';
+      syncRecalibrationFromTab();
+    }
+  
     function switchBlueprintTab(tabId, btn) {
       document.querySelectorAll('.blueprint-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.blueprint-tab-pane').forEach(p => p.style.display = 'none');
