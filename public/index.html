@@ -2135,24 +2135,25 @@
     .nexus-learning-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(4, 7, 13, 0.82);
+      background: rgba(3, 6, 12, 0.94);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       z-index: 100070;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 18px;
     }
 
     .nexus-learning-box {
       width: 100%;
-      max-width: 1120px;
-      height: 88vh;
-      background: rgba(10, 14, 24, 0.95);
-      border: 1px solid rgba(0, 229, 255, 0.4);
+      max-width: 1140px;
+      height: 90vh;
+      max-height: 90vh;
+      background: #0B111E;
+      border: 1.5px solid rgba(0, 229, 255, 0.45);
       border-radius: 20px;
-      box-shadow: 0 0 60px rgba(0, 229, 255, 0.25), 0 30px 80px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 60px rgba(0, 229, 255, 0.25), 0 30px 80px rgba(0, 0, 0, 0.95);
       backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
@@ -2160,12 +2161,13 @@
     }
 
     .learning-header {
-      padding: 18px 24px;
+      padding: 16px 24px;
       background: #111726;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .learning-layout {
@@ -2175,19 +2177,20 @@
     }
 
     .learning-sidebar {
-      width: 290px;
-      background: rgba(8, 12, 20, 0.9);
+      width: 300px;
+      background: #070B14;
       border-right: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
       overflow-y: auto;
+      flex-shrink: 0;
     }
 
     .learning-tab-btn {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 18px;
+      padding: 13px 18px;
       background: transparent;
       border: none;
       border-left: 3px solid transparent;
@@ -2200,12 +2203,12 @@
     }
 
     .learning-tab-btn:hover {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.04);
       color: #FFF;
     }
 
     .learning-tab-btn.active {
-      background: rgba(0, 229, 255, 0.08);
+      background: rgba(0, 229, 255, 0.09);
       border-left-color: #00E5FF;
       color: #FFF;
       font-weight: 700;
@@ -2214,14 +2217,15 @@
     .learning-content-pane {
       flex: 1;
       overflow-y: auto;
-      padding: 28px 34px;
+      padding: 26px 32px;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      background: #0B111E;
     }
 
     .learning-doc-block {
-      background: rgba(18, 25, 40, 0.6);
+      background: rgba(18, 25, 40, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
       padding: 20px;
@@ -2238,8 +2242,8 @@
     }
 
     .learning-doc-block p, .learning-doc-block li {
-      font-size: 0.82rem;
-      color: var(--text-muted);
+      font-size: 0.83rem;
+      color: #CBD5E1;
       line-height: 1.6;
     }
 
@@ -2253,6 +2257,38 @@
       color: #38BDF8;
       overflow-x: auto;
       margin: 10px 0;
+    }
+
+    @media (max-width: 860px) {
+      .nexus-learning-box {
+        height: 94vh;
+        max-height: 94vh;
+      }
+      .learning-layout {
+        flex-direction: column;
+      }
+      .learning-sidebar {
+        width: 100%;
+        max-height: 170px;
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .learning-tab-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        padding: 10px 14px;
+      }
+      .learning-tab-btn.active {
+        border-left-color: transparent;
+        border-bottom-color: #00E5FF;
+      }
+      .learning-content-pane {
+        padding: 16px 18px;
+      }
     }
 
     /* =========================================================================
@@ -4212,8 +4248,13 @@
       </div>
     </a>
 
-    <!-- BADGE DE ESTADO COMPACTO PERMANENTE -->
-    <div style="display: flex; align-items: center; gap: 12px;">
+    <!-- BOTÓN DE APRENDIZAJE & BADGE DE ESTADO -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button type="button" class="btn-nav-learning" onclick="openNexusLearning('guia_inicio')" title="Centro de Aprendizaje: Guía de uso y Caso de Estudio" style="background: rgba(0, 242, 254, 0.12); border: 1.5px solid rgba(0, 242, 254, 0.45); color: #00F2FE; border-radius: 9999px; padding: 6px 14px; font-weight: 800; font-size: 0.76rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(0, 242, 254, 0.22)'" onmouseout="this.style.background='rgba(0, 242, 254, 0.12)'">
+        <span>📚</span>
+        <span class="nav-learning-text">Guía &amp; Ejemplo</span>
+      </button>
+
       <div class="telemetry-pill" id="pill-db-conn" style="margin: 0;">
         <span class="status-dot" id="dot-db-status"></span>
         <span id="txt-db-status">NEON: <strong id="lbl-db-status" style="color:var(--accent-green);">ONLINE</strong></span>
@@ -4302,8 +4343,8 @@
 
     <!-- SECCIÓN: DOCUMENTACIÓN Y APRENDIZAJE -->
     <div class="drawer-section-title">📚 Documentación & Aprendizaje</div>
-    <button class="drawer-link-btn" onclick="closeBurgerNav(); openNexusLearning('cad');">
-      <span>📚 Nexus Learning Center</span>
+    <button class="drawer-link-btn" onclick="closeBurgerNav(); openNexusLearning('guia_inicio');" style="border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.1); color: #00F2FE; font-weight: bold;">
+      <span>📚 Guía &amp; Caso de Ejemplo (Nexus Learning)</span>
     </button>
     <button class="drawer-link-btn" onclick="closeBurgerNav(); openManualModal();">
       <span>📖 Manual & Optimizaciones</span>
@@ -4370,7 +4411,10 @@
             Plataforma intuitiva para dar vida a tus proyectos tecnológicos en <strong>3 pasos sencillos</strong>: Crear, Implementar y Cerrar.
           </p>
         </div>
-        <div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <button type="button" onclick="openNexusLearning('guia_inicio')" style="background: rgba(0, 242, 254, 0.12); color: #00F2FE; border: 1.5px solid rgba(0, 242, 254, 0.45); border-radius: 10px; padding: 12px 18px; font-weight: 800; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='rgba(0, 242, 254, 0.22)'" onmouseout="this.style.background='rgba(0, 242, 254, 0.12)'">
+            <span>📚 Guía &amp; Caso Práctico</span>
+          </button>
           <button type="button" onclick="openNexusChatModal()" style="background: linear-gradient(135deg, #FF6B00 0%, #FF8533 100%); color: #FFF; border: none; border-radius: 10px; padding: 12px 22px; font-weight: 800; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 0 20px rgba(255,107,0,0.4); transition: transform 0.2s;">
             <span>💬 Chatear con NORA</span>
             <span>➔</span>
@@ -5758,8 +5802,8 @@
           <p>Haz clic en cualquiera de las etapas magnéticas para explorar sus opciones operativas en un modal translúcido y abrir herramientas reales.</p>
         </div>
         <div style="display:flex; align-items:center; gap:10px;">
-          <button class="btn-secondary" onclick="openNexusLearning('cad')" style="border-color: #00E5FF; color: #00E5FF; font-size: 0.78rem;">
-            <span>📚 Abrir Nexus Learning</span>
+          <button class="btn-secondary" onclick="openNexusLearning('guia_inicio')" style="border-color: #00E5FF; color: #00E5FF; font-size: 0.78rem;">
+            <span>📚 Ver Guía &amp; Caso Práctico</span>
           </button>
         </div>
       </div>
@@ -7048,89 +7092,100 @@
   <!-- ========================================================================= -->
   <!-- MODAL PRINCIPAL: NEXUS LEARNING (MANUALES, AYUDAS Y GUÍAS DE OPERACIÓN)  -->
   <!-- ========================================================================= -->
-  <div class="nexus-learning-backdrop" id="nexus-learning-modal" onclick="closeLearningModalOnBackdrop(event)">
+  <div class="nexus-learning-backdrop" id="nexus-learning-modal" style="display: none;" onclick="closeLearningModalOnBackdrop(event)">
     <div class="nexus-learning-box">
       <!-- HEADER -->
       <div class="learning-header">
         <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #00F2FE, #0284C7); display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
+          <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #00F2FE, #0284C7); display:flex; align-items:center; justify-content:center; font-size:1.3rem; box-shadow: 0 0 15px rgba(0,242,254,0.3);">
             📚
           </div>
           <div>
-            <div style="display:flex; align-items:center; gap:10px;">
-              <h2 style="font-family:var(--font-primary); font-size:1.25rem; font-weight:900; color:#FFF; margin:0;">
-                NEXUS LEARNING // MANUALES OPERATIVOS &amp; GUÍAS TÉCNICAS
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <h2 style="font-family:var(--font-primary); font-size:1.2rem; font-weight:900; color:#FFF; margin:0;">
+                CENTRO DE APRENDIZAJE NEXUS // GUÍAS Y CASO DE EJEMPLO
               </h2>
-              <span style="font-family:var(--font-mono); font-size:0.65rem; background:rgba(0,242,254,0.15); color:var(--accent-cyan); border:1px solid rgba(0,242,254,0.3); padding:2px 8px; border-radius:4px;">
-                OFICIAL 2026.1
+              <span style="font-family:var(--font-mono); font-size:0.65rem; background:rgba(0,242,254,0.15); color:var(--accent-cyan); border:1px solid rgba(0,242,254,0.3); padding:2px 8px; border-radius:4px; font-weight:700;">
+                GUÍA COMPLETA &amp; PASO A PASO
               </span>
             </div>
             <p style="font-size:0.78rem; color:var(--text-muted); margin:2px 0 0 0;">
-              Manuales técnicos, guías paso a paso, contratos de endpoints y especificaciones de arquitectura sin simulaciones.
+              Aprende cómo usar la plataforma completa (Crear • Implementar • Cerrar), interactuar con NORA y explora el caso real de Ferretodo Ayala.
             </p>
           </div>
         </div>
-        <button onclick="closeNexusLearningModal()" style="background:transparent; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; padding:4px 8px;">✕</button>
+        <button type="button" onclick="closeNexusLearningModal()" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#FFF; font-size:0.82rem; font-weight:700; cursor:pointer; padding:6px 14px; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+          <span>✕ Cerrar Guía</span>
+        </button>
       </div>
 
       <!-- LAYOUT CON SIDEBAR Y CONTENIDO -->
       <div class="learning-layout">
         <!-- SIDEBAR DE MÓDULOS -->
         <div class="learning-sidebar" id="learning-sidebar-tabs">
-          <button class="learning-tab-btn active" data-mod="cad" onclick="switchLearningTab('cad')">
-            <span>📐</span>
+          <!-- SECCIÓN: APRENDIZAJE ESENCIAL -->
+          <div style="padding:10px 18px 4px 18px; font-family:var(--font-mono); font-size:0.66rem; color:#FF8533; font-weight:800; letter-spacing:1px; text-transform:uppercase;">
+            🌟 GUÍAS ESENCIALES
+          </div>
+          <button class="learning-tab-btn active" data-mod="guia_inicio" onclick="switchLearningTab('guia_inicio')">
+            <span style="font-size:1.15rem;">🚀</span>
             <div>
-              <div style="font-weight:700; color:#FFF;">CAD Vector Architect</div>
-              <div style="font-size:0.7rem; color:var(--text-dim);">SVG Puro con Gemini AI</div>
+              <div style="font-weight:700; color:#FFF;">Cómo Usar la Plataforma</div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">Flujo Crear • Implementar • Cerrar</div>
+            </div>
+          </button>
+          <button class="learning-tab-btn" data-mod="caso_ejemplo" onclick="switchLearningTab('caso_ejemplo')">
+            <span style="font-size:1.15rem;">🏪</span>
+            <div>
+              <div style="font-weight:700; color:#FFF;">Caso Real: Ferretodo Ayala</div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">De la idea al ROI paso a paso</div>
+            </div>
+          </button>
+          <button class="learning-tab-btn" data-mod="asistente_nora" onclick="switchLearningTab('asistente_nora')">
+            <span style="font-size:1.15rem;">💬</span>
+            <div>
+              <div style="font-weight:700; color:#FFF;">Cómo Preguntar a NORA</div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">Guía de consultas &amp; atajos IA</div>
+            </div>
+          </button>
+
+          <!-- SECCIÓN: MÓDULOS TÉCNICOS -->
+          <div style="padding:12px 18px 4px 18px; font-family:var(--font-mono); font-size:0.66rem; color:var(--accent-cyan); font-weight:800; letter-spacing:1px; text-transform:uppercase; border-top:1px solid rgba(255,255,255,0.06); margin-top:6px;">
+            🛠️ MÓDULOS TÉCNICOS PRO
+          </div>
+          <button class="learning-tab-btn" data-mod="herramientas_pro" onclick="switchLearningTab('herramientas_pro')">
+            <span style="font-size:1.15rem;">⚙️</span>
+            <div>
+              <div style="font-weight:700; color:#FFF;">Herramientas Avanzadas</div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">Neon DB, DAG y CI/CD</div>
             </div>
           </button>
           <button class="learning-tab-btn" data-mod="dag" onclick="switchLearningTab('dag')">
-            <span>🕸️</span>
+            <span style="font-size:1.15rem;">🕸️</span>
             <div>
               <div style="font-weight:700; color:#FFF;">Protocolo Binario DAG</div>
               <div style="font-size:0.7rem; color:var(--text-dim);">Regla Red/Green &amp; To-Do</div>
             </div>
           </button>
+          <button class="learning-tab-btn" data-mod="cad" onclick="switchLearningTab('cad')">
+            <span style="font-size:1.15rem;">📐</span>
+            <div>
+              <div style="font-weight:700; color:#FFF;">CAD Vector Architect</div>
+              <div style="font-size:0.7rem; color:var(--text-dim);">SVG Puro con Gemini AI</div>
+            </div>
+          </button>
           <button class="learning-tab-btn" data-mod="brain" onclick="switchLearningTab('brain')">
-            <span>🧠</span>
+            <span style="font-size:1.15rem;">🧠</span>
             <div>
               <div style="font-weight:700; color:#FFF;">Cerebro RAG &amp; Pgvector</div>
               <div style="font-size:0.7rem; color:var(--text-dim);">LangCache Redis &lt;50ms</div>
             </div>
           </button>
-          <button class="learning-tab-btn" data-mod="marketing" onclick="switchLearningTab('marketing')">
-            <span>✉️</span>
-            <div>
-              <div style="font-weight:700; color:#FFF;">Marketing &amp; RFC 8058</div>
-              <div style="font-size:0.7rem; color:var(--text-dim);">BullMQ, Umbral ≥95%</div>
-            </div>
-          </button>
-          <button class="learning-tab-btn" data-mod="cicd" onclick="switchLearningTab('cicd')">
-            <span>⚡</span>
-            <div>
-              <div style="font-weight:700; color:#FFF;">Telemetría CI/CD</div>
-              <div style="font-size:0.7rem; color:var(--text-dim);">HMAC-SHA256 &amp; GitHub</div>
-            </div>
-          </button>
-          <button class="learning-tab-btn" data-mod="presentation" onclick="switchLearningTab('presentation')">
-            <span>📊</span>
-            <div>
-              <div style="font-weight:700; color:#FFF;">Presentaciones 16:9</div>
-              <div style="font-size:0.7rem; color:var(--text-dim);">Exportación PDF Nativa</div>
-            </div>
-          </button>
           <button class="learning-tab-btn" data-mod="closure" onclick="switchLearningTab('closure')">
-            <span>🔒</span>
+            <span style="font-size:1.15rem;">🔒</span>
             <div>
               <div style="font-weight:700; color:#FFF;">Cierre Inmutable DMAIC</div>
               <div style="font-size:0.7rem; color:var(--text-dim);">Snapshots &amp; Archivados</div>
-            </div>
-          </button>
-          <button class="learning-tab-btn" data-mod="prompt" onclick="switchLearningTab('prompt')">
-            <span>🎯</span>
-            <div>
-              <div style="font-weight:700; color:#FFF;">Prompt Architect</div>
-              <div style="font-size:0.7rem; color:var(--text-dim);">Directivas en 5 Fases</div>
             </div>
           </button>
         </div>
@@ -9175,10 +9230,10 @@
     function openStageLearning() {
       const stage = FLOW_STAGES[activeFlowStageKey];
       closeFlowStageModal();
-      if (stage && stage.learningKey) {
+      if (stage && stage.learningKey && NEXUS_LEARNING_CONTENT[stage.learningKey]) {
         openNexusLearning(stage.learningKey);
       } else {
-        openNexusLearning('cad');
+        openNexusLearning('guia_inicio');
       }
     }
 
@@ -9196,6 +9251,98 @@
     // SISTEMA Y MANUALES INTERACTIVOS DE NEXUS LEARNING
     // =========================================================================
     const NEXUS_LEARNING_CONTENT = {
+      guia_inicio: {
+        title: "¿Cómo Usar la Plataforma Completa? Flujo Maestro en 3 Pasos",
+        badge: "GUÍA DE INICIO RÁPIDO & OPERACIÓN",
+        summary: "Diseñado para usuarios sin experiencia técnica: aprende a crear tu proyecto, supervisar el avance de tareas y cerrar la entrega formal con medición de rentabilidad.",
+        actionBtn: { text: "Comenzar en Paso 1 (Crear) ➔", action: "closeNexusLearningModal(); switchNoraPhase('crear');" },
+        sections: [
+          {
+            heading: "1. Paso 1: CREAR (Planificación y Presupuesto en Minutos)",
+            body: "En esta primera fase defines los cimientos de tu proyecto de software:<br>• <strong>Nombre del Proyecto:</strong> Asigna un identificador claro (ejemplo: <em>'Tienda Digital Ferretodo Ayala'</em>).<br>• <strong>Arquetipo del Sistema:</strong> Selecciona el tipo de solución que necesitas: Tienda en Línea (E-commerce), Sistema Web / SaaS, Aplicación Móvil o Landing Page Comercial.<br>• <strong>Presupuesto y Plazo:</strong> Define el monto de inversión estimado y la fecha tentativa de entrega.<br>• <strong>Asistencia Inteligente de NORA:</strong> Si no sabes qué tecnología elegir o cómo calcular costos, presiona <strong>💬 Sugerir con NORA</strong> para recibir un desglose instantáneo y fundamentado."
+          },
+          {
+            heading: "2. Paso 2: IMPLEMENTAR (Supervisión Transparente del Avance)",
+            body: "Una vez creado el proyecto, pasas a la fase de ejecución y monitoreo en tiempo real:<br>• <strong>Barra de Salud y Progreso:</strong> Observa el porcentaje exacto de avance (ej. 68% Completado) y el indicador de bloqueos en verde.<br>• <strong>Hitos Visuales:</strong> Cada componente (Base de datos, Pasarela de pagos, Catálogo de productos, Pruebas finales) se muestra con su estado verificado.<br>• <strong>Conexión con Neon PostgreSQL:</strong> Tus datos de inventario y clientes se guardan de forma segura en la nube en Neon DB, garantizando alta disponibilidad sin requerir servidores locales."
+          },
+          {
+            heading: "3. Paso 3: CERRAR (Entrega Formal, Llaves y Retorno de Inversión)",
+            body: "Cuando las tareas se han completado, es momento de sellar la entrega:<br>• <strong>Checklist de Entregables:</strong> Verificación de que el código fuente, bases de datos y accesos administrativos estén en manos del cliente.<br>• <strong>Acta de Finiquito Inmutable:</strong> Se genera el documento oficial de entrega y satisfacción del cliente, protegido contra modificaciones posteriores.<br>• <strong>Medición del Retorno de Inversión (ROI):</strong> El sistema calcula el ahorro de horas hombre y los ingresos proyectados para validar el beneficio económico del proyecto."
+          },
+          {
+            heading: "4. Comunicación Continua con NORA",
+            body: "NORA es tu asistente virtual siempre activo. Puedes abrirla en cualquier momento pulsando el botón flotante en la esquina inferior derecha o usando el atajo de teclado <code>Alt + N</code> para preguntarle en español natural cualquier duda operativa o técnica."
+          }
+        ]
+      },
+      caso_ejemplo: {
+        title: "Caso de Uso Real: Ferretodo Ayala (De la Idea a la Entrega Digital)",
+        badge: "CASO DE ESTUDIO PRÁCTICO PASO A PASO",
+        summary: "Descubre cómo 'Ferretodo Ayala' digitalizó su inventario de 1,200 productos, redujo 18 horas de trabajo manual a la semana y recuperó el 113% de su inversión en tan solo 30 días.",
+        actionBtn: { text: "Ver Panel de Ferretodo ➔", action: "closeNexusLearningModal(); switchNoraPhase('implementar');" },
+        sections: [
+          {
+            heading: "1. El Reto Inicial de Don Roberto Ayala",
+            body: "<strong>Cliente:</strong> Ferretería y Materiales Ayala (Don Roberto Ayala, propietario).<br><strong>Situación:</strong> Un negocio tradicional con más de 1,200 productos ferreteros (herramientas, plomería, electricidad, tornillería). Los clientes tenían que llamar por teléfono o acudir al mostrador únicamente para cotizar precios y preguntar si había existencias. El personal tardaba hasta 3 horas elaborando presupuestos manuales y se perdían ventas frente a grandes cadenas comerciales.<br><strong>Objetivo:</strong> Un catálogo web rápido, accesible desde celulares, con cotizaciones automáticas por WhatsApp y control de existencias en tiempo real."
+          },
+          {
+            heading: "2. Aplicación del Paso 1: CREAR (Día 1)",
+            body: "Don Roberto ingresó a la plataforma y completó el formulario de inicio con ayuda de NORA:<br>• <strong>Nombre:</strong> <em>'Plataforma Digital &amp; Catálogo Ferretodo Ayala'</em>.<br>• <strong>Arquetipo:</strong> E-commerce / Catálogo Web con integración directa a WhatsApp Business.<br>• <strong>Presupuesto acordado:</strong> $12,500 USD.<br>• <strong>Tiempo de entrega:</strong> 4 semanas.<br>• NORA generó automáticamente el desglose de 14 tareas prioritarias y la arquitectura de datos relacional para soportar los 1,200 productos."
+          },
+          {
+            heading: "3. Aplicación del Paso 2: IMPLEMENTAR (Semanas 1 a 4)",
+            body: "Don Roberto supervisó el proyecto día a día desde la pestaña <strong>Paso 2: Implementar</strong> sin necesidad de entender código:<br>• <strong>Semanas 1 y 2 (Base de Datos):</strong> Se aprovisionó Neon PostgreSQL y se cargaron los 1,200 productos con fotografías, códigos SKU y precios de mayoreo/menudeo. El hito de base de datos pasó a verde.<br>• <strong>Semana 3 (Interfaz y Buscador):</strong> Se desplegó la tienda responsiva en Vercel con un buscador ultrarrápido que encuentra artículos por nombre o código en menos de 50 milisegundos.<br>• <strong>Semana 4 (Pruebas con Clientes):</strong> Se realizaron pruebas reales en mostrador con 50 clientes frecuentes realizando pedidos de prueba directamente a WhatsApp."
+          },
+          {
+            heading: "4. Aplicación del Paso 3: CERRAR (Resultados y Retorno de Inversión)",
+            body: "Cumplidas las 4 semanas, se activó la fase final:<br>• <strong>Capacitación Rápida:</strong> Se capacitó a los cajeros y encargados de mostrador en una sesión de 45 minutos.<br>• <strong>Entrega de Llaves Digitales:</strong> Don Roberto recibió sus contraseñas de administrador y el acta de entrega formal inmutable sellada en el sistema.<br>• <strong>Resultados Medidos a los 30 Días:</strong><br>&nbsp;&nbsp;✓ Ahorro de <strong>18 horas a la semana</strong> en llamadas telefónicas y cotizaciones en papel.<br>&nbsp;&nbsp;✓ Facturación adicional de <strong>$14,200 USD</strong> proveniente exclusivamente de pedidos por el catálogo digital.<br>&nbsp;&nbsp;✓ <strong>Retorno de Inversión (ROI): 113% en el primer mes</strong>, superando con creces el costo del proyecto."
+          }
+        ]
+      },
+      asistente_nora: {
+        title: "Cómo Interactuar con NORA: Tu Asistente Virtual Inteligente",
+        badge: "GUÍA DEL ASISTENTE VIRTUAL",
+        summary: "Aprende a comunicarte con NORA en lenguaje natural. Sin códigos ni tecnicismos, obtén respuestas instantáneas sobre el progreso, costos y decisiones de tu proyecto.",
+        actionBtn: { text: "Abrir Chat con NORA ➔", action: "closeNexusLearningModal(); openNexusChatModal();" },
+        sections: [
+          {
+            heading: "1. ¿Quién es NORA?",
+            body: "NORA es el asistente inteligente del ecosistema. Está conectada a la base de datos de tu proyecto y al estado de tus tareas, por lo que siempre sabe exactamente qué se ha hecho, qué falta por hacer y cómo va tu presupuesto."
+          },
+          {
+            heading: "2. Preguntas Recomendadas para Hacerle a NORA",
+            body: "Puedes escribirle preguntas cotidianas como:<br>• <em>'¿Cómo va el avance general de mi proyecto?'</em><br>• <em>'¿Cuánto presupuesto llevamos ejecutado y cuánto queda disponible?'</em><br>• <em>'¿Qué tareas faltan para que podamos entregar el sistema?'</em><br>• <em>'¿Me puedes explicar qué es la base de datos Neon sin usar términos técnicos?'</em><br>• <em>'¿Cuáles son los pasos para firmar el acta de entrega final?'</em>"
+          },
+          {
+            heading: "3. Botones de 1 Clic (Atajos Rápidos)",
+            body: "Dentro de la ventana de chat de NORA encontrarás botones de acceso rápido con las preguntas más solicitadas. Solo haz clic en uno de ellos y NORA te contestará de inmediato sin necesidad de que teclees."
+          }
+        ]
+      },
+      herramientas_pro: {
+        title: "Herramientas Avanzadas & Modo Ingeniero (Opcional)",
+        badge: "ESPECIFICACIÓN PARA DESARROLLADORES",
+        summary: "Para arquitectos de software, administradores de sistemas y DevOps: resumen de las tecnologías robustas que operan tras bambalinas.",
+        actionBtn: { text: "Activar Consola Técnica ➔", action: "closeNexusLearningModal(); toggleTechMode();" },
+        sections: [
+          {
+            heading: "1. Base de Datos Neon PostgreSQL Serverless",
+            body: "Arquitectura de base de datos en la nube con pooling de conexiones para alta concurrencia, escalado a cero para optimización de costos y soporte nativo para pgvector y búsquedas semánticas."
+          },
+          {
+            heading: "2. Orquestador de Grafos Binarios (DAG)",
+            body: "Máquina de estados estricta donde cada nodo técnico (Infraestructura, Backend, Frontend, Telemetría) solo conmuta a <code>GREEN</code> cuando el 100% de las tareas dependientes han sido verificadas exitosamente."
+          },
+          {
+            heading: "3. Telemetría CI/CD con HMAC-SHA256",
+            body: "Validación criptográfica de webhooks enviados desde GitHub Actions y despliegues automáticos en Vercel, garantizando trazabilidad e inmutabilidad en los registros de auditoría."
+          },
+          {
+            heading: "4. Despacho Masivo BullMQ y Cierre DMAIC",
+            body: "Procesamiento asíncrono de correos con cumplimiento anti-spam RFC 8058 y congelamiento de snapshots JSONB en la base de datos al sellar proyectos bajo estándares Six Sigma."
+          }
+        ]
+      },
       cad: {
         title: "CAD Vector Architect IA: Generación de Isotipos, Logotipos y SVG Puro",
         badge: "DISEÑO VECTORIAL & TOKENS",
@@ -9362,14 +9509,17 @@
       }
     };
 
-    let activeLearningTab = 'cad';
+    let activeLearningTab = 'guia_inicio';
 
     function openNexusLearning(moduleKey) {
       if (moduleKey && NEXUS_LEARNING_CONTENT[moduleKey]) {
         activeLearningTab = moduleKey;
+      } else if (!NEXUS_LEARNING_CONTENT[activeLearningTab]) {
+        activeLearningTab = 'guia_inicio';
       }
       switchLearningTab(activeLearningTab);
-      document.getElementById('nexus-learning-modal').style.display = 'flex';
+      const modal = document.getElementById('nexus-learning-modal');
+      if (modal) modal.style.display = 'flex';
     }
 
     function closeNexusLearningModal() {
