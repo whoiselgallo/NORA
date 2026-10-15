@@ -8731,6 +8731,11 @@ Process completed with exit code 1.</textarea>
         </div>
 
         <div style="display:flex; align-items:center; gap:10px;">
+          
+          <button type="button" onclick="openResponsibilityMatrixModal()" style="background:rgba(0,242,254,0.12); border:1.5px solid rgba(0,242,254,0.45); color:#00F2FE; border-radius:9999px; padding:6px 14px; font-size:0.75rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s;" onmouseover="this.style.background='rgba(0,242,254,0.22)'" onmouseout="this.style.background='rgba(0,242,254,0.12)'">
+            <span>⚖️</span> Matriz Cliente vs TSolutions
+          </button>
+
           <button type="button" class="btn-cancel" onclick="closeServicesMenuModal()" style="padding:7px 18px; border-radius:9999px; font-size:0.78rem; font-weight:700;">
             ✕ Cerrar
           </button>
@@ -8896,6 +8901,96 @@ Process completed with exit code 1.</textarea>
       <!-- DOSSIER DOCUMENT BODY -->
       <div id="printable-dossier-content" style="padding:36px 44px; overflow-y:auto; font-family:'Inter', sans-serif; font-size:10pt; line-height:1.6; color:#2D3748;">
         <!-- Inyección dinámica vía renderDossierDocument() -->
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       MODAL 4: MATRIZ DE RESPONSABILIDAD TÉCNICA (CLIENTE VS TSOLUTIONS)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="responsibility-matrix-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.92); backdrop-filter:blur(24px); z-index:99999; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+    <div style="max-width:1100px; width:100%; background:rgba(10,14,24,0.98); border:1.5px solid rgba(0,242,254,0.5); border-radius:18px; box-shadow:0 25px 80px rgba(0,0,0,0.9), 0 0 40px rgba(0,242,254,0.2); max-height:92vh; display:flex; flex-direction:column; overflow:hidden;">
+      
+      <!-- HEADER -->
+      <div style="padding:18px 24px; background:linear-gradient(180deg, rgba(0,242,254,0.12) 0%, rgba(14,20,32,0.9) 100%); border-bottom:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="background:rgba(0,242,254,0.15); border:1.5px solid #00F2FE; border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
+            ⚖️
+          </div>
+          <div>
+            <h2 style="margin:0; font-family:var(--font-primary); font-size:1.1rem; font-weight:900; color:#FFFFFF;">
+              MATRIZ DE RESPONSABILIDAD TÉCNICA &amp; DELIMITACIÓN DE COSTOS
+            </h2>
+            <p style="margin:2px 0 0 0; font-size:0.75rem; color:var(--text-muted);">
+              TSolutions IPIDD • Transparencia Total: Qué va por cuenta del Cliente vs. Qué absorbe nuestra Empresa
+            </p>
+          </div>
+        </div>
+
+        <button type="button" class="btn-cancel" onclick="closeResponsibilityMatrixModal()" style="padding:6px 16px; border-radius:9999px; font-size:0.76rem; font-weight:700;">
+          ✕ Cerrar
+        </button>
+      </div>
+
+      <!-- BODY TABLE -->
+      <div style="padding:24px; overflow-y:auto; flex:1;">
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+          <!-- COLUMNA CLIENTE -->
+          <div style="background:rgba(245,158,11,0.06); border:1.5px solid rgba(245,158,11,0.3); border-radius:14px; padding:18px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="font-size:1.2rem;">👤</span>
+              <h3 style="margin:0; font-family:var(--font-primary); font-size:0.95rem; font-weight:900; color:#FBBF24;">
+                POR CUENTA DEL CLIENTE (PROPIEDAD &amp; FACTURACIÓN)
+              </h3>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.45; margin-bottom:12px;">
+              Activos cuyo consumo, titularidad y facturación directa pertenecen a tu negocio, garantizando que nunca quedes cautivo:
+            </p>
+            <ul style="padding-left:18px; margin:0; font-size:0.75rem; color:#E2E8F0; line-height:1.6;">
+              <li><strong>Nombre de Dominio:</strong> Registro y renovación de dominio (.com/.mx).</li>
+              <li><strong>Base de Datos Cloud:</strong> Instancia Postgres dedicada (Neon, AWS RDS, Supabase).</li>
+              <li><strong>Máquinas Virtuales:</strong> Servidores VPS o compute dedicado si requiere hosting híbrido.</li>
+              <li><strong>APIs Google Cloud Console:</strong> Maps JavaScript API y Places API con su propia tarjeta.</li>
+              <li><strong>Claves de API AI Studio / Gemini:</strong> Saldo de tokens de inteligencia artificial.</li>
+              <li><strong>Pasarelas Bancarias:</strong> Cuentas de Stripe o Mercado Pago para depósitos de dinero.</li>
+              <li><strong>WhatsApp Cloud API:</strong> Cuenta Meta for Developers y línea telefónica SIM.</li>
+              <li><strong>Cuentas de Logística:</strong> Contrato directo con Uber Direct Business y paqueterías (fletes).</li>
+            </ul>
+          </div>
+
+          <!-- COLUMNA TSOLUTIONS -->
+          <div style="background:rgba(0,242,254,0.06); border:1.5px solid rgba(0,242,254,0.3); border-radius:14px; padding:18px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="font-size:1.2rem;">🛡️</span>
+              <h3 style="margin:0; font-family:var(--font-primary); font-size:0.95rem; font-weight:900; color:#00F2FE;">
+                POR CUENTA DE TSOLUTIONS (HERRAMIENTAS &amp; INGENIERÍA)
+              </h3>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.45; margin-bottom:12px;">
+              Herramientas de nivel corporativo que nuestra empresa absorbe íntegramente durante el desarrollo:
+            </p>
+            <ul style="padding-left:18px; margin:0; font-size:0.75rem; color:#CBD5E1; line-height:1.6;">
+              <li><strong>Antigravity Advanced Agentic AI Assistant:</strong> Orquestación de directivas e instrucciones.</li>
+              <li><strong>Vercel Pro &amp; Edge Network:</strong> Hosting perimetral de ultra-baja latencia para frontends.</li>
+              <li><strong>Render / Cloud Run:</strong> Middleware de ejecución de bots, staging y webhooks.</li>
+              <li><strong>Licencias Adobe Creative Cloud:</strong> Illustrator, Photoshop y After Effects para vectorizado.</li>
+              <li><strong>Licencias Canva Pro &amp; Figma:</strong> Plantillas editables y diseño colaborativo.</li>
+              <li><strong>Dify.ai Enterprise:</strong> Orquestador de agentes RAG con embeddings de alta precisión.</li>
+              <li><strong>GitHub Enterprise:</strong> Repositorios privados y pipelines de integración continua CI/CD.</li>
+              <li><strong>Ingeniería &amp; Andragogía:</strong> Horas físicas de codificación y capacitación en 3 dominios.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CUOTA DEL 5% -->
+        <div style="background:linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,107,0,0.08) 100%); border:1.5px dashed rgba(255,215,0,0.5); border-radius:12px; padding:14px 18px; font-size:0.78rem; color:#E2E8F0; line-height:1.5;">
+          <strong style="color:#FFD700; font-size:0.84rem;">✦ Cláusula de Plataforma Gratuita &amp; Cuota Única del 5%:</strong><br>
+          Esta plataforma de arquitectura es <strong>100% gratuita para explorar, planificar y cotizar</strong>. Al formalizar y firmar el contrato de prestación de servicios, se aplica un <strong>pago único equivalente al 5% del valor total del proyecto</strong> por el tiempo estimado de ejecución, con el propósito exclusivo de resguardar servidores dedicados, bases de datos y soporte para espacios colaborativos más robustos.
+        </div>
+
       </div>
 
     </div>
@@ -11913,6 +12008,8 @@ Process completed with exit code 1.</textarea>
         badge: '🔥 Más Recomendado',
         description: 'Fusión integral de Smart Web vertical mobile-first y Landing de conversión local. Detiene fugas en Google Maps, unifica horarios y automatiza la toma de pedidos por WhatsApp.',
         ticketJustification: 'Resuelve el caos operativo integral para captar tráfico local de inmediato y acelerar pedidos sin duplicar herramientas.',
+        clientResponsibility: 'Cuenta Google (Gmail) para titularidad en Maps; número de WhatsApp activo; tarjeta de facturación para Google Cloud si supera la cuota gratuita de Maps.',
+        tsolutionsResponsibility: 'Desarrollo web Full-Stack; hosting en Vercel Edge; licencias de Adobe CC para fotos y banners; configuración de Google Search Console y agentes Antigravity.',
         includedIn: [],
         includesServices: ['paq_tarjeta_smart', 'paq_negocio_google'],
         workspaceTools: ['prompt_architect', 'branding_lockup', 'metricas_terreno'],
@@ -11929,6 +12026,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Entrada Rápida',
         description: 'Bio link inteligente optimizado para la zona de pulgar con botones de contacto rápido, catálogo ligero y llamada a la acción directa por WhatsApp.',
         ticketJustification: 'Evita la pérdida de clientes por no contar con un canal digital ágil.',
+        clientResponsibility: 'Número móvil de WhatsApp comercial; dominio propio opcional (si no se tiene, se aloja en subdominio TSolutions sin costo).',
+        tsolutionsResponsibility: 'Maquetación UI; hosting en Vercel; generación de QR vectorial de alta resolución en Adobe Illustrator.',
         includedIn: ['paq_escala_rapida', 'paq_ecosistema_total'],
         includesServices: [],
         workspaceTools: ['branding_lockup', 'prospeccion_b2b'],
@@ -11945,6 +12044,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Rescate Local',
         description: 'Alta y optimización de ficha en Google Maps, verificación de dirección, unificación de horarios comerciales y sincronización con WhatsApp Business.',
         ticketJustification: 'Elimina las fugas económicas de clientes que acuden a direcciones erróneas o ven horarios desactualizados.',
+        clientResponsibility: 'Recepción del código postal de verificación de Google; cuenta Gmail corporativa propia.',
+        tsolutionsResponsibility: 'Auditoría SEO local; corrección de coordenadas; Landing Page en Vercel; retoque fotográfico en Adobe Photoshop.',
         includedIn: ['paq_escala_rapida'],
         includesServices: [],
         workspaceTools: ['metricas_terreno', 'branding_lockup'],
@@ -11961,6 +12062,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Cerebro con IA',
         description: 'Sitio web corporativo Full-Stack (hasta 5 páginas), cuentas de correo empresarial, plantillas editables para redes y Middleware de IA embebido en backend para optimizar desempeño.',
         ticketJustification: 'Centraliza la presencia digital corporativa con inteligencia reactiva y diseño a la medida.',
+        clientResponsibility: 'Anualidad del Nombre de Dominio (.com/.mx); servicio de correos corporativos (Google Workspace/M365); cuenta de Google AI Studio / Gemini con facturación.',
+        tsolutionsResponsibility: 'Programación Full-Stack; hosting Vercel Pro; plantillas en Canva Pro / Figma; arquitectura del middleware de IA.',
         includedIn: [],
         includesServices: ['paq_tarjeta_smart'],
         workspaceTools: ['prompt_architect', 'gemini_gateway', 'presentador_rag', 'branding_lockup'],
@@ -11977,6 +12080,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Logística Nativa',
         description: 'Catálogo transaccional completo, carrito con recuperación, pasarelas de pago blindadas (Stripe/Mercado Pago), terminal Point Mini y conexión automática con Uber Direct y paqueterías.',
         ticketJustification: 'Libera al dueño de triangular envíos manualmente y transparenta los costos de flete.',
+        clientResponsibility: 'Cuenta bancaria fiscal; cuentas de Stripe/Mercado Pago a su nombre; cuenta Uber Direct Business con tarjeta para fletes; base de datos Postgres (Neon) propia.',
+        tsolutionsResponsibility: 'Desarrollo de e-commerce sin comisiones por venta; integración de webhooks bancarios; suministro de Terminal Point Mini; hosting Vercel Pro y pipelines CI/CD.',
         includedIn: [],
         includesServices: ['srv_pasarela_pagos', 'srv_logistica_uber'],
         workspaceTools: ['prompt_architect', 'gemini_gateway', 'flotas_logistica', 'concurrencia_redis', 'migracion_neon'],
@@ -11995,6 +12100,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Operaciones',
         description: 'Levantamiento de procedimientos operativos estándar (SOPs), manuales de flujo y recetas operativas para delegar la operación y preparar al negocio para abrir sucursales.',
         ticketJustification: 'Documenta el conocimiento clave de la empresa evitando el colapso operativo al crecer.',
+        clientResponsibility: 'Disponibilidad de personal operativo para entrevistas de campo y validación de manuales.',
+        tsolutionsResponsibility: 'Horas de consultoría especializada; redacción técnica de SOPs; matrices de flujo y diagramación en software profesional.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['diagnostico_5s', 'matriz_ishikawa'],
@@ -12011,6 +12118,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Metodología IPIDD',
         description: 'Diagnóstico exhaustivo de 6 fases, reporte de línea base de ventas/almacén, cálculo de horas físicas vs aplicadas (HF/HA) y cronograma secuencial de 12 semanas.',
         ticketJustification: 'Erradica la improvisación y define con exactitud qué se construirá y su justificación económica.',
+        clientResponsibility: 'Acceso a métricas históricas de mostrador, mermas de almacén y tiempos de atención.',
+        tsolutionsResponsibility: 'Metodología IPIDD completa; modelo de cálculo de horas HF/HA; cronograma Gantt y simulador de Payback.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['diagnostico_5s', 'matriz_ishikawa', 'simulador_cpk', 'calculadora_roi'],
@@ -12027,6 +12136,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Enterprise Core',
         description: 'Arquitectura de control de existencias, equivalencias técnicas para mostrador, alertas dinámicas de reorden, catálogo masivo y módulo ágil de ventas facturable.',
         ticketJustification: 'Reduce en un 40% los tiempos de mostrador y detiene fugas de capital por mermas o inventario obsoleto.',
+        clientResponsibility: 'Lector de códigos de barras, impresora térmica, computadoras de mostrador; instancia Neon Postgres o VPS cloud a su nombre; proveedor PAC de timbrado CFDI.',
+        tsolutionsResponsibility: 'Arquitectura de base de datos relacional; desarrollo Full-Stack del punto de venta; migración y depuración de catálogos masivos; capacitación andragógica TWI.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['migracion_neon', 'dag_orchestrator', 'diagnostico_5s'],
@@ -12043,6 +12154,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Sesión Directa',
         description: 'Sesión virtual privada de 1 hora con nuestro equipo experto para auditar tu modelo de negocio, tecnología actual, cuellos de botella e IA aplicable.',
         ticketJustification: 'Alinea la visión de los directores con las herramientas técnicas de mayor retorno inmediato.',
+        clientResponsibility: 'Puntualidad en videollamada y definición de temas prioritarios.',
+        tsolutionsResponsibility: 'Consultor senior; grabación en alta definición; resumen ejecutivo y hoja de ruta tecnológica.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['prompt_architect', 'calculadora_roi'],
@@ -12061,6 +12174,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Atención 24/7',
         description: 'Asistente virtual autónomo basado en Gemini / Dify.ai entrenado con el inventario y políticas del negocio. Responde consultas técnicas, cotiza y atiende por WhatsApp.',
         ticketJustification: 'Absorbe el 80% de las preguntas y cotizaciones repetitivas de clientes día y noche.',
+        clientResponsibility: 'Número telefónico dedicado; cuenta Meta WhatsApp Business Cloud API; cuenta Google AI Studio / Gemini con tarjeta para saldo de tokens.',
+        tsolutionsResponsibility: 'Plataforma Dify.ai Enterprise; ingeniería de metaprompts con Antigravity; vectorización RAG; conexión a webhooks 24/7.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['prompt_architect', 'gemini_gateway', 'presentador_rag'],
@@ -12077,6 +12192,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Agente Web',
         description: 'Asistente embebido en el sitio web para resolver dudas frecuentes, guiar a los prospectos al checkout y transferir a WhatsApp.',
         ticketJustification: 'Eleva la tasa de permanencia y conversión de visitantes en la web.',
+        clientResponsibility: 'Cuenta de proveedor de LLM (OpenAI o Google AI Studio) con método de pago registrado para consumo.',
+        tsolutionsResponsibility: 'Diseño del widget flotante; integración en frontend; calibración de base de conocimientos.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['gemini_gateway', 'prompt_architect'],
@@ -12093,6 +12210,8 @@ Process completed with exit code 1.</textarea>
         badge: 'RAG Avanzado',
         description: 'Canalizaciones backend que vectorizan documentos corporativos para permitir búsquedas semánticas precisas y extracción de datos en milisegundos.',
         ticketJustification: 'Permite automatizar consultas complejas sobre manuales y catálogos de miles de artículos.',
+        clientResponsibility: 'Almacén de vectores cloud (Pinecone o pgvector en Neon) a nombre del cliente.',
+        tsolutionsResponsibility: 'Pipelines DAG asíncronos; procesamiento de documentos; endpoints REST optimizados en Render/Cloud Run.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['gemini_gateway', 'presentador_rag', 'dag_orchestrator'],
@@ -12111,6 +12230,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Identidad Visual',
         description: 'Sesión formativa de creación de marca, entrega de logotipo en curvas (SVG/PNG), paleta de colores técnica, fuentes corporativas y narrativa comercial.',
         ticketJustification: 'Permite al cliente apropiarse de su marca y transmitir autoridad frente a clientes y proveedores.',
+        clientResponsibility: 'Insumos y retroalimentación sobre la visión de la empresa.',
+        tsolutionsResponsibility: 'Licencias Adobe Illustrator / Photoshop; entrega de archivos vectoriales puros; redacción de Brand Story.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['branding_lockup'],
@@ -12127,6 +12248,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Blindaje Legal',
         description: 'Reporte de viabilidad fonética y disponibilidad ante el IMPI para evitar demandas o multas por marcas registradas por terceros, más manifiesto formal.',
         ticketJustification: 'Protege la inversión publicitaria antes de imprimir rótulos, uniformes o papelería.',
+        clientResponsibility: 'Pago de derechos oficiales ante el IMPI ($2,814 MXN aprox.) si decide solicitar el título de marca formal.',
+        tsolutionsResponsibility: 'Búsqueda fonética en bases del IMPI; dictamen técnico de viabilidad; redacción de manifiesto de marca.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['acuerdos_nda', 'riesgos_cumplimiento'],
@@ -12143,6 +12266,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Acceso Total',
         description: 'Acceso ilimitado y permanente a los 4 talleres de creación de marca, descarga infinita de PDFs vectoriales y uso del Editor Canvas de TSolutions.',
         ticketJustification: 'Autonomía perpetua para crear material publicitario sin depender de agencias externas.',
+        clientResponsibility: 'Ninguno adicional.',
+        tsolutionsResponsibility: 'Acceso permanente al Editor Canvas; soporte técnico de la plataforma.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['branding_lockup'],
@@ -12159,6 +12284,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Ventas Rápidas',
         description: 'Redacción persuasiva estructurada para bios de redes, encabezados web y respuestas rápidas de WhatsApp que explican el valor del negocio al instante.',
         ticketJustification: 'Estandariza el discurso comercial para elevar conversiones desde el primer contacto.',
+        clientResponsibility: 'Definición del cliente objetivo y diferenciadores clave.',
+        tsolutionsResponsibility: 'Copywriting profesional; entrega de 3 variantes de guion maestro.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['prompt_architect'],
@@ -12177,6 +12304,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Fletes en Tiempo Real',
         description: 'Conexión directa con la API de Uber Direct para cotizar fletes en vivo y despachar pedidos a domicilio sin triangular con repartidores por mensaje.',
         ticketJustification: 'Convierte el mostrador en una central logística automatizada de bajo costo.',
+        clientResponsibility: 'Contrato y alta de cuenta en Uber Direct Business; tarjeta para pago de fletes a Uber por viaje.',
+        tsolutionsResponsibility: 'Integración de API de Uber; cálculo dinámico en checkout; webhook de seguimiento de viajes en tiempo real.',
         includedIn: ['paq_ecommerce_logistica'],
         includesServices: [],
         workspaceTools: ['flotas_logistica'],
@@ -12193,6 +12322,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Fintech',
         description: 'Integración técnica de Stripe o Mercado Pago con webhooks seguros, meses sin intereses y vinculación a terminal física Point Mini.',
         ticketJustification: 'Asegura depósitos bancarios inmediatos y protege contra contracargos fraudulentos.',
+        clientResponsibility: 'Cuenta bancaria de depósito; comisiones transaccionales de la pasarela (aprox. 3.5% + IVA por cobro).',
+        tsolutionsResponsibility: 'Desarrollo de flujo seguro de checkout; configuración de webhooks; pruebas en entorno sandbox y pase a producción.',
         includedIn: ['paq_ecommerce_logistica'],
         includesServices: [],
         workspaceTools: ['calculadora_roi'],
@@ -12209,6 +12340,8 @@ Process completed with exit code 1.</textarea>
         badge: 'WhatsApp API',
         description: 'Flujo estructurado con menús de botones interactivos, toma de datos de facturación y enrutamiento hacia asesores especializados.',
         ticketJustification: 'Evita perder prospectos en horas no laborales o fines de semana.',
+        clientResponsibility: 'Número móvil para WhatsApp API; cuenta Meta for Developers; costo de conversaciones cobrado por Meta.',
+        tsolutionsResponsibility: 'Construcción del árbol lógico; servidor de webhook en Node.js; pruebas de estrés y monitoreo.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['gemini_gateway'],
@@ -12225,6 +12358,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Hardware NFC',
         description: 'Tarjeta plástica grabada con chip NFC para compartir catálogo con un toque al celular, más soporte acrílico para mostrador con QR dinámico.',
         ticketJustification: 'Transfiere la experiencia digital al punto de venta físico de forma impactante.',
+        clientResponsibility: 'Recepción del paquete físico en su domicilio.',
+        tsolutionsResponsibility: 'Suministro de la tarjeta con chip NTAG216; programación de vCard; diseño e impresión láser de acrílico.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['branding_lockup'],
@@ -12241,6 +12376,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Audiovisual',
         description: 'Grabación profesional en sitio, edición cinematográfica, corrección de color y musicalización licenciada lista para pauta publicitaria en redes.',
         ticketJustification: 'Genera credibilidad inmediata y aumenta la confianza de compra en clientes nuevos.',
+        clientResponsibility: 'Acceso a instalaciones y selección de colaboradores participantes.',
+        tsolutionsResponsibility: 'Cámaras 4K, luces, estabilizadores, edición profesional en Adobe Premiere / After Effects, licencias de audio.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['carrusel_marketing'],
@@ -12257,6 +12394,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Tráfico Pago',
         description: 'Configuración técnica de Meta Business Manager, instalación de la API de conversiones, delimitación geográfica y segmentación de clientes ideales.',
         ticketJustification: 'Garantiza que el presupuesto publicitario no se desperdicie en clics sin intención de compra.',
+        clientResponsibility: 'Tarjeta vinculada a la cuenta publicitaria para pagar directamente a Meta/Google por las impresiones/clics.',
+        tsolutionsResponsibility: 'Instalación de píxel y CAPI; segmentación demográfica y de intereses; diseño de artes publicitarios.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['prospeccion_b2b'],
@@ -12273,6 +12412,8 @@ Process completed with exit code 1.</textarea>
         badge: 'Diseño Social',
         description: 'Homologación de fotos de perfil, portadas, historias destacadas y entrega de 5 plantillas editables para publicaciones consistentes.',
         ticketJustification: 'Mantiene una imagen pulcra y profesional en todos los puntos de contacto del cliente.',
+        clientResponsibility: 'Suministro de logotipo y fotografías de sus productos.',
+        tsolutionsResponsibility: 'Diseño de 5 plantillas editables en Canva Pro; manual de especificaciones y dimensiones.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['branding_lockup'],
@@ -12289,6 +12430,8 @@ Process completed with exit code 1.</textarea>
         badge: 'SLA Continuo',
         description: 'Monitoreo de disponibilidad 24/7, respaldo semanal de base de datos, 1 hora de soporte directo de código al mes y 15% de descuento en ampliaciones.',
         ticketJustification: 'Póliza de tranquilidad para negocios que no pueden detener sus operaciones digitales ni un solo día.',
+        clientResponsibility: 'Ninguno adicional.',
+        tsolutionsResponsibility: 'Monitoreo de uptime; soporte de ingeniería de software preventivo; respaldo cifrado en la nube.',
         includedIn: [],
         includesServices: [],
         workspaceTools: ['pipeline_auditor', 'migracion_neon'],
@@ -12299,6 +12442,17 @@ Process completed with exit code 1.</textarea>
     let currentServicesFilter = 'todos';
 
     // ABRIR Y CERRAR MODALES DEL CATÁLOGO
+    
+    function openResponsibilityMatrixModal() {
+      const modal = document.getElementById('responsibility-matrix-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeResponsibilityMatrixModal() {
+      const modal = document.getElementById('responsibility-matrix-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
     function openServicesMenuModal() {
       const modal = document.getElementById('services-menu-modal');
       if (modal) {
@@ -12344,7 +12498,6 @@ Process completed with exit code 1.</textarea>
       const container = document.getElementById('services-cards-grid');
       if (!container) return;
 
-      // Verificar qué servicios están incluidos en algún paquete seleccionado actualmente
       const activeParentPackages = window.unifiedServicesCatalog.filter(s => s.selected && s.includesServices && s.includesServices.length > 0);
       const allIncludedServiceIds = new Set();
       activeParentPackages.forEach(p => p.includesServices.forEach(id => allIncludedServiceIds.add(id)));
@@ -12369,37 +12522,48 @@ Process completed with exit code 1.</textarea>
           return '<span class="tool-tag-pill">🛠️ ' + t + '</span>';
         }).join('');
 
-        return \`
-          <div class="service-card-item \${isSelected ? 'selected' : ''} \${isIncludedInParent ? 'included-free' : ''}" onclick="toggleServiceSelection('\${item.id}')">
+        return `
+          <div class="service-card-item ${isSelected ? 'selected' : ''} ${isIncludedInParent ? 'included-free' : ''}" onclick="toggleServiceSelection('${item.id}')">
             <div class="service-checkbox-wrap" onclick="event.stopPropagation()">
-              <input type="checkbox" class="service-checkbox" \${isSelected ? 'checked' : ''} onchange="toggleServiceSelection('\${item.id}')" />
+              <input type="checkbox" class="service-checkbox" ${isSelected ? 'checked' : ''} onchange="toggleServiceSelection('${item.id}')" />
             </div>
             <div class="service-info-wrap">
               <div class="service-title-row">
                 <div>
                   <div class="service-name">
-                    \${item.name}
-                    \${item.badge ? '<span style="font-size:0.68rem; background:rgba(255,107,0,0.15); color:#FF6B00; border:1px solid rgba(255,107,0,0.3); padding:1px 6px; border-radius:4px;">' + item.badge + '</span>' : ''}
-                    \${badgeExtra}
+                    ${item.name}
+                    ${item.badge ? '<span style="font-size:0.68rem; background:rgba(255,107,0,0.15); color:#FF6B00; border:1px solid rgba(255,107,0,0.3); padding:1px 6px; border-radius:4px;">' + item.badge + '</span>' : ''}
+                    ${badgeExtra}
                   </div>
-                  <div style="font-size:0.73rem; color:#A0AEC0; margin-top:2px;">\${item.subtitle}</div>
+                  <div style="font-size:0.73rem; color:#A0AEC0; margin-top:2px;">${item.subtitle}</div>
                 </div>
-                <div class="service-price-badge \${isIncludedInParent ? 'included' : ''}">
-                  \${priceDisplay}
+                <div class="service-price-badge ${isIncludedInParent ? 'included' : ''}">
+                  ${priceDisplay}
                 </div>
               </div>
-              <p class="service-desc">\${item.description}</p>
+              <p class="service-desc">${item.description}</p>
+              
+              <!-- CAJA DE DELIMITACIÓN DE RESPONSABILIDAD TÉCNICA -->
+              <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:8px 12px; margin-bottom:10px; font-size:0.71rem; line-height:1.45;">
+                <div style="margin-bottom:4px; color:#FBBF24;">
+                  <strong>👤 Por cuenta del Cliente:</strong> <span style="color:#E2E8F0;">${item.clientResponsibility || 'Cuenta propia del servicio.'}</span>
+                </div>
+                <div style="color:#00F2FE;">
+                  <strong>🛡️ Por cuenta de TSolutions:</strong> <span style="color:#CBD5E1;">${item.tsolutionsResponsibility || 'Ingeniería, licencias y desarrollo.'}</span>
+                </div>
+              </div>
+
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                 <div class="service-tools-tags">
-                  \${toolsList}
+                  ${toolsList}
                 </div>
                 <div style="font-size:0.7rem; color:#718096; font-family:var(--font-mono);">
-                  Modalidad: \${item.paymentModel}
+                  Modalidad: ${item.paymentModel}
                 </div>
               </div>
             </div>
           </div>
-        \`;
+        `;
       }).join('');
     }
 
@@ -12645,7 +12809,18 @@ Process completed with exit code 1.</textarea>
           Se hace constar expresamente que el uso, acceso, modelado de directivas y exploración en el <em>Nexus Architect Studio</em> es libre de costo. No obstante, al momento de formalizar el cierre del presente contrato, <strong>se establece un pago único a cargo del CLIENTE equivalente al 5% (cinco por ciento) del valor total de la inversión neta del proyecto</strong> ($\${platformFee.toLocaleString('es-MX')} MXN). Dicho importe ampara el tiempo estimado de duración del proyecto y se destina de forma exclusiva al aprovisionamiento de bases de datos aisladas en la nube, seguridad multi-tenant, servidores de alta disponibilidad y soporte de espacios colaborativos más robustos, sin que existan mensualidades ocultas posteriores.
         </p>
 
-        <div class="clause-title">CLÁUSULA QUINTA: CAPACITACIÓN ANDRAGÓGICA Y CONSTANCIA DE APRENDIZAJE</div>
+        
+        <div class="clause-title" style="color:#0284C7; background:#E0F2FE; padding:6px 10px; border-left:4px solid #0284C7; border-radius:4px;">
+          CLÁUSULA QUINTA: DELIMITACIÓN DE CUENTAS, CONSUMOS Y HERRAMIENTAS DE AGENCIA
+        </div>
+        <p style="text-align:justify;">
+          Queda expresamente pactado que todos los servicios de consumo recurrente vinculados directamente a la propiedad del CLIENTE (incluyendo sin limitar: nombres de dominio, instancias de bases de datos persistentes en Neon o AWS, servidores virtuales, llamadas a APIs de Google Cloud Console con su propia facturación, tokens de modelos de lenguaje en AI Studio y comisiones de pasarelas de pago o fletes de Uber Direct) <strong>se aperturan a nombre exclusivo del CLIENTE con sus propios métodos de pago</strong>. TSolutions IPIDD no revende ni infla costos de infraestructura de terceros.
+        </p>
+        <p style="text-align:justify;">
+          Por su parte, <strong>TSolutions IPIDD absorbe íntegramente los costos de licenciamiento de sus plataformas profesionales de desarrollo</strong>, incluyendo el agente de inteligencia artificial Antigravity, hosting en Vercel Pro para frontends, Render/Cloud Run para staging, licencias de software de diseño Adobe Creative Cloud y Canva Pro, orquestadores Dify.ai Enterprise y repositorios GitHub privados con pipelines de CI/CD, así como las horas aplicadas de ingeniería y capacitación andragógica.
+        </p>
+
+        <div class="clause-title">CLÁUSULA SEXTA: CAPACITACIÓN ANDRAGÓGICA Y CONSTANCIA DE APRENDIZAJE</div>
         <p style="text-align:justify;">
           Al finalizar la implementación técnica, TSolutions IPIDD impartirá capacitación estructurada al personal del CLIENTE en los 3 dominios formativos (Cognitivo, Psicomotor y Afectivo), emitiendo la <em>Constancia de Participación, Aprendizaje y Dominio Tecnológico</em> emitida por TSolutions, garantizando la adopción integral sin resistencia al cambio.
         </p>
@@ -12797,6 +12972,43 @@ Fase 6: Cierre &amp; Sesión Andragógica                                    [==
             <td style="border:1px solid #CBD5E0; padding:10px;"><strong>INVERSIÓN TOTAL DEL PROYECTO:</strong></td>
             <td style="border:1px solid #CBD5E0; padding:10px; text-align:right; font-weight:bold; font-family:monospace; color:#16A34A;">$\${finalTotal.toLocaleString('es-MX')} MXN</td>
           </tr>
+        </table>
+
+        
+        <h2 style="font-size:12pt; text-transform:uppercase; color:#0F172A; border-left:4px solid #0284C7; padding-left:10px; margin-top:24px;">
+          4. Matriz de Responsabilidad Técnica: Cliente vs. TSolutions IPIDD
+        </h2>
+        <table style="width:100%; border-collapse:collapse; margin:14px 0; font-size:9pt;">
+          <thead>
+            <tr style="background:#0F172A; color:#FFFFFF;">
+              <th style="border:1px solid #CBD5E0; padding:8px; text-align:left; width:50%;">👤 Por Cuenta del Cliente (Propiedad &amp; Consumo)</th>
+              <th style="border:1px solid #CBD5E0; padding:8px; text-align:left; width:50%;">🛡️ Por Cuenta de TSolutions (Ingeniería &amp; Licencias)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border:1px solid #CBD5E0; padding:8px; vertical-align:top;">
+                • Dominio (.com/.mx) y control de DNS.<br>
+                • Base de datos persistente (Postgres Neon/AWS).<br>
+                • Máquinas virtuales / VPS si requiere host local.<br>
+                • Facturación de APIs de Google Cloud Console.<br>
+                • Claves y saldo de tokens de Google AI Studio / Gemini.<br>
+                • Cuentas comerciales bancarias (Stripe / Mercado Pago).<br>
+                • Cuentas de WhatsApp Business Cloud API &amp; SIM.<br>
+                • Cuenta Uber Direct Business para fletes de envíos.
+              </td>
+              <td style="border:1px solid #CBD5E0; padding:8px; vertical-align:top; background:#F8FAFC;">
+                • Antigravity Advanced Agentic AI Assistant.<br>
+                • Vercel Pro Hosting &amp; Edge Network.<br>
+                • Render / Cloud Run (Middleware de bots).<br>
+                • Licencias Adobe Creative Cloud (Illustrator, Photoshop).<br>
+                • Licencias Canva Pro / Figma para plantillas.<br>
+                • Dify.ai Enterprise (Orquestador de agentes RAG).<br>
+                • GitHub Enterprise &amp; Pipelines CI/CD.<br>
+                • Horas de ingeniería, arquitectura y capacitación TWI.
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <div style="background:#F0FDF4; border:1px solid #86EFAC; border-radius:8px; padding:14px; margin-top:16px;">
