@@ -6869,126 +6869,342 @@
 
       <!-- BODY: FORM & LIVE PREVIEW -->
       <div id="onboarding-form-wrapper" style="display:grid; grid-template-columns:1fr 360px; flex:1; overflow:hidden;">
-        <!-- LEFT: 5 VECTORS -->
+        <!-- LEFT: ÁRBOL DE DECISIONES CONDICIONAL EN 6 PASOS PROGRESIVOS -->
         <div style="padding:24px 30px; overflow-y:auto; border-right:1px solid rgba(255,255,255,0.10);">
           <div id="onboarding-error-banner" style="display:none; background:rgba(239,68,68,0.15); border:1px solid #EF4444; border-radius:8px; padding:12px 16px; color:#FCA5A5; font-size:0.88rem; margin-bottom:20px;"></div>
 
-          <!-- VECTOR 1: ARQUETIPOS -->
-          <div style="margin-bottom:24px;">
-            <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-              <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">1</span>
-              Arquetipo de Proyecto &amp; Dominio Oficial
+          <!-- NAVEGACIÓN SUPERIOR DEL WIZARD (PASOS 1 AL 6) -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:rgba(0,0,0,0.4); padding:10px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); overflow-x:auto;">
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="ob-step-nav-btn active" id="ob-nav-step-1" onclick="jumpToOnboardingStep(1)" style="background:rgba(0,229,255,0.18); border:1px solid #00E5FF; color:#00E5FF; border-radius:6px; padding:4px 10px; font-size:0.75rem; font-weight:bold; cursor:pointer;">1. Hosting</button>
+              <button type="button" class="ob-step-nav-btn" id="ob-nav-step-2" onclick="jumpToOnboardingStep(2)" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#94A3B8; border-radius:6px; padding:4px 10px; font-size:0.75rem; font-weight:bold; cursor:pointer;">2. Datos &amp; CMS</button>
+              <button type="button" class="ob-step-nav-btn" id="ob-nav-step-3" onclick="jumpToOnboardingStep(3)" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#94A3B8; border-radius:6px; padding:4px 10px; font-size:0.75rem; font-weight:bold; cursor:pointer;">3. Identidad</button>
+              <button type="button" class="ob-step-nav-btn" id="ob-nav-step-4" onclick="jumpToOnboardingStep(4)" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#94A3B8; border-radius:6px; padding:4px 10px; font-size:0.75rem; font-weight:bold; cursor:pointer;">4. Pagos</button>
+              <button type="button" class="ob-step-nav-btn" id="ob-nav-step-5" onclick="jumpToOnboardingStep(5)" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#94A3B8; border-radius:6px; padding:4px 10px; font-size:0.75rem; font-weight:bold; cursor:pointer;">5. IA &amp; Colas</button>
+              <button type="button" class="ob-step-nav-btn" id="ob-nav-step-6" onclick="jumpToOnboardingStep(6)" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#94A3B8; border-radius:6px; padding:4px 10px; font-size:0.75rem; font-weight:bold; cursor:pointer;">6. Cierre &amp; Cliente</button>
             </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;" id="onboarding-archetype-grid">
-              <!-- Tarjetas de arquetipos generadas dinámicamente -->
-            </div>
+            <span id="ob-step-counter" style="font-family:monospace; font-size:0.75rem; color:#00E5FF; font-weight:bold;">Paso 1 de 6</span>
           </div>
 
-          <!-- VECTOR 2: CLIENTE -->
-          <div style="margin-bottom:24px;">
-            <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-              <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">2</span>
-              Datos del Propietario (Cliente &amp; Empresa)
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Nombre del Proyecto *</label>
-                <input type="text" id="ob-project-name" value="Portal Corporativo Nexus" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;" />
+          <!-- CONTENIDO DE LOS PASOS -->
+          <div id="ob-wizard-step-container">
+            
+            <!-- PASO 1: NATURALEZA DEL PROYECTO Y TRÁFICO (DEFINE HOSTING BASE) -->
+            <div id="ob-pane-step-1" class="ob-wizard-pane" style="display:block;">
+              <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+                <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">1</span>
+                Paso 1: Naturaleza del Proyecto y Tráfico (Hosting Base)
               </div>
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Razón Social o Empresa</label>
-                <input type="text" id="ob-company-name" value="Almonte Logistics S.A. de C.V." style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;" />
-              </div>
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Representante Legal *</label>
-                <input type="text" id="ob-client-name" value="Lic. Fernando Almonte" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;" />
-              </div>
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Correo Electrónico *</label>
-                <input type="email" id="ob-client-email" value="falmonte@empresa-cliente.com" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;" />
-              </div>
-              <div style="grid-column:1 / -1;">
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Dominio Objetivo / URL Prevista</label>
-                <input type="text" id="ob-target-domain" value="www.almontelogistics.mx" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;" />
-              </div>
-            </div>
-          </div>
-
-          <!-- VECTOR 3: MATRIZ RACI -->
-          <div style="margin-bottom:24px;">
-            <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-              <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">3</span>
-              Matriz RACI del Equipo de Trabajo
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Tech Lead / Implementador (Responsable)</label>
-                <input type="text" id="ob-tech-lead-name" value="Ing. David Gómez (Tech Lead)" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem; margin-bottom:6px;" />
-                <input type="email" id="ob-tech-lead-email" value="dgomez@tsolutionsipidd.com" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 10px; color:#94A3B8; font-size:0.78rem;" />
-              </div>
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Project Manager / Calidad (Accountable)</label>
-                <input type="text" id="ob-pm-name" value="Mtra. Sofía Valenzuela (PM)" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem; margin-bottom:6px;" />
-                <input type="email" id="ob-pm-email" value="svalenzuela@tsolutionsipidd.com" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 10px; color:#94A3B8; font-size:0.78rem;" />
-              </div>
-            </div>
-          </div>
-
-          <!-- VECTOR 4: REQUERIMIENTOS TÉCNICOS -->
-          <div style="margin-bottom:24px;">
-            <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-              <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">4</span>
-              Requerimientos Técnicos e Integraciones
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Origen de Repositorio</label>
-                <select id="ob-repo-provider" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;">
-                  <option value="BLUEPRINT_GENERATED">Generación Directa (Blueprint DAG)</option>
-                  <option value="GITHUB">GitHub CI/CD Conectado</option>
-                  <option value="GITLAB">GitLab Pipelines</option>
-                </select>
-              </div>
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Pasarela de Pago</label>
-                <select id="ob-payment-gateway" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;">
-                  <option value="NONE">No Aplica / Sin Pasarela</option>
-                  <option value="STRIPE">Stripe Payments</option>
-                  <option value="CLIP">Clip API (MSI)</option>
-                  <option value="MERCADOPAGO">MercadoPago Wallet</option>
-                </select>
-              </div>
-              <div style="grid-column:1 / -1; display:flex; align-items:center; gap:10px; margin-top:6px;">
-                <input type="checkbox" id="ob-google-tasks" style="width:18px; height:18px; accent-color:#00E5FF;" />
-                <label for="ob-google-tasks" style="font-size:0.85rem; color:#E2E8F0; cursor:pointer;">
-                  Habilitar Sincronización Bidireccional con Google Tasks
+              
+              <!-- P1.1 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 1.1: ¿Cuál es el objetivo principal de tu sitio o plataforma web?
                 </label>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  <label class="ob-radio-card" style="display:flex; align-items:flex-start; gap:10px; padding:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p1_1" value="OPCION_A" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF; margin-top:3px;" />
+                    <div>
+                      <strong style="color:#FFF; font-size:0.85rem;">Opción A: Presencia informativa, Landing Page o portafolio corporativo</strong>
+                      <div style="font-size:0.74rem; color:#94A3B8; margin-top:2px;">Recomendación Vercel Hobby / Cloudflare Pages (4 hrs desarrollo, $0 OpEx mensual). Oculta bases de datos complejas.</div>
+                    </div>
+                  </label>
+                  <label class="ob-radio-card" style="display:flex; align-items:flex-start; gap:10px; padding:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p1_1" value="OPCION_B" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF; margin-top:3px;" />
+                    <div>
+                      <strong style="color:#FFF; font-size:0.85rem;">Opción B: Sistema empresarial a medida, portal PHP tradicional o APIs dedicadas</strong>
+                      <div style="font-size:0.74rem; color:#94A3B8; margin-top:2px;">Backend en Render Standard / Google Cloud Run (10 hrs desarrollo, $25/mes OpEx).</div>
+                    </div>
+                  </label>
+                  <label class="ob-radio-card" style="display:flex; align-items:flex-start; gap:10px; padding:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p1_1" value="OPCION_C" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF; margin-top:3px;" />
+                    <div>
+                      <strong style="color:#FFF; font-size:0.85rem;">Opción C: Aplicación web moderna interactiva (SaaS, membresías o IA integrada)</strong>
+                      <div style="font-size:0.74rem; color:#94A3B8; margin-top:2px;">Stack Híbrido: Frontend Next.js en Vercel + Backend persistente en Render / Cloud Run.</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- P1.2 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 1.2: ¿Qué volumen de visitas mensuales estimas recibir en los primeros 6 meses?
+                </label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p1_2" value="UNDER_10K" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">Menos de 10,000 visitas/mes ($0 OpEx)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p1_2" value="OVER_10K" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">Más de 10,000 visitas/mes (Vercel Pro $20/mes)</span>
+                  </label>
+                </div>
               </div>
             </div>
+
+            <!-- PASO 2: DATOS, ARCHIVOS Y AUTOGESTIÓN DE CONTENIDO (DEFINE PERSISTENCIA Y CMS) -->
+            <div id="ob-pane-step-2" class="ob-wizard-pane" style="display:none;">
+              <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+                <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">2</span>
+                Paso 2: Datos, Archivos y Autogestión de Contenido (Persistencia y CMS)
+              </div>
+
+              <!-- P2.1 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 2.1: ¿Tu sitio necesita guardar información dinámica (clientes, pedidos, inventario)?
+                </label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p2_1" value="NO" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">No: Solo formularios a correo/WhatsApp (Sin BD)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p2_1" value="YES" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">Sí: Neon Postgres / Supabase + Backups ($25/mes)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- P2.2 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 2.2: ¿Los usuarios o administradores subirán archivos pesados (fotos, PDFs, videos)?
+                </label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p2_2" value="NO" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">No: Solo texto y assets predefinidos</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p2_2" value="YES" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">Sí: Object Storage Cloudflare R2 / AWS S3 ($5/mes)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- P2.3 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 2.3: ¿Deseas un panel autoadministrable (Headless CMS) para editar textos o catálogo?
+                </label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p2_3" value="NO" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">No: Contenido estático administrado por código</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p2_3" value="YES" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">Sí: Payload CMS / Sanity / Strapi ($15/mes)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- PASO 3: CUENTAS DE USUARIO Y NIVELES DE ACCESO (DEFINE AUTH & RBAC) -->
+            <div id="ob-pane-step-3" class="ob-wizard-pane" style="display:none;">
+              <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+                <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">3</span>
+                Paso 3: Cuentas de Usuario y Niveles de Acceso (Auth &amp; RBAC)
+              </div>
+
+              <!-- P3.1 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 3.1: ¿Tus clientes o empleados necesitarán iniciar sesión con usuario y contraseña (o Google)?
+                </label>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  <label style="display:flex; align-items:flex-start; gap:10px; padding:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p3_1" value="NO" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF; margin-top:3px;" />
+                    <div>
+                      <strong style="color:#FFF; font-size:0.85rem;">No: El sitio es de acceso público o mostrador abierto</strong>
+                      <div style="font-size:0.74rem; color:#94A3B8; margin-top:2px;">No requiere módulo de autenticación ($0 OpEx, 0 hrs adicionales).</div>
+                    </div>
+                  </label>
+                  <label style="display:flex; align-items:flex-start; gap:10px; padding:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p3_1" value="YES" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF; margin-top:3px;" />
+                    <div>
+                      <strong style="color:#FFF; font-size:0.85rem;">Sí: Roles diferenciados (Admin, Cliente, Operador) y 2FA</strong>
+                      <div style="font-size:0.74rem; color:#94A3B8; margin-top:2px;">Integración de Clerk / Supabase Auth (12 hrs desarrollo, $0 OpEx hasta 10,000 usuarios activos).</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- PASO 4: MONETIZACIÓN Y PASARELA DE PAGOS (DEFINE STRIPE Y VARIABLES) -->
+            <div id="ob-pane-step-4" class="ob-wizard-pane" style="display:none;">
+              <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+                <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">4</span>
+                Paso 4: Monetización y Pasarela de Pagos (Stripe &amp; Finanzas)
+              </div>
+
+              <!-- P4.1 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 4.1: ¿Vas a cobrar en línea dentro de la plataforma?
+                </label>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p4_1" value="NO" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">No: Sin pagos en línea (solo cotizaciones o pago en mostrador)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p4_1" value="ONE_TIME" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">Sí, pagos únicos (Carrito de compras, servicios, pedidos)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p4_1" value="SUBSCRIPTION" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">Sí, suscripciones recurrentes o membresías mensuales</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- P4.2 CONDICIONAL -->
+              <div id="ob-box-p4-2" style="display:none; background:rgba(0,0,0,0.35); border:1px dashed rgba(0,229,255,0.3); border-radius:10px; padding:14px; margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#00E5FF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 4.2: Proyección de transacciones para cálculo de comisiones:
+                </label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                  <div>
+                    <label style="font-size:0.75rem; color:#94A3B8; display:block; margin-bottom:4px;">Volumen mensual estimado (USD):</label>
+                    <input type="number" id="ob-input-vol-usd" value="5000" onchange="handleOnboardingBranching()" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:6px 10px; color:#FFF; font-family:monospace;" />
+                  </div>
+                  <div>
+                    <label style="font-size:0.75rem; color:#94A3B8; display:block; margin-bottom:4px;">Cantidad de transacciones / mes:</label>
+                    <input type="number" id="ob-input-tx-count" value="100" onchange="handleOnboardingBranching()" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:6px 10px; color:#FFF; font-family:monospace;" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PASO 5: INTELIGENCIA ARTIFICIAL Y PROCESAMIENTO EN SEGUNDO PLANO (DEFINE IA Y COLAS) -->
+            <div id="ob-pane-step-5" class="ob-wizard-pane" style="display:none;">
+              <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+                <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">5</span>
+                Paso 5: Inteligencia Artificial y Procesamiento Asíncrono (IA &amp; Colas)
+              </div>
+
+              <!-- P5.1 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 5.1: ¿El proyecto integrará funciones de Inteligencia Artificial (chatbots, RAG, análisis)?
+                </label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p5_1" value="NO" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">No: Sin módulos de Inteligencia Artificial</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p5_1" value="YES" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                    <span style="font-size:0.82rem; color:#E2E8F0;">Sí: Gemini / OpenAI + Rate Limiting Upstash ($30/mes)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- P5.2 y P5.3 CONDICIONALES -->
+              <div id="ob-box-p5-sub" style="display:none; background:rgba(0,0,0,0.35); border:1px dashed rgba(0,229,255,0.3); border-radius:10px; padding:14px; margin-bottom:18px;">
+                <div style="margin-bottom:12px;">
+                  <label style="font-size:0.84rem; color:#00E5FF; font-weight:600; display:block; margin-bottom:6px;">
+                    Pregunta 5.2: ¿La plataforma realizará tareas pesadas (&gt;10 seg) como análisis de PDFs o video?
+                  </label>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:6px; cursor:pointer;">
+                      <input type="radio" name="ob_p5_2" value="NO" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                      <span style="font-size:0.78rem; color:#E2E8F0;">No, solo respuestas instantáneas</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; padding:8px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:6px; cursor:pointer;">
+                      <input type="radio" name="ob_p5_2" value="YES" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF;" />
+                      <span style="font-size:0.78rem; color:#E2E8F0;">Sí: Colas Asíncronas BullMQ / Inngest ($10/mes)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">
+                    Pregunta 5.3: Estimado de peticiones de IA al mes (con Hard Limit de seguridad):
+                  </label>
+                  <select id="ob-input-ai-req" onchange="handleOnboardingBranching()" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:6px 10px; color:#FFF; font-family:monospace; font-size:0.8rem;">
+                    <option value="1000">1,000 consultas/mes (~$0.15 USD)</option>
+                    <option value="5000">5,000 consultas/mes (~$0.75 USD)</option>
+                    <option value="10000" selected>10,000 consultas/mes (~$1.50 USD)</option>
+                    <option value="50000">50,000 consultas/mes (~$7.50 USD)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- PASO 6: OPERACIÓN POST-LANZAMIENTO Y DATOS DEL CLIENTE (DEFINE MODALIDAD DE CIERRE) -->
+            <div id="ob-pane-step-6" class="ob-wizard-pane" style="display:none;">
+              <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+                <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">6</span>
+                Paso 6: Operación Post-Lanzamiento y Datos del Proyecto
+              </div>
+
+              <!-- P6.1 -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:0.84rem; color:#FFF; font-weight:600; display:block; margin-bottom:8px;">
+                  Pregunta 6.1: Una vez entregada la plataforma, ¿cómo prefieres gestionar servidores y mantenimiento?
+                </label>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  <label style="display:flex; align-items:flex-start; gap:10px; padding:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p6_1" value="MODALITY_A" checked onchange="handleOnboardingBranching()" style="accent-color:#00E5FF; margin-top:3px;" />
+                    <div>
+                      <strong style="color:#FFF; font-size:0.85rem;">Modalidad A (Autogestión / Entrega Total)</strong>
+                      <div style="font-size:0.74rem; color:#94A3B8; margin-top:2px;">Vinculas tus propias tarjetas bancarias en cada proveedor (Vercel, Render, OpenAI) sin iguala mensual.</div>
+                    </div>
+                  </label>
+                  <label style="display:flex; align-items:flex-start; gap:10px; padding:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer;">
+                    <input type="radio" name="ob_p6_1" value="MODALITY_B" onchange="handleOnboardingBranching()" style="accent-color:#00E5FF; margin-top:3px;" />
+                    <div>
+                      <strong style="color:#FFF; font-size:0.85rem;">Modalidad B (Servicio Gestionado / Póliza Retainer Mensual al 10%)</strong>
+                      <div style="font-size:0.74rem; color:#94A3B8; margin-top:2px;">TSolutions administra servidores, monitorea caídas 24/7 (Sentry/Uptime), parches Snyk y respaldos diarios.</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- DATOS FORMALES DEL CLIENTE -->
+              <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:16px;">
+                <div style="font-size:0.82rem; color:#00E5FF; font-weight:bold; margin-bottom:10px;">
+                  Datos de Identificación del Proyecto &amp; Dominio
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                  <div>
+                    <label style="font-size:0.75rem; color:#94A3B8; display:block; margin-bottom:4px;">Nombre del Proyecto / Negocio *</label>
+                    <input type="text" id="ob-project-name" value="MPS Ayala Ferretodo" placeholder="Ej. Ferretería Central" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:8px 10px; color:#FFF; font-size:0.82rem;" />
+                  </div>
+                  <div>
+                    <label style="font-size:0.75rem; color:#94A3B8; display:block; margin-bottom:4px;">Nombre del Cliente Sponsor *</label>
+                    <input type="text" id="ob-client-name" value="Gabriel Ayala" placeholder="Ej. Carlos Mendoza" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:8px 10px; color:#FFF; font-size:0.82rem;" />
+                  </div>
+                  <div>
+                    <label style="font-size:0.75rem; color:#94A3B8; display:block; margin-bottom:4px;">Correo Electrónico Oficial *</label>
+                    <input type="email" id="ob-client-email" value="gabriel@ferreayala.mx" placeholder="cliente@negocio.com" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:8px 10px; color:#FFF; font-size:0.82rem;" />
+                  </div>
+                  <div>
+                    <label style="font-size:0.75rem; color:#94A3B8; display:block; margin-bottom:4px;">Dominio Objetivo</label>
+                    <input type="text" id="ob-target-domain" value="m.tsolutionsipidd.com" placeholder="www.tudominio.com" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:8px 10px; color:#FFF; font-size:0.82rem;" />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
           </div>
 
-          <!-- VECTOR 5: ESQUEMA COMERCIAL -->
-          <div>
-            <div style="font-family:'Space Grotesk', sans-serif; font-size:0.95rem; font-weight:bold; color:#00E5FF; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-              <span style="background:#00E5FF; color:#0A0D14; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">5</span>
-              Marco Comercial &amp; Términos de Contratación
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Términos de Pago</label>
-                <select id="ob-payment-terms" onchange="updateOnboardingSummary()" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;">
-                  <option value="50/50">50% Anticipo / 50% Liquidación</option>
-                  <option value="30/30/40">30% Anticipo / 30% Hito / 40% Cierre</option>
-                  <option value="ANNUAL">Licenciamiento Anual</option>
-                  <option value="MONTHLY_LICENSE">Póliza Mensual de Gestión OPEX</option>
-                </select>
-              </div>
-              <div>
-                <label style="font-size:0.78rem; color:#94A3B8; display:block; margin-bottom:4px;">Fecha Objetivo de Entrega</label>
-                <input type="date" id="ob-delivery-date" style="width:100%; background:#0A0D14; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:8px 12px; color:#FFF; font-size:0.85rem;" />
-              </div>
-            </div>
+          <!-- BOTONES DE NAVEGACIÓN ANTERIOR / SIGUIENTE -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; pt:16px; border-top:1px solid rgba(255,255,255,0.08);">
+            <button type="button" id="ob-btn-prev" onclick="navigateOnboardingStep(-1)" style="display:none; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#E2E8F0; padding:8px 18px; border-radius:6px; font-size:0.82rem; font-weight:bold; cursor:pointer;">
+              ← Anterior
+            </button>
+            <button type="button" id="ob-btn-next" onclick="navigateOnboardingStep(1)" style="margin-left:auto; background:#00E5FF; border:none; color:#0A0D14; padding:8px 24px; border-radius:6px; font-size:0.82rem; font-weight:bold; cursor:pointer; box-shadow:0 0 16px rgba(0,229,255,0.4);">
+              Siguiente →
+            </button>
           </div>
+
         </div>
 
         <!-- RIGHT: LIVE ARCHITECTURE SUMMARY -->
@@ -7001,11 +7217,23 @@
             <!-- Inversión -->
             <div style="background:rgba(18, 23, 34, 0.9); border:1px solid rgba(255, 107, 0, 0.35); border-radius:10px; padding:16px; margin-bottom:16px; box-shadow:0 0 20px rgba(255, 107, 0, 0.1);">
               <div style="font-size:0.72rem; color:#94A3B8; text-transform:uppercase;">Inversión Total Estimada</div>
-              <div id="ob-summary-price" style="font-family:'Bruno Ace', sans-serif; font-size:1.75rem; color:#FF6B00; margin:4px 0 2px 0;">
-                $7,500 MXN
+              <div id="ob-summary-price" style="font-family:'Bruno Ace', sans-serif; font-size:1.65rem; color:#00E5FF; margin:4px 0 2px 0;">
+                $4,410 USD
               </div>
-              <div id="ob-summary-terms" style="font-size:0.75rem; color:#00E5FF; font-family:'Space Grotesk', sans-serif;">
-                50/50 • Pago Único
+              <div id="ob-summary-capex-mxn" style="font-size:0.75rem; color:#FFD700; font-family:monospace; margin-bottom:4px;">
+                ~$88,200 MXN (CapEx)
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#CBD5E1; padding-top:4px; border-top:1px solid rgba(255,255,255,0.1);">
+                <span>OpEx Mensual:</span>
+                <strong id="ob-summary-opex" style="color:#FBBF24; font-family:monospace;">$105 USD/mes</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#CBD5E1; margin-top:2px;">
+                <span>Retainer Sugerido:</span>
+                <strong id="ob-summary-retainer" style="color:#34D399; font-family:monospace;">$441 USD/mes</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#FFD700; margin-top:2px; padding-top:2px; border-top:1px dashed rgba(255,215,0,0.3);">
+                <span>✦ Cuota Plataforma (5%):</span>
+                <strong id="ob-summary-platform-fee" style="color:#FFD700; font-family:monospace;">$220.50 USD</strong>
               </div>
             </div>
 
@@ -7096,6 +7324,242 @@
     function openNexusOnboardingModal() {
       document.getElementById('nexus-onboarding-modal').style.display = 'flex';
       loadOnboardingCatalog();
+    }
+
+    function closeNexusOnboardingModal() {
+      document.getElementById('nexus-onboarding-modal').style.display = 'none';
+      document.getElementById('onboarding-form-wrapper').style.display = 'grid';
+      document.getElementById('onboarding-success-view').style.display = 'none';
+    }
+
+    async function loadOnboardingCatalog() {
+      try {
+        const res = await fetch('/api/v1/nexus/onboarding/catalog');
+        if (res.ok) {
+          obCatalog = await res.json();
+        }
+      } catch (err) {
+        console.warn('Error loading catalog:', err);
+      }
+      renderArchetypeGrid();
+      updateOnboardingSummary();
+    }
+
+    function renderArchetypeGrid() {
+      const container = document.getElementById('onboarding-archetype-grid');
+      if (!container) return;
+
+      container.innerHTML = ARCHETYPE_META.map(arch => {
+        const isSelected = obSelectedArchetype === arch.id;
+        return `
+          <div onclick="selectOnboardingArchetype('${arch.id}')" style="
+            background:${isSelected ? 'rgba(0, 229, 255, 0.12)' : '#0A0D14'};
+            border:${isSelected ? '1px solid #00E5FF' : '1px solid rgba(255, 255, 255, 0.08)'};
+            border-radius:8px;
+            padding:12px;
+            cursor:pointer;
+            transition:all 0.2s;
+            box-shadow:${isSelected ? '0 0 15px rgba(0, 229, 255, 0.2)' : 'none'};
+          ">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <span style="font-size:1.2rem;">${arch.icon}</span>
+              <span style="font-size:0.65rem; padding:2px 6px; border-radius:4px; background:${isSelected ? '#00E5FF' : 'rgba(255,255,255,0.06)'}; color:${isSelected ? '#0A0D14' : '#94A3B8'}; font-weight:bold; font-family:'Space Grotesk', sans-serif;">
+                ${arch.badge}
+              </span>
+            </div>
+            <div style="font-size:0.85rem; font-weight:bold; color:${isSelected ? '#FFF' : '#E2E8F0'};">
+              ${arch.label}
+            </div>
+            <div style="font-size:0.7rem; color:#64748B; margin-top:2px;">
+              ${arch.domain}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectOnboardingArchetype(arch) {
+      obSelectedArchetype = arch;
+      const matchingPkg = obCatalog.find(p => p.archetype === arch);
+      if (matchingPkg) {
+        obSelectedPackageCode = matchingPkg.package_code;
+      }
+      renderArchetypeGrid();
+      updateOnboardingSummary();
+    }
+
+    function updateOnboardingSummary() {
+      const pkg = obCatalog.find(p => p.package_code === obSelectedPackageCode) || {
+        package_name: 'Configuración Estándar',
+        price_amount: 12500,
+        currency: 'MXN',
+        domain: 'www.tsolutionsipidd.com',
+        estimated_delivery_days: 14,
+        contract_template_type: 'CONTRACT_MASTER',
+        tech_stack_preset: { technologies: ['TypeScript', 'React', 'Neon PostgreSQL', 'BullMQ'], hosting: 'Vercel / Cloud Run' }
+      };
+
+      const termsEl = document.getElementById('ob-payment-terms');
+      const terms = termsEl ? termsEl.value : '50/50';
+
+      const priceEl = document.getElementById('ob-summary-price');
+      if (priceEl) priceEl.innerText = '$' + Number(pkg.price_amount || 0).toLocaleString() + ' ' + (pkg.currency || 'MXN');
+
+      const termsText = document.getElementById('ob-summary-terms');
+      if (termsText) termsText.innerText = terms + ' • ' + (pkg.billing_scheme === 'ANNUAL' ? 'Anualidad' : 'Pago Único');
+
+      const archEl = document.getElementById('ob-summary-archetype');
+      if (archEl) archEl.innerText = obSelectedArchetype;
+
+      const domEl = document.getElementById('ob-summary-domain');
+      if (domEl) domEl.innerText = pkg.domain;
+
+      const hostEl = document.getElementById('ob-summary-hosting');
+      if (hostEl) hostEl.innerText = pkg.tech_stack_preset?.hosting || 'Google Cloud Run + Vercel';
+
+      const daysEl = document.getElementById('ob-summary-days');
+      if (daysEl) daysEl.innerText = '~' + (pkg.estimated_delivery_days || 14) + ' días hábiles';
+
+      const contractEl = document.getElementById('ob-summary-contract');
+      if (contractEl) {
+        contractEl.innerText = pkg.contract_template_type === 'CONTRACT_VCARD_LICENSE'
+          ? '📜 Licencia SaaS vCard'
+          : pkg.contract_template_type === 'CONTRACT_BRAND_ASSIGNMENT'
+          ? '📜 Cesión Derechos Diseño'
+          : '📜 Contrato Maestro de Software';
+      }
+
+      const stackContainer = document.getElementById('ob-summary-stack');
+      if (stackContainer) {
+        const techs = pkg.tech_stack_preset?.technologies || ['TypeScript', 'PostgreSQL', 'Tailwind'];
+        stackContainer.innerHTML = techs.map(t => `
+          <span style="background:rgba(0, 229, 255, 0.1); border:1px solid rgba(0, 229, 255, 0.3); border-radius:4px; padding:2px 8px; font-size:0.7rem; color:#00E5FF; font-family:'Space Grotesk', sans-serif;">
+            ${t}
+          </span>
+        `).join('');
+      }
+    }
+
+    async function submitNexusOnboarding() {
+      const btn = document.getElementById('ob-submit-btn');
+      const errBanner = document.getElementById('onboarding-error-banner');
+      if (errBanner) errBanner.style.display = 'none';
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = '⏳ Aprovisionando Workspace & DAG...';
+      }
+
+      const clientName = document.getElementById('ob-client-name')?.value?.trim() || 'Gabriel Ayala';
+      const clientEmail = document.getElementById('ob-client-email')?.value?.trim() || 'cliente@tsolutionsipidd.com';
+      const projectName = document.getElementById('ob-project-name')?.value?.trim() || 'Proyecto Nexus';
+      const targetDomain = document.getElementById('ob-target-domain')?.value?.trim() || 'm.tsolutionsipidd.com';
+
+      // Sincronizar estado global
+      if (window.project_onboarding_state) {
+        window.project_onboarding_state.client_info = {
+          name: clientName,
+          company: projectName,
+          email: clientEmail,
+          domain: targetDomain
+        };
+        try {
+          localStorage.setItem('nexus_onboarding_state', JSON.stringify(window.project_onboarding_state));
+        } catch (e) {}
+      }
+
+      const payload = {
+        archetype: typeof obSelectedArchetype !== 'undefined' ? obSelectedArchetype : 'FULLSTACK_SSR',
+        client_name: clientName,
+        client_email: clientEmail,
+        company_name: projectName,
+        target_domain: targetDomain,
+        raci: {
+          tech_lead_name: document.getElementById('ob-tech-lead-name')?.value?.trim() || 'Ing. Javier Soto',
+          tech_lead_email: document.getElementById('ob-tech-lead-email')?.value?.trim() || 'techlead@tsolutionsipidd.com',
+          project_manager_name: document.getElementById('ob-pm-name')?.value?.trim() || 'Laura Mendoza',
+          project_manager_email: document.getElementById('ob-pm-email')?.value?.trim() || 'pm@tsolutionsipidd.com',
+          collaborators: []
+        },
+        technical: {
+          repository_provider: document.getElementById('ob-repo-provider')?.value || 'GITHUB',
+          github_repo: 'whoiselgallo/antigravity-instruction-architect',
+          payment_gateway: document.getElementById('ob-payment-gateway')?.value || 'STRIPE',
+          enable_google_tasks: document.getElementById('ob-google-tasks')?.checked || false
+        },
+        commercial: {
+          package_code: typeof obSelectedPackageCode !== 'undefined' ? obSelectedPackageCode : 'FULLSTACK_SSR',
+          payment_terms: document.getElementById('ob-payment-terms')?.value || '50/50',
+          target_delivery_date: document.getElementById('ob-delivery-date')?.value || null
+        },
+        project_name: projectName,
+        project_description: 'Aprovisionado automáticamente desde la Consola de Onboarding de Nexus Architect Studio.'
+      };
+
+      try {
+        let data = {};
+        try {
+          const res = await fetch('/api/v1/nexus/onboarding/session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            data = await res.json();
+          }
+        } catch (fetchErr) {
+          console.warn('API endpoint offline, proceeding with client-side workspace orchestration:', fetchErr);
+        }
+
+        // Render success & Workspace Transition
+        const formWrap = document.getElementById('onboarding-form-wrapper');
+        if (formWrap) formWrap.style.display = 'none';
+        
+        // Auto-registrar Workspace y conmutar a la Suite Activa inmediatamente
+        const newWsId = (data.workspace && (data.workspace.id || data.workspace.slug)) || 'ws-' + Date.now();
+        const newWsData = {
+          id: newWsId,
+          name: projectName,
+          slug: newWsId,
+          client_name: clientName,
+          tech_lead: 'Ing. Javier Soto',
+          pm: 'Laura Mendoza',
+          domain: targetDomain,
+          created_at: new Date().toISOString()
+        };
+        registerKnownWorkspace(newWsData);
+        switchWorkspaceFromSelect(newWsData.id);
+        
+        // Sincronizar y activar herramientas técnicas asociadas
+        if (typeof applyServicesToWorkspace === 'function') {
+          // Activar herramientas seleccionadas
+          applyServicesToWorkspace();
+        }
+
+        addLog('[NEXUS ONBOARDING] Workspace aprovisionado exitosamente: ' + newWsData.name, 'pulse');
+
+        const successView = document.getElementById('onboarding-success-view');
+        if (successView) {
+          successView.style.display = 'block';
+          const titleSucc = document.getElementById('success-project-title');
+          if (titleSucc) titleSucc.textContent = projectName;
+        }
+
+        setTimeout(() => {
+          closeNexusOnboardingModal();
+        }, 1800);
+
+      } catch (err) {
+        console.error('Onboarding Error:', err);
+        if (errBanner) {
+          errBanner.style.display = 'block';
+          errBanner.textContent = 'Aviso: ' + (err.message || 'Se configuró el workspace en modo local.');
+        }
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = '🚀 Confirmar & Aprovisionar Proyecto';
+        }
+      }
     }
 
     function closeNexusOnboardingModal() {
@@ -13942,7 +14406,511 @@ Fase 6: Cierre &amp; Sesión Andragógica                                    [==
     }
 
 
+    
+    // =========================================================================
+    // CONTROLADOR DEL ONBOARDING WIZARD DE 6 PASOS CON BRANCHING LOGIC
+    // =========================================================================
+    let currentOnboardingStep = 1;
+
+    window.project_onboarding_state = {
+      client_info: {
+        name: 'Gabriel Ayala',
+        company: 'MPS Ayala Ferretodo',
+        email: 'gabriel@ferreayala.mx',
+        domain: 'm.tsolutionsipidd.com'
+      },
+      step_1_architecture: {
+        project_type: 'fullstack_ssr',
+        expected_monthly_traffic: 'under_10k',
+        preferred_backend_language: 'node_ts'
+      },
+      step_2_data_and_content: {
+        needs_database: true,
+        needs_file_storage: true,
+        needs_headless_cms: false
+      },
+      step_3_identity: {
+        needs_authentication: true,
+        roles_required: ['admin', 'subscribed_client', 'guest'],
+        require_2fa: true
+      },
+      step_4_payments_stripe: {
+        enable_stripe: true,
+        payment_model: 'subscriptions_and_one_time',
+        estimated_monthly_volume_usd: 5000,
+        estimated_monthly_transactions: 100
+      },
+      step_5_ai_and_queues: {
+        enable_ai: true,
+        ai_provider: 'gemini',
+        estimated_monthly_ai_requests: 10000,
+        monthly_hard_limit_usd: 30,
+        needs_async_queues: false
+      },
+      step_6_handover_modality: {
+        management_mode: 'modality_b_retainer'
+      },
+      mandatory_standards: {
+        transactional_email_dns: true,
+        ui_ux_design: true,
+        technical_seo_analytics: true,
+        legal_compliance_pages: true,
+        devsecops_snyk_ci_cd: true,
+        sentry_uptime_monitoring: true
+      }
+    };
+
+    function jumpToOnboardingStep(stepNumber) {
+      if (stepNumber < 1 || stepNumber > 6) return;
+      currentOnboardingStep = stepNumber;
+
+      // Ocultar todos los panes
+      for (let i = 1; i <= 6; i++) {
+        const pane = document.getElementById('ob-pane-step-' + i);
+        const navBtn = document.getElementById('ob-nav-step-' + i);
+        if (pane) pane.style.display = (i === currentOnboardingStep) ? 'block' : 'none';
+        if (navBtn) {
+          if (i === currentOnboardingStep) {
+            navBtn.style.background = 'rgba(0,229,255,0.18)';
+            navBtn.style.borderColor = '#00E5FF';
+            navBtn.style.color = '#00E5FF';
+          } else {
+            navBtn.style.background = 'transparent';
+            navBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+            navBtn.style.color = '#94A3B8';
+          }
+        }
+      }
+
+      const counter = document.getElementById('ob-step-counter');
+      if (counter) counter.textContent = 'Paso ' + currentOnboardingStep + ' de 6';
+
+      const prevBtn = document.getElementById('ob-btn-prev');
+      const nextBtn = document.getElementById('ob-btn-next');
+      if (prevBtn) prevBtn.style.display = (currentOnboardingStep > 1) ? 'block' : 'none';
+      if (nextBtn) {
+        if (currentOnboardingStep === 6) {
+          nextBtn.textContent = '✓ Revisar & Confirmar';
+          nextBtn.style.background = '#10B981';
+          nextBtn.style.color = '#FFF';
+        } else {
+          nextBtn.textContent = 'Siguiente →';
+          nextBtn.style.background = '#00E5FF';
+          nextBtn.style.color = '#0A0D14';
+        }
+      }
+    }
+
+    function navigateOnboardingStep(direction) {
+      if (currentOnboardingStep === 6 && direction > 0) {
+        // En el paso 6, el botón siguiente ejecuta submit
+        submitNexusOnboarding();
+        return;
+      }
+      jumpToOnboardingStep(currentOnboardingStep + direction);
+    }
+
+    // MANEJO DE LÓGICA CONDICIONAL (BRANCHING LOGIC)
+    function handleOnboardingBranching() {
+      // 1.1 Objetivo del sitio
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+
+      // Actualizar estado
+      if (p1_1 === 'OPCION_A') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'static_jamstack';
+      } else if (p1_1 === 'OPCION_B') {
+        window.project_onboarding_state.step_1_architecture.project_type = 'backend_php_api';
+      } else {
+        window.project_onboarding_state.step_1_architecture.project_type = 'fullstack_ssr';
+      }
+
+      // Si es Opción B o C, sugerir marcar Sí en base de datos
+      if (p1_1 === 'OPCION_B' || p1_1 === 'OPCION_C') {
+        const p2_1_yes = document.querySelector('input[name="ob_p2_1"][value="YES"]');
+        if (p2_1_yes && !p2_1_yes.checked) {
+          p2_1_yes.checked = true;
+        }
+      }
+
+      // 2. Persistencia y CMS
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+
+      window.project_onboarding_state.step_2_data_and_content.needs_database = (p2_1 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_file_storage = (p2_2 === 'YES');
+      window.project_onboarding_state.step_2_data_and_content.needs_headless_cms = (p2_3 === 'YES');
+
+      // 3. Auth
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_3_identity.needs_authentication = (p3_1 === 'YES');
+
+      // 4. Pagos
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const boxP4_2 = document.getElementById('ob-box-p4-2');
+      if (boxP4_2) boxP4_2.style.display = (p4_1 !== 'NO') ? 'block' : 'none';
+      window.project_onboarding_state.step_4_payments_stripe.enable_stripe = (p4_1 !== 'NO');
+
+      // 5. IA y Colas
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const boxP5_sub = document.getElementById('ob-box-p5-sub');
+      if (boxP5_sub) boxP5_sub.style.display = (p5_1 === 'YES') ? 'block' : 'none';
+      window.project_onboarding_state.step_5_ai_and_queues.enable_ai = (p5_1 === 'YES');
+
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+      window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues = (p5_2 === 'YES');
+
+      // 6. Modalidad
+      const p6_1 = document.querySelector('input[name="ob_p6_1"]:checked')?.value || 'MODALITY_A';
+      window.project_onboarding_state.step_6_handover_modality.management_mode = p6_1.toLowerCase();
+
+      // SINCRONIZAR AUTOMÁTICAMENTE CON EL COTIZADOR Y BLUEPRINT
+      syncOnboardingToBlueprintModules();
+    }
+
+    // CONEXIÓN AUTOMÁTICA DEL CUESTIONARIO CON LA MATRIZ DE COMPLEJIDAD (FASE 3 Y 4)
+    function syncOnboardingToBlueprintModules() {
+      if (!window.blueprintModulesCatalog) return;
+
+      const p1_1 = document.querySelector('input[name="ob_p1_1"]:checked')?.value || 'OPCION_A';
+      const p1_2 = document.querySelector('input[name="ob_p1_2"]:checked')?.value || 'UNDER_10K';
+      const p2_1 = document.querySelector('input[name="ob_p2_1"]:checked')?.value || 'NO';
+      const p2_2 = document.querySelector('input[name="ob_p2_2"]:checked')?.value || 'NO';
+      const p2_3 = document.querySelector('input[name="ob_p2_3"]:checked')?.value || 'NO';
+      const p3_1 = document.querySelector('input[name="ob_p3_1"]:checked')?.value || 'NO';
+      const p4_1 = document.querySelector('input[name="ob_p4_1"]:checked')?.value || 'NO';
+      const p5_1 = document.querySelector('input[name="ob_p5_1"]:checked')?.value || 'NO';
+      const p5_2 = document.querySelector('input[name="ob_p5_2"]:checked')?.value || 'NO';
+
+      // 1. Hosting (Fila 2, 3, 4)
+      const modStatic = window.blueprintModulesCatalog.find(m => m.id === 'm_host_static');
+      const modPro = window.blueprintModulesCatalog.find(m => m.id === 'm_host_pro');
+      const modBackend = window.blueprintModulesCatalog.find(m => m.id === 'm_backend_srv');
+
+      if (p1_1 === 'OPCION_A') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = false;
+      } else if (p1_1 === 'OPCION_B') {
+        if (modStatic) modStatic.active = true;
+        if (modPro) modPro.active = false;
+        if (modBackend) modBackend.active = true;
+      } else {
+        if (p1_2 === 'OVER_10K') {
+          if (modStatic) modStatic.active = false;
+          if (modPro) modPro.active = true;
+        } else {
+          if (modStatic) modStatic.active = true;
+          if (modPro) modPro.active = false;
+        }
+        if (modBackend) modBackend.active = true;
+      }
+
+      // 2. Base de datos (Fila 5)
+      const modDB = window.blueprintModulesCatalog.find(m => m.id === 'm_database_sql');
+      if (modDB) modDB.active = (p2_1 === 'YES');
+
+      // 3. Object Storage (Fila 6)
+      const modStorage = window.blueprintModulesCatalog.find(m => m.id === 'm_object_storage');
+      if (modStorage) modStorage.active = (p2_2 === 'YES');
+
+      // 4. Headless CMS (Fila 7)
+      const modCMS = window.blueprintModulesCatalog.find(m => m.id === 'm_headless_cms');
+      if (modCMS) modCMS.active = (p2_3 === 'YES');
+
+      // 5. Auth RBAC (Fila 8)
+      const modAuth = window.blueprintModulesCatalog.find(m => m.id === 'm_auth_rbac');
+      if (modAuth) modAuth.active = (p3_1 === 'YES');
+
+      // 6. Stripe (Fila 9)
+      const modStripe = window.blueprintModulesCatalog.find(m => m.id === 'm_stripe_webhooks');
+      if (modStripe) modStripe.active = (p4_1 !== 'NO');
+
+      // 7. IA + Rate Limit (Fila 10)
+      const modAI = window.blueprintModulesCatalog.find(m => m.id === 'm_ai_ratelimit');
+      if (modAI) modAI.active = (p5_1 === 'YES');
+
+      // 8. Colas Asíncronas (Fila 11)
+      const modQueues = window.blueprintModulesCatalog.find(m => m.id === 'm_queues_cron');
+      if (modQueues) modQueues.active = (p5_2 === 'YES');
+
+      // Estándares fijos obligatorios (Filas 12 a 17) siempre activos
+      ['m_email_trans', 'm_ui_layout', 'm_seo_schema', 'm_legal_compliance', 'm_cicd_snyk', 'm_monitoring_sentry'].forEach(fid => {
+        const fmod = window.blueprintModulesCatalog.find(m => m.id === fid);
+        if (fmod) fmod.active = true;
+      });
+
+      // Recalcular y actualizar UI del resumen del Onboarding
+      updateOnboardingArchitectureSummary();
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+    }
+
+    function updateOnboardingArchitectureSummary() {
+      if (!window.blueprintModulesCatalog) return;
+
+      let totalHours = 0;
+      let totalCapex = 0;
+      let totalOpex = 0;
+
+      window.blueprintModulesCatalog.forEach(m => {
+        if (m.active) {
+          totalHours += m.hours;
+          totalCapex += m.hours * 35; // USD
+          totalOpex += m.opexUsd; // USD
+        }
+      });
+
+      const days = Math.ceil(totalHours / 6);
+      const retainer = Math.max(150, Math.round(totalCapex * 0.10));
+      const platformFee = Math.round(totalCapex * 0.05);
+
+      const priceEl = document.getElementById('ob-summary-price');
+      if (priceEl) priceEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalCapex.toLocaleString('es-MX') + ' USD';
+
+      const capexMxnEl = document.getElementById('ob-summary-capex-mxn');
+      if (capexMxnEl) capexMxnEl.textContent = '~
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + (totalCapex * 20).toLocaleString('es-MX') + ' MXN (CapEx)';
+
+      const opexEl = document.getElementById('ob-summary-opex');
+      if (opexEl) opexEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + totalOpex.toLocaleString('es-MX') + ' USD/mes';
+
+      const retEl = document.getElementById('ob-summary-retainer');
+      if (retEl) retEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + retainer.toLocaleString('es-MX') + ' USD/mes';
+
+      const feeEl = document.getElementById('ob-summary-platform-fee');
+      if (feeEl) feeEl.textContent = '
+      if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
+      initNoraWorkflow();
+      initLayeredWorkspaceBuilder();
+      initAuthSession();
+      syncWithNeonDB();
+      initMagneticCards();
+      NexusRewardEngine.init();
+      bootstrapNexusPulse();
+      // Polling ligero de sincronización cada 12 segundos
+      setInterval(syncWithNeonDB, 12000);
+      // Polling de pulso operativo cada 30 segundos
+      setInterval(bootstrapNexusPulse, 30000);
+    });
+
+    // ATAJOS DE TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeBurgerNav();
+        closeCharterDocModal();
+        closeFullCharterPreviewModal();
+        closeDocumentFileModal();
+        closeFullPageWorkspaceView();
+        closeNexusChatModal();
+      }
+      if (e.key === '1' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) scrollToShowcase();
+      // Atajo de teclado directo para invocar a Cerebro Nexus (Alt+N o 'n')
+      if ((e.altKey && (e.key === 'n' || e.key === 'N')) || (e.key === 'n' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName))) {
+        e.preventDefault();
+        openNexusChatModal();
+      }
+    });
+  </script>
+
+  <!-- ========================================================================= -->
+  <!-- WIDGET FLOTANTE HUMANIZADO DE NORA (VIRTUAL ASSISTANT FAB)                  -->
+  <canvas id="nexus-reward-canvas" class="nexus-reward-canvas"></canvas>
+
+</body>
+</html>
+ + platformFee.toLocaleString('es-MX') + ' USD';
+
+      const daysEl = document.getElementById('ob-summary-days');
+      if (daysEl) daysEl.textContent = '~' + days + ' días hábiles (' + totalHours + ' hrs)';
+
+      // Stack sugerido badges
+      const stackContainer = document.getElementById('ob-summary-stack');
+      if (stackContainer) {
+        const stackItems = ['TypeScript', 'Vercel CDN', 'Snyk DevSecOps', 'Resend SPF/DKIM'];
+        if (window.project_onboarding_state.step_1_architecture.project_type !== 'static_jamstack') stackItems.push('Render Backend');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_database) stackItems.push('Neon Postgres Lakebase');
+        if (window.project_onboarding_state.step_2_data_and_content.needs_file_storage) stackItems.push('Cloudflare R2');
+        if (window.project_onboarding_state.step_3_identity.needs_authentication) stackItems.push('Clerk Auth 2FA');
+        if (window.project_onboarding_state.step_4_payments_stripe.enable_stripe) stackItems.push('Stripe Webhooks');
+        if (window.project_onboarding_state.step_5_ai_and_queues.enable_ai) stackItems.push('Gemini AI + Upstash Redis');
+        if (window.project_onboarding_state.step_5_ai_and_queues.needs_async_queues) stackItems.push('BullMQ Queues');
+
+        stackContainer.innerHTML = stackItems.map(s => `
+          <span style="font-family:monospace; font-size:0.68rem; background:rgba(0,229,255,0.12); color:#00E5FF; border:1px solid rgba(0,229,255,0.3); padding:2px 8px; border-radius:4px;">
+            ${s}
+          </span>
+        `).join('');
+      }
+    }
+
+
     window.addEventListener('DOMContentLoaded', () => {
+      handleOnboardingBranching();
       if (typeof renderBlueprintCalculator === 'function') renderBlueprintCalculator();
       initNoraWorkflow();
       initLayeredWorkspaceBuilder();
