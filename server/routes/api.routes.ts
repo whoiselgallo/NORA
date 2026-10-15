@@ -233,6 +233,102 @@ export function createApiRouter(
     }
   });
 
+  // 1.1 Listar miembros del workspace activo
+  router.get('/workspaces/:workspaceId/members', async (req: Request, res: Response) => {
+    const wsId = req.params.workspaceId || req.workspaceId || DEFAULT_WORKSPACE_ID;
+    try {
+      const result = await pool.query(
+        `SELECT u.id, u.name, u.email, wm.role, u.company, wm.created_at
+         FROM workspace_members wm
+         JOIN users u ON u.id = wm.user_id
+         WHERE wm.workspace_id = $1
+         ORDER BY wm.created_at ASC`,
+        [wsId]
+      );
+      res.json(result.rows);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // 1.2 Enviar / registrar invitación a workspace
+  router.post('/workspaces/:workspaceId/invitations', async (req: Request, res: Response) => {
+    const wsId = req.params.workspaceId || req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const { email, name, role, department, invited_by } = req.body;
+    try {
+      const cleanEmail = (email || '').trim().toLowerCase();
+      if (!cleanEmail || !cleanEmail.includes('@')) {
+        res.status(400).json({ error: 'Correo electrónico inválido para la invitación' });
+        return;
+      }
+      const userName = (name || cleanEmail.split('@')[0] || 'Colaborador Invitado').trim();
+      const userRole = role || 'COLLABORATOR';
+
+      let userRes = await pool.query(`SELECT id FROM users WHERE email = $1`, [cleanEmail]);
+      let userId = userRes.rows[0]?.id;
+
+      if (!userId) {
+        const newU = await pool.query(
+          `INSERT INTO users (name, email, role)
+           VALUES ($1, $2, $3)
+           RETURNING id`,
+          [userName, cleanEmail, userRole === 'CLIENT_SPONSOR' ? 'CLIENT' : 'COLLABORATOR']
+        );
+        userId = newU.rows[0].id;
+      }
+
+      await pool.query(
+        `INSERT INTO workspace_members (workspace_id, user_id, role)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (workspace_id, user_id) DO UPDATE SET role = EXCLUDED.role`,
+        [wsId, userId, userRole === 'CLIENT_SPONSOR' ? 'CLIENT' : 'COLLABORATOR']
+      );
+
+      const token = Buffer.from(JSON.stringify({ wsId, email: cleanEmail, role: userRole, t: Date.now() })).toString('base64');
+      const inviteUrl = `https://m.tsolutionsipidd.com/?invite=${token}&ws=${wsId}&role=${userRole}&name=${encodeURIComponent(userName)}`;
+
+      res.status(201).json({
+        success: true,
+        message: 'Invitación generada exitosamente',
+        invitation: {
+          workspaceId: wsId,
+          email: cleanEmail,
+          name: userName,
+          role: userRole,
+          department: department || 'General',
+          invitedBy: invited_by || 'Tech Leader / PM',
+          inviteUrl
+        }
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // 1.3 Actualizar rol de miembro en workspace
+  router.post('/workspaces/:workspaceId/members/role', async (req: Request, res: Response) => {
+    const wsId = req.params.workspaceId || req.workspaceId || DEFAULT_WORKSPACE_ID;
+    const { user_id, email, new_role } = req.body;
+    try {
+      const targetRole = new_role === 'CLIENT_SPONSOR' ? 'CLIENT' : 'COLLABORATOR';
+      if (user_id) {
+        await pool.query(
+          `UPDATE workspace_members SET role = $1 WHERE workspace_id = $2 AND user_id = $3`,
+          [targetRole, wsId, user_id]
+        );
+      } else if (email) {
+        await pool.query(
+          `UPDATE workspace_members SET role = $1
+           WHERE workspace_id = $2 AND user_id IN (SELECT id FROM users WHERE email = $3)`,
+          [targetRole, wsId, email.trim().toLowerCase()]
+        );
+      }
+      res.json({ success: true, message: `Rol actualizado a ${new_role}` });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   // ==========================================================================
   // 2. PROYECTOS & WORKFLOWS CON AISLAMIENTO RLS
   // ==========================================================================

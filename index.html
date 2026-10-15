@@ -4259,7 +4259,167 @@
         grid-template-columns: 1fr !important;
       }
     }
-  </style>
+  
+    /* =========================================================================
+       BOTÓN DORADO MAESTRO // LA PUNTA DE LA FLECHA // TSOLUTIONS IPIDD
+       ========================================================================= */
+    .btn-nav-gold-master {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.22) 0%, rgba(218, 165, 32, 0.38) 50%, rgba(255, 179, 0, 0.25) 100%);
+      border: 1.5px solid #FFD700;
+      color: #FFFFFF;
+      border-radius: 9999px;
+      padding: 7px 18px;
+      font-weight: 900;
+      font-size: 0.78rem;
+      font-family: var(--font-primary), 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .btn-nav-gold-master:hover {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.35) 0%, rgba(255, 193, 7, 0.5) 50%, rgba(255, 152, 0, 0.38) 100%);
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.7), 0 4px 16px rgba(0, 0, 0, 0.5);
+      border-color: #FFE066;
+      transform: translateY(-1px) scale(1.02);
+      color: #FFFFFF;
+    }
+    .btn-nav-gold-master .gold-icon {
+      color: #FFD700;
+      font-size: 0.95rem;
+      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.85));
+      animation: goldPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes goldPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 12px #FFD700); }
+    }
+    @media (max-width: 920px) {
+      .btn-nav-gold-master .gold-btn-text {
+        display: none;
+      }
+      .btn-nav-gold-master {
+        padding: 6px 12px;
+      }
+      .btn-nav-gold-master::after {
+        content: "✦ SUITE";
+        font-size: 0.75rem;
+        font-weight: 900;
+      }
+    }
+
+    /* =========================================================================
+       ACTIVE WORKSPACE HUB (PANEL OPERATIVO Y AISLADO DE WORKSPACE)
+       ========================================================================= */
+    .active-workspace-hub {
+      background: linear-gradient(135deg, rgba(14, 20, 32, 0.98) 0%, rgba(8, 12, 20, 0.99) 100%);
+      border: 1.5px solid rgba(255, 215, 0, 0.45);
+      border-radius: 18px;
+      padding: 24px 28px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(255, 215, 0, 0.15);
+      margin: 16px 0 24px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .active-workspace-hub::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #FF6B00 0%, #FFD700 50%, #00F2FE 100%);
+    }
+    .ws-hub-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 20px;
+    }
+    .ws-brand-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #FFD700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+    .ws-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .ws-tool-card {
+      background: rgba(18, 26, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.22s ease;
+      position: relative;
+    }
+    .ws-tool-card:hover {
+      border-color: #00F2FE;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 242, 254, 0.2);
+      transform: translateY(-2px);
+    }
+    .ws-tool-card.active-in-ws {
+      border-color: rgba(255, 215, 0, 0.45);
+      background: linear-gradient(180deg, rgba(22, 32, 52, 0.9) 0%, rgba(14, 20, 34, 0.95) 100%);
+    }
+
+    /* MODAL MAESTRO TABS & PILLS */
+    .master-modal-tabs {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0 24px;
+      background: rgba(6, 9, 15, 0.6);
+      overflow-x: auto;
+    }
+    .master-tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #94A3B8;
+      font-family: var(--font-primary);
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .master-tab-btn:hover {
+      color: #FFF;
+    }
+    .master-tab-btn.active {
+      color: #FFD700;
+      border-bottom-color: #FFD700;
+    }
+
+</style>
 </head>
 <body>
 
@@ -4284,7 +4444,13 @@
 
     <!-- BOTÓN DE APRENDIZAJE & BADGE DE ESTADO -->
     <div style="display: flex; align-items: center; gap: 10px;">
-      <button type="button" class="btn-nav-learning" onclick="openNexusLearning('guia_inicio')" title="Centro de Aprendizaje: Guía de uso y Caso de Estudio" style="background: rgba(0, 242, 254, 0.12); border: 1.5px solid rgba(0, 242, 254, 0.45); color: #00F2FE; border-radius: 9999px; padding: 6px 14px; font-weight: 800; font-size: 0.76rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(0, 242, 254, 0.22)'" onmouseout="this.style.background='rgba(0, 242, 254, 0.12)'">
+            <!-- BOTÓN DORADO MAESTRO // LA PUNTA DE LA FLECHA // SUITE MAESTRA -->
+      <button type="button" class="btn-nav-gold-master" onclick="openMasterToolsModal()" title="Central Maestra: Ecosistema Completo de Herramientas y Gestión de Workspaces">
+        <span class="gold-icon">✦</span>
+        <span class="gold-btn-text">CENTRAL MAESTRA // SUITE</span>
+      </button>
+
+<button type="button" class="btn-nav-learning" onclick="openNexusLearning('guia_inicio')" title="Centro de Aprendizaje: Guía de uso y Caso de Estudio" style="background: rgba(0, 242, 254, 0.12); border: 1.5px solid rgba(0, 242, 254, 0.45); color: #00F2FE; border-radius: 9999px; padding: 6px 14px; font-weight: 800; font-size: 0.76rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(0, 242, 254, 0.22)'" onmouseout="this.style.background='rgba(0, 242, 254, 0.12)'">
         <span>📚</span>
         <span class="nav-learning-text">Guía &amp; Ejemplo</span>
       </button>
@@ -4459,6 +4625,92 @@
             <span>➔</span>
           </button>
         </div>
+      </div>
+
+      
+      <!-- =========================================================================
+           ACTIVE WORKSPACE HUB // SUITE OPERATIVA MODULAR MULTI-TENANT
+           Aislamiento estricto por Workspace para que no se revuelvan en la misma PC
+           ========================================================================= -->
+      <div class="active-workspace-hub" id="active-workspace-hub">
+        
+        <!-- CABECERA DEL WORKSPACE ACTIVO -->
+        <div class="ws-hub-header">
+          <div>
+            <div class="ws-brand-tag">
+              <span>✦</span>
+              <span>ESPACIO DE TRABAJO ACTIVO • MULTI-TENANT AISLADO</span>
+            </div>
+            <div style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">
+              <h2 id="ws-display-name" style="font-size:1.4rem; font-weight:900; color:#FFF; margin:0; font-family:var(--font-primary);">
+                Workspace Principal: Tienda en Línea & App Ferretodo
+              </h2>
+              <span id="ws-display-slug" style="font-family:var(--font-mono); font-size:0.75rem; background:rgba(0, 242, 254, 0.12); color:#00F2FE; border:1px solid rgba(0, 242, 254, 0.3); padding:2px 8px; border-radius:6px;">
+                ID: 59b89995-9684-4de6-9291-f7a6806b999a
+              </span>
+            </div>
+            <p id="ws-display-desc" style="font-size:0.82rem; color:#94A3B8; margin:4px 0 0 0;">
+              Líder Técnico: <strong id="ws-display-techlead" style="color:#FFF;">Ing. Javier Soto</strong> • Cliente Sponsor: <strong id="ws-display-client" style="color:#FF8533;">Ayala Ferretodo</strong>
+            </p>
+          </div>
+
+          <!-- CONTROLES RÁPIDOS: SWITCHER DE WORKSPACE, ROL CONTEXTUAL E INVITACIONES -->
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            
+            <!-- SELECTOR DE WORKSPACE PARA EVITAR REVOLTURA EN LA MISMA PC -->
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <span style="font-size:0.65rem; color:#94A3B8; font-family:var(--font-mono); font-weight:700;">CAMBIAR ESPACIO (PC):</span>
+              <select id="ws-quick-switcher" onchange="switchWorkspaceFromSelect(this.value)" style="background:#06090F; color:#FFD700; border:1px solid rgba(255, 215, 0, 0.4); border-radius:8px; padding:6px 12px; font-family:var(--font-mono); font-size:0.78rem; font-weight:800; cursor:pointer;">
+                <option value="59b89995-9684-4de6-9291-f7a6806b999a">Tienda Ferretodo (Activo)</option>
+              </select>
+            </div>
+
+            <!-- GOBERNANZA CONTEXTUAL: SELECTOR DE ROL DINÁMICO -->
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <span style="font-size:0.65rem; color:#94A3B8; font-family:var(--font-mono); font-weight:700;">ROL / DEPARTAMENTO:</span>
+              <select id="ws-context-role-selector" onchange="updateContextualRole(this.value)" style="background:#06090F; color:#00F2FE; border:1px solid rgba(0, 242, 254, 0.4); border-radius:8px; padding:6px 12px; font-family:var(--font-mono); font-size:0.78rem; font-weight:800; cursor:pointer;">
+                <option value="TECH_LEAD">TECH LEAD (Ingeniería & CI/CD)</option>
+                <option value="PROJECT_MANAGER">PROJECT MANAGER (PMO & Sprints)</option>
+                <option value="CLIENT_SPONSOR">CLIENT SPONSOR (Modo Co-Creación Activo)</option>
+                <option value="DESIGN_LEAD">DESIGN LEAD (UX & Lockups CAD)</option>
+                <option value="OPERATIONS_LEAD">OPERATIONS LEAD (DMAIC Six Sigma)</option>
+                <option value="COLLABORATOR">COLLABORATOR (Ejecutor To-Do)</option>
+              </select>
+            </div>
+
+            <!-- BOTÓN INVITAR AL WORKSPACE -->
+            <button type="button" onclick="openMasterToolsModal('tab-team')" style="background:rgba(16, 185, 129, 0.15); border:1.5px solid #10B981; color:#10B981; border-radius:8px; padding:8px 14px; font-weight:800; font-size:0.78rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s;" onmouseover="this.style.background='rgba(16, 185, 129, 0.25)'" onmouseout="this.style.background='rgba(16, 185, 129, 0.15)'">
+              <span>✉️</span>
+              <span>Invitar Miembro</span>
+            </button>
+
+            <!-- BOTÓN ABRIR CENTRAL MAESTRA DE HERRAMIENTAS -->
+            <button type="button" onclick="openMasterToolsModal('tab-tools')" style="background:linear-gradient(135deg, #FF6B00 0%, #FF8533 100%); border:none; color:#FFF; border-radius:8px; padding:8px 16px; font-weight:800; font-size:0.78rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 0 16px rgba(255,107,0,0.4);">
+              <span>✦</span>
+              <span>Gestionar Herramientas (<span id="ws-active-tools-count-badge">18</span>)</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- LISTADO DE HERRAMIENTAS ACTIVAS EN ESTE WORKSPACE -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="font-size:0.85rem; font-weight:800; color:#FFF; display:flex; align-items:center; gap:8px;">
+              <span>🛠️ HERRAMIENTAS ACTIVAS SELECCIONADAS PARA ESTE ESPACIO</span>
+              <span id="ws-tools-status-summary" style="font-size:0.72rem; color:#FFD700; font-family:var(--font-mono); font-weight:normal;">(18 habilitadas de 18)</span>
+            </div>
+            <button type="button" onclick="openMasterToolsModal('tab-tools')" style="background:transparent; border:none; color:#00F2FE; font-size:0.78rem; font-weight:700; cursor:pointer; text-decoration:underline;">
+              + Agregar / Quitar Herramientas
+            </button>
+          </div>
+
+          <!-- CONTENEDOR DINÁMICO DE HERRAMIENTAS HABILITADAS -->
+          <div class="ws-tools-grid" id="ws-active-tools-container">
+            <!-- Renderizado por renderActiveWorkspaceTools() -->
+          </div>
+        </div>
+
       </div>
 
       <!-- MASTER STEPPER: 1. CREAR -> 2. IMPLEMENTAR -> 3. CERRAR -->
@@ -4896,6 +5148,237 @@
   </div>
 
   <!-- ========================================================================= -->
+  
+  <!-- ========================================================================= -->
+  <!-- MODAL MAESTRO: CENTRAL MAESTRA DE HERRAMIENTAS & WORKSPACE SUITE          -->
+  <!-- TSOLUTIONS IPIDD • "LA PUNTA DE LA FLECHA"                                -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="master-tools-modal" style="display:none; position:fixed; inset:0; background:rgba(4,7,14,0.85); backdrop-filter:blur(24px) saturate(190%); -webkit-backdrop-filter:blur(24px) saturate(190%); z-index:99999; justify-content:center; align-items:center; padding:16px; overflow-y:auto;">
+    <div style="width:min(1100px, 96vw); max-height:min(90vh, 850px); height:auto; background:rgba(10,15,26,0.96); border:2px solid #FFD700; border-radius:20px; box-shadow:0 30px 80px -15px rgba(0,0,0,0.95), 0 0 45px rgba(255,215,0,0.3); display:flex; flex-direction:column; overflow:hidden; position:relative;">
+      
+      <!-- BOTÓN CERRAR -->
+      <button onclick="closeMasterToolsModal()" style="position:absolute; top:18px; right:20px; z-index:10; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#FFF; font-size:1.2rem; cursor:pointer; width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; transition:all 0.2s;" onmouseover="this.style.borderColor='#FFD700'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'">✕</button>
+
+      <!-- BRAND HEADER MAESTRO -->
+      <div style="padding:24px 28px 18px 28px; background:linear-gradient(180deg, rgba(22, 30, 48, 0.9) 0%, rgba(10, 15, 26, 0.98) 100%); border-bottom:1px solid rgba(255, 255, 255, 0.08); display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; justify-content:center; width:52px; height:52px; background:rgba(255,107,0,0.08); border:2px solid #FF6B00; border-radius:14px; box-shadow:0 0 20px rgba(255,107,0,0.4); flex-shrink:0;">
+          <svg viewBox="0 0 100 100" width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 8px rgba(255,107,0,0.7));">
+            <polygon points="50,6 90,29 90,71 50,94 10,71 10,29" stroke="#FF6B00" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="rgba(255,107,0,0.06)" />
+            <polygon points="50,23 79,73 21,73" stroke="#FF6B00" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="rgba(255,107,0,0.12)" />
+          </svg>
+        </div>
+        <div style="flex:1; min-width:280px;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span style="background:linear-gradient(90deg, #FFD700 0%, #FF8533 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-family:var(--font-mono); font-size:0.75rem; font-weight:900; letter-spacing:0.12em;">
+              ✦ TSOLUTIONS IPIDD • LA PUNTA DE LA FLECHA
+            </span>
+            <span style="background:rgba(255,215,0,0.12); color:#FFD700; border:1px solid rgba(255,215,0,0.35); font-size:0.68rem; font-family:var(--font-mono); font-weight:800; padding:2px 8px; border-radius:10px;">
+              SUITE v3.0 MAESTRA
+            </span>
+          </div>
+          <h2 style="font-family:'Space Grotesk', sans-serif; font-size:1.55rem; font-weight:900; color:#FFF; margin:4px 0 2px 0;">
+            Central Maestra de Herramientas & Workspace Suite
+          </h2>
+          <p style="font-size:0.82rem; color:#94A3B8; font-style:italic; margin:0;">
+            "Tecnología instalada. Conocimiento transferido. Negocios escalados. Selecciona, activa y lidera tu espacio de trabajo."
+          </p>
+        </div>
+      </div>
+
+      <!-- MASTER TABS -->
+      <div class="master-modal-tabs">
+        <button type="button" class="master-tab-btn active" id="tab-btn-tools" onclick="switchMasterModalTab('tab-tools')">
+          <span>🛠️ Catálogo Completo de Herramientas (18)</span>
+        </button>
+        <button type="button" class="master-tab-btn" id="tab-btn-workspaces" onclick="switchMasterModalTab('tab-workspaces')">
+          <span>🏢 Espacios de Trabajo & Aislamiento PC</span>
+        </button>
+        <button type="button" class="master-tab-btn" id="tab-btn-team" onclick="switchMasterModalTab('tab-team')">
+          <span>👥 Equipo, Invitaciones & Roles Flexibles</span>
+        </button>
+      </div>
+
+      <!-- BODY DEL MODAL CON SCROLL INDEPENDIENTE -->
+      <div style="flex:1 1 auto; overflow-y:auto; padding:24px 28px; background:#080C14;">
+        
+        <!-- ============================================================== -->
+        <!-- TAB 1: CATÁLOGO COMPLETO DE HERRAMIENTAS (SELECCIONABLES)      -->
+        <!-- ============================================================== -->
+        <div id="master-tab-tools" style="display:block;">
+          
+          <!-- BARRA DE CONTROLES Y FILTROS -->
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.08);">
+            
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+              <button type="button" onclick="filterMasterTools('all', this)" class="master-cat-btn active" style="background:#FFD700; color:#0A0D14; border:none; padding:6px 14px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer;">
+                Todas (18)
+              </button>
+              <button type="button" onclick="filterMasterTools('ai_rag', this)" class="master-cat-btn" style="background:rgba(255,255,255,0.06); color:#94A3B8; border:1px solid rgba(255,255,255,0.1); padding:6px 12px; border-radius:8px; font-weight:700; font-size:0.75rem; cursor:pointer;">
+                IA & Prompts
+              </button>
+              <button type="button" onclick="filterMasterTools('dag_cicd', this)" class="master-cat-btn" style="background:rgba(255,255,255,0.06); color:#94A3B8; border:1px solid rgba(255,255,255,0.1); padding:6px 12px; border-radius:8px; font-weight:700; font-size:0.75rem; cursor:pointer;">
+                DAG & CI/CD
+              </button>
+              <button type="button" onclick="filterMasterTools('opex_sigma', this)" class="master-cat-btn" style="background:rgba(255,255,255,0.06); color:#94A3B8; border:1px solid rgba(255,255,255,0.1); padding:6px 12px; border-radius:8px; font-weight:700; font-size:0.75rem; cursor:pointer;">
+                Six Sigma DMAIC
+              </button>
+              <button type="button" onclick="filterMasterTools('legal_roi', this)" class="master-cat-btn" style="background:rgba(255,255,255,0.06); color:#94A3B8; border:1px solid rgba(255,255,255,0.1); padding:6px 12px; border-radius:8px; font-weight:700; font-size:0.75rem; cursor:pointer;">
+                Legal & Finanzas
+              </button>
+              <button type="button" onclick="filterMasterTools('ops_mkt', this)" class="master-cat-btn" style="background:rgba(255,255,255,0.06); color:#94A3B8; border:1px solid rgba(255,255,255,0.1); padding:6px 12px; border-radius:8px; font-weight:700; font-size:0.75rem; cursor:pointer;">
+                Operaciones & Marketing
+              </button>
+            </div>
+
+            <!-- BÚSQUEDA Y BOTONES MASIVOS -->
+            <div style="display:flex; align-items:center; gap:10px;">
+              <input type="text" id="master-tool-search-input" oninput="handleMasterToolSearch(this.value)" placeholder="🔍 Buscar herramienta..." style="background:#0F172A; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:6px 12px; color:#FFF; font-size:0.8rem; width:180px;" />
+              <button type="button" onclick="toggleAllMasterTools(true)" style="background:rgba(0, 242, 254, 0.12); color:#00F2FE; border:1px solid rgba(0, 242, 254, 0.35); padding:6px 12px; border-radius:8px; font-size:0.72rem; font-weight:800; cursor:pointer;">
+                Activar Todas
+              </button>
+              <button type="button" onclick="toggleAllMasterTools(false)" style="background:rgba(239, 68, 68, 0.1); color:#EF4444; border:1px solid rgba(239, 68, 68, 0.3); padding:6px 12px; border-radius:8px; font-size:0.72rem; font-weight:800; cursor:pointer;">
+                Limpiar
+              </button>
+            </div>
+
+          </div>
+
+          <!-- CONTADOR DE HERRAMIENTAS ACTIVAS -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-size:0.78rem; font-family:var(--font-mono); color:#94A3B8;">
+            <span>Marca o desmarca cada herramienta para agregarla o retirarla de este Workspace:</span>
+            <span id="master-tools-counter-badge" style="color:#FFD700; font-weight:800;">18 de 18 seleccionadas</span>
+          </div>
+
+          <!-- GRID DE LAS 18 HERRAMIENTAS -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px;" id="master-tools-catalog-grid">
+            <!-- Renderizado por renderMasterToolsGrid() -->
+          </div>
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- TAB 2: ESPACIOS DE TRABAJO & AISLAMIENTO (MULTI-TENANT PC)     -->
+        <!-- ============================================================== -->
+        <div id="master-tab-workspaces" style="display:none;">
+          <div style="background:rgba(18, 26, 42, 0.7); border:1px solid rgba(255, 215, 0, 0.3); border-radius:14px; padding:20px; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+              <div>
+                <span style="font-size:0.7rem; color:#FFD700; font-family:var(--font-mono); font-weight:800; text-transform:uppercase;">ESPACIO ACTUAL EN MEMORIA</span>
+                <h3 id="mt-ws-current-title" style="color:#FFF; font-size:1.25rem; font-weight:900; margin:2px 0;">Tienda en Línea & App Ferretodo</h3>
+                <span id="mt-ws-current-id" style="font-family:var(--font-mono); font-size:0.72rem; color:#00F2FE;">ID: 59b89995-9684-4de6-9291-f7a6806b999a</span>
+              </div>
+              <button type="button" onclick="closeMasterToolsModal(); openNexusOnboardingModal();" style="background:#FF6B00; border:none; color:#FFF; padding:10px 18px; border-radius:8px; font-weight:800; font-size:0.82rem; cursor:pointer; box-shadow:0 0 16px rgba(255,107,0,0.4);">
+                🚀 Crear / Aprovisionar Nuevo Espacio
+              </button>
+            </div>
+            <p style="font-size:0.8rem; color:#94A3B8; margin:0; line-height:1.5;">
+              🛡️ <strong>Garantía de Aislamiento Estricto:</strong> Cada espacio de trabajo mantiene sus propias tareas, miembros, configuraciones y herramientas seleccionadas aisladas de forma que varios clientes o proyectos en la misma PC jamás cruzan sus datos.
+            </p>
+          </div>
+
+          <h4 style="color:#FFF; font-size:0.95rem; font-weight:800; margin-bottom:12px;">Espacios de Trabajo Guardados en esta Estación:</h4>
+          <div id="mt-saved-workspaces-list" style="display:flex; flex-direction:column; gap:10px;">
+            <!-- Renderizado por renderSavedWorkspacesList() -->
+          </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- TAB 3: EQUIPO, INVITACIONES & ROLES FLEXIBLES                  -->
+        <!-- ============================================================== -->
+        <div id="master-tab-team" style="display:none;">
+          
+          <!-- FORMULARIO DE INVITACIÓN RÁPIDA -->
+          <div style="background:rgba(18, 26, 42, 0.7); border:1px solid rgba(16, 185, 129, 0.35); border-radius:14px; padding:22px; margin-bottom:24px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+              <span style="font-size:1.2rem;">✉️</span>
+              <div>
+                <h3 style="color:#FFF; font-size:1.15rem; font-weight:900; margin:0;">Invitar a un Nuevo Miembro o Cliente al Espacio</h3>
+                <span style="font-size:0.75rem; color:#94A3B8;">El Tech Leader o Project Manager puede invitar a colaboradores o clientes con su rol departamental asignado.</span>
+              </div>
+            </div>
+
+            <form id="form-invite-member" onsubmit="handleSendInvitation(event)">
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-bottom:14px;">
+                <div>
+                  <label style="display:block; font-size:0.75rem; color:#94A3B8; margin-bottom:4px;">Nombre Completo:</label>
+                  <input type="text" id="inv-input-name" placeholder="Ej: Ing. Laura Mendoza" required style="width:100%; box-sizing:border-box; background:#06090F; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:#FFF; font-size:0.85rem;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.75rem; color:#94A3B8; margin-bottom:4px;">Correo Electrónico (Cualquier dominio):</label>
+                  <input type="email" id="inv-input-email" placeholder="laura@empresa.com o @gmail.com" required style="width:100%; box-sizing:border-box; background:#06090F; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:#FFF; font-size:0.85rem;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.75rem; color:#94A3B8; margin-bottom:4px;">Departamento:</label>
+                  <select id="inv-input-department" style="width:100%; box-sizing:border-box; background:#06090F; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:#FFF; font-size:0.85rem;">
+                    <option value="Ingeniería & Software">Ingeniería & Software</option>
+                    <option value="PMO & Procesos">PMO & Procesos</option>
+                    <option value="Diseño & UX">Diseño & UX</option>
+                    <option value="Cliente / Stakeholder">Cliente / Stakeholder</option>
+                    <option value="Operaciones Six Sigma">Operaciones Six Sigma</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.75rem; color:#94A3B8; margin-bottom:4px;">Rol Asignado:</label>
+                  <select id="inv-input-role" style="width:100%; box-sizing:border-box; background:#06090F; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:#FFF; font-size:0.85rem;">
+                    <option value="COLLABORATOR">COLLABORATOR — Ejecutor de Tareas</option>
+                    <option value="CLIENT_SPONSOR">CLIENT SPONSOR — Co-Creación o Aprobación</option>
+                    <option value="TECH_LEAD">TECH LEAD — Arquitectura Técnica</option>
+                    <option value="PROJECT_MANAGER">PROJECT MANAGER — Gestión de Tiempos</option>
+                    <option value="DESIGN_LEAD">DESIGN LEAD — Identidad & CAD</option>
+                    <option value="OPERATIONS_LEAD">OPERATIONS LEAD — DMAIC & OPEX</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                <div id="invitation-result-box" style="display:none; font-size:0.78rem; font-family:var(--font-mono); color:#10B981; background:rgba(16,185,129,0.12); padding:8px 14px; border-radius:8px; border:1px solid rgba(16,185,129,0.3);"></div>
+                <button type="submit" id="btn-submit-invitation" style="background:#10B981; border:none; color:#0A0D14; font-weight:900; font-size:0.85rem; padding:10px 22px; border-radius:8px; cursor:pointer; box-shadow:0 0 16px rgba(16,185,129,0.35); margin-left:auto;">
+                  ✉️ Generar Enlace y Enviar Invitación
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- TABLA DE MIEMBROS ACTIVOS DEL ESPACIO -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h4 style="color:#FFF; font-size:0.95rem; font-weight:800; margin:0;">Miembros Activos del Workspace:</h4>
+            <span style="font-size:0.72rem; color:#94A3B8; font-family:var(--font-mono);">Los roles pueden cambiarse en cualquier momento según la fase del proyecto</span>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.82rem; text-align:left;">
+              <thead>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.12); color:#94A3B8; font-family:var(--font-mono);">
+                  <th style="padding:10px;">MIEMBRO</th>
+                  <th style="padding:10px;">CORREO</th>
+                  <th style="padding:10px;">DEPARTAMENTO</th>
+                  <th style="padding:10px;">ROL ACTUAL</th>
+                  <th style="padding:10px; text-align:right;">GESTIÓN</th>
+                </tr>
+              </thead>
+              <tbody id="ws-members-table-body">
+                <!-- Renderizado por renderWorkspaceMembersTable() -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- FOOTER DEL MODAL MAESTRO -->
+      <div style="padding:14px 28px; background:rgba(6,9,15,0.85); border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <span style="font-size:0.75rem; color:#94A3B8; font-family:var(--font-mono);">
+          © 2026 TSolutions IPIDD • Arquitectura Modular & Multi-Tenant de Alta Disponibilidad
+        </span>
+        <button onclick="closeMasterToolsModal()" class="btn-primary" style="padding:8px 24px; font-size:0.85rem; background:#FFD700; color:#0A0D14; border-color:#FFD700; font-weight:900;">
+          <span>Guardar &amp; Salir al Workspace</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- MODAL PRINCIPAL: NEON OAUTH & AUTENTICACIÓN GRATUITA CRM                   -->
   <!-- ========================================================================= -->
   <div class="modal-backdrop" id="neon-auth-modal" style="display:none; position:fixed; inset:0; background:rgba(6,9,15,0.92); backdrop-filter:blur(10px); z-index:99999; justify-content:center; align-items:center; padding:20px;">
@@ -6370,6 +6853,23 @@
 
         // Render success
         document.getElementById('onboarding-form-wrapper').style.display = 'none';
+        
+        // Auto-registrar Workspace y conmutar a la Suite Activa inmediatamente
+        if (data.workspace) {
+          const newWsData = {
+            id: data.workspace.id || data.workspace.slug,
+            name: data.workspace.name || document.getElementById('ob-project-name').value.trim(),
+            slug: data.workspace.slug,
+            client_name: data.clientUser?.name || document.getElementById('ob-client-name').value.trim(),
+            tech_lead: document.getElementById('ob-tech-lead-name').value.trim() || 'Ing. Javier Soto',
+            pm: document.getElementById('ob-pm-name').value.trim() || 'Laura Mendoza',
+            domain: document.getElementById('ob-target-domain').value.trim() || 'm.tsolutionsipidd.com',
+            created_at: new Date().toISOString()
+          };
+          registerKnownWorkspace(newWsData);
+          switchWorkspaceFromSelect(newWsData.id);
+          addLog('[NEXUS ONBOARDING] Workspace aprovisionado exitosamente: ' + newWsData.name, 'pulse');
+        }
         const successView = document.getElementById('onboarding-success-view');
         successView.style.display = 'block';
 
