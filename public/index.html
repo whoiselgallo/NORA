@@ -6431,10 +6431,12 @@
       document.getElementById('interactive-demo').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // LOGGING SYSTEM
+    // LOGGING SYSTEM (CON NULL-SAFETY RESILIENTE)
     function addLog(msg, type = 'normal') {
-      const consoleBox = document.getElementById('log-console');
       const time = new Date().toTimeString().split(' ')[0];
+      console.log(`[NexusLog][${time}][${type}]`, msg);
+      const consoleBox = document.getElementById('log-console');
+      if (!consoleBox) return;
       const div = document.createElement('div');
       div.className = `log-entry ${type === 'pulse' ? 'event-pulse' : (type === 'transition' ? 'event-transition' : '')}`;
       div.innerHTML = `<span class="timestamp">[${time}]</span> ${msg}`;
@@ -6443,8 +6445,11 @@
     }
 
     function clearLogs() {
-      document.getElementById('log-console').innerHTML = '';
-      addLog('Consola reiniciada.', 'normal');
+      const consoleBox = document.getElementById('log-console');
+      if (consoleBox) {
+        consoleBox.innerHTML = '';
+        addLog('Consola reiniciada.', 'normal');
+      }
     }
 
     // SIMULACIÓN DE NODOS Y REGLA BINARIA
@@ -6459,7 +6464,7 @@
     function updateOverallMetrics() {
       let completed = Object.values(nodeStates).filter(Boolean).length;
       let pct = (completed / 5) * 100;
-      document.getElementById('overall-status-text').innerText = `${completed} DE 5 COMPLETADOS (${pct}%)`;
+      const statusEl = document.getElementById('overall-status-text'); if (statusEl) statusEl.innerText = `${completed} DE 5 COMPLETADOS (${pct}%)`;
     }
 
     // CONFIGURACIÓN CENTRALIZADA Y ESTADO EN VIVO
@@ -8111,6 +8116,7 @@ Process completed with exit code 1.</textarea>
 
       const domain = domainEl ? domainEl.value : '';
       const messagesContainer = document.getElementById('nexus-chat-messages');
+      if (!messagesContainer) return;
 
       // 1. Render User Message
       const userBubble = document.createElement('div');
